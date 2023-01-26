@@ -21,7 +21,7 @@ export const dayList = Array.from(Array(31),(_,i)=>String(i+1));
 export const yearList = Array.from(Array(124),(_,i)=>String(2023-i));
 
 // 대학교
-export const university = [
+export const universityList = [
     "한서대학교",
     "서울대학교",
     "고려대학교",
@@ -29,7 +29,7 @@ export const university = [
   ];
 
 // 대학교에 해당하는 학과
-export const major = [
+export const majorList = [
     "항공교통물류학부",
     "항공운항항과",
     "항공기계학과",

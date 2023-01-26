@@ -8,9 +8,9 @@ import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg"
 import Input from '../common/Input';
 import { useState } from 'react';
 import Selector from '../common/Selector';
-import { monthList,dayList,yearList, university } from '../../lib/staticData';
+import { monthList,dayList,yearList, universityList } from '../../lib/staticData';
 import palette from '../../styles/palette';
-import { major } from './../../lib/staticData';
+import { majorList } from './../../lib/staticData';
 
 const Container = styled.form`
     width:568px;
@@ -84,9 +84,21 @@ const SignUpModal = () => {
         password:'',
       });
 
+    // select 관리할 state
+    const [selectInputs,setSelectInputs] = useState({
+        university:"",
+        major:"",
+        birthMonth:"",
+        birthDay:"",
+        birthYear:""
+    })
+
+    
+
 
     // 비구조화 할당을 통해 값 추출
     const { userName,userNickname,studentID,email,password} = inputs; 
+    const {university,major,birthMonth,birthDay,birthYear} = selectInputs;
 
     // input과 select onChange함수들
     const onChangeValue = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -97,12 +109,22 @@ const SignUpModal = () => {
         });
       };
     
+    const onChangeBirthSelector = (event:React.ChangeEvent<HTMLSelectElement>)=>{
+    const { value, name } = event.target; // 우선 e.target 에서 name 과 value 를 추출
+    setSelectInputs({
+        ...selectInputs, // 기존의 input 객체를 복사한 뒤
+        [name]: value // name 키를 가진 값을 value 로 설정
+    });
+    }
+    
+
     // * 비밀번호 숨김 토글
     const toggleHidePassword = ()=>{
         setHidePassword(!hidePassword);
     }
 
     console.log(userName,userNickname,studentID,email,password)
+    console.log(university,major,birthMonth,birthDay,birthYear)
     return (
         <Container>
             <CloseXIcon className="modal-close-x-icon"/>
@@ -160,16 +182,20 @@ const SignUpModal = () => {
             <div className='sign-up-university-selectors'>
                 <div className='sign-up-university-selector'>
                     <Selector 
-                        options={university}
+                        options={universityList}
                         disabledoptions={["대학교"]}
                         defaultValue="대학교"
+                        name="university"
+                        onChange={onChangeBirthSelector}
                     />
                 </div>
                 <div className='sign-up-major-selector'>
                     <Selector 
-                        options={major}
+                        options={majorList}
                         disabledoptions={["전공"]}
                         defaultValue="전공"
+                        name="major"
+                        onChange={onChangeBirthSelector}
                     />
                 </div>
             </div>
@@ -180,6 +206,8 @@ const SignUpModal = () => {
                         options={monthList} 
                         disabledoptions={["월"]}
                         defaultValue="월"
+                        name="birthMonth"
+                        onChange={onChangeBirthSelector}
                     />
                 </div>
                 <div className='sign-up-modal-birthday-day-selector'>
@@ -187,6 +215,8 @@ const SignUpModal = () => {
                         options={dayList}
                         disabledoptions={["일"]}
                         defaultValue="일"
+                        name="birthDay"
+                        onChange={onChangeBirthSelector}
                     />
                 </div>
                 <div className='sign-up-modal-birthday-year-selector'>
@@ -194,6 +224,8 @@ const SignUpModal = () => {
                         options={yearList}
                         disabledoptions={["연도"]}
                         defaultValue="연도"
+                        name="birthYear"
+                        onChange={onChangeBirthSelector}
                     />
                 </div>
             </div>
