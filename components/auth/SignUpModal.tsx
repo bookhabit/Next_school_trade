@@ -7,6 +7,10 @@ import OpenedEyeIcon from "../../public/static/svg/auth/opened_eye.svg"
 import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg"
 import Input from '../common/Input';
 import { useState } from 'react';
+import Selector from '../common/Selector';
+import { monthList,dayList,yearList, university } from '../../lib/staticData';
+import palette from '../../styles/palette';
+import { major } from './../../lib/staticData';
 
 const Container = styled.form`
     width:568px;
@@ -14,6 +18,7 @@ const Container = styled.form`
     background-color:white;
     z-index:11;
 
+    /* input */
     .modal-close-x-icon{
         cursor: pointer;
         display:block;
@@ -23,6 +28,45 @@ const Container = styled.form`
     .input-wrapper{
         position:relative;
         margin-bottom:16px;   
+    }
+
+    /* 셀렉터 */
+    .sign-up-selector-label{
+        font-size:16px;
+        font-weight:600;
+        margin-top:16px;
+        margin-bottom:8px;
+    }
+    
+    /* 대학교 셀렉터 */
+    .sign-up-university-selectors{
+        display:flex;
+        margin-bottom:24px;
+        .sign-up-university-selector{
+            margin-right:16px;
+            flex-grow:1;
+        }
+        .sign-up-major-selector{
+            margin-right:16px;
+            width:40%;
+        }
+    }
+
+    /* 생년월일 셀렉터 */
+    .sign-up-modal-birthday-selectors{
+        display:flex;
+        margin-bottom:24px;
+        .sign-up-modal-birthday-month-selector{
+            margin-right:16px;
+            flex-grow:1;
+        }
+        .sign-up-modal-birthday-day-selector{
+            margin-right:16px;
+            width:25%;
+        }
+        .sign-up-modal-birthday-year-selector{
+            width:33.3333%
+        }
     }
 `
 
@@ -111,6 +155,47 @@ const SignUpModal = () => {
                     name='password'
                     onChange={onChangeValue}
                 />
+            </div>
+            <p className='sign-up-selector-label'>학교</p>
+            <div className='sign-up-university-selectors'>
+                <div className='sign-up-university-selector'>
+                    <Selector 
+                        options={university}
+                        disabledoptions={["대학교"]}
+                        defaultValue="대학교"
+                    />
+                </div>
+                <div className='sign-up-major-selector'>
+                    <Selector 
+                        options={major}
+                        disabledoptions={["전공"]}
+                        defaultValue="전공"
+                    />
+                </div>
+            </div>
+            <p className='sign-up-selector-label'>생년월일</p>
+            <div className='sign-up-modal-birthday-selectors'>
+                <div className='sign-up-modal-birthday-month-selector'>
+                    <Selector 
+                        options={monthList} 
+                        disabledoptions={["월"]}
+                        defaultValue="월"
+                    />
+                </div>
+                <div className='sign-up-modal-birthday-day-selector'>
+                    <Selector 
+                        options={dayList}
+                        disabledoptions={["일"]}
+                        defaultValue="일"
+                    />
+                </div>
+                <div className='sign-up-modal-birthday-year-selector'>
+                    <Selector 
+                        options={yearList}
+                        disabledoptions={["연도"]}
+                        defaultValue="연도"
+                    />
+                </div>
             </div>
         </Container>
     );
