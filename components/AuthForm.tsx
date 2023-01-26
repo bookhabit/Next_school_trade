@@ -1,9 +1,8 @@
 import React from 'react';
-import ModalPortal from './auth/ModalPortal';
 import AuthModal from './auth/AuthModal';
 import styled from 'styled-components';
 import palette from '../styles/palette';
-import { useState } from 'react';
+import useModal from './../hooks/useModal';
 
 const Container = styled.div`
         .header-sign-up-button{
@@ -36,12 +35,12 @@ const Container = styled.div`
 
 
 const AuthForm = () => {
-    const [modalOpened,setModalOpened] = useState(false)
+    const {openModal,ModalPortal} = useModal();
     return (
         <Container>
             <div className="header-auth-buttons">
                 <button type="button" className="header-sign-up-button"
-                onClick={()=>setModalOpened(true)}
+                onClick={openModal}
                 >
                     회원가입
                 </button>
@@ -50,11 +49,11 @@ const AuthForm = () => {
                     로그인
                 </button>
             </div>
-            {modalOpened&&(
-            <ModalPortal closePortal={()=>setModalOpened(false)} >
+            
+            <ModalPortal >
                 <AuthModal/>
             </ModalPortal>
-            )}
+            
         </Container>
     );
 };
