@@ -11,6 +11,7 @@ import Selector from '../common/Selector';
 import { monthList,dayList,yearList, universityList } from '../../lib/staticData';
 import palette from '../../styles/palette';
 import { majorList } from './../../lib/staticData';
+import Button from '../common/Button';
 
 const Container = styled.form`
     width:568px;
@@ -68,6 +69,13 @@ const Container = styled.form`
             width:33.3333%
         }
     }
+
+    /* 버튼 wrapper 스타일링 */
+    .sign-up-modal-submit-button-wrapper{
+        margin-bottom:16px;
+        padding-bottom:16px;
+        border-bottom:1px solid ${palette.gray_eb}
+    }
 `
 
 
@@ -92,8 +100,6 @@ const SignUpModal = () => {
         birthDay:"",
         birthYear:""
     })
-
-    
 
 
     // 비구조화 할당을 통해 값 추출
@@ -228,6 +234,9 @@ const SignUpModal = () => {
                         onChange={onChangeBirthSelector}
                     />
                 </div>
+            </div>
+            <div className='sign-up-modal-submit-button-wrapper'>
+                <Button type='submit'>가입하기</Button>
             </div>
         </Container>
     );
