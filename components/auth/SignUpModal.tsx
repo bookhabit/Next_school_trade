@@ -137,6 +137,13 @@ const SignUpModal = () => {
    // 회원가입 폼 제출하는 함수
    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
     event.preventDefault();
+    // validateMode true - 유효성검사 실시
+    setValidateMode(true)
+
+    if(!userName|| !userNickname || !studentID || !email || !password ||!university || !major || !birthDay){
+        return undefined
+    }
+
     try{
         const signUpBody={
             userName,
@@ -159,7 +166,7 @@ const SignUpModal = () => {
     }
     }
 
-
+    const [validateMode,setValidateMode] = useState(false)
     return (
         <Container onSubmit={onSubmitSignUp}>
             <CloseXIcon className="modal-close-x-icon"/>
@@ -167,36 +174,48 @@ const SignUpModal = () => {
                 <Input 
                     placeholder="이름" 
                     icon={<PersonIcon/>}
-                    type="text"
                     name='userName'
                     onChange={onChangeValue}
+                    validateMode={validateMode}
+                    isValid={!!userName}
+                    errorMessage="이름을 입력해주세요"
+                    usevalidation
                 />
             </div>
             <div className='input-wrapper'>
                 <Input 
                     placeholder="닉네임" 
                     icon={<PersonIcon/>}
-                    type="text"
                     name='userNickname'
                     onChange={onChangeValue}
+                    validateMode={validateMode}
+                    isValid={!!userNickname}
+                    errorMessage="닉네임을 입력해주세요"
+                    usevalidation
                 />
             </div>
             <div className='input-wrapper'>
                 <Input 
                     placeholder="학번" 
                     icon={<PersonIcon/>}
-                    type="text"
                     name='studentID'
                     onChange={onChangeValue}
+                    validateMode={validateMode}
+                    isValid={!!studentID}
+                    errorMessage="학번을 입력해주세요"
+                    usevalidation
                 />
             </div>
             <div className='input-wrapper'>
                 <Input 
                     placeholder="이메일 주소" 
                     icon={<MailIcon/>}
-                    type="email"
                     name='email'
                     onChange={onChangeValue}
+                    validateMode={validateMode}
+                    isValid={!!email}
+                    errorMessage="이메일을 입력해주세요"
+                    usevalidation
                 />
             </div>
             <div className='input-wrapper'>
@@ -211,6 +230,10 @@ const SignUpModal = () => {
                     type={hidePassword?"password":"text"}
                     name='password'
                     onChange={onChangeValue}
+                    validateMode={validateMode}
+                    isValid={!!password}
+                    errorMessage="비밀번호를 입력해주세요"
+                    usevalidation
                 />
             </div>
             <p className='sign-up-selector-label'>학교</p>

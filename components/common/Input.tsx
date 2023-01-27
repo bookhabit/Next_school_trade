@@ -1,8 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled,{css} from 'styled-components';
 import palette from '../../styles/palette';
 
-const Container = styled.div<{iconExist:boolean}>`
+type InputContainerProps = {
+    iconExist:boolean;
+    isValid:boolean;
+    usevalidation:boolean;
+}
+
+const Container = styled.div<InputContainerProps>`
     display:flex;
     align-items:center;
     input{
@@ -35,19 +41,75 @@ const Container = styled.div<{iconExist:boolean}>`
         display:flex;
         align-items:center;
     }
+    /* 에러메시지 스타일링 */
+    .input-error-message{
+        margin-top:8px;
+        font-weight:600;
+        font-size:14px;
+        color:${palette.tawny}
+    }
 
+    // 인풋 밸리데이션
+    ${({usevalidation,isValid})=>
+        usevalidation && !isValid && css`
+            input {
+                background-color: ${palette.snow};
+                border-color: ${palette.orange};
+                &:focus {
+                border-color: ${palette.orange};
+            }
+        }  
+    `}
+    ${({ usevalidation, isValid }) =>
+    usevalidation &&
+    isValid &&
+    css`
+      input {
+        border-color: ${palette.dark_cyan};
+      }
+    `}
 `
+const ErrorContainer = styled.div`
+  margin-top:8px;
+    p{
+      color:${palette.tawny};
+      font-weight:600;
+      font-size:14px;
+    }
+        
+`
+
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     icon?:JSX.Element;
+    isValid:boolean;
+    usevalidation:boolean;
+    errorMessage?:string;
+    validateMode:boolean;
 }
 
-const Input:React.FC<IProps> = ({icon,...props}) => {
+const Input:React.FC<IProps> = ({
+    icon,
+    validateMode,
+    usevalidation,
+    isValid,
+    errorMessage,
+    ...props
+}) => {
     return (
-        <Container iconExist={!!icon}>
+        <>
+        <Container 
+            iconExist={!!icon} 
+            isValid={isValid} 
+            usevalidation={validateMode&&usevalidation}>
             <input {...props}/>
             <div className='input-icon-wrapper'>{icon}</div>
         </Container>
+            <ErrorContainer>
+            {usevalidation&&validateMode&&!isValid&&errorMessage&&
+            (<p>{errorMessage}</p>)}
+        </ErrorContainer>
+      </>
     );
 };
 
