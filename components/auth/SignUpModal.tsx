@@ -12,6 +12,7 @@ import { monthList,dayList,yearList, universityList } from '../../lib/staticData
 import palette from '../../styles/palette';
 import { majorList } from './../../lib/staticData';
 import Button from '../common/Button';
+import { signupAPI } from '../../lib/api/auth';
 
 const Container = styled.form`
     width:568px;
@@ -129,10 +130,35 @@ const SignUpModal = () => {
         setHidePassword(!hidePassword);
     }
 
-    console.log(userName,userNickname,studentID,email,password)
-    console.log(university,major,birthMonth,birthDay,birthYear)
+
+   // 회원가입 폼 제출하는 함수
+   const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
+    event.preventDefault();
+    try{
+        const signUpBody={
+            userName,
+            userNickname,
+            studentID,
+            email,
+            password,
+            university,
+            major,
+            birthDay:new Date(
+                `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
+                ).toUTCString()
+        }
+        
+        const data = await signupAPI(signUpBody);
+        console.log('클라이언트 받은 데이터',data)
+        
+    }catch(e){
+        console.log(e)
+    }
+    }
+
+
     return (
-        <Container>
+        <Container onSubmit={onSubmitSignUp}>
             <CloseXIcon className="modal-close-x-icon"/>
             <div className='input-wrapper'>
                 <Input 

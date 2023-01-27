@@ -18,6 +18,12 @@ const Container = styled.div`
     height: 100%;
     background-color: rgba(0, 0, 0, 0.75);
   }
+  .modal-contents{
+        width:400px;
+        height:400px;
+        background-color:white;
+        z-index:11;
+    }
 `;
 
 const useModal = () => {
