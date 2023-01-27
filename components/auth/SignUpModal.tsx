@@ -13,6 +13,8 @@ import palette from '../../styles/palette';
 import { majorList } from './../../lib/staticData';
 import Button from '../common/Button';
 import { signupAPI } from '../../lib/api/auth';
+import { useDispatch } from 'react-redux';
+import { userActions } from './../../store/user';
 
 const Container = styled.form`
     width:568px;
@@ -124,12 +126,13 @@ const SignUpModal = () => {
     });
     }
     
-
     // * 비밀번호 숨김 토글
     const toggleHidePassword = ()=>{
         setHidePassword(!hidePassword);
     }
 
+    // 디스패치
+    const dispatch = useDispatch();
 
    // 회원가입 폼 제출하는 함수
    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
@@ -148,9 +151,9 @@ const SignUpModal = () => {
                 ).toUTCString()
         }
         
-        const data = await signupAPI(signUpBody);
+        const {data} = await signupAPI(signUpBody);
         console.log('클라이언트 받은 데이터',data)
-        
+        dispatch(userActions.setLoggedUser(data))   
     }catch(e){
         console.log(e)
     }

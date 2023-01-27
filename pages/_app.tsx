@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 import Auth from "../components/Auth";
 import GlobalStyle from "../styles/GlobalStyle";
+import { wrapper } from "../store";
 
 const MyApp = ({Component,pageProps}:AppProps)=>{
     return(
@@ -13,4 +14,4 @@ const MyApp = ({Component,pageProps}:AppProps)=>{
     )
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);
