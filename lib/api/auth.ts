@@ -13,4 +13,4 @@ interface SignUpAPIBody{
     birthDay:string
 }
 // 회원가입 api
-export const signupAPI = (body:SignUpAPIBody)=>axios.post("/api/auth/signup",body)
+export const signupAPI = (body:SignUpAPIBody)=>axios.post<UserType>("/api/auth/signup",body)

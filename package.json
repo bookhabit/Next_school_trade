@@ -13,6 +13,7 @@
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-styled-components": "^2.0.7",
     "bcryptjs": "^2.4.3",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "next": "^13.1.4",
     "next-redux-wrapper": "^8.1.0",

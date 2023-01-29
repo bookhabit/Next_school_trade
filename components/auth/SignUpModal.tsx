@@ -6,15 +6,16 @@ import PersonIcon from "../../public/static/svg/auth/person.svg"
 import OpenedEyeIcon from "../../public/static/svg/auth/opened_eye.svg"
 import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg"
 import Input from '../common/Input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Selector from '../common/Selector';
-import { monthList,dayList,yearList, universityList } from '../../lib/staticData';
+import { monthList,dayList,yearList } from '../../lib/staticData';
 import palette from '../../styles/palette';
 import { majorList } from './../../lib/staticData';
 import Button from '../common/Button';
 import { signupAPI } from '../../lib/api/auth';
 import { useDispatch } from 'react-redux';
 import { userActions } from './../../store/user';
+import axios from "axios";
 
 const Container = styled.form`
     width:568px;
@@ -49,10 +50,6 @@ const Container = styled.form`
         .sign-up-university-selector{
             margin-right:16px;
             flex-grow:1;
-        }
-        .sign-up-major-selector{
-            margin-right:16px;
-            width:40%;
         }
     }
 
@@ -166,7 +163,19 @@ const SignUpModal = () => {
     }
     }
 
+    // 대학교명 리스트 가져오기
+    const [universityNameList,setUniversityNameList] = useState<string[]>();
+
+    useEffect(()=>{
+        async function fetchUniversityName() {
+            const response = await axios.get("/api/school/universityName");
+            setUniversityNameList(response.data)
+        }
+        fetchUniversityName();
+    },[])
+
     const [validateMode,setValidateMode] = useState(false)
+
     return (
         <Container onSubmit={onSubmitSignUp}>
             <CloseXIcon className="modal-close-x-icon"/>
@@ -240,19 +249,10 @@ const SignUpModal = () => {
             <div className='sign-up-university-selectors'>
                 <div className='sign-up-university-selector'>
                     <Selector 
-                        options={universityList}
+                        options={universityNameList}
                         disabledoptions={["대학교"]}
                         defaultValue="대학교"
                         name="university"
-                        onChange={onChangeBirthSelector}
-                    />
-                </div>
-                <div className='sign-up-major-selector'>
-                    <Selector 
-                        options={majorList}
-                        disabledoptions={["전공"]}
-                        defaultValue="전공"
-                        name="major"
                         onChange={onChangeBirthSelector}
                     />
                 </div>
