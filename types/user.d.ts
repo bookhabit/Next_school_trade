@@ -7,7 +7,6 @@ export type StoredUserType = {
     email: string;
     password: string;
     university: string;
-    major:string;
     birthDay:string;
     profileImage: string;
   };
@@ -20,7 +19,6 @@ export type StoredUserType = {
     studentID: string;
     email: string;
     university: string;
-    major:string;
     birthDay:string;
     profileImage: string;
   };

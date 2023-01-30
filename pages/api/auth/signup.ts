@@ -6,10 +6,10 @@ import jwt  from "jsonwebtoken";
 
 export default async (req:NextApiRequest,res:NextApiResponse)=>{
     if(req.method==="POST"){
-        const {userName,userNickname,studentID,email,password,university,major,birthDay} = req.body;
+        const {userName,userNickname,studentID,email,password,university,birthDay} = req.body;
         
         // req.body의 값이 유효한지 확인하기
-        if(!userName|| !userNickname || !studentID || !email || !password ||!university || !major || !birthDay){
+        if(!userName|| !userNickname || !studentID || !email || !password ||!university || !birthDay){
             res.statusCode = 400;
             return res.send("필수 데이터가 없습니다.")
         }
@@ -40,7 +40,6 @@ export default async (req:NextApiRequest,res:NextApiResponse)=>{
             email,
             password:hashedPassword,
             university,
-            major,
             birthDay,
             profileImage:"/static/image/user/default_user_profile_image.jpg"
         }

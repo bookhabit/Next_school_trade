@@ -186,9 +186,20 @@ const SignUpModal = () => {
     setValidateMode(true)
 
     // 폼요소의 값이 없다면
-    if(!userName|| !userNickname || !studentID || !email || !password ||!university || !major || !birthDay){
+    if(!userName|| !userNickname || !studentID || !email || !password ||!university || !birthDay){
         return undefined
     }
+
+    //* 비밀번호가 올바르지 않다면
+    if (
+        isPasswordHasNameOrEmail ||
+        !isPasswordOverMinLength ||
+        !isPasswordHasNumberOrSymbol
+    ) {
+        console.log('비밀번호가 올바르지 않다')
+        return false;
+    }
+    
 
     try{
         const signUpBody={
