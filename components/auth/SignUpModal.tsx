@@ -8,7 +8,7 @@ import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg"
 import Input from '../common/Input';
 import { useState, useEffect } from 'react';
 import Selector from '../common/Selector';
-import { monthList,dayList,yearList } from '../../lib/staticData';
+import { monthList,dayList,yearList,universityList } from '../../lib/staticData';
 import palette from '../../styles/palette';
 import { majorList } from './../../lib/staticData';
 import Button from '../common/Button';
@@ -165,15 +165,12 @@ const SignUpModal = () => {
     //* 비밀번호가 숫자나 특수기호를 포함하는지
     const isPasswordHasNumberOrSymbol = useMemo(
         () =>
-        !(
+        (
             /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/g.test(password) ||
             /[0-9]/g.test(password)
         ),
         [password]
     );
-    console.log(isPasswordHasNameOrEmail,isPasswordOverMinLength,isPasswordHasNumberOrSymbol)
-
-
     // 디스패치
     const dispatch = useDispatch();
 
@@ -183,23 +180,15 @@ const SignUpModal = () => {
    // 회원가입 폼 제출하는 함수
    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
     event.preventDefault();
+
     // validateMode true - 유효성검사 실시
+    console.log('밸리데이션 실시')
     setValidateMode(true)
 
     // 폼요소의 값이 없다면
     if(!userName|| !userNickname || !studentID || !email || !password ||!university || !major || !birthDay){
         return undefined
     }
-
-    //* 비밀번호가 올바르지 않다면
-    if (
-        isPasswordHasNameOrEmail ||
-        !isPasswordOverMinLength ||
-        isPasswordHasNumberOrSymbol
-    ) {
-        return false;
-    }
-
 
     try{
         const signUpBody={
@@ -221,7 +210,7 @@ const SignUpModal = () => {
     }catch(e){
         console.log(e)
     }
-    }
+}
 
     // 대학교명 리스트 가져오기
     const [universityNameList,setUniversityNameList] = useState<string[]>();
@@ -300,7 +289,7 @@ const SignUpModal = () => {
                     onChange={onChangeValue}
                     isValid={!isPasswordHasNameOrEmail&&
                         isPasswordOverMinLength &&
-                        !isPasswordHasNumberOrSymbol}
+                        isPasswordHasNumberOrSymbol}
                     errorMessage="비밀번호를 입력해주세요"
                     usevalidation
                     onFocus={onFocusPassword}
@@ -315,7 +304,7 @@ const SignUpModal = () => {
                         isValid={isPasswordOverMinLength}
                         text="최소 8자"/>
                     <PasswordWarning 
-                        isValid={!isPasswordHasNumberOrSymbol}
+                        isValid={isPasswordHasNumberOrSymbol}
                         text="숫자나 기호를 포함하세요."/>
                 </>
             )}

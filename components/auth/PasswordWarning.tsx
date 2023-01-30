@@ -20,7 +20,6 @@ interface IProps{
 }
 
 const PasswordWarning:React.FC<IProps>=({isValid,text})=>{
-    console.log(isValid)
     return(
         <Container isValid={isValid}>
             {isValid?<GreenCheckIcon/>:<RedXIcon/>}

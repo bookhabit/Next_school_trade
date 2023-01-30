@@ -105,7 +105,7 @@ const Input:React.FC<IProps> = ({
             <input {...props}/>
             <div className='input-icon-wrapper'>{icon}</div>
         </Container>
-            <ErrorContainer>
+        <ErrorContainer>
             {usevalidation&&validateMode&&!isValid&&errorMessage&&
             (<p>{errorMessage}</p>)}
         </ErrorContainer>
