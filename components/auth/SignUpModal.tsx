@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import CloseXIcon from "../../public/static/svg/auth/modal_close_x_icon.svg"
 import MailIcon from "../../public/static/svg/auth/email.svg"
@@ -18,6 +18,7 @@ import { userActions } from './../../store/user';
 import axios from "axios";
 import { commonActions } from './../../store/common';
 import useValidateMode from '../../hooks/useValidateMode';
+import PasswordWarning from './PasswordWarning';
 
 const Container = styled.form`
     width:568px;
@@ -85,6 +86,12 @@ const SignUpModal = () => {
     // 비밀번호 토글 state
     const [hidePassword,setHidePassword] = useState(true)
 
+    // 비밀번호 인풋 포커스 되었을 때 상태
+    const [passwordFocused,setPasswordFocused] = useState(false);
+
+    // 비밀번호 최소 자릿수
+    const PASSWORD_MIN_LENGTH = 8;
+
     // input창 관리할 state
     const [inputs, setInputs] = useState({
         userName:'',
@@ -130,6 +137,43 @@ const SignUpModal = () => {
         setHidePassword(!hidePassword);
     }
 
+    
+
+    // 비밀번호 인풋 포커스 되었을 때 이벤트함수
+    const onFocusPassword= ()=>{
+        setPasswordFocused(true)
+    }
+
+          
+
+    //* password가 이름이나 이메일을 포함하는지
+    const isPasswordHasNameOrEmail = useMemo(
+        () =>
+        !password ||
+        !userName || !email ||
+        password.includes(userName) ||
+        password.includes(email.split("@")[0]),
+        [password, userName, email]
+    );
+
+    //* 비밀번호가 최수 자리수 이상인지
+    const isPasswordOverMinLength = useMemo(
+        () => password.length >= PASSWORD_MIN_LENGTH,
+        [password]
+    );
+
+    //* 비밀번호가 숫자나 특수기호를 포함하는지
+    const isPasswordHasNumberOrSymbol = useMemo(
+        () =>
+        !(
+            /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/g.test(password) ||
+            /[0-9]/g.test(password)
+        ),
+        [password]
+    );
+    console.log(isPasswordHasNameOrEmail,isPasswordOverMinLength,isPasswordHasNumberOrSymbol)
+
+
     // 디스패치
     const dispatch = useDispatch();
 
@@ -142,9 +186,20 @@ const SignUpModal = () => {
     // validateMode true - 유효성검사 실시
     setValidateMode(true)
 
+    // 폼요소의 값이 없다면
     if(!userName|| !userNickname || !studentID || !email || !password ||!university || !major || !birthDay){
         return undefined
     }
+
+    //* 비밀번호가 올바르지 않다면
+    if (
+        isPasswordHasNameOrEmail ||
+        !isPasswordOverMinLength ||
+        isPasswordHasNumberOrSymbol
+    ) {
+        return false;
+    }
+
 
     try{
         const signUpBody={
@@ -179,6 +234,7 @@ const SignUpModal = () => {
         fetchUniversityName();
     },[])
 
+    // 모달창 꺼지면 validateMode 꺼줌
     useEffect(()=>{
         setValidateMode(false)
     },[])
@@ -242,11 +298,28 @@ const SignUpModal = () => {
                     type={hidePassword?"password":"text"}
                     name='password'
                     onChange={onChangeValue}
-                    isValid={!!password}
+                    isValid={!isPasswordHasNameOrEmail&&
+                        isPasswordOverMinLength &&
+                        !isPasswordHasNumberOrSymbol}
                     errorMessage="비밀번호를 입력해주세요"
                     usevalidation
+                    onFocus={onFocusPassword}
                 />
             </div>
+            {passwordFocused && (
+                <>
+                    <PasswordWarning
+                        isValid={!isPasswordHasNameOrEmail}
+                        text="비밀번호에 본인 이름이나 이메일 주소를 포함할 수 없습니다."/>
+                    <PasswordWarning 
+                        isValid={isPasswordOverMinLength}
+                        text="최소 8자"/>
+                    <PasswordWarning 
+                        isValid={!isPasswordHasNumberOrSymbol}
+                        text="숫자나 기호를 포함하세요."/>
+                </>
+            )}
+
             <p className='sign-up-selector-label'>학교</p>
             <div className='sign-up-university-selectors'>
                 <div className='sign-up-university-selector'>
