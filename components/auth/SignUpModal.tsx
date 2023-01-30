@@ -16,6 +16,8 @@ import { signupAPI } from '../../lib/api/auth';
 import { useDispatch } from 'react-redux';
 import { userActions } from './../../store/user';
 import axios from "axios";
+import { commonActions } from './../../store/common';
+import useValidateMode from '../../hooks/useValidateMode';
 
 const Container = styled.form`
     width:568px;
@@ -131,6 +133,9 @@ const SignUpModal = () => {
     // 디스패치
     const dispatch = useDispatch();
 
+    // validateMode 함수가져옴
+    const {setValidateMode } = useValidateMode();
+
    // 회원가입 폼 제출하는 함수
    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
     event.preventDefault();
@@ -174,7 +179,9 @@ const SignUpModal = () => {
         fetchUniversityName();
     },[])
 
-    const [validateMode,setValidateMode] = useState(false)
+    useEffect(()=>{
+        setValidateMode(false)
+    },[])
 
     return (
         <Container onSubmit={onSubmitSignUp}>
@@ -185,7 +192,6 @@ const SignUpModal = () => {
                     icon={<PersonIcon/>}
                     name='userName'
                     onChange={onChangeValue}
-                    validateMode={validateMode}
                     isValid={!!userName}
                     errorMessage="이름을 입력해주세요"
                     usevalidation
@@ -197,7 +203,6 @@ const SignUpModal = () => {
                     icon={<PersonIcon/>}
                     name='userNickname'
                     onChange={onChangeValue}
-                    validateMode={validateMode}
                     isValid={!!userNickname}
                     errorMessage="닉네임을 입력해주세요"
                     usevalidation
@@ -209,7 +214,6 @@ const SignUpModal = () => {
                     icon={<PersonIcon/>}
                     name='studentID'
                     onChange={onChangeValue}
-                    validateMode={validateMode}
                     isValid={!!studentID}
                     errorMessage="학번을 입력해주세요"
                     usevalidation
@@ -221,7 +225,6 @@ const SignUpModal = () => {
                     icon={<MailIcon/>}
                     name='email'
                     onChange={onChangeValue}
-                    validateMode={validateMode}
                     isValid={!!email}
                     errorMessage="이메일을 입력해주세요"
                     usevalidation
@@ -239,7 +242,6 @@ const SignUpModal = () => {
                     type={hidePassword?"password":"text"}
                     name='password'
                     onChange={onChangeValue}
-                    validateMode={validateMode}
                     isValid={!!password}
                     errorMessage="비밀번호를 입력해주세요"
                     usevalidation
