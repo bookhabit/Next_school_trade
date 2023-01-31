@@ -81,8 +81,12 @@ const Container = styled.form`
     }
 `
 
+interface IProps {
+    closeModal:()=> void;
+}
 
-const SignUpModal = () => {
+
+const SignUpModal:React.FC<IProps> = ({closeModal}) => {
     // 비밀번호 토글 state
     const [hidePassword,setHidePassword] = useState(true)
 
@@ -180,10 +184,10 @@ const SignUpModal = () => {
     // 회원가입 폼 입력 값 확인하는 함수
     const validateSignUpForm = ()=>{
     // 폼 요소의 값이 없다면
-        if(!userName|| !userNickname || !studentID || !email || !password ||!university || !birthDay){
+        if(!userName|| !userNickname || !studentID || !email || !password || !university || !birthDay){
             return false;
         }
-
+        
         //* 비밀번호가 올바르지 않다면
         if (
             isPasswordHasNameOrEmail ||
@@ -193,6 +197,7 @@ const SignUpModal = () => {
             console.log('비밀번호가 올바르지 않다')
             return false;
         }    
+        return true;
     }
 
    // 회원가입 폼 제출하는 함수
@@ -201,7 +206,7 @@ const SignUpModal = () => {
 
     // validateMode true - 유효성검사 실시
     setValidateMode(true)
-
+    
     if(validateSignUpForm()){
         try{
             const signUpBody={
@@ -219,11 +224,11 @@ const SignUpModal = () => {
             const {data} = await signupAPI(signUpBody);
             console.log('클라이언트 받은 데이터',data)
             dispatch(userActions.setLoggedUser(data))   
+
+            closeModal();
         }catch(e){
             console.log(e)
         }
-    }else{
-        alert('폼을 모두 입력해주세요.')
     }
 }
 
@@ -245,7 +250,7 @@ const SignUpModal = () => {
 
     return (
         <Container onSubmit={onSubmitSignUp}>
-            <CloseXIcon className="modal-close-x-icon"/>
+            <CloseXIcon className="modal-close-x-icon" onClick={closeModal}/>
             <div className='input-wrapper'>
                 <Input 
                     placeholder="이름" 

@@ -35,7 +35,7 @@ const Container = styled.div`
 
 
 const AuthForm = () => {
-    const {openModal,ModalPortal} = useModal();
+    const {openModal,ModalPortal,closeModal} = useModal();
     return (
         <Container>
             <div className="header-auth-buttons">
@@ -51,7 +51,7 @@ const AuthForm = () => {
             </div>
             
             <ModalPortal >
-                <AuthModal/>
+                <AuthModal closeModal={closeModal}/>
             </ModalPortal>
             
         </Container>
