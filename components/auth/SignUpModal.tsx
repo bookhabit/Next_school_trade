@@ -104,7 +104,6 @@ const SignUpModal = () => {
     // select 관리할 state
     const [selectInputs,setSelectInputs] = useState({
         university:"",
-        major:"",
         birthMonth:"",
         birthDay:"",
         birthYear:""
@@ -113,7 +112,7 @@ const SignUpModal = () => {
 
     // 비구조화 할당을 통해 값 추출
     const { userName,userNickname,studentID,email,password} = inputs; 
-    const {university,major,birthMonth,birthDay,birthYear} = selectInputs;
+    const {university,birthMonth,birthDay,birthYear} = selectInputs;
 
     // input과 select onChange함수들
     const onChangeValue = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -177,49 +176,54 @@ const SignUpModal = () => {
     // validateMode 함수가져옴
     const {setValidateMode } = useValidateMode();
 
+
+    // 회원가입 폼 입력 값 확인하는 함수
+    const validateSignUpForm = ()=>{
+    // 폼 요소의 값이 없다면
+        if(!userName|| !userNickname || !studentID || !email || !password ||!university || !birthDay){
+            return false;
+        }
+
+        //* 비밀번호가 올바르지 않다면
+        if (
+            isPasswordHasNameOrEmail ||
+            !isPasswordOverMinLength ||
+            !isPasswordHasNumberOrSymbol
+        ) {
+            console.log('비밀번호가 올바르지 않다')
+            return false;
+        }    
+    }
+
    // 회원가입 폼 제출하는 함수
    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
     event.preventDefault();
 
     // validateMode true - 유효성검사 실시
-    console.log('밸리데이션 실시')
     setValidateMode(true)
 
-    // 폼요소의 값이 없다면
-    if(!userName|| !userNickname || !studentID || !email || !password ||!university || !birthDay){
-        return undefined
-    }
-
-    //* 비밀번호가 올바르지 않다면
-    if (
-        isPasswordHasNameOrEmail ||
-        !isPasswordOverMinLength ||
-        !isPasswordHasNumberOrSymbol
-    ) {
-        console.log('비밀번호가 올바르지 않다')
-        return false;
-    }
-    
-
-    try{
-        const signUpBody={
-            userName,
-            userNickname,
-            studentID,
-            email,
-            password,
-            university,
-            major,
-            birthDay:new Date(
-                `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
-                ).toUTCString()
+    if(validateSignUpForm()){
+        try{
+            const signUpBody={
+                userName,
+                userNickname,
+                studentID,
+                email,
+                password,
+                university,
+                birthDay:new Date(
+                    `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
+                    ).toUTCString()
+            }
+            
+            const {data} = await signupAPI(signUpBody);
+            console.log('클라이언트 받은 데이터',data)
+            dispatch(userActions.setLoggedUser(data))   
+        }catch(e){
+            console.log(e)
         }
-        
-        const {data} = await signupAPI(signUpBody);
-        console.log('클라이언트 받은 데이터',data)
-        dispatch(userActions.setLoggedUser(data))   
-    }catch(e){
-        console.log(e)
+    }else{
+        alert('폼을 모두 입력해주세요.')
     }
 }
 
@@ -329,6 +333,7 @@ const SignUpModal = () => {
                         defaultValue="대학교"
                         name="university"
                         onChange={onChangeBirthSelector}
+                        isValid={!!university}
                     />
                 </div>
             </div>
@@ -341,6 +346,7 @@ const SignUpModal = () => {
                         defaultValue="월"
                         name="birthMonth"
                         onChange={onChangeBirthSelector}
+                        isValid={!!birthMonth}
                     />
                 </div>
                 <div className='sign-up-modal-birthday-day-selector'>
@@ -350,6 +356,7 @@ const SignUpModal = () => {
                         defaultValue="일"
                         name="birthDay"
                         onChange={onChangeBirthSelector}
+                        isValid={!!birthDay}
                     />
                 </div>
                 <div className='sign-up-modal-birthday-year-selector'>
@@ -359,6 +366,7 @@ const SignUpModal = () => {
                         defaultValue="연도"
                         name="birthYear"
                         onChange={onChangeBirthSelector}
+                        isValid={!!birthYear}
                     />
                 </div>
             </div>
