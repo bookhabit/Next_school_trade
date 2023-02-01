@@ -47,6 +47,19 @@ const Container = styled.form`
     margin-left: 8px;
     cursor: pointer;
   }
+  /* 에러메시지 스타일링 */
+  .input-error-message{
+        margin-top:8px;
+        font-weight:600;
+        font-size:14px;
+        color:${palette.tawny};
+
+        p{
+            color:${palette.tawny};
+            font-weight:600;
+            font-size:14px;
+       }
+    }
 `;
 
 interface IProps {
@@ -56,6 +69,8 @@ interface IProps {
 const LoginModal: React.FC<IProps> = ({ closeModal }) => {
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
+    // 에러메시지 상태
+    const [errorMessage,setErrorMessage] = useState("")
 
     // 비밀번호 토글 state
     const [isPasswordHided,setIsPasswordHided] = useState(true);
@@ -67,19 +82,19 @@ const LoginModal: React.FC<IProps> = ({ closeModal }) => {
     // 이메일 주소 onchange
     const onChangeEmail = (event:React.ChangeEvent<HTMLInputElement>)=>{
         setEmail(event.target.value)
+        setErrorMessage("")
     }
 
     // 비밀번호 onchange
     const onChangePassword = (event:React.ChangeEvent<HTMLInputElement>)=>{
         setPassword(event.target.value)
+        setErrorMessage("")
     }
 
     // 회원가입 모달로 변경하기
     const chnageToSignUpModal = ()=>{
         dispatch(authActions.setAuthMode("signup"))
     }
-
-    console.log(email,password)
 
     // 로그인 버튼 클릭 시 API호출
     const onSubmitLogin = async (event:React.FormEvent<HTMLFormElement>)=>{
@@ -88,17 +103,27 @@ const LoginModal: React.FC<IProps> = ({ closeModal }) => {
         setValidateMode(true)
 
         if(!email||!password){
-            alert("이메일과 비밀번호를 모두 입력해주세요.")
+            console.log("이메일과 비밀번호를 모두 입력해주세요.")
         }else{
             const loginBody = {email,password}
-            console.log('loginBody:',loginBody)
+            
             try{
                 const {data} = await loginAPI(loginBody)
-                console.log(data)
+                
+                console.log('data',data)
                 dispatch(userActions.setLoggedUser(data))
                 closeModal()
-            }catch(e){
-                console.log(e)
+            }catch(e:any){
+                // data에 있는 상태코드에 따라 에러메시지 출력
+                console.log('에러',e.response)
+                // 해당 이메일의 유저가 없을 때
+                if(e.response.status === 404){
+                    setErrorMessage('해당 이메일의 유저가 없습니다.')
+                }
+                // 유저의 비밀번호가 일치하지 않을 때
+                if(e.response.status === 403){
+                    setErrorMessage('비밀번호가 일치하지 않습니다')
+                }
             }
         }
     }
@@ -120,17 +145,26 @@ const LoginModal: React.FC<IProps> = ({ closeModal }) => {
           value={email}
           onChange={onChangeEmail}
           icon={<MailIcon />}
+          usevalidation
+          isValid={!!email}
+          errorMessage={"이메일을 입력해주세요"}
         />
       </div>
       <div className="login-input-wrapper login-password-input-wrapper">
         <Input
-          placeholder="비밀번호 설정하기"
+          placeholder="비밀번호 입력하기"
           name="password"
           type={isPasswordHided ? "password" : "text"}
           icon={isPasswordHided ? (<ClosedEyeIcon/>) : (<OpenedEyeIcon/>)}
           value={password}
           onChange={onChangePassword}
+          usevalidation
+          isValid={!!password}
+          errorMessage={"비밀번호를 입력해주세요"}
         />
+      </div>
+      <div className="input-error-message">
+        <p>{errorMessage}</p>
       </div>
       <div className="login-modal-submit-button-wrapper">
         <Button type="submit">
