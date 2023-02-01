@@ -18,10 +18,15 @@ const exist = ({ email }: { email: string }) => {
   return users.some((user) => user.email === email);
 };
 
+// email의 유저 불러오기
+const find  = ({email}:{email:string})=>{
+  const users = getList();
+  return users.find((user)=>user.email===email);
+}
 
 //* 유저 리스트 저장하기
 const write = async (users: StoredUserType[]) => {
   writeFileSync("data/users.json", JSON.stringify(users));
 };
 
-export default { getList, exist, write };
+export default { getList, exist, write,find };

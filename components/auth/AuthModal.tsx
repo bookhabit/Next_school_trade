@@ -13,7 +13,7 @@ const AuthModal:React.FC<IProps> = ({closeModal}) => {
     return (
         <>
         {authMode==="signup"&&<SignUpModal closeModal={closeModal}/>}
-        {authMode==="login"&& <LoginModal/>}
+        {authMode==="login"&& <LoginModal closeModal={closeModal} />}
         </>
     );
 };

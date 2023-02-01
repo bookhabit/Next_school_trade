@@ -19,6 +19,7 @@ import axios from "axios";
 import { commonActions } from './../../store/common';
 import useValidateMode from '../../hooks/useValidateMode';
 import PasswordWarning from './PasswordWarning';
+import { authActions } from '../../store/auth';
 
 const Container = styled.form`
     width:568px;
@@ -51,8 +52,7 @@ const Container = styled.form`
         display:flex;
         margin-bottom:24px;
         .sign-up-university-selector{
-            margin-right:16px;
-            flex-grow:1;
+            width:100%;
         }
     }
 
@@ -250,6 +250,11 @@ const SignUpModal:React.FC<IProps> = ({closeModal}) => {
         fetchUniversityName();
     },[])
 
+    // 로그인 모달로 변경하기
+    const changeToLoginModal = ()=>{
+        dispatch(authActions.setAuthMode("login"))
+    }
+
     // 모달창 꺼지면 validateMode 꺼줌
     useEffect(()=>{
         setValidateMode(false)
@@ -391,7 +396,7 @@ const SignUpModal:React.FC<IProps> = ({closeModal}) => {
                 <span
                 className="sign-up-modal-set-login"
                 role="presentation"
-                onClick={()=>{}}
+                onClick={changeToLoginModal}
                 >
                 로그인
                 </span>
