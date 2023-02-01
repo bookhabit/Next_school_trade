@@ -3,6 +3,8 @@ import AuthModal from './auth/AuthModal';
 import styled from 'styled-components';
 import palette from '../styles/palette';
 import useModal from './../hooks/useModal';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../store/auth';
 
 const Container = styled.div`
         .header-sign-up-button{
@@ -36,15 +38,23 @@ const Container = styled.div`
 
 const AuthForm = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
+    const dispatch = useDispatch();
     return (
         <Container>
             <div className="header-auth-buttons">
                 <button type="button" className="header-sign-up-button"
-                onClick={openModal}
+                onClick={()=>{
+                    dispatch(authActions.setAuthMode('signup'))
+                    openModal();
+                    }
+                }
                 >
                     회원가입
                 </button>
-                <button type="button" className="header-login-button"
+                <button type="button" className="header-login-button" onClick={ ()=>{
+                    dispatch(authActions.setAuthMode("login"));
+                    openModal();
+                } }
                 >
                     로그인
                 </button>
