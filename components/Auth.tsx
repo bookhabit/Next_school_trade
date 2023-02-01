@@ -3,6 +3,7 @@ import AuthUserProfile from './AuthUserProfile';
 import AuthForm from './AuthForm';
 import styled from 'styled-components';
 import palette from '../styles/palette';
+import { useSelector } from 'react-redux';
 
 const Container = styled.div`
     /* 헤더창 */
@@ -37,12 +38,12 @@ const Container = styled.div`
 const Auth = () => {
     //  로그인 안되어있으면 input창 - AuthForm 
     //  로그인 되어있으면 유저프로필 - AuthUserProfile
+    const user = useSelector((state:any)=>state.user);
     return (
         <Container>
             <button className='myStore'>내 상점</button>
-            {/* 로그인이 되어있는지에 따라 */}
-            <AuthForm/>
-            {/* <AuthUserProfile/> */}
+            {!user.isLogged&&(<AuthForm/>)}
+            {user.isLogged&&(<AuthUserProfile/>)}
         </Container>
     );
 };

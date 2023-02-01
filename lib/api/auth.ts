@@ -9,7 +9,6 @@ interface SignUpAPIBody{
     email:string;
     password:string;
     university:string;
-    major:string;
     birthDay:string
 }
 // 회원가입 api
