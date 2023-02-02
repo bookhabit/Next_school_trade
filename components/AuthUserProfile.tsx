@@ -1,14 +1,28 @@
 import React from 'react';
 import HambergerIcon from "../public/static/svg/header/hambergerIcon.svg";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { logoutAPI } from '../lib/api/auth';
+import { userActions } from './../store/user';
 
 
 const AuthUserProfile = () => {
     const user = useSelector((state:any) => state.user);
+
+    const dispatch = useDispatch();
+
     // 유저메뉴 열고 , 닫힘 여부
     const [isUsermenuOpened,setIsUsermenuOpened] = useState(false);
+
+    const logout = async()=>{
+        try{
+            await logoutAPI();
+            dispatch(userActions.initUser());
+        }catch(e:any){
+            console.log(e.message);
+        }
+    }
     return (
         <>
         {
@@ -27,7 +41,7 @@ const AuthUserProfile = () => {
                         <li>숙소 관리</li>
                         <li>숙소 등록하기</li>
                         <div className="header-usermenu-divider" />
-                        <li role="presentation">
+                        <li role="presentation" onClick={logout}>
                             로그아웃
                         </li>
                     </ul>
