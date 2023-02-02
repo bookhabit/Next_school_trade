@@ -1,43 +1,41 @@
 import React from 'react';
-import styled from 'styled-components';
 import HambergerIcon from "../public/static/svg/header/hambergerIcon.svg";
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import OutsideClickHandler from 'react-outside-click-handler';
 
-const Container = styled.div`
-    /* 로그인한 경우 헤더 유저 프로필 스타일링 */
-    .header-user-profile{
-                display:flex;
-                align-items:center;
-                height:42px;
-                padding:0 6px 0 16px;
-                border:0;
-                box-shadow:0px 1px 2px rgba(0,0,0,0.18);
-                border-radius:21px;
-                background-color:white;
-                cursor: pointer;
-                outline:none;
-                &:hover{
-                    box-shadow:0px 2px 8px rgba(0,0,0,0.12);
-                }
-            }
-    .header-user-profile-image{
-        margin-left:8px;
-        width:30px;
-        height:30px;
-        border-radius:50%;
-    }
-`
 
 const AuthUserProfile = () => {
-    const userProfileImage = useSelector((state:any) => state.user.profileImage);
+    const user = useSelector((state:any) => state.user);
+    // 유저메뉴 열고 , 닫힘 여부
+    const [isUsermenuOpened,setIsUsermenuOpened] = useState(false);
     return (
         <>
-            <Container>
-                <button type='button' className='header-user-profile'>
-                    <HambergerIcon/>
-                    <img src={userProfileImage} className="header-user-profile-image" alt=""/>
-                </button>
-            </Container>
+        {
+            user.isLogged&& (
+                <OutsideClickHandler onOutsideClick={()=>{
+                    if(isUsermenuOpened){
+                        setIsUsermenuOpened(false)
+                    }
+                }}>
+                    <button type='button' className='header-user-profile' onClick={()=>setIsUsermenuOpened(!isUsermenuOpened)}>
+                        <HambergerIcon/>
+                        <img src={user.profileImage} className="header-user-profile-image" alt=""/>
+                    </button>
+                    {isUsermenuOpened && (
+                    <ul className="header-usermenu">
+                        <li>숙소 관리</li>
+                        <li>숙소 등록하기</li>
+                        <div className="header-usermenu-divider" />
+                        <li role="presentation">
+                            로그아웃
+                        </li>
+                    </ul>
+                )}
+                </OutsideClickHandler>
+            )
+        }
+            
         </>
     );
 };
