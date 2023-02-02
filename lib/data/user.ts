@@ -18,11 +18,11 @@ const exist = ({ email }: { email: string }) => {
   return users.some((user) => user.email === email);
 };
 
-// email의 유저 불러오기
-const find  = ({email}:{email:string})=>{
+//* email 또는 id의 유저 불러오기
+const find = ({ email, id }: { email?: string; id?: number }) => {
   const users = getList();
-  return users.find((user)=>user.email===email);
-}
+  return users.find((user) => user.email === email || user.id === id);
+};
 
 //* 유저 리스트 저장하기
 const write = async (users: StoredUserType[]) => {
