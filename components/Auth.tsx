@@ -88,12 +88,12 @@ const Container = styled.div`
 const Auth = () => {
     //  로그인 안되어있으면 input창 - AuthForm 
     //  로그인 되어있으면 유저프로필 - AuthUserProfile
-    const user = useSelector((state:any)=>state.user);
+    const isLogged = useSelector((state:any)=>state.user.isLogged);
     return (
         <Container>
             <button className='myStore'>내 상점</button>
-            {!user.isLogged&&(<AuthForm/>)}
-            {user.isLogged&&(<AuthUserProfile/>)}
+            {!isLogged&&(<AuthForm/>)}
+            {isLogged&&(<AuthUserProfile/>)}
         </Container>
     );
 };

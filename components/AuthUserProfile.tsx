@@ -8,7 +8,7 @@ import { userActions } from './../store/user';
 
 
 const AuthUserProfile = () => {
-    const user = useSelector((state:any) => state.user);
+    const userProfileImage = useSelector((state:any) => state.user.profileImage);
 
     const dispatch = useDispatch();
 
@@ -24,9 +24,6 @@ const AuthUserProfile = () => {
         }
     }
     return (
-        <>
-        {
-            user.isLogged&& (
                 <OutsideClickHandler onOutsideClick={()=>{
                     if(isUsermenuOpened){
                         setIsUsermenuOpened(false)
@@ -34,7 +31,7 @@ const AuthUserProfile = () => {
                 }}>
                     <button type='button' className='header-user-profile' onClick={()=>setIsUsermenuOpened(!isUsermenuOpened)}>
                         <HambergerIcon/>
-                        <img src={user.profileImage} className="header-user-profile-image" alt=""/>
+                        <img src={userProfileImage} className="header-user-profile-image" alt=""/>
                     </button>
                     {isUsermenuOpened && (
                     <ul className="header-usermenu">
@@ -47,10 +44,6 @@ const AuthUserProfile = () => {
                     </ul>
                 )}
                 </OutsideClickHandler>
-            )
-        }
-            
-        </>
     );
 };
 
