@@ -8,7 +8,7 @@ const globalStyle = css`
         box-sizing: border-box;
     }
     body{
-        font-family: Noto Sans,Noto Sans KR;
+        font-family: Noto Sans,Noto Sans KR,Roboto;
         color:${palette.black}
     }
     a{
