@@ -9,11 +9,7 @@ const Container  = styled.div`
 const index:React.FC = ()=>{
     return (
     <Container>
-        <h1>hello </h1>
-        <ul>
-            <li>hi li</li>
-        </ul>
-        <a>hi a</a>
+        <h2>전체 상품</h2>
     </Container>);
 }
 
