@@ -24,13 +24,13 @@ export default {
     gray_f7: "#f7f7f7",
     dark_cyan: "#008489",
     green: "#008A05",
-    main_color:"9E00FF",
-    main_text_color:"FEFAFA",
-    updatedDate:"8C8C8C",
-    detail_background:"FBFBFB",
-    error_border_color:"FF581C",
-    error_box_fill:"FFF1EE",
-    error_message:"D93900",
-    input_focus:"008489",
-    btn_hover:"D7A4ED"
+    main_color:"#9E00FF",
+    main_text_color:"#FEFAFA",
+    updatedDate:"#8C8C8C",
+    detail_background:"#FBFBFB",
+    error_border_color:"#FF581C",
+    error_box_fill:"#FFF1EE",
+    error_message:"#D93900",
+    input_focus:"#008489",
+    btn_hover:"#D7A4ED"
   };
