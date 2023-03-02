@@ -15,6 +15,10 @@ const globalStyle = css`
         text-decoration: none;
         color:${palette.black};
     }
+    button{
+        border:none;
+        outline: none;
+    }
 `
 
 const GlobalStyle = createGlobalStyle`
