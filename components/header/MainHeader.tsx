@@ -6,6 +6,7 @@ import SearchIcon from "../../public/static/svg/header/mainHeader/searchIcon.svg
 import HambergerIcon from "../../public/static/svg/header/mainHeader/hambergerIcon.svg"
 import AlarmIcon from "../../public/static/svg/header/mainHeader/alarmIcon.svg"
 import { useState } from 'react';
+import Link from 'next/link';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -80,7 +81,6 @@ const Conatainer = styled.div`
 
 const mainHeader = () => {
     const [testAlarmState,setTestAlarmState] = useState<boolean>(true)
-    console.log(testAlarmState)
     const testAlarmCount = 2
     return (
         <Conatainer>
@@ -91,10 +91,14 @@ const mainHeader = () => {
                     <SearchIcon className="searchIcon"/>
                 </div>
                 <div className='alarmBox'>
-                    <AlarmIcon/>
+                    <Link href="alarm">
+                        <AlarmIcon className="alarmIcon"/>
+                    </Link>
                     {testAlarmState ? <span className='showAlarm'>{testAlarmCount}</span>  : null}
                 </div>
-                <HambergerIcon/>
+                <Link href="/category">
+                    <HambergerIcon/>
+                </Link>
             </div>
         </Conatainer>
     );

@@ -5,10 +5,10 @@ import CommonHeader from './CommonHeader';
 
 const Header = () => {
     const router = useRouter();
-    console.log('Header:',router.pathname)
+    const currentPathName = router.pathname;
     return (
         <div>
-            {router.pathname==="/" ? <MainHeader/> : <CommonHeader/> }
+            {router.pathname==="/" ? <MainHeader/> : <CommonHeader pathName={currentPathName}/> }
         </div>
     );
 };
