@@ -8,7 +8,7 @@ const Header = () => {
     const currentPathName = router.pathname;
     return (
         <div>
-            {router.pathname==="/" ? <MainHeader/> : <CommonHeader pathName={currentPathName}/> }
+            {router.pathname==="/"? null : router.pathname==="/home" ? <MainHeader/> : <CommonHeader pathName={currentPathName}/> }
         </div>
     );
 };

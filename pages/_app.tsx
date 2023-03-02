@@ -9,7 +9,6 @@ import { meAPI } from "../lib/api/auth";
 import { useEffect } from "react";
 import { userActions } from "../store/user";
 import { useDispatch } from "react-redux";
-import MainHeader from "../components/header/mainHeader";
 import Header from "../components/header/Header";
 
 const MyApp = ({Component,pageProps,...data}:AppProps)=>{
