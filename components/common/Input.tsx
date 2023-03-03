@@ -12,36 +12,37 @@ type InputContainerProps = {
 const Container = styled.div<InputContainerProps>`
     display:flex;
     align-items:center;
-    input{
-            position:relative;
+    .inner-input-wrapper{
+        display:flex;
+        width:100%;
+        height:40px;
+        border:1px solid #D9D9D9;
+        border-radius:10px;
+        padding:0px 10px;
+        &:focus{
+            border-color:${palette.input_focus}
+        }
+        input{
             width:100%;
-            height:40px;
-            padding:${({iconExist})=> (iconExist?"0 44px 0 11px":"0 11px")};
-            border:1px solid #D9D9D9;
-            border-radius:10px;
             font-size:15px;
             outline:none;
+            border:none;
+            appearance: none;
             ::placeholder{
                 color:${palette.gray_76}
             }
             &:focus{
-                border-color:${palette.dark_cyan}; 
+                border-color:${palette.input_focus}; 
             }
         }
-    svg{
-        position:absolute;
-        right:5px;
-        height:40px;
+        .input-icon-wrapper{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            margin-right:5px;
+        }
     }
-        
-    .input-icon-wrapper{
-        position:absolute;
-        top:0;
-        right:11px;
-        height:75px;
-        display:flex;
-        align-items:center;
-    }
+    
     /* 에러메시지 스타일링 */
     .input-error-message{
         margin-top:8px;
@@ -50,22 +51,26 @@ const Container = styled.div<InputContainerProps>`
         color:${palette.error_message}
     }
 
-    // 인풋 밸리데이션
+    // 인풋 밸리데이션 - 에러상태일 때 input창 스타일링
     ${({usevalidation,isValid})=>
         usevalidation && !isValid && css`
-            input {
+            .inner-input-wrapper {
                 background-color: ${palette.error_box_fill};
                 border-color: ${palette.error_border_color};
                 &:focus {
                 border-color: ${palette.error_border_color};
             }
+            input{
+                    background-color: ${palette.error_box_fill};
+                    border-color: ${palette.error_border_color};
+                }
         }  
     `}
     ${({ usevalidation, isValid }) =>
     usevalidation &&
     isValid &&
     css`
-      input {
+      .inner-input-wrapper {
         border-color: ${palette.dark_cyan};
       }
     `}
@@ -102,8 +107,10 @@ const Input:React.FC<IProps> = ({
             iconExist={!!icon} 
             isValid={isValid} 
             usevalidation={validateMode&&usevalidation}>
-            <input {...props}/>
-            <div className='input-icon-wrapper'>{icon}</div>
+            <div className='inner-input-wrapper'>
+                <input {...props}/>
+                <div className='input-icon-wrapper'>{icon}</div>    
+            </div>
         </Container>
         <ErrorContainer>
             {usevalidation&&validateMode&&!isValid&&errorMessage&&
