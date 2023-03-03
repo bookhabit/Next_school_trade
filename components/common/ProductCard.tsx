@@ -88,13 +88,12 @@ interface IProps{
 
 const ProductCard:React.FC<IProps> = ({product}) => {
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
-    
     const userFavoriteState = product.favorite
-    const [heartProduct,setHeartProduct] = useState(userFavoriteState)
-    console.log('heartProduct',heartProduct)
+    const [favoriteProduct,setFavoriteProduct] = useState(userFavoriteState)
+    console.log('favoriteProduct',favoriteProduct)
     // 하트아이콘 변경
     const toggleHeartIcon = ()=>{
-        setHeartProduct(!heartProduct)
+        setFavoriteProduct(!favoriteProduct)
         // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
     }
 
@@ -111,7 +110,7 @@ const ProductCard:React.FC<IProps> = ({product}) => {
                         <p>{product.updatedDate}</p>
                         <div className='info-footerRight'>
                             <div className='heartDiv'>
-                                {heartProduct? <HeartIcon onClick={toggleHeartIcon}/>:<BorderHeartIcon onClick={toggleHeartIcon}/>}
+                                {favoriteProduct? <HeartIcon onClick={toggleHeartIcon}/>:<BorderHeartIcon onClick={toggleHeartIcon}/>}
                                 <span>{product.heartCount}</span>
                             </div>
                             <div className='chattingDiv'>

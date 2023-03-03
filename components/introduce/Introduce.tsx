@@ -38,6 +38,7 @@ const Container = styled.div`
             color:${palette.main_text_color};
             font-size:25px;
             font-weight:bold;
+            cursor: pointer;
         }
     }
     .footerText{
