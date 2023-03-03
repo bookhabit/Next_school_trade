@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Container = styled.div<{currentLeft:boolean}>`
     width:100%;
@@ -40,14 +42,42 @@ const SubHeader = () => {
     const changeCurrent = ()=>{
         setCurrentLeft(!currentLeft)
     }
-    console.log(currentLeft)
+    // left,right를 페이지의 props마다 다른 text로 변경
+    const router = useRouter();
+    const pathname = router.pathname
+
+    const setLeftHeaderName = () => {
+        switch (pathname) {
+            case "/auth":
+                return "로그인"
+            case "/user/sellList":
+                return "판매중"
+            case "/user/grade":
+                return "평점"
+            default:
+                return "잘못된경로";
+        }
+    }
+    const setRightHeaderName = () => {
+        switch (pathname) {
+            case "/auth":
+                return "회원가입"
+            case "/user/sellList":
+                return "거래완료"
+            case "/user/grade":
+                return "리뷰"
+            default:
+                return "잘못된경로";
+        }
+    }
+
     return (
         <Container currentLeft={currentLeft}>
             <div className='subHeader-left' onClick={changeCurrent}>
-                <p>로그인</p>
+                <p>{setLeftHeaderName()}</p>
             </div>
             <div className='subHeader-right' onClick={changeCurrent}>
-                <p>회원가입</p>
+                <p>{setRightHeaderName()}</p>
             </div>
         </Container>
     );
