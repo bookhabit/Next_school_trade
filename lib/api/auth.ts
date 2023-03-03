@@ -5,7 +5,6 @@ import { UserType } from '../../types/user';
 interface SignUpAPIBody{
     userName:string;
     userNickname:string;
-    studentID:string;
     email:string;
     password:string;
     university:string;

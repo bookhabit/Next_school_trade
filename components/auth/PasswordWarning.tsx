@@ -11,6 +11,7 @@ const Container = styled.p<{isValid:boolean}>`
     svg{
         margin-right:8px;
     }
+    margin-bottom:3px;
 `
 
 

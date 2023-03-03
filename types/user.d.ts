@@ -3,12 +3,14 @@ export type StoredUserType = {
     id:number;
     userName: string;
     userNickname: string;
-    studentID: string;
     email: string;
     password: string;
     university: string;
     birthDay:string;
     profileImage: string;
+    latitude?:number;
+    longitude?:number;
+
   };
   
   // password값 지운 유저타입 - 클라이언트
@@ -16,10 +18,11 @@ export type StoredUserType = {
     id:number;
     userName: string;
     userNickname: string;
-    studentID: string;
     email: string;
     university: string;
     birthDay:string;
     profileImage: string;
+    latitude?:number;
+    longitude?:number;
   };
   

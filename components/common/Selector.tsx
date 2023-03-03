@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 const Container = styled.div<{ isValid:boolean; validateMode:boolean;}>`
     width:100%;
-    height:46px;
+    height:40px;
 
     select {
     width: 100%;
@@ -14,7 +14,7 @@ const Container = styled.div<{ isValid:boolean; validateMode:boolean;}>`
     border: 1px solid ${palette.gray_eb};
     font-size: 16px;
     padding: 0 11px;
-    border-radius: 4px;
+    border-radius: 10px;
     outline: none;
     -webkit-appearance: none;
     background-image: url("/static/svg/common/selector/selector_down_arrow.svg");

@@ -15,7 +15,7 @@ const Container = styled.div<InputContainerProps>`
     input{
             position:relative;
             width:100%;
-            height:46px;
+            height:40px;
             padding:${({iconExist})=> (iconExist?"0 44px 0 11px":"0 11px")};
             border:1px solid #D9D9D9;
             border-radius:10px;
@@ -30,7 +30,7 @@ const Container = styled.div<InputContainerProps>`
         }
     svg{
         position:absolute;
-        right:11px;
+        right:5px;
         height:40px;
     }
         

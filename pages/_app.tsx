@@ -27,7 +27,6 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
             <Header/>
             <GlobalStyle/>
             <Component {...pageProps}/>
-            <div id="root-modal"/>
         </>
     )
 }
