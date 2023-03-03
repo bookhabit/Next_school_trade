@@ -1,5 +1,4 @@
 import { AppContext, AppProps } from "next/app";
-import Auth from "../components/Auth";
 import GlobalStyle from "../styles/GlobalStyle";
 import { wrapper } from "../store";
 import App from "next/app";
@@ -23,7 +22,6 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
 
     return(
         <>
-            {/* <Auth/> */}
             <Header/>
             <GlobalStyle/>
             <Component {...pageProps}/>
