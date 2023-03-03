@@ -55,6 +55,10 @@ const Container = styled.div`
 `
 
 const Introduce = () => {
+    const isLogged = false;
+    const linkAsIsLogged = ()=>{
+        return isLogged ? "home" : "auth"
+    }
     return (
         <Container>
             <LogoIcon/>
@@ -63,7 +67,7 @@ const Introduce = () => {
                 <p>주변 학생들과 <span>공유</span>해보세요</p>
             </div>
             <div className='startBtn'>
-                <Link href="auth">
+                <Link href={linkAsIsLogged()}>
                     <button>시작하기</button>
                 </Link>
             </div>
