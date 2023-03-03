@@ -1,10 +1,13 @@
 import React from 'react';
+import Auth from '../components/auth/Auth';
+import SubHeader from '../components/header/SubHeader';
 
 const auth = () => {
     return (
-        <div>
-            <h2>로그인,회원가입 페이지</h2>
-        </div>
+        <>
+            <SubHeader/>
+            <Auth/>
+        </>
     );
 };
 
