@@ -35,10 +35,13 @@ const Container = styled.div<{currentLeft:boolean}>`
         background-color:white;
     }
 `
+interface IProps{
+    currentLeft:boolean
+    setCurrentLeft:Function
+}
 
-const SubHeader = () => {
+const SubHeader:React.FC<IProps> = ({currentLeft,setCurrentLeft}) => {
     // currentLeft에 따라서 UI가 바뀌고 다른 정보를 가져오면 된다
-    const [currentLeft,setCurrentLeft] = useState(true);
     const changeCurrent = ()=>{
         setCurrentLeft(!currentLeft)
     }

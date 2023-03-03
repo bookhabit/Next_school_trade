@@ -1,9 +1,15 @@
 import React from 'react';
+import Login from './Login';
+import SignUp from './SignUp';
 
-const Auth = () => {
+interface IProps{
+    currentLeft:boolean
+}
+
+const Auth:React.FC<IProps> = ({currentLeft}) => {
     return (
         <div>
-            <h2>로그인/회원가입페이지</h2>
+            {currentLeft?<Login/>:<SignUp/>}
         </div>
     );
 };
