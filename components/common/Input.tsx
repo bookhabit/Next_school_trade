@@ -17,21 +17,21 @@ const Container = styled.div<InputContainerProps>`
             width:100%;
             height:46px;
             padding:${({iconExist})=> (iconExist?"0 44px 0 11px":"0 11px")};
-            border:1px solid ${palette.gray_eb};
-            border-radius:4px;
-            font-size:16px;
+            border:1px solid #D9D9D9;
+            border-radius:10px;
+            font-size:15px;
             outline:none;
             ::placeholder{
                 color:${palette.gray_76}
             }
             &:focus{
-                border-color:${palette.dark_cyan} !important;
+                border-color:${palette.dark_cyan}; 
             }
         }
     svg{
         position:absolute;
         right:11px;
-        height:46px;
+        height:40px;
     }
         
     .input-icon-wrapper{
@@ -47,17 +47,17 @@ const Container = styled.div<InputContainerProps>`
         margin-top:8px;
         font-weight:600;
         font-size:14px;
-        color:${palette.tawny}
+        color:${palette.error_message}
     }
 
     // 인풋 밸리데이션
     ${({usevalidation,isValid})=>
         usevalidation && !isValid && css`
             input {
-                background-color: ${palette.snow};
-                border-color: ${palette.orange};
+                background-color: ${palette.error_box_fill};
+                border-color: ${palette.error_border_color};
                 &:focus {
-                border-color: ${palette.orange};
+                border-color: ${palette.error_border_color};
             }
         }  
     `}
@@ -73,7 +73,7 @@ const Container = styled.div<InputContainerProps>`
 const ErrorContainer = styled.div`
   margin-top:8px;
     p{
-      color:${palette.tawny};
+      color:${palette.error_message};
       font-weight:600;
       font-size:14px;
     }
