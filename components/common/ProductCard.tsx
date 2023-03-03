@@ -4,6 +4,7 @@ import HeartIcon from "../../public/static/svg/product/heartIcon.svg"
 import BorderHeartIcon from "../../public/static/svg/product/borderHeartIcon.svg"
 import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg"
 import palette from '../../styles/palette';
+import { Division } from './Division';
 
 const Container = styled.div`
     width:350px;
@@ -66,10 +67,7 @@ const Container = styled.div`
     }
   
 `
-const Division = styled.div`
-        border-bottom:1px solid #D9D9D9;
-        margin-bottom:20px;
-`
+
 
 type Product = {
         id:number,
