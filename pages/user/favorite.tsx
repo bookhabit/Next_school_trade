@@ -1,6 +1,6 @@
 import React from 'react';
 
-const userHeartList = () => {
+const favorite = () => {
     return (
         <div>
             <h2>관심목록</h2>
@@ -8,4 +8,4 @@ const userHeartList = () => {
     );
 };
 
-export default userHeartList;
+export default favorite;

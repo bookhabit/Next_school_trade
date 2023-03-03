@@ -1,6 +1,6 @@
 import React from 'react';
 
-const userChattingList = () => {
+const chattingList = () => {
     return (
         <div>
             <h2>채팅방 목록</h2>
@@ -8,4 +8,4 @@ const userChattingList = () => {
     );
 };
 
-export default userChattingList;
+export default chattingList;
