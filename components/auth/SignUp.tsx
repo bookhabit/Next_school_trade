@@ -22,6 +22,8 @@ import useValidateMode from '../../hooks/useValidateMode';
 import PasswordWarning from './PasswordWarning';
 import { authActions } from '../../store/auth';
 import Link from 'next/link';
+import useModal from '../../hooks/useModal';
+import SetPosition from '../map/setPosition';
 
 const Container = styled.form`
     width:100%;
@@ -106,163 +108,167 @@ const Container = styled.form`
 `
 
 const SignUp = () => {
-// 비밀번호 토글 state
-const [hidePassword,setHidePassword] = useState(true)
 
-// 비밀번호 인풋 포커스 되었을 때 상태
-const [passwordFocused,setPasswordFocused] = useState(false);
+    // 비밀번호 토글 state
+    const [hidePassword,setHidePassword] = useState(true)
 
-// 비밀번호 최소 자릿수
-const PASSWORD_MIN_LENGTH = 8;
+    // 비밀번호 인풋 포커스 되었을 때 상태
+    const [passwordFocused,setPasswordFocused] = useState(false);
 
-// input창 관리할 state
-const [inputs, setInputs] = useState({
-    userName:'',
-    userNickname: '',
-    studentID:'',
-    email: '',
-    password:'',
-    confirmPassword:''
-  });
+    // 비밀번호 최소 자릿수
+    const PASSWORD_MIN_LENGTH = 8;
 
-// select 관리할 state
-const [selectInputs,setSelectInputs] = useState({
-    university:"",
-    birthMonth:"",
-    birthDay:"",
-    birthYear:""
-})
-
-
-// 비구조화 할당을 통해 값 추출
-const { userName,userNickname,email,password,confirmPassword} = inputs; 
-const {university,birthMonth,birthDay,birthYear} = selectInputs;
-
-// input과 select onChange함수들
-const onChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target; 
-    setInputs({
-      ...inputs, // 기존의 input 객체를 복사한 뒤
-      [name]: value // name 키를 가진 값을 value 로 설정
+    // input창 관리할 state
+    const [inputs, setInputs] = useState({
+        userName:'',
+        userNickname: '',
+        studentID:'',
+        email: '',
+        password:'',
+        confirmPassword:''
     });
-  };
 
-const onChangeSelector = (event:React.ChangeEvent<HTMLSelectElement>)=>{
-const { value, name } = event.target; // 우선 e.target 에서 name 과 value 를 추출
-setSelectInputs({
-    ...selectInputs, // 기존의 input 객체를 복사한 뒤
-    [name]: value // name 키를 가진 값을 value 로 설정
-});
-}
-
-// * 비밀번호 숨김 토글
-const toggleHidePassword = ()=>{
-    setHidePassword(!hidePassword);
-}
+    // select 관리할 state
+    const [selectInputs,setSelectInputs] = useState({
+        university:"",
+        birthMonth:"",
+        birthDay:"",
+        birthYear:""
+    })
 
 
+    // 비구조화 할당을 통해 값 추출
+    const { userName,userNickname,email,password,confirmPassword} = inputs; 
+    const {university,birthMonth,birthDay,birthYear} = selectInputs;
 
-// 비밀번호 인풋 포커스 되었을 때 이벤트함수
-const onFocusPassword= ()=>{
-    setPasswordFocused(true)
-}
+    // input과 select onChange함수들
+    const onChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
+        const { value, name } = event.target; 
+        setInputs({
+        ...inputs, // 기존의 input 객체를 복사한 뒤
+        [name]: value // name 키를 가진 값을 value 로 설정
+        });
+    };
 
-// 비밀번호 확인 인풋 포커스 되었을 떄 이벤트함수
-const onFocusedConfirmPassword = ()=>{
-    setPasswordFocused(false)
-}
-      
-
-//* password가 이름이나 이메일을 포함하는지
-const isPasswordHasNameOrEmail = useMemo(
-    () =>
-    !password ||
-    !userName || !email ||
-    password.includes(userName) ||
-    password.includes(email.split("@")[0]),
-    [password, userName, email]
-);
-
-//* 비밀번호가 최수 자리수 이상인지
-const isPasswordOverMinLength = useMemo(
-    () => password.length >= PASSWORD_MIN_LENGTH,
-    [password]
-);
-
-//* 비밀번호가 숫자나 특수기호를 포함하는지
-const isPasswordHasNumberOrSymbol = useMemo(
-    () =>
-    (
-        /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/g.test(password) ||
-        /[0-9]/g.test(password)
-    ),
-    [password]
-);
-// 디스패치
-const dispatch = useDispatch();
-
-// validateMode 함수가져옴
-const {setValidateMode } = useValidateMode();
-
-
-// 회원가입 폼 입력 값 확인하는 함수
-const validateSignUpForm = ()=>{
-// 폼 요소의 값이 없다면
-    if(!userName|| !userNickname || !email || !password || !university || !birthDay){
-        return false;
+    const onChangeSelector = (event:React.ChangeEvent<HTMLSelectElement>)=>{
+    const { value, name } = event.target; // 우선 e.target 에서 name 과 value 를 추출
+    setSelectInputs({
+        ...selectInputs, // 기존의 input 객체를 복사한 뒤
+        [name]: value // name 키를 가진 값을 value 로 설정
+    });
     }
-    
-    //* 비밀번호가 올바르지 않다면
-    if (
-        isPasswordHasNameOrEmail ||
-        !isPasswordOverMinLength ||
-        !isPasswordHasNumberOrSymbol
-    ) {
-        console.log('비밀번호가 올바르지 않다')
-        return false;
-    }    
-    return true;
-}
 
-// 회원가입 폼 제출하는 함수
-const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
-event.preventDefault();
+    // * 비밀번호 숨김 토글
+    const toggleHidePassword = ()=>{
+        setHidePassword(!hidePassword);
+    }
 
-// validateMode true - 유효성검사 실시
-setValidateMode(true)
 
-if(validateSignUpForm()){
-    try{
-        const signUpBody={
-            userName,
-            userNickname,            
-            email,
-            password,
-            university,
-            birthDay:new Date(
-                `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
-                ).toUTCString()
+
+    // 비밀번호 인풋 포커스 되었을 때 이벤트함수
+    const onFocusPassword= ()=>{
+        setPasswordFocused(true)
+    }
+
+    // 비밀번호 확인 인풋 포커스 되었을 떄 이벤트함수
+    const onFocusedConfirmPassword = ()=>{
+        setPasswordFocused(false)
+    }
+        
+
+    //* password가 이름이나 이메일을 포함하는지
+    const isPasswordHasNameOrEmail = useMemo(
+        () =>
+        !password ||
+        !userName || !email ||
+        password.includes(userName) ||
+        password.includes(email.split("@")[0]),
+        [password, userName, email]
+    );
+
+    //* 비밀번호가 최수 자리수 이상인지
+    const isPasswordOverMinLength = useMemo(
+        () => password.length >= PASSWORD_MIN_LENGTH,
+        [password]
+    );
+
+    //* 비밀번호가 숫자나 특수기호를 포함하는지
+    const isPasswordHasNumberOrSymbol = useMemo(
+        () =>
+        (
+            /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/g.test(password) ||
+            /[0-9]/g.test(password)
+        ),
+        [password]
+    );
+    // 디스패치
+    const dispatch = useDispatch();
+
+    // validateMode 함수가져옴
+    const {setValidateMode } = useValidateMode();
+
+
+    // 회원가입 폼 입력 값 확인하는 함수
+    const validateSignUpForm = ()=>{
+    // 폼 요소의 값이 없다면
+        if(!userName|| !userNickname || !email || !password || !university || !birthDay){
+            return false;
         }
         
-        const {data} = await signupAPI(signUpBody);
-        console.log('클라이언트 받은 데이터',data)
-        dispatch(userActions.setLoggedUser(data))   
-
-    }catch(e){
-        console.log(e)
+        //* 비밀번호가 올바르지 않다면
+        if (
+            isPasswordHasNameOrEmail ||
+            !isPasswordOverMinLength ||
+            !isPasswordHasNumberOrSymbol
+        ) {
+            console.log('비밀번호가 올바르지 않다')
+            return false;
+        }    
+        return true;
     }
-}
-}
-// 대학교명 리스트 가져오기
-const [universityNameList,setUniversityNameList] = useState<string[]>();
 
-useEffect(()=>{
-    async function fetchUniversityName() {
-        const response = await axios.get("/api/school/universityName");
-        setUniversityNameList(response.data)
+    // 회원가입 폼 제출하는 함수
+    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
+    event.preventDefault();
+
+    // validateMode true - 유효성검사 실시
+    setValidateMode(true)
+
+    if(validateSignUpForm()){
+        try{
+            const signUpBody={
+                userName,
+                userNickname,            
+                email,
+                password,
+                university,
+                birthDay:new Date(
+                    `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
+                    ).toUTCString()
+            }
+            
+            const {data} = await signupAPI(signUpBody);
+            console.log('클라이언트 받은 데이터',data)
+            dispatch(userActions.setLoggedUser(data))   
+
+        }catch(e){
+            console.log(e)
+        }
     }
-    fetchUniversityName();
-},[])
+    }
+    // 대학교명 리스트 가져오기
+    const [universityNameList,setUniversityNameList] = useState<string[]>();
+
+    useEffect(()=>{
+        async function fetchUniversityName() {
+            const response = await axios.get("/api/school/universityName");
+            setUniversityNameList(response.data)
+        }
+        fetchUniversityName();
+    },[])
+
+    // ModalPortal 
+    const {openModal,ModalPortal} = useModal();
 
     return (
         <Container onSubmit={onSubmitSignUp}>
@@ -397,7 +403,7 @@ useEffect(()=>{
                 </div>
             </div>
             <div className='signup-setMyPosition-wrapper'>
-                <div className='signup-setMyPosition'>
+                <div className='signup-setMyPosition' onClick={openModal}>
                     <MapIcon/>
                         <p>주 거래 위치 설정하기</p>
                 </div>
@@ -405,6 +411,9 @@ useEffect(()=>{
             <div className='sign-up-modal-submit-button-wrapper'>
                 <Button type='submit'>가입하기</Button>
             </div>
+            <ModalPortal>
+                <SetPosition/>
+            </ModalPortal>
         </Container>
     );
 };

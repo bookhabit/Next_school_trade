@@ -19,10 +19,11 @@ const Container = styled.div`
     background-color: rgba(0, 0, 0, 0.75);
   }
   .modal-contents{
-        width:400px;
-        height:400px;
+        width:360px;
+        height:800px;
         background-color:white;
         z-index:11;
+        text-align:center;
     }
 `;
 

@@ -18,6 +18,12 @@ const globalStyle = css`
     button{
         border:none;
         outline: none;
+        background-color: transparent;
+    }
+    input{
+        border:none;
+        outline: none;
+        background-color: transparent;
     }
 `
 
