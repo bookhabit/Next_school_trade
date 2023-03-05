@@ -1,10 +1,13 @@
 import React from 'react';
+import LinkFooter from '../../components/footer/LinkFooter';
+import FavoriteList from '../../components/myPage/FavoriteList';
 
 const favorite = () => {
     return (
-        <div>
-            <h2>관심목록</h2>
-        </div>
+        <>
+            <FavoriteList/>
+            <LinkFooter/>
+        </>
     );
 };
 

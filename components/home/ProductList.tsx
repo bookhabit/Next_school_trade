@@ -8,7 +8,7 @@ import SoccershoesImg from "../../public/static/image/testProudct/축구화.jpg"
 import ToeicImg from "../../public/static/image/testProudct/토익.jpg"
 
 const Container = styled.div`
-    margin-top:50px;
+    margin-top:20px;
 `
 
 const ProductList = () => {
