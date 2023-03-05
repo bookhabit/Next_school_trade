@@ -6,12 +6,17 @@ import OperatingBook from "../../public/static/image/testProudct/운영체제.jp
 import DataStructureBook from "../../public/static/image/testProudct/자료구조.jpg"
 import SoccershoesImg from "../../public/static/image/testProudct/축구화.jpg"
 import ToeicImg from "../../public/static/image/testProudct/토익.jpg"
+import CompletedProductCard from '../common/CompletedProductCard';
 
-const Container = styled.div`
-    margin-top:20px;
+const Container = styled.div<{completedProducts:boolean}>`
+    margin-top:${props=>props.completedProducts? "0px" :"20px"};
 `
 
-const ProductList = () => {
+interface IProps{
+    completedProducts:boolean
+}
+
+const ProductList:React.FC<IProps> = ({completedProducts}) => {
     const testProduct = [{
         id:1,
         title:"전공책 팝니다",
@@ -59,10 +64,11 @@ const ProductList = () => {
         favorite:true,
     }]
     return (
-        <Container>  
+        <Container completedProducts={completedProducts}>  
             {testProduct.map((product)=>(
-                <ProductCard key={product.id} product={product}/>
+                completedProducts ? <CompletedProductCard key={product.id} product={product}/>  : <ProductCard key={product.id} product={product}/>
             ))}
+            
         </Container>
     );
 };

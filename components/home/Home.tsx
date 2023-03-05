@@ -11,7 +11,7 @@ const Home = () => {
     const showProductList = true
     return (
         <Container>
-            {showProductList ? <ProductList/> : <h2>상품 리스트가 없습니다.</h2>}
+            {showProductList ? <ProductList completedProducts={false}/> : <h2>상품 리스트가 없습니다.</h2>}
         </Container>
     );
 };

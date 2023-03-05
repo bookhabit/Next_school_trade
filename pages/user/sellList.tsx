@@ -1,6 +1,7 @@
 import React from 'react';
 import SubHeader from '../../components/header/SubHeader';
 import { useState } from 'react';
+import SellList from '../../components/myPage/sellList/SellList';
 
 const sellList = () => {
     // subHeader에 왼쪽 정보인지 오른쪽 정보인지 알려주기 위한 state
@@ -9,7 +10,7 @@ const sellList = () => {
     return (
         <div>
             <SubHeader currentLeft={currentLeft} setCurrentLeft={setCurrentLeft} />
-            <h2>판매내역 페이지</h2>
+            <SellList currentLeft={currentLeft}/>
         </div>
     );
 };
