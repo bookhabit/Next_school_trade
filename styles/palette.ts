@@ -33,5 +33,6 @@ export default {
     error_message:"#D93900",
     input_focus:"#008489",
     btn_hover:"#D7A4ED",
-    text_hover:"#F1D8FB"
+    text_hover:"#F1D8FB",
+    divistion_color:"#D9D9D9"
   };
