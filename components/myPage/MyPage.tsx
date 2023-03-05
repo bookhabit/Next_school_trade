@@ -52,6 +52,8 @@ const Container = styled.div`
         p{
             font-size:18px;
             font-weight:600;
+            cursor: pointer;
+            display:inline-block;
         }
         .sellListIcon{
             margin-left:12px;
@@ -74,7 +76,7 @@ const Container = styled.div`
 `
 
 const MyPage = () => {
-    const {openModal,ModalPortal} = useModal();
+    const {openModal,ModalPortal,closeModal} = useModal();
     return (
         <Container>
             <div className='myUniversity'>
@@ -119,7 +121,7 @@ const MyPage = () => {
                 </div>
             </div>
             <ModalPortal>
-                <SetPosition/>
+                <SetPosition closeModal={closeModal}/>
             </ModalPortal>
         </Container>
     );

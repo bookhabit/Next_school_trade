@@ -2,9 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import MarkerIcon from "../../public/static/svg/map/marker.svg"
+import CloseXIcon from "../../public/static/svg/map/modal_close_x_icon.svg"
+import useModal from '../../hooks/useModal';
 
 
 const Container = styled.div`
+    .mordal-close-x-icon {
+        position:relative;
+        left:90px;
+        bottom:55px;
+        font-size:30px;
+        color:#FFFFFF;
+        cursor: pointer;
+    }
     .set-position-header{
         position:sticky;
         top:0;
@@ -92,12 +102,17 @@ const Container = styled.div`
         }
     }
 `
+interface IProps {
+    closeModal: () => void;
+}
 
-const SetPosition = () => {
+const SetPosition:React.FC<IProps> = ({closeModal}) => {
+    
     return (
         <Container className='modal-contents'>
             <div className='set-position-header'>
                 <p>거래 위치 설정하기</p>
+                <CloseXIcon className="mordal-close-x-icon" onClick={closeModal}/>
             </div>
             <div className='set-position-map'>
                 <MarkerIcon/>

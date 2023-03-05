@@ -268,7 +268,7 @@ const SignUp = () => {
     },[])
 
     // ModalPortal 
-    const {openModal,ModalPortal} = useModal();
+    const {openModal,ModalPortal,closeModal} = useModal();
 
     return (
         <Container onSubmit={onSubmitSignUp}>
@@ -412,7 +412,7 @@ const SignUp = () => {
                 <Button type='submit'>가입하기</Button>
             </div>
             <ModalPortal>
-                <SetPosition/>
+                <SetPosition closeModal={closeModal}/>
             </ModalPortal>
         </Container>
     );
