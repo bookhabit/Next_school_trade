@@ -10,7 +10,7 @@ const LinkModal = () => {
             <Link href="registerProduct">
                 <p>판매하기</p>
             </Link>
-            <Link href="myPage">
+            <Link href="user/myPage">
                 <p>내 정보</p>
             </Link>
         </div>

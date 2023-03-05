@@ -38,7 +38,6 @@ MyApp.getInitialProps = async (context:AppContext)=>{
         if(cookieObject.access_token){
             axios.defaults.headers.cookie = cookieObject.access_token;
             data = await (await meAPI()).data;
-            console.log('data:',data)
         }
     }catch(e){
         console.log(e)

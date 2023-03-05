@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.svg"
+import { useSelector } from 'react-redux';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -26,6 +27,9 @@ const Conatainer = styled.div`
         .headerLeft{
             display:flex;
             align-items:center;
+            img{
+              margin-right:10px;
+            }
         }
         .headerLeftIcon{
             margin-right:15px;
@@ -40,6 +44,8 @@ interface IProps {
 const CommonHeader:React.FC<IProps> = ({pathName}) => {
     // 알림페이지,카테고리페이지,채팅방페이지 는 편집 버튼 생성
     const showEditBtn = pathName=== "/user/alarm" || pathName==="/user/chattingList" || pathName === "/user/favorite"; 
+    const LoggedUser = useSelector((state:any)=>state.user)
+    console.log(LoggedUser.userName)
     
     const goToBackpage = ()=>{
         window.history.back();
@@ -59,6 +65,8 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "거래 위치 설정하기";
           case "/category":
             return "카테고리";
+          case "/user/myPage":
+            return `${LoggedUser.userName}`
           case "/user/alarm":
             return "알림";
           case "/user/favorite":
@@ -74,7 +82,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
           case "/user/grade":
             return "나의 평점 및 리뷰";
           default:
-            return "판매자이름";
+            return "지정된 페이지 없음";
         }
       };
     
@@ -83,6 +91,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             <div className='headerDiv'>
                 <div className='headerLeft'>
                     <BeforeIcon className="headerLeftIcon" onClick={goToBackpage}/>
+                    {pathName==="/user/myPage"? <img src={LoggedUser.profileImage} alt="프로필이미지"/>:null}
                     <p>{changeURLName()}</p>
                 </div>
                 <div className='headerRight'>
