@@ -28,6 +28,9 @@ const Conatainer = styled.div`
             display:flex;
             align-items:center;
             img{
+              width:35px;
+              height:35px;
+              color:${palette.main_text_color};
               margin-right:10px;
             }
         }
