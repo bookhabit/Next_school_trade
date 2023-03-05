@@ -9,6 +9,8 @@ import SellListIcon from "../../public/static/svg/myPage/sellListIcon.svg"
 import UniversityAuthIcon from "../../public/static/svg/myPage/universityAuthIcon.svg"
 import PassWordIcon from "../../public/static/svg/myPage/passWordIcon.svg"
 import MarkerIcon from "../../public/static/svg/myPage/marker.svg"
+import useModal from '../../hooks/useModal';
+import SetPosition from '../map/setPosition';
 
 const Container = styled.div`
 
@@ -72,6 +74,7 @@ const Container = styled.div`
 `
 
 const MyPage = () => {
+    const {openModal,ModalPortal} = useModal();
     return (
         <Container>
             <div className='myUniversity'>
@@ -112,9 +115,12 @@ const MyPage = () => {
                 </Link>
                 <div className='myPage-list'>
                     <MarkerIcon className='myPageIcon markerIcon' />
-                    <p>주 거래 위치 설정하기</p>
+                    <p onClick={openModal}>주 거래 위치 설정하기</p>
                 </div>
             </div>
+            <ModalPortal>
+                <SetPosition/>
+            </ModalPortal>
         </Container>
     );
 };

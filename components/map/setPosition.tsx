@@ -93,7 +93,7 @@ const Container = styled.div`
     }
 `
 
-const setPosition = () => {
+const SetPosition = () => {
     return (
         <Container className='modal-contents'>
             <div className='set-position-header'>
@@ -120,4 +120,4 @@ const setPosition = () => {
     );
 };
 
-export default setPosition;
+export default SetPosition;
