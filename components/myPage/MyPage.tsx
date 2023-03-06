@@ -101,7 +101,7 @@ const MyPage = () => {
                 <p className='myPageTitle'>거래 평가</p>
                 <Link href="/user/grade" className='myPage-list'>
                     <UniversityHatIcon className='myPageIcon'/>
-                    <p>나의 평점 및 리뷰</p>
+                    <p>나의 거래후기</p>
                 </Link>
             </div>
             <div className='myPage-etc myPageBody'>

@@ -14,7 +14,7 @@ const Container = styled.div`
     
     .complete-text{
         position:absolute;
-        left:170px;
+        left:160px;
         color:${palette.main_text_color};
         margin-top:15px;
     }

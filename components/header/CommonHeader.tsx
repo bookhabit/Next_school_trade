@@ -83,7 +83,11 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
           case "/user/chattingRoom":
             return "채팅하는 상대방 이름";
           case "/user/grade":
-            return "나의 평점 및 리뷰";
+            return "거래후기";
+          case "/user/profile":
+            return "프로필 정보";
+          case "/seller/profile":
+            return "판매자이름";
           default:
             return "지정된 페이지 없음";
         }

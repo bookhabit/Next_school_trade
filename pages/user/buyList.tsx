@@ -1,11 +1,14 @@
 import React from 'react';
+import LinkFooter from '../../components/footer/LinkFooter';
+import BuyList from '../../components/myPage/BuyList';
 
 const buyList = () => {
     return (
-        <div>
-            <h2>구매내역</h2>
-        </div>
-    );
+        <>
+            <BuyList/>
+            <LinkFooter/>        
+        </>
+    )
 };
 
 export default buyList;
