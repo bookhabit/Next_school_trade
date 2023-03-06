@@ -91,7 +91,7 @@ const mainHeader = () => {
                     <SearchIcon className="searchIcon"/>
                 </div>
                 <div className='alarmBox'>
-                    <Link href="alarm">
+                    <Link href="/user/alarm">
                         <AlarmIcon className="alarmIcon"/>
                     </Link>
                     {testAlarmState ? <span className='showAlarm'>{testAlarmCount}</span>  : null}

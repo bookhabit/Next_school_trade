@@ -9,7 +9,7 @@ import ChattingIcon from "../../public/static/svg/footer/chatting.svg"
 
 const Container = styled.div`
     position:sticky;
-    bottom:0px;      
+    bottom:0;      
     background-color:${palette.main_color};
     width:100%;
     height:60px;

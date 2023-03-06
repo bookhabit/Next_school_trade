@@ -32,53 +32,31 @@ const Container = styled.div`
         display:flex;
         justify-content:center;
         align-items:center;
+        margin-top:10px;
         cursor: pointer;
-        svg{
-            margin-right:5px;
-        }
-        .true_main_color{
-            path{
-                fill: ${palette.main_color};
-            }
+        h2{
+            font-size:30px;
+            color:${palette.main_color}
         }
         
 }
 `
+interface IProps{
+    reviewList:Object[];
+}
 
 
-
-const GradeReview = () => {
-    // 별점 기본값 설정
-    const [clicked, setClicked] = useState([false, false, false, false, false]);
-
-    // 별점 체크 최종 설정
-    const array = [0,1,2,3,4]
-
-    const handleStarClick = (index:any) => {
-        let clickStates = [...clicked];
-        for (let i = 0; i < 5; i++) {
-          clickStates[i] = i <= index ? true : false;
-        }
-         setClicked(clickStates);
-    };
-
-    // 별점 계산
-    let score = clicked.filter(Boolean).length;
-    
-
+const GradeReview:React.FC<IProps> = ({reviewList}) => {
+    // 전달받은 리스트에서 총 평점 점수를 렌더링한다
+    const starCount = reviewList;
+   
     return (
         <Container>
             <div className='star-title'>
                 <h2>평점</h2>
             </div>
             <div className='review-star-box'>
-                {array.map((index:any)=>(
-                    <StarIcon
-                        key={index}
-                        onClick={()=>handleStarClick(index)}
-                        className={`${clicked[index]}_main_color`}
-                        />
-                ))}
+                <h2>4.5 점</h2>
             </div>
         </Container>
     );
