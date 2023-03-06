@@ -1,10 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
+import Link from 'next/link';
+import ElectronicIcon from "../public/static/svg/category/electronic.svg"
+import Category from '../components/category/Category';
+import LinkFooter from '../components/footer/LinkFooter';
 
 const category = () => {
     return (
-        <div>
-            <h2>카테고리 페이지입니다.</h2>
-        </div>
+        <>
+            <Category/>
+            <LinkFooter/>
+        </>
     );
 };
 
