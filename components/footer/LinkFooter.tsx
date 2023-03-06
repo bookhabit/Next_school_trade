@@ -9,6 +9,7 @@ import ChattingIcon from "../../public/static/svg/footer/chatting.svg"
 
 const Container = styled.div`
     position:sticky;
+    position:absolute;
     bottom:0;      
     background-color:${palette.main_color};
     width:100%;
@@ -32,8 +33,6 @@ const Container = styled.div`
             color:${palette.main_text_color}
         }
     }
-    
-
 `
 
 const LinkFooter = () => {
@@ -52,7 +51,7 @@ const LinkFooter = () => {
                     <ChattingIcon/>
                     <p>채팅</p>
                 </Link>
-                <Link href="/user/myPage">
+                <Link href="/user">
                     <UserIcon/>
                     <p>내정보</p>
                 </Link>

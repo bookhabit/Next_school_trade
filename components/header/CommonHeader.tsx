@@ -68,7 +68,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "거래 위치 설정하기";
           case "/category":
             return "카테고리";
-          case "/user/myPage":
+          case "/user":
             return `${LoggedUser.userName}`
           case "/user/alarm":
             return "알림";
@@ -98,7 +98,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             <div className='headerDiv'>
                 <div className='headerLeft'>
                     <BeforeIcon className="headerLeftIcon" onClick={goToBackpage}/>
-                    {pathName==="/user/myPage"? <img src={LoggedUser.profileImage} alt="프로필이미지"/>:null}
+                    {pathName==="/user"? <img src={LoggedUser.profileImage} alt="프로필이미지"/>:null}
                     <p>{changeURLName()}</p>
                 </div>
                 <div className='headerRight'>
