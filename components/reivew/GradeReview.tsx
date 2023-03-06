@@ -36,7 +36,7 @@ const Container = styled.div`
         svg{
             margin-right:5px;
         }
-        .main_color{
+        .true_main_color{
             path{
                 fill: ${palette.main_color};
             }
@@ -76,7 +76,7 @@ const GradeReview = () => {
                     <StarIcon
                         key={index}
                         onClick={()=>handleStarClick(index)}
-                        className={clicked[index] && 'main_color'}
+                        className={`${clicked[index]}_main_color`}
                         />
                 ))}
             </div>
