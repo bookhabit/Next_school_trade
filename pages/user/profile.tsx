@@ -1,10 +1,13 @@
 import React from 'react';
+import LinkFooter from '../../components/footer/LinkFooter';
+import Profile from '../../components/myPage/Profile';
 
 const profile = () => {
     return (
-        <div>
-            <h2>프로필정보</h2>
-        </div>
+        <>
+            <Profile/>
+            <LinkFooter/>
+        </>
     );
 };
 

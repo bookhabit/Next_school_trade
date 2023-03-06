@@ -85,7 +85,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
           case "/user/tradeReview":
             return "거래후기";
           case "/user/profile":
-            return "프로필 정보";
+            return "프로필 정보 수정";
           case "/seller/profile":
             return "판매자이름";
           default:
