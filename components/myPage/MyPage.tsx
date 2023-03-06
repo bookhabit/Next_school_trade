@@ -99,7 +99,7 @@ const MyPage = () => {
             </div>
             <div className='myTradeEvaluation myPageBody'>
                 <p className='myPageTitle'>거래 평가</p>
-                <Link href="/user/grade" className='myPage-list'>
+                <Link href="/user/tradeReview" className='myPage-list'>
                     <UniversityHatIcon className='myPageIcon'/>
                     <p>나의 거래후기</p>
                 </Link>

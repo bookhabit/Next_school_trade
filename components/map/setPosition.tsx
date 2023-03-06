@@ -10,7 +10,7 @@ const Container = styled.div`
     .mordal-close-x-icon {
         position:relative;
         left:90px;
-        bottom:55px;
+        bottom:50px;
         font-size:30px;
         color:#FFFFFF;
         cursor: pointer;
