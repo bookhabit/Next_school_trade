@@ -58,11 +58,11 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
         switch (pathName) {
           case "/auth":
             return "로그인/회원가입";
-          case "/registerProduct":
+          case "/product/register":
             return "상품 등록하기";
-          case "/productDetail":
+          case "/product/":
             return "상품상세페이지 (게시글제목으로 바꾸기-리덕스)";
-          case "/correctProduct":
+          case "/product/correct":
             return "상품 수정하기";
           case "/setPosition":
             return "거래 위치 설정하기";

@@ -3,24 +3,7 @@ import styled from 'styled-components';
 import palette from '../../styles/palette';
 
 const Container = styled.div`
-    /* 이미지 css */
     
-
-    /* 제목 css */
-
-
-    /* 가격 css */
-
-    /* 설명 css */
-
-
-    /* 카테고리 css */
-
-    /* 지도 모달창 연결 css */
-
-    /* 위치 인풋받기 css */
-
-
     /* 푸터 css */
     .register-footer{
         position:fixed;
@@ -45,22 +28,20 @@ const Container = styled.div`
     }
 `
 
-
-const RegisterProduct = () => {
+const ShowProductDetail = () => {
     return (
         <Container>
-            <div className='register-image'></div>
-            <div className='register-input-title'></div>
-            <div className='register-input-price'></div>
-            <div className='register-input-desc'></div>
-            <div className='register-select-category'></div>
-            <div className='register-setPosition-modal'></div>
-            <div className='register-setPosition-input'></div>
+            
+
+
+
+
             <div className='register-footer'>
-                <button>등록하기</button>
+                {/* 하트이콘,가격 푸터에 추가하기 - flex필요 */}
+                <button>채팅하기</button>
             </div>
         </Container>
     );
 };
 
-export default RegisterProduct;
+export default ShowProductDetail;

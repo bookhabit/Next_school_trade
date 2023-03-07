@@ -42,7 +42,7 @@ const LinkFooter = () => {
                     <HomeIcon/>
                     <p>홈</p>
                 </Link>
-                <Link href="/registerProduct">
+                <Link href="/product/register">
                     <RegisterIcon/>
                     <p>등록</p>
                 </Link>

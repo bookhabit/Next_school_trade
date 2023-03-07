@@ -34,5 +34,6 @@ export default {
     input_focus:"#008489",
     btn_hover:"#D7A4ED",
     text_hover:"#F1D8FB",
-    divistion_color:"#D9D9D9"
+    divistion_color:"#D9D9D9",
+    orange_btn:"#F36363"
   };
