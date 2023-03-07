@@ -47,7 +47,7 @@ const LinkFooter = () => {
                     <RegisterIcon/>
                     <p>등록</p>
                 </Link>
-                <Link href="/user/chattingList">
+                <Link href="/user/chatting">
                     <ChattingIcon/>
                     <p>채팅</p>
                 </Link>

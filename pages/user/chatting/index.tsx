@@ -1,6 +1,6 @@
 import React from 'react';
-import LinkFooter from '../../components/footer/LinkFooter';
-import ChattingList from './../../components/chattingList/ChattingList';
+import LinkFooter from '../../../components/footer/LinkFooter';
+import ChattingList from '../../../components/chattingList/ChattingList';
 
 const chattingList = () => {
         // 사용자의 정보를 불러와서 채팅목록 개수에 맞게 리스트를 map함수를 불러준다

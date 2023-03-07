@@ -46,7 +46,7 @@ interface IProps {
 
 const CommonHeader:React.FC<IProps> = ({pathName}) => {
     // 알림페이지,카테고리페이지,채팅방페이지 는 편집 버튼 생성
-    const showEditBtn = pathName=== "/user/alarm" || pathName==="/user/chattingList" || pathName === "/user/favorite"; 
+    const showEditBtn = pathName=== "/user/alarm" || pathName==="/user/chatting" || pathName === "/user/favorite"; 
     const LoggedUser = useSelector((state:any)=>state.user)
     console.log(LoggedUser.userName)
     
@@ -78,7 +78,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "판매내역";
           case "/user/buyList":
             return "구매내역";
-          case "/user/chattingList":
+          case "/user/chatting":
             return "채팅";
           case "/user/chattingRoom":
             return "채팅하는 상대방 이름";
