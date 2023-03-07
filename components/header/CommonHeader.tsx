@@ -80,7 +80,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "구매내역";
           case "/user/chatting":
             return "채팅";
-          case "/user/chattingRoom":
+          case "/user/chatting/chattingRoom":
             return "채팅하는 상대방 이름";
           case "/user/tradeReview":
             return "거래후기";

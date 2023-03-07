@@ -8,8 +8,7 @@ import UserIcon from "../../public/static/svg/footer/user.svg"
 import ChattingIcon from "../../public/static/svg/footer/chatting.svg"
 
 const Container = styled.div`
-    position:sticky;
-    position:absolute;
+    position:fixed;
     bottom:0;      
     background-color:${palette.main_color};
     width:100%;
