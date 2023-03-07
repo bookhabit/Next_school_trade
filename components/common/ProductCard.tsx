@@ -54,6 +54,7 @@ const Container = styled.div`
                 span{
                     margin-left:3px;
                     font-size:16px;
+                    text-align:right;
                 }
             }
             .chattingDiv{
@@ -61,6 +62,7 @@ const Container = styled.div`
                 align-items:center;
                 span{
                     margin-left:3px;
+                    text-align:right;
                 }
             }
         }
