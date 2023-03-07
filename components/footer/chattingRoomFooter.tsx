@@ -14,6 +14,7 @@ const Container= styled.div`
     align-items:center;
     justify-content:space-between;
     padding:0px 10px;
+    margin-top:20px;
     .chatting-file{
         label{
             margin:0 10px;
