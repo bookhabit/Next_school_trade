@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Selector from '../common/Selector';
+import { makeMoneyString } from '../../lib/utils';
 
 
 const Container = styled.div`
@@ -295,7 +296,8 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     <HeartIcon className="detail-heartIcon"/>
                     <DivisionIcon/>
                 </div>
-                <p className='detail-footer-price'>{testProductDeatail.price} 원</p>
+                <p className='detail-footer-price'>
+                {makeMoneyString(String(testProductDeatail.price))} 원</p>
                 {postOwner ?<button>채팅방</button> :<button>채팅하기</button> }
                 
             </div>
