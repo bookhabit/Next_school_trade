@@ -22,7 +22,7 @@ const profile:NextPage = (id) => {
 
 profile.getInitialProps = async ({query})=>{
   const {id} = query;
-  // 이 id값은 userId를 뜻한다  
+  // 이 id값은 seller의 userId를 뜻한다  
   // 이 userId에 해당하는 유저 정보를 받아오는 api를 호출하고 응답받은 데이터를 클라이언트로 넘겨준다
   return {id}
 }

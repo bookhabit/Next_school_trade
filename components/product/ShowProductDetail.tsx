@@ -56,6 +56,30 @@ const Container = styled.div`
                 height:auto;
             }
         }
+        /* 이미지 페이지네이션 */
+        .pager{
+                position: relative;
+                bottom:40px;
+                text-align: center;
+                z-index: 2;
+        }
+        .pager span{
+            width: 6px;
+            height: 6px;
+            border:2px solid #7E57C2;
+            box-sizing:border-box;
+            border-radius:50%;
+            text-indent: -9999em;
+            transition: 0.35s all;
+            margin:0 3px;
+            opacity:1;
+            font-size:6px;
+            background-color: transparent; /* 배경색을 투명하게 설정하여 내용을 보이지 않게 함 */
+            color: transparent; /* 글자 색을 투명하게 설정하여 내용을 보이지 않게 함 */
+        }
+        .pager span.active{
+            background: #7E57C2 !important;
+        }
         /* 판매자 정보 or 셀렉터 및 수정,삭제 */
         .detail-seller-info{
             width:100%;
@@ -313,7 +337,16 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
             <div className='detail-body'>
                 <div className='detail-product-image'>
                     <img src={testProductDeatail.image} alt="상품이미지"/>
+                    <p className="pager">
+                    <span className="active">1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span>
+                    </p> 
                 </div>
+                
+                
                 <div className='detail-seller-info'>
                     <div className='seller-info-left'>
                         {postOwner
