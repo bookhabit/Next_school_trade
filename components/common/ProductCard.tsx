@@ -5,6 +5,7 @@ import BorderHeartIcon from "../../public/static/svg/product/borderHeartIcon.svg
 import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg"
 import palette from '../../styles/palette';
 import { Division } from './Division';
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
     width:350px;
@@ -96,10 +97,18 @@ const ProductCard:React.FC<IProps> = ({product}) => {
         setFavoriteProduct(!favoriteProduct)
         // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
     }
+    const router= useRouter();
+    const goToDetail = ()=>{
+        router.push({
+            pathname:`/product/[id]`,
+            query:{id:product.id}
+        })
+    }
+
 
     return (
         <>
-            <Container>
+            <Container onClick={goToDetail}>
                 <div className='productImg'>
                     <img src={product.img.src}/>
                 </div>

@@ -28,7 +28,22 @@ const Container = styled.div`
     }
 `
 
-const ShowProductDetail = () => {
+interface IProps{
+    testProductDeatail:{
+        id:number,
+        title:string,
+        price:number,
+        body:string,
+        chat_cnt:number,
+        like_cnt:number,
+        sellerId:number,
+        category:string,
+        created_at:string,
+        position:string
+    }
+}
+
+const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     return (
         <Container>
             
@@ -38,6 +53,8 @@ const ShowProductDetail = () => {
 
             <div className='register-footer'>
                 {/* 하트이콘,가격 푸터에 추가하기 - flex필요 */}
+                <p>아이콘 넣기</p>
+                {/* <p>{testProductDeatail.price}</p> */}
                 <button>채팅하기</button>
             </div>
         </Container>
