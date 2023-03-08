@@ -120,6 +120,64 @@ const Container = styled.div`
              }   
             }
         }
+
+        /* 상품 상세 정보 css */
+        .detail-product-info{
+            width:100%;
+            padding:20px;
+            .detail-product-title{
+                width:100%;
+                height:40px;
+                background-color:#FBFBFB;
+                margin-bottom:10px;
+                padding:10px;
+                p{
+                    font-size:20px;
+                    font-weight:bold;
+                }
+            }
+            .detail-product-sub-info{
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                width:100%;
+                height:35px;
+                background-color:#FBFBFB;
+                margin-bottom:10px;
+                padding:0px 10px;
+                
+                p{
+                    font-size:15px;
+                    font-weight:bold;
+                    color:${palette.updatedDate};
+                }
+            }
+            .detail-product-desc{
+                width:100%;
+                min-height:180px;
+                background-color:#FBFBFB;
+                margin-bottom:10px;
+                padding:10px;
+                p{
+                    font-size:16px;
+                    line-height:25px;
+                }
+            }
+            .detail-product-position{
+                display:flex;
+                align-items:center;
+                width:100%;
+                min-height:55px;
+                background-color:#FBFBFB;
+                .detail-product-positionIcon{
+                    margin:0px 10px;
+                }
+                p{
+                    font-size:15px;
+                    font-weight:bold;
+                }
+            }
+        }
     }
     
     /* 푸터 css */
@@ -191,6 +249,21 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     const goToSellerProfile = ()=>{
         router.push({
             pathname:`/seller/${testProductDeatail.sellerId}`
+        })
+    }
+    
+    // 게시글 주인이 아닐 경우 채팅하기 클릭 
+    const goToChattingRoom = ()=>{
+        router.push({
+            pathname:`/user/chatting/chattingRoom`,
+            query:`${testProductDeatail.sellerId}`
+        })
+    }
+
+    // 게시글 주인일 경우 채팅방 클릭
+    const goToChattinList = ()=>{
+        router.push({
+            pathname:`/user/chatting`
         })
     }
 
@@ -275,17 +348,25 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     </div>
                 </div>
                 <div className='detail-product-info'>
-                    <div className='detail-product-title'></div>
+                    <div className='detail-product-title'>
+                        <p>{testProductDeatail.title}</p>
+                    </div>
                     <div className='detail-product-sub-info'>
-                        <div className='detail-product-category'></div>
-                        <div className='detail-product-updateDate'></div>
+                        <div className='detail-product-category'>
+                            <p>{testProductDeatail.category}</p>
+                        </div>
+                        <div className='detail-product-updateDate'>
+                            <p>{testProductDeatail.created_at}</p>
+                        </div>
                     </div>
                     <div className='detail-product-desc'>
-                        <textarea></textarea>
+                        <p>
+                        {testProductDeatail.body}
+                        </p>
                     </div>
                     <div className='detail-product-position'>
-                        <p>아이콘</p>
-                        <p>거래희망장소 : </p>
+                        <PositionIcon className="detail-product-positionIcon"/>
+                        <p>거래희망장소 : <span>{testProductDeatail.position}</span></p>
                     </div>
                 </div>
 
@@ -297,9 +378,9 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     <DivisionIcon/>
                 </div>
                 <p className='detail-footer-price'>
-                {makeMoneyString(String(testProductDeatail.price))} 원</p>
-                {postOwner ?<button>채팅방</button> :<button>채팅하기</button> }
-                
+                    {makeMoneyString(String(testProductDeatail.price))} 원
+                </p>
+                {postOwner ?<button onClick={goToChattinList}>채팅목록</button> :<button onClick={goToChattingRoom}>채팅하기</button> }
             </div>
         </Container>
     );

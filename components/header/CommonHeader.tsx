@@ -105,7 +105,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             <div className='headerDiv'>
                 <div className='headerLeft'>
                     <BeforeIcon className="headerLeftIcon" onClick={goToBackpage}/>
-                    {pathName=== "/user" || "/seller/[id]" ? <img src={LoggedUser.profileImage} alt="프로필이미지"/>:null}
+                    {pathName=== "/user" ? <img src={LoggedUser.profileImage} alt="프로필이미지"/>:null}
                     <p>{changeURLName()}</p>
                 </div>
                 <div className='headerRight'>
