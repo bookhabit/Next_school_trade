@@ -54,10 +54,6 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
         window.history.back();
     }
 
-    // 상품 상세페이지 router.query.id로 상품을 불러와서 title제목을 추가해준다 (header에 text로)
-    const router= useRouter();
-    console.log('commonHeader router',router.query.id)
-
 
     const changeURLName = () => {
         switch (pathName) {
@@ -65,8 +61,6 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "로그인/회원가입";
           case "/product/register":
             return "상품 등록하기";
-          case `/product/[id]`:
-            return "상품상세페이지 (게시글제목으로 바꾸기-id값)";
           case "/product/correct":
             return "상품 수정하기";
           case "/setPosition":
