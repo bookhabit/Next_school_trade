@@ -6,6 +6,7 @@ import HomeIcon from "../../public/static/svg/footer/home.svg"
 import RegisterIcon from "../../public/static/svg/footer/register.svg"
 import UserIcon from "../../public/static/svg/footer/user.svg"
 import ChattingIcon from "../../public/static/svg/footer/chatting.svg"
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
     position:fixed;
@@ -17,7 +18,7 @@ const Container = styled.div`
     .link-flex-wrap{
         display:flex;
         justify-content:space-evenly;
-        a{
+        .link-flex-item{
             display:flex;
             flex-direction:column;
             justify-content:center;
@@ -35,26 +36,45 @@ const Container = styled.div`
 `
 
 const LinkFooter = () => {
+    const router = useRouter();
     return (
         <Container>
             <div className='link-flex-wrap'>
-                <Link href="/home">
+                <div className='link-flex-item' onClick={()=>{
+                    router.push({
+                        pathname:"/home"
+                    })
+                }}>
                     <HomeIcon/>
                     <p>홈</p>
-                </Link>
-                <Link href="/product/register">
+                </div>
+                
+                <div className='link-flex-item' onClick={()=>{
+                    router.push({
+                        pathname:"/product/register"
+                    })
+                }}>
                     <RegisterIcon/>
                     <p>등록</p>
-                </Link>
-                <Link href="/user/chatting">
+                </div>
+                
+                <div className='link-flex-item' onClick={()=>{
+                    router.push({
+                        pathname:"/user/chatting"
+                    })
+                }}>
                     <ChattingIcon/>
                     <p>채팅</p>
-                </Link>
-                <Link href="/user">
-                    <UserIcon/>
+                </div>
+                
+                <div className='link-flex-item' onClick={()=>{
+                    router.push({
+                        pathname:"/user"
+                    })
+                }}>
+                     <UserIcon/>
                     <p>내정보</p>
-                </Link>
-
+                </div>
             </div>
         </Container>
     );
