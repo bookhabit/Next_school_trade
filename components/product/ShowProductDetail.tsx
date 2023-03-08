@@ -113,8 +113,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     const router= useRouter();
     const goToSellerProfile = ()=>{
         router.push({
-            pathname:"/seller/profile",
-            query:`${testProductDeatail.sellerId}`
+            pathname:`/seller/${testProductDeatail.sellerId}`
         })
     }
 

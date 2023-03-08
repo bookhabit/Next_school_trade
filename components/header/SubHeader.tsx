@@ -55,7 +55,7 @@ const SubHeader:React.FC<IProps> = ({currentLeft,setCurrentLeft}) => {
                 return "로그인"
             case "/user/sellList":
                 return "판매중"
-            case "/seller/profile":
+            case "/seller/[id]":
                 return "리뷰"
             default:
                 return "잘못된경로";
@@ -67,7 +67,7 @@ const SubHeader:React.FC<IProps> = ({currentLeft,setCurrentLeft}) => {
                 return "회원가입"
             case "/user/sellList":
                 return "거래완료"
-            case "/seller/profile":
+            case "/seller/[id]":
                 return "리뷰 작성"
             default:
                 return "잘못된경로";

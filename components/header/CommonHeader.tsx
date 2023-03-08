@@ -53,6 +53,14 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
     const goToBackpage = ()=>{
         window.history.back();
     }
+    
+    // 판매자의 id를 받아서 유저정보를 받아오고 
+    const router = useRouter();
+    const sellerId = router.query.id 
+    const testSellerName = "제리님"
+    // 이 sellerId 값으로 유저정보를 불러오는 api호출하고
+    // 유저의 이름으로 바꿔준다
+    
 
 
     const changeURLName = () => {
@@ -85,8 +93,8 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "거래후기";
           case "/user/profile":
             return "프로필 정보 수정";
-          case "/seller/profile":
-            return "판매자이름";
+          case "/seller/[id]":
+            return `${testSellerName}`;
           default:
             return "지정된 페이지 없음";
         }
