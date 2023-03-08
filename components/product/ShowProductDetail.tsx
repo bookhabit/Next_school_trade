@@ -4,8 +4,12 @@ import palette from '../../styles/palette';
 import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.svg"
 import HeartIcon from "../../public/static/svg/product/detail_heartIcon.svg"
 import DivisionIcon from "../../public/static/svg/product/divisionIcon.svg"
+import ModalClickIcon from "../../public/static/svg/product/modal_click_icon.svg"
+import PositionIcon from "../../public/static/svg/product/position.svg"
+import SellerStarIcon from "../../public/static/svg/product/sellerStarIcon.svg"
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 
 const Container = styled.div`
@@ -100,15 +104,9 @@ interface IProps{
 }
 
 const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
-    console.log('props data',testProductDeatail)
     const goToBackpage = ()=>{
         window.history.back();
     }
-    // 로그인 되어 있는 사용자의 id와 sellerId를 비교하여 작성자인지 알 수 있다
-    const userId = useSelector((state:any)=>state.user.id) // 로그인 - 현재 유저 id
-    const postOwner = userId === testProductDeatail.sellerId  // 게시글 주인의 유저 id
-
-
     // 판매자 정보를 클릭하면 판매자 정보 페이지로 이동하기 - sellerId로 넘기기
     const router= useRouter();
     const goToSellerProfile = ()=>{
@@ -116,6 +114,35 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
             pathname:`/seller/${testProductDeatail.sellerId}`
         })
     }
+
+    // sellerId값을 통해서 판매자 정보를 받아오고 프로필이미지와 이름을 가져온다
+    const testSellerInfo = {
+        id:1,
+        profileImage:"/static/image/user/default_user_profile_image.jpg",
+        userNickname:"제리님",
+        sellerStarCount:3,
+    }
+    
+    // 로그인 - 현재 유저 id
+    const userId = useSelector((state:any)=>state.user.id)
+    // 로그인 되어 있는 사용자의 id와 sellerId를 비교하여 작성자인지 구분하는 변수
+    const postOwner = userId === testProductDeatail.sellerId  
+
+    // 수정,삭제 버튼 모달보이기 state
+    const [showBtnModal,setShowBtnModal] = useState(false);
+    const clickShowBtnModal = ()=>{
+        setShowBtnModal(!showBtnModal)
+    }
+
+    //  판매자 별점 개수에 따라서 별점아이콘 출력하기
+    const starLoop = () => {
+        let starCount = []
+        for (let i = 0; i < testSellerInfo.sellerStarCount; i++) {
+            starCount.push(i)
+        }
+        return starCount
+    };
+    
 
     return (
         <Container>
@@ -131,12 +158,33 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
             <div className='detail-body'>
                 <div className='detail-product-image'></div>
                 <div className='detail-seller-info'>
-                    <div className='seller-info-left' onClick={goToSellerProfile}>
-                        <p>아이콘</p>
-                        <p>이현진</p>
+                    <div className='seller-info-left'>
+                        {postOwner
+                        ? <>
+                            <select>판매중</select>
+                            
+                        </> 
+                        : <>
+                            <img src={testSellerInfo.profileImage} alt="판매자 프로필이미지"/>
+                            <p onClick={goToSellerProfile}>{testSellerInfo.userNickname}</p>
+                        </>}
+                        
                     </div>
                     <div className='seller-info-right'>
-                        <p>별점</p>
+                        {postOwner 
+                        ? 
+                        <>
+                            <ModalClickIcon onClick={clickShowBtnModal}/>
+                            {!showBtnModal? null : <div className='correct-remove-modal'>
+                                <p className='correct-btn'>수정하기</p>
+                                <p className='remove-btn'>삭제하기</p>
+                            </div>
+                            }
+                        </> 
+                        :<>{starLoop().map((index)=>(
+                            <SellerStarIcon key={index}/>
+                        ))}</>
+                        }
                     </div>
                 </div>
                 <div className='detail-product-info'>
