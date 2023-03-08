@@ -5,11 +5,13 @@ import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.s
 import HeartIcon from "../../public/static/svg/product/detail_heartIcon.svg"
 import DivisionIcon from "../../public/static/svg/product/divisionIcon.svg"
 import ModalClickIcon from "../../public/static/svg/product/modal_click_icon.svg"
+import DownArrowIcon from "../../public/static/svg/product/down_arrow.svg"
 import PositionIcon from "../../public/static/svg/product/position.svg"
 import SellerStarIcon from "../../public/static/svg/product/sellerStarIcon.svg"
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import Selector from '../common/Selector';
 
 
 const Container = styled.div`
@@ -40,8 +42,83 @@ const Container = styled.div`
     }
 
     .detail-body{
+        width:100%;
         padding-top:90px;
         padding-bottom:70px;
+        /* 이미지 부분 css */
+        .detail-product-image{
+            width:100%;
+            height:230px;
+            border-bottom:1px solid ${palette.divistion_color};
+            img{
+                width:100%;
+                height:auto;
+            }
+        }
+        /* 판매자 정보 or 셀렉터 및 수정,삭제 */
+        .detail-seller-info{
+            width:100%;
+            height:64px;
+            padding:0px 20px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            background-color:#EAEAEA;
+            border-bottom:1px solid ${palette.divistion_color};
+            .seller-info-left{
+                width:110px;
+                display:flex;
+                align-items:center;
+                /* 작성자가 아닐 경우 */
+                img{
+                    width:30px;
+                    height:30px;
+                    background-color:${palette.main_text_color};
+                    border-radius:50px;
+                    margin-right:5px;
+                }
+                p{
+                    font-size:20px;
+                    font-weight:bold;
+                }
+                /* 작성자일경우 */
+                select{
+                    width: 100%;
+                    height: 20px;
+                    padding: 0 11px;
+                    background-color:#EAEAEA;
+                    border:none;
+                    outline: none;
+                    -webkit-appearance: none;
+                    background-image: url("/static/svg/common/selector/selector_down_arrow.svg");
+                    background-position: right center;
+                    background-repeat: no-repeat;
+                    font-size:20px;
+                    font-weight:bold;
+                    option{
+                        font-size:15px;
+                        font-weight:bold;
+                    }
+                }
+            }
+            .seller-info-right{
+             .correct-remove-modal{
+                width:80px;
+                height:60px;
+                background-color:white;
+                font-size:13px;
+                color:${palette.updatedDate};
+                text-align:center;
+                padding:15px;
+                position:absolute;
+                right:40px;
+                top: 322px;
+                p{
+                    margin-bottom:10px;
+                }
+             }   
+            }
+        }
     }
     
     /* 푸터 css */
@@ -99,7 +176,8 @@ interface IProps{
         sellerId:number,
         category:string,
         created_at:string,
-        position:string
+        position:string,
+        image:string,
     }
 }
 
@@ -142,10 +220,13 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
         }
         return starCount
     };
+
+    const selectOptions = ["판매중","거래완료"]
     
 
     return (
         <Container>
+            {/* 헤더 */}
             <div className='detail-header'>
                 <div className='detail-header-left'>
                     <div className="detail-header-left-icon">
@@ -154,14 +235,19 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     <p>{testProductDeatail.title}</p>
                 </div>
             </div>
-
+            {/* 본문 */}
             <div className='detail-body'>
-                <div className='detail-product-image'></div>
+                <div className='detail-product-image'>
+                    <img src={testProductDeatail.image} alt="상품이미지"/>
+                </div>
                 <div className='detail-seller-info'>
                     <div className='seller-info-left'>
                         {postOwner
                         ? <>
-                            <select>판매중</select>
+                            <select name="sell-state" className='sell-state'>
+                                <option value="selling">판매중</option>
+                                <option value="completed">거래완료</option>
+                            </select>
                             
                         </> 
                         : <>
@@ -203,9 +289,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                 </div>
 
             </div>
-
-
-
+            {/* 푸터 */}
             <div className='detail-footer'>
                 <div className="detail-footer-icon">
                     <HeartIcon className="detail-heartIcon"/>
