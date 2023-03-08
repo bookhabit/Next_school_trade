@@ -255,8 +255,8 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     // 게시글 주인이 아닐 경우 채팅하기 클릭 
     const goToChattingRoom = ()=>{
         router.push({
-            pathname:`/user/chatting/chattingRoom`,
-            query:`${testProductDeatail.sellerId}`
+            pathname:`/user/chatting/[id]`,
+            query:{id:testProductDeatail.sellerId}
         })
     }
 

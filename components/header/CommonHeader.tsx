@@ -54,12 +54,14 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
         window.history.back();
     }
     
-    // 판매자의 id를 받아서 유저정보를 받아오고 
     const router = useRouter();
+    // 이 sellerId 값으로 유저정보를 불러오는 api호출하고 유저의 이름으로 바꿔준다
     const sellerId = router.query.id 
-    const testSellerName = "제리님"
-    // 이 sellerId 값으로 유저정보를 불러오는 api호출하고
-    // 유저의 이름으로 바꿔준다
+    // case "/seller/[id]":
+    const testSellerNameForProfile = "제리님"
+
+    // case "/user/chatting/[id]":
+    const testSellerNameForChatting = "제리님"
     
 
 
@@ -87,14 +89,14 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "구매내역";
           case "/user/chatting":
             return "채팅";
-          case "/user/chatting/chattingRoom":
-            return "채팅하는 상대방 이름";
+          case "/user/chatting/[id]":
+            return `${testSellerNameForChatting}`;
           case "/user/tradeReview":
             return "거래후기";
           case "/user/profile":
             return "프로필 정보 수정";
           case "/seller/[id]":
-            return `${testSellerName}`;
+            return `${testSellerNameForProfile}`;
           default:
             return "지정된 페이지 없음";
         }
