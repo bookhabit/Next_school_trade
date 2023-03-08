@@ -5,6 +5,7 @@ import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.s
 import HeartIcon from "../../public/static/svg/product/detail_heartIcon.svg"
 import DivisionIcon from "../../public/static/svg/product/divisionIcon.svg"
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 
 const Container = styled.div`
@@ -32,6 +33,11 @@ const Container = styled.div`
                 margin-right:15px;
             }
         }
+    }
+
+    .detail-body{
+        padding-top:90px;
+        padding-bottom:70px;
     }
     
     /* 푸터 css */
@@ -101,7 +107,17 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     // 로그인 되어 있는 사용자의 id와 sellerId를 비교하여 작성자인지 알 수 있다
     const userId = useSelector((state:any)=>state.user.id) // 로그인 - 현재 유저 id
     const postOwner = userId === testProductDeatail.sellerId  // 게시글 주인의 유저 id
-    
+
+
+    // 판매자 정보를 클릭하면 판매자 정보 페이지로 이동하기 - sellerId로 넘기기
+    const router= useRouter();
+    const goToSellerProfile = ()=>{
+        router.push({
+            pathname:"/seller/profile",
+            query:`${testProductDeatail.sellerId}`
+        })
+    }
+
     return (
         <Container>
             <div className='detail-header'>
@@ -113,6 +129,33 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                 </div>
             </div>
 
+            <div className='detail-body'>
+                <div className='detail-product-image'></div>
+                <div className='detail-seller-info'>
+                    <div className='seller-info-left' onClick={goToSellerProfile}>
+                        <p>아이콘</p>
+                        <p>이현진</p>
+                    </div>
+                    <div className='seller-info-right'>
+                        <p>별점</p>
+                    </div>
+                </div>
+                <div className='detail-product-info'>
+                    <div className='detail-product-title'></div>
+                    <div className='detail-product-sub-info'>
+                        <div className='detail-product-category'></div>
+                        <div className='detail-product-updateDate'></div>
+                    </div>
+                    <div className='detail-product-desc'>
+                        <textarea></textarea>
+                    </div>
+                    <div className='detail-product-position'>
+                        <p>아이콘</p>
+                        <p>거래희망장소 : </p>
+                    </div>
+                </div>
+
+            </div>
 
 
 
