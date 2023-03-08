@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.svg"
+import HeartIcon from "../../public/static/svg/product/detail_heartIcon.svg"
+import DivisionIcon from "../../public/static/svg/product/divisionIcon.svg"
+
 
 const Container = styled.div`
     /* 헤더 css */
@@ -37,6 +40,26 @@ const Container = styled.div`
         background-color:${palette.main_color};
         width:100%;
         height:70px;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        .detail-footer-icon{
+            margin-left:20px;
+            margin-right:20px;
+            .detail-heartIcon{
+                margin-right:10px;
+            }
+        }
+
+        .detail-footer-price{
+            font-size:30px;
+            font-weight:bold;
+            color:${palette.main_text_color};
+            flex-grow:1;
+        }
+
+
+
         button{
             float:right;
             margin:15px 20px;
@@ -77,7 +100,9 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
         <Container>
             <div className='detail-header'>
                 <div className='detail-header-left'>
-                    <BeforeIcon className="detail-header-left-icon" onClick={goToBackpage}/>
+                    <div className="detail-header-left-icon">
+                        <BeforeIcon onClick={goToBackpage}/>
+                    </div>
                     <p>title</p>
                 </div>
             </div>
@@ -86,9 +111,11 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
 
 
             <div className='detail-footer'>
-                {/* 하트이콘,가격 푸터에 추가하기 - flex필요 */}
-                <p>아이콘 넣기</p>
-                {/* <p>{testProductDeatail.price}</p> */}
+                <div className="detail-footer-icon">
+                    <HeartIcon className="detail-heartIcon"/>
+                    <DivisionIcon/>
+                </div>
+                <p className='detail-footer-price'>40,000 원</p>
                 <button>채팅하기</button>
             </div>
         </Container>
