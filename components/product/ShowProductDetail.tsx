@@ -1,11 +1,37 @@
 import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
+import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.svg"
 
 const Container = styled.div`
+    /* 헤더 css */
+    .detail-header{
+        position:fixed;
+        top:0;
+        width:100%;
+        height:90px;
+        background-color: ${palette.main_color};
+        display:flex;
+        align-items:center;
+        .detail-header-left{
+            display:flex;
+            align-items:center;
+            padding:0px 20px;
+            width:100%;
+            height:45px;
+            p{
+                color:${palette.main_text_color};
+                font-size:25px;
+                font-weight:bold;
+            }
+            .detail-header-left-icon{
+                margin-right:15px;
+            }
+        }
+    }
     
     /* 푸터 css */
-    .register-footer{
+    .detail-footer{
         position:fixed;
         bottom:0;   
         background-color:${palette.main_color};
@@ -44,14 +70,22 @@ interface IProps{
 }
 
 const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
+    const goToBackpage = ()=>{
+        window.history.back();
+    }
     return (
         <Container>
-            
+            <div className='detail-header'>
+                <div className='detail-header-left'>
+                    <BeforeIcon className="detail-header-left-icon" onClick={goToBackpage}/>
+                    <p>title</p>
+                </div>
+            </div>
 
 
 
 
-            <div className='register-footer'>
+            <div className='detail-footer'>
                 {/* 하트이콘,가격 푸터에 추가하기 - flex필요 */}
                 <p>아이콘 넣기</p>
                 {/* <p>{testProductDeatail.price}</p> */}
