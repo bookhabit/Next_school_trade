@@ -4,6 +4,8 @@ import palette from '../../styles/palette';
 import PriceWonIcon from "../../public/static/svg/product/price_won.svg"
 import MapIcon from "../../public/static/svg/product/map.svg"
 import PositionIcon from "../../public/static/svg/product/register_position.svg"
+import useModal from './../../hooks/useModal';
+import SetPosition from '../map/setPosition';
 
 const Container = styled.div`
     /* 이미지 css */
@@ -182,6 +184,7 @@ const Container = styled.div`
 
 
 const RegisterProduct = () => {
+    const {openModal,ModalPortal,closeModal} = useModal();
     return (
         <Container>
             <div className='register-image-box'>
@@ -226,7 +229,7 @@ const RegisterProduct = () => {
             </div>
             <div className='register-setPosition-modal'>
                 <MapIcon/>
-                <p>거래 희망 장소 지도로 설정하기</p>
+                <p onClick={openModal}>거래 희망 장소 지도로 설정하기</p>
             </div>
             <div className='register-setPosition-input'>
                 <PositionIcon/>
@@ -235,6 +238,9 @@ const RegisterProduct = () => {
             <div className='register-footer'>
                 <button>등록하기</button>
             </div>
+            <ModalPortal>
+                <SetPosition closeModal={closeModal}/>
+            </ModalPortal>
         </Container>
     );
 };
