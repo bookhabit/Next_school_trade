@@ -40,6 +40,7 @@ export default class MyDocument extends Document{
                     href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,700&display=swap&subset=korean"
                     rel="stylesheet"
                 />
+                <link rel="shortcut icon" href="#"></link>
                 </Head>
                 <body>
                 <Main />
