@@ -6,6 +6,8 @@ import MapIcon from "../../public/static/svg/product/map.svg"
 import PositionIcon from "../../public/static/svg/product/register_position.svg"
 import useModal from './../../hooks/useModal';
 import SetPosition from '../map/setPosition';
+import { useState } from 'react';
+import { makeMoneyString } from '../../lib/utils';
 
 const Container = styled.div`
     /* 이미지 css */
@@ -185,6 +187,15 @@ const Container = styled.div`
 
 const RegisterProduct = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
+
+    const [price,setPrice] = useState('');
+
+    const onChangePrice = (e:any)=>{
+        console.log(e.target.value)
+        const commaPrice = makeMoneyString(String(e.target.value))
+        setPrice(commaPrice)
+    }
+
     return (
         <Container>
             <div className='register-image-box'>
@@ -208,7 +219,7 @@ const RegisterProduct = () => {
             </div>
             <div className='register-input-price'>
                 <PriceWonIcon/>
-                <input type="text" placeholder='가격'/> 
+                <input type="text" placeholder='가격' value={price} onChange={onChangePrice}/> 
             </div>
             <div className='register-input-desc'>
                 <textarea placeholder='상품에 대해서 설명해주세요.'/>
