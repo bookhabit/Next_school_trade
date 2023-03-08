@@ -4,6 +4,7 @@ import palette from '../../styles/palette';
 import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.svg"
 import HeartIcon from "../../public/static/svg/product/detail_heartIcon.svg"
 import DivisionIcon from "../../public/static/svg/product/divisionIcon.svg"
+import { useSelector } from 'react-redux';
 
 
 const Container = styled.div`
@@ -93,9 +94,14 @@ interface IProps{
 }
 
 const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
+    console.log('props data',testProductDeatail)
     const goToBackpage = ()=>{
         window.history.back();
     }
+    // 로그인 되어 있는 사용자의 id와 sellerId를 비교하여 작성자인지 알 수 있다
+    const userId = useSelector((state:any)=>state.user.id) // 로그인 - 현재 유저 id
+    const postOwner = userId === testProductDeatail.sellerId  // 게시글 주인의 유저 id
+    
     return (
         <Container>
             <div className='detail-header'>
@@ -103,7 +109,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     <div className="detail-header-left-icon">
                         <BeforeIcon onClick={goToBackpage}/>
                     </div>
-                    <p>title</p>
+                    <p>{testProductDeatail.title}</p>
                 </div>
             </div>
 
@@ -115,8 +121,9 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     <HeartIcon className="detail-heartIcon"/>
                     <DivisionIcon/>
                 </div>
-                <p className='detail-footer-price'>40,000 원</p>
-                <button>채팅하기</button>
+                <p className='detail-footer-price'>{testProductDeatail.price} 원</p>
+                {postOwner ?<button>채팅방</button> :<button>채팅하기</button> }
+                
             </div>
         </Container>
     );

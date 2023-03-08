@@ -3,7 +3,6 @@ import React from 'react';
 import ShowProductDetail from '../../components/product/ShowProductDetail';
 
 const productDetail:NextPage = (id)=>{
-    console.log("client id",id)
     const testProductDeatail = {
         id:1,
         title:"축구화 사실분 구합니다",
@@ -22,7 +21,6 @@ const productDetail:NextPage = (id)=>{
 
 productDetail.getInitialProps = async ({query})=>{
     const {id} = query;
-    console.log('server id',id)
     // 이 id값에 해당하는 상품 1개를 불러오는 api를 호출하고 응답받은 데이터를 클라이언트로 넘겨준다
     return {id}
 }
