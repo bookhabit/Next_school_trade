@@ -6,7 +6,7 @@ import MapIcon from "../../public/static/svg/product/map.svg"
 import PositionIcon from "../../public/static/svg/product/register_position.svg"
 import useModal from './../../hooks/useModal';
 import SetPosition from '../map/setPosition';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { makeMoneyString } from '../../lib/utils';
 
 const Container = styled.div`
@@ -196,22 +196,63 @@ const RegisterProduct = () => {
         setPrice(commaPrice)
     }
 
+    // formdata 생성
+  const formdata = new FormData();
+
+  // 이미지 상태관리
+    const [productImg,SetProductImg] = useState<{
+        file:string;
+        thumbnail: string;
+        type: string;
+    }>({
+        file:'',
+        thumbnail: '',
+        type: '',
+    });
+
+  // 이미지 업로드 기능
+  const onChangeImg = (e:any) => {
+    const fileList = e.target.files; // 배열형태
+    // 상품이미지 폼에 보여줄 이미지 미리보기 위해 url생성
+    if (fileList && fileList[0]) {
+      const url = URL.createObjectURL(fileList[0]);
+      console.log(fileList[0].type.slice(0, 5))
+      SetProductImg({
+        file: fileList[0],
+        thumbnail: url,
+        type: fileList[0].type.slice(0, 5),
+      });
+    }
+  };
+
+  // 업로드된 이미지 파일 미리보기
+  const showImage = useMemo(() => {
+    if (!productImg && productImg == null) {
+      return <h3>선택된 이미지 없음</h3>;
+    }
+    return <img src={productImg.thumbnail} alt={productImg.type} className='preview-image-box' />;
+  }, [productImg]);
+
     return (
         <Container>
             <div className='register-image-box'>
                 <div className='register-image-slide'>
                     <div className='file-image-box'>
                         <label htmlFor='file-image'/>
-                        <input type="file" id="file-image" />
+                        <input 
+                            name='file'
+                            type="file" id="file-image" 
+                            accept="image/png,image/jpg,image/jpeg"
+                            multiple
+                            onChange={onChangeImg}
+                        />
                         <p className='file-image-count'>2/5</p>
                     </div>
                     <div className='preview-image-box'>
-                        <p></p>
                         <img src="/static/svg/product/testProductImage.png" alt="상품이미지"/>
+                        {showImage}
                     </div>
-                    <div className='preview-image-box'>
-                        <img src="/static/svg/product/testProductImage.png" alt="상품이미지"/>
-                    </div>
+                    
                 </div>
             </div>
             <div className='register-input-title'>
