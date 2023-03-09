@@ -8,6 +8,7 @@ import useModal from './../../hooks/useModal';
 import SetPosition from '../map/setPosition';
 import { useState, useMemo } from 'react';
 import { makeMoneyString } from '../../lib/utils';
+import Delete from "../../public/static/svg/product/thumnailXicon.svg"
 
 const Container = styled.div`
     /* 이미지 css */
@@ -18,6 +19,7 @@ const Container = styled.div`
         align-items:center;
         background-color:#FFFBFB;
         border-bottom:1px solid ${palette.divistion_color};
+        overflow:hidden;
         .register-image-slide{
             display:flex;
             align-items:center;
@@ -50,6 +52,8 @@ const Container = styled.div`
             }
             
             .preview-image-box{
+                display:flex;
+                align-items:center;
                 img{
                     width:80px;
                     height:80px;
@@ -57,9 +61,12 @@ const Container = styled.div`
                     margin-right:20px;
                     border-radius:10px;
                 }
-                /* x 아이콘 - 삭제버튼표시하기 */
-                span{
-                    background-image:url("/static/svg/map/modal_close_x_icon.svg");
+                .preview-image-delete-icon{
+                    position:relative;
+                    right:30px;
+                    bottom:35px;
+                    background-color:white;
+                    border-radius:50px;
                 }
             }
 
@@ -196,42 +203,31 @@ const RegisterProduct = () => {
         setPrice(commaPrice)
     }
 
-    // formdata 생성
-  const formdata = new FormData();
-
-  // 이미지 상태관리
-    const [productImg,SetProductImg] = useState<{
-        file:string;
-        thumbnail: string;
-        type: string;
-    }>({
-        file:'',
-        thumbnail: '',
-        type: '',
-    });
-
-  // 이미지 업로드 기능
-  const onChangeImg = (e:any) => {
-    const fileList = e.target.files; // 배열형태
-    // 상품이미지 폼에 보여줄 이미지 미리보기 위해 url생성
-    if (fileList && fileList[0]) {
-      const url = URL.createObjectURL(fileList[0]);
-      console.log(fileList[0].type.slice(0, 5))
-      SetProductImg({
-        file: fileList[0],
-        thumbnail: url,
-        type: fileList[0].type.slice(0, 5),
-      });
+    // 썸네일 미리보기
+    const [showImages, setShowImages] = useState<string[]>([]);
+    
+    // 이미지 상대경로 저장
+    const handleAddImages = (event: any) => {
+      const imageLists = event.target.files;
+      
+      let imageUrlLists = [...showImages]; // 하나씩 추가할 수도 있으니까
+  
+      for (let i = 0; i < imageLists.length; i++) {
+        const currentImageUrl = URL.createObjectURL(imageLists[i]);
+        imageUrlLists.push(currentImageUrl);
+      }
+  
+      if (imageUrlLists.length > 10) {
+        imageUrlLists = imageUrlLists.slice(0, 10);
+      }
+  
+      setShowImages(imageUrlLists);
     }
-  };
 
-  // 업로드된 이미지 파일 미리보기
-  const showImage = useMemo(() => {
-    if (!productImg && productImg == null) {
-      return <h3>선택된 이미지 없음</h3>;
-    }
-    return <img src={productImg.thumbnail} alt={productImg.type} className='preview-image-box' />;
-  }, [productImg]);
+      // X버튼 클릭 시 이미지 삭제
+  const handleDeleteImage = (id: number) => {
+        setShowImages(showImages.filter((_, index) => index !== id));
+    };
 
     return (
         <Container>
@@ -244,13 +240,17 @@ const RegisterProduct = () => {
                             type="file" id="file-image" 
                             accept="image/png,image/jpg,image/jpeg"
                             multiple
-                            onChange={onChangeImg}
+                            onChange={handleAddImages}
                         />
-                        <p className='file-image-count'>2/5</p>
+                        <p className='file-image-count'>{showImages.length}/5</p>
                     </div>
                     <div className='preview-image-box'>
-                        <img src="/static/svg/product/testProductImage.png" alt="상품이미지"/>
-                        {showImage}
+                        {showImages.map((image: string, id: number) => (
+                            <div className="preview-image-box" key={id}>
+                                <img src={image} alt={`${image}-${id}`} />
+                                <Delete onClick={() => handleDeleteImage(id)} className="preview-image-delete-icon" />
+                            </div>
+                        ))}
                     </div>
                     
                 </div>
