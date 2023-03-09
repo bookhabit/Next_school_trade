@@ -51,22 +51,26 @@ const Container = styled.div`
                 }
             }
             
-            .preview-image-box{
+            .preview-image-box-wrap{
                 display:flex;
                 align-items:center;
-                img{
-                    width:80px;
-                    height:80px;
-                    object-fit:fill;
-                    margin-right:20px;
-                    border-radius:10px;
-                }
-                .preview-image-delete-icon{
-                    position:relative;
-                    right:30px;
-                    bottom:35px;
-                    background-color:white;
-                    border-radius:50px;
+                .preview-image-box{
+                    display:flex;
+                    align-items:center;
+                    img{
+                        width:80px;
+                        height:80px;
+                        object-fit:fill;
+                        margin-right:20px;
+                        border-radius:10px;
+                    }
+                    .preview-image-delete-icon{
+                        position:relative;
+                        right:30px;
+                        bottom:35px;
+                        background-color:white;
+                        border-radius:50px;
+                    }
                 }
             }
 
@@ -244,7 +248,7 @@ const RegisterProduct = () => {
                         />
                         <p className='file-image-count'>{showImages.length}/5</p>
                     </div>
-                    <div className='preview-image-box'>
+                    <div className='preview-image-box-wrap'>
                         {showImages.map((image: string, id: number) => (
                             <div className="preview-image-box" key={id}>
                                 <img src={image} alt={`${image}-${id}`} />
