@@ -288,22 +288,15 @@ const RegisterProduct = () => {
                         <p className='file-image-count'>{showImages.length}/5</p>
                     </div>
                     <div className='preview-image-box-wrap'>
-                    <Slick>
-                        {showImages.map((image: string, id: number)  => (
-                            <SliderItem key={id} className="preview-image-box">
-                            <img src={image} alt={`${image}-${id}`} />
-                            <Delete onClick={() => handleDeleteImage(id)} className="preview-image-delete-icon" />
-                            </SliderItem>
-                        ))}
-                    </Slick>
-                        {/* {showImages.map((image: string, id: number) => (
-                            <div className="preview-image-box" key={id}>
+                        <Slick>
+                            {showImages.map((image: string, id: number)  => (
+                                <SliderItem key={id} className="preview-image-box">
                                 <img src={image} alt={`${image}-${id}`} />
                                 <Delete onClick={() => handleDeleteImage(id)} className="preview-image-delete-icon" />
-                            </div>
-                        ))} */}
+                                </SliderItem>
+                            ))}
+                        </Slick>
                     </div>
-                    
                 </div>
             </div>
             <div className='register-input-title'>

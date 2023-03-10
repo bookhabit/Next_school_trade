@@ -9,7 +9,7 @@ import useModal from '../../hooks/useModal';
 const Container = styled.div`
     .mordal-close-x-icon {
         position:relative;
-        left:95px;
+        left:97px;
         bottom:60px;
         font-size:30px;
         color:#FFFFFF;
