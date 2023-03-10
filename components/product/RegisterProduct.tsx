@@ -9,6 +9,7 @@ import SetPosition from '../map/setPosition';
 import { useState, useMemo } from 'react';
 import { makeMoneyString } from '../../lib/utils';
 import Delete from "../../public/static/svg/product/thumnailXicon.svg"
+import Slick from './Slick';
 
 const Container = styled.div`
     /* 이미지 css */
@@ -52,26 +53,54 @@ const Container = styled.div`
             }
             
             .preview-image-box-wrap{
+                width:100%;
+                height:100%;
                 display:flex;
+                flex-direction:row;
                 align-items:center;
-                .preview-image-box{
-                    display:flex;
-                    align-items:center;
-                    img{
-                        width:80px;
-                        height:80px;
-                        object-fit:fill;
-                        margin-right:20px;
-                        border-radius:10px;
-                    }
-                    .preview-image-delete-icon{
-                        position:relative;
-                        right:30px;
-                        bottom:35px;
-                        background-color:white;
-                        border-radius:50px;
+                section{
+                    .slick-slider{
+                        .slick-arrow{
+                            display:none !important;
+                        }
+                        .slick-track{
+                            width:100%;
+                            display:flex;
+                            align-items:center;
+                            .slick-slide{
+                                width:80px !important;
+                                height:80px !important;
+                                margin-right:20px;
+                                div{
+                                    width:100%;
+                                    height:100%;
+                                    .preview-image-box{
+                                        width:100%;
+                                        height:100%;
+                                        img{
+                                            width:80px;
+                                            height:80px;
+                                            object-fit:fill;
+                                            margin-right:20px;
+                                            border-radius:10px;
+                                        }
+                                        .preview-image-delete-icon{
+                                            position:relative;
+                                            left:70px;
+                                            bottom:83px;
+                                            background-color:white;
+                                            border-radius:50px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .slick-dots{
+                            display:none !important;
+                        }
                     }
                 }
+                
             }
 
         }
@@ -194,7 +223,13 @@ const Container = styled.div`
         }
     }
 `
-
+const SliderItem = styled.div`
+  width: 100%;
+  img{
+    max-width: 100%;
+    height: auto;
+  }
+`
 
 const RegisterProduct = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
@@ -250,12 +285,20 @@ const RegisterProduct = () => {
                         <p className='file-image-count'>{showImages.length}/5</p>
                     </div>
                     <div className='preview-image-box-wrap'>
-                        {showImages.map((image: string, id: number) => (
+                    <Slick>
+                        {showImages.map((image: string, id: number)  => (
+                            <SliderItem key={id} className="preview-image-box">
+                            <img src={image} alt={`${image}-${id}`} />
+                            <Delete onClick={() => handleDeleteImage(id)} className="preview-image-delete-icon" />
+                            </SliderItem>
+                        ))}
+                    </Slick>
+                        {/* {showImages.map((image: string, id: number) => (
                             <div className="preview-image-box" key={id}>
                                 <img src={image} alt={`${image}-${id}`} />
                                 <Delete onClick={() => handleDeleteImage(id)} className="preview-image-delete-icon" />
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                     
                 </div>
