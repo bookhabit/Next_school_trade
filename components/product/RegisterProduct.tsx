@@ -209,13 +209,14 @@ const RegisterProduct = () => {
 
     // 썸네일 미리보기
     const [showImages, setShowImages] = useState<string[]>([]);
-    
+    console.log('showImages',showImages)
+
     // 이미지 상대경로 저장
     const handleAddImages = (event: any) => {
       const imageLists = event.target.files;
-      
+      console.log('imageLists',imageLists)
       let imageUrlLists = [...showImages]; // 하나씩 추가할 수도 있으니까
-  
+      console.log(imageUrlLists)
       for (let i = 0; i < imageLists.length; i++) {
         const currentImageUrl = URL.createObjectURL(imageLists[i]);
         imageUrlLists.push(currentImageUrl);

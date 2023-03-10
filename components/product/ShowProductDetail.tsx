@@ -13,6 +13,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Selector from '../common/Selector';
 import { makeMoneyString } from '../../lib/utils';
+import Slider from "react-slick";
+import Item from './Item';
+import Slick from './Slick';
 
 
 const Container = styled.div`
@@ -46,40 +49,40 @@ const Container = styled.div`
         width:100%;
         padding-top:90px;
         padding-bottom:70px;
-        /* 이미지 부분 css */
+        /* 이미지 슬라이드 부분 css */
         .detail-product-image{
             width:100%;
             height:230px;
             border-bottom:1px solid ${palette.divistion_color};
-            img{
-                width:100%;
-                height:auto;
-            }
+            
+            .slick-slider{
+                .slick-list{
+                    width:100%;
+                    height:230px;
+                    .slick-track{
+                        width:100%;
+                        height:230px;
+                        div{
+                            width:100%;
+                            height:230px;
+                            img{
+                                width:100%;
+                                height:230px;
+                                object-fit:fill;
+                            }
+                        }
+                    }
+                    img{
+                        width:100%;
+                        height:auto;
+                    }
+                }
+                .slick-dots{
+                    bottom:15px !important;
+                }
+            } 
         }
-        /* 이미지 페이지네이션 */
-        .pager{
-                position: relative;
-                bottom:40px;
-                text-align: center;
-                z-index: 2;
-        }
-        .pager span{
-            width: 6px;
-            height: 6px;
-            border:2px solid #7E57C2;
-            box-sizing:border-box;
-            border-radius:50%;
-            text-indent: -9999em;
-            transition: 0.35s all;
-            margin:0 3px;
-            opacity:1;
-            font-size:6px;
-            background-color: transparent; /* 배경색을 투명하게 설정하여 내용을 보이지 않게 함 */
-            color: transparent; /* 글자 색을 투명하게 설정하여 내용을 보이지 않게 함 */
-        }
-        .pager span.active{
-            background: #7E57C2 !important;
-        }
+        
         /* 판매자 정보 or 셀렉터 및 수정,삭제 */
         .detail-seller-info{
             width:100%;
@@ -248,6 +251,14 @@ const Container = styled.div`
     }
 `
 
+const SliderItem = styled.div`
+  width: 100%;
+  img{
+    max-width: 100%;
+    height: auto;
+  }
+`
+
 interface IProps{
     testProductDeatail:{
         id:number,
@@ -260,8 +271,13 @@ interface IProps{
         category:string,
         created_at:string,
         position:string,
-        image:string,
+        images: itemsProps[],
     }
+}
+
+interface itemsProps {
+    item: string,
+    name: string
 }
 
 const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
@@ -320,7 +336,6 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     };
 
     const selectOptions = ["판매중","거래완료"]
-    
 
     return (
         <Container>
@@ -335,17 +350,16 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
             </div>
             {/* 본문 */}
             <div className='detail-body'>
+            
                 <div className='detail-product-image'>
-                    <img src={testProductDeatail.image} alt="상품이미지"/>
-                    <p className="pager">
-                    <span className="active">1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                    </p> 
+                    <Slick>
+                        {testProductDeatail.images.map((item, index) => (
+                            <SliderItem key={index}>
+                            <img src={item.item} alt={item.name} />
+                            </SliderItem>
+                        ))}
+                    </Slick>
                 </div>
-                
                 
                 <div className='detail-seller-info'>
                     <div className='seller-info-left'>

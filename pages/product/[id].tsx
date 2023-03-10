@@ -14,7 +14,21 @@ const productDetail:NextPage = (id)=>{
         category:"스포츠/레저",
         created_at:"1시간 전",
         position:"한서대학교 이디야 카페",
-        image:"/static/svg/product/testProductImage.png"
+        images:
+            [
+                {
+                  item: "/static/svg/product/testProductImage.png",
+                  name: '이미지01'
+                },
+                {
+                  item: "/static/svg/product/testProductImage2.png",
+                  name: '이미지02'
+                },
+                {
+                  item: "/static/svg/product/testProductImage3.png",
+                  name: '이미지03'
+                },    
+              ]
     }
 
     return <ShowProductDetail testProductDeatail={testProductDeatail}/>
