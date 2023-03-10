@@ -25,6 +25,8 @@ const Container= styled.div`
                 display:none;
         }
     }
+
+    
     
     .chatting-message{
         width:290px;
