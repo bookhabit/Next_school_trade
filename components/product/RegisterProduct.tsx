@@ -22,10 +22,11 @@ const Container = styled.div`
         border-bottom:1px solid ${palette.divistion_color};
         overflow:hidden;
         .register-image-slide{
+            width:100%;
             display:flex;
             align-items:center;
             .file-image-box{
-                width:80px;
+                width:80px !important;
                 height:80px;
                 margin:0px 20px;
                 background-color:#A19B9B;
@@ -53,13 +54,15 @@ const Container = styled.div`
             }
             
             .preview-image-box-wrap{
-                width:100%;
+                width:70%;
                 height:100%;
                 display:flex;
                 flex-direction:row;
                 align-items:center;
                 section{
+                    width:100%;
                     .slick-slider{
+                        width:100%;
                         .slick-arrow{
                             display:none !important;
                         }
