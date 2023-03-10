@@ -56,6 +56,9 @@ const Container = styled.div`
             border-bottom:1px solid ${palette.divistion_color};
             
             .slick-slider{
+                .slick-arrow{
+                    display:none;
+                }
                 .slick-list{
                     width:100%;
                     height:230px;
