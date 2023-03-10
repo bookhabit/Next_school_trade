@@ -57,7 +57,7 @@ const Container = styled.div`
             
             .slick-slider{
                 .slick-arrow{
-                    display:none;
+                    display:none !important;
                 }
                 .slick-list{
                     width:100%;
