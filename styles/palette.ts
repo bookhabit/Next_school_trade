@@ -24,7 +24,7 @@ export default {
     gray_f7: "#f7f7f7",
     dark_cyan: "#008489",
     green: "#008A05",
-    main_color:"#9E00FF",
+    main_color:"#54AA76",
     main_text_color:"#FEFAFA",
     updatedDate:"#8C8C8C",
     detail_background:"#FBFBFB",
