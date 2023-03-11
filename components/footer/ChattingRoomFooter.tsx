@@ -25,7 +25,6 @@ const Container= styled.div`
                 display:none;
         }
     }
-
     
     
     .chatting-message{
@@ -60,7 +59,7 @@ const ChattingRoomFooter = () => {
             <div className='chatting-submit'>
                 <button><SubmitBtn/></button>
             </div>
-            
+
         </Container>
     );
 };
