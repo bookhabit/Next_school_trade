@@ -306,7 +306,7 @@ const SignUp = () => {
                 const {data} = await signupAPI(signUpBody);
                 console.log('클라이언트 받은 데이터',data)
                 dispatch(userActions.setLoggedUser(data)) 
-                router.push("/")
+                router.push("/home")
     
             }catch(e){
                 console.log(e)
