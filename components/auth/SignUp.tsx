@@ -25,6 +25,7 @@ import Link from 'next/link';
 import useModal from '../../hooks/useModal';
 import SetPosition from '../map/SetPosition';
 import SetPositionUserLocation from '../map/SetPositionUserLocation';
+import { useSelector } from 'react-redux';
 
 const Container = styled.form`
     width:100%;
@@ -110,7 +111,9 @@ const Container = styled.form`
 
 const SignUp = () => {
     // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
-    
+    const setUserLocation = useSelector((state:any)=>state.registerPosition.location)
+    const setUserLatitude = useSelector((state:any)=>state.registerPosition.latitude)
+    const setUserLongitude = useSelector((state:any)=>state.registerPosition.longitude)
 
     // 비밀번호 토글 state
     const [hidePassword,setHidePassword] = useState(true)

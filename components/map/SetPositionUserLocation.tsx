@@ -215,11 +215,22 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
         window.initMap = initMap
     },[currentMapLocation])
 
-    const [loading,setLoading] = useState(false)
 
+    // 지도 위치,위도,경도 입력값 확인하는 함수
+    const validateLocation = ()=>{
+        // 폼 요소의 값이 없다면
+            if(!currentMapLocation|| inputLocation==''){
+                return false;
+            }
+            return true;
+    }
 
     // 주 거래 위치로 설정하기  - 위치,위도,경도를 registerPositon 리덕스 스토어에 저장한다
     const savePosition = ()=>{
+        if(validateLocation() === false){
+            Swal.fire('장소명을 입력해주세요.')
+            return false;
+        }
         dispatch(registerPositionActions.setLatitude(currentMapLocation.latitude));
         dispatch(registerPositionActions.setLongitude(currentMapLocation.longitude));
         dispatch(registerPositionActions.setLocation(inputLocation));
