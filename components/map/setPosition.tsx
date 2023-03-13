@@ -42,6 +42,20 @@ const Container = styled.div`
         align-items:center;
         background-color:${palette.main_text_color};
     }
+
+    .set-position-current-location{
+        background-color:${palette.main_color};
+        color:${palette.main_text_color};
+        height:20px;
+        border-bottom:1px solid ${palette.divistion_color};
+        p{
+            padding-top:2px;
+            width:100%;
+            font-size:15px;
+            text-align:center;
+        }
+    }
+
     .set-position-name{
         width:100%;
         height:100px;
@@ -80,7 +94,7 @@ const Container = styled.div`
         background-color:#DED7E2;
         text-align:center;
         border-radius:30px;
-        margin-top:30px;
+        margin-top:20px;
         display:flex;
         justify-content:center;
         button{
@@ -95,7 +109,7 @@ const Container = styled.div`
         background-color:${palette.main_color};
         text-align:center;
         border-radius:30px;
-        margin-top:30px;
+        margin-top:20px;
         display:flex;
         justify-content:center;
         button{
@@ -140,7 +154,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
 
     // 위치 설명 string
     const [inputLocation,setInputLocation] = useState('')
-    console.log(inputLocation)
+    
     const onChangeInput = (e:any)=>{
         setInputLocation(e.target.value)
     }
@@ -201,6 +215,9 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
             </div>
             <div className='set-position-map' id="map" ref={mapRef}>
                 <MarkerIcon/>
+            </div>
+            <div className='set-position-current-location'>
+                <p>현재위치로 설정하기</p>
             </div>
             <div className='set-position-name'>
                 <p>선택한 곳의 장소명을 입력해주세요</p>
