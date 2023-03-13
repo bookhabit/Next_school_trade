@@ -152,7 +152,7 @@ const loadMapScript = () => {
     });
 };
 
-const SetPosition:React.FC<IProps> = ({closeModal}) => {
+const SetPositionUserLocation:React.FC<IProps> = ({closeModal}) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
     // 대학교의 주소를 구글api에 요청하여 위도,경도를 반환하는 api 필요
@@ -304,4 +304,4 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
     );
 };
 
-export default React.memo(SetPosition);
+export default React.memo(SetPositionUserLocation);
