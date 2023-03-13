@@ -24,6 +24,7 @@ import { authActions } from '../../store/auth';
 import Link from 'next/link';
 import useModal from '../../hooks/useModal';
 import SetPosition from '../map/SetPosition';
+import SetPositionUserLocation from '../map/SetPositionUserLocation';
 
 const Container = styled.form`
     width:100%;
@@ -412,7 +413,7 @@ const SignUp = () => {
                 <Button type='submit'>가입하기</Button>
             </div>
             <ModalPortal>
-                <SetPosition closeModal={closeModal}/>
+                <SetPositionUserLocation closeModal={closeModal}/>
             </ModalPortal>
         </Container>
     );

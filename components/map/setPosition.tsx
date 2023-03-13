@@ -223,7 +223,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                 latitude:coords.latitude,
                 longitude:coords.longitude
           })
-          
+          setInputLocation("")
           Swal.fire('현재 위치를 설정하였습니다.')
           
         }catch(e){
