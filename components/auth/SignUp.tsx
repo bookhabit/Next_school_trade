@@ -23,7 +23,7 @@ import PasswordWarning from './PasswordWarning';
 import { authActions } from '../../store/auth';
 import Link from 'next/link';
 import useModal from '../../hooks/useModal';
-import SetPosition from '../map/setPosition';
+import SetPosition from '../map/SetPosition';
 
 const Container = styled.form`
     width:100%;
@@ -418,4 +418,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default React.memo(SignUp);

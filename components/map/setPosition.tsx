@@ -4,6 +4,8 @@ import palette from '../../styles/palette';
 import MarkerIcon from "../../public/static/svg/map/marker.svg"
 import CloseXIcon from "../../public/static/svg/map/modal_close_x_icon.svg"
 import { useEffect, useRef, useState } from 'react';
+import Head from "next/head";
+import throttle from "lodash/throttle";
 
 const Container = styled.div`
     .mordal-close-x-icon {
@@ -114,7 +116,7 @@ declare global{
 const loadMapScript = () => {
     return new Promise<void>((resolve) => {
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
       script.defer = true;
       document.head.appendChild(script);
       script.onload = () => {
@@ -128,34 +130,88 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
     // 대학교의 주소를 구글api에 요청하여 위도,경도를 반환하는 api 필요
 
     const [currentLocation, setCurrentLocation] = useState({
-        latitude: 37.5666784,
-        longitude: 126.9778436,
+        latitude: 36.6907235,
+        longitude: 126.5846966,
     });
 
-    const loadMap = async () => {
+    const loadMap = async ()=>{
         await loadMapScript();
-    };
-    
-    useEffect(() => {
-        const initMap = () => {
-          //* 지도 불러오기
-          if (mapRef.current) {
-            const map = new window.google.maps.Map(mapRef.current, {
-              center: {
-                lat: currentLocation.latitude,
-                lng: currentLocation.longitude,
-              },
-              zoom: 14,
+    }
+    useEffect(()=>{
+        loadMap();
+    },[])
+
+    window.initMap = ()=>{
+        // 지도 불러오기
+        if(mapRef.current){
+            const map:any = new window.google.maps.Map(mapRef.current,{
+                center:{
+                    lat:currentLocation.latitude,
+                    lng:currentLocation.longitude
+                },
+                zoom:18,
             });
-          }
-        };
+            const marker = new window.google.maps.Marker({
+                position:{
+                    lat:currentLocation.latitude,
+                    lng:currentLocation.longitude
+                },
+                map,
+            })
+            map.addListener("center_changed",throttle(()=>{
+                const centerLat = map.getCenter().lat();
+                const centerLng = map.getCenter().lng();
+                console.log(centerLat,centerLng)
+                marker.setPosition({lat:centerLat,lng:centerLng})
+                setCurrentLocation({
+                    latitude:centerLat,
+                    longitude:centerLng
+                })
+            },1500)
+            )
+        }
+    }
     
-        
-        loadMapScript().then(() => {
-          window.initMap = initMap;
-          initMap();
-        });
-      }, [currentLocation]);
+    // useEffect(() => {
+    //     const initMap = () => {
+    //       //* 지도 불러오기
+    //       if (mapRef.current) {
+    //         const map = new window.google.maps.Map(mapRef.current, {
+    //           center: {
+    //             lat: currentLocation.latitude,
+    //             lng: currentLocation.longitude,
+    //           },
+    //           zoom: 16,
+    //         });
+    //         const marker = new window.google.maps.Marker({
+    //             position:{
+    //                 lat:36.6907235,
+    //                 lng:126.5846966,
+    //             },
+    //             map,
+    //         })
+    //       }
+    //     };
+    
+    //     window.initMap = initMap;
+    //      // <Head> 컴포넌트를 사용하여 구글 지도 API를 로드합니다.
+    //     const script = document.getElementById("google-maps-api");
+
+    //     if (script) {
+    //     script.remove();
+    //     }
+
+    //     const scriptTag = document.createElement("script");
+    //     scriptTag.id = "google-maps-api";
+    //     scriptTag.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+    //     scriptTag.async = true;
+    //     document.head.appendChild(scriptTag);
+
+    //     return () => {
+    //     // 컴포넌트가 언마운트될 때 구글 지도 API 스크립트를 제거합니다.
+    //     scriptTag.remove();
+    //     };
+    // }, [currentLocation]);
     
     return (
         <Container className='modal-contents'>
@@ -184,4 +240,4 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
     );
 };
 
-export default SetPosition;
+export default React.memo(SetPosition);
