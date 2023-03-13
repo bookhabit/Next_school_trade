@@ -242,9 +242,9 @@ const Container = styled.div`
             margin:15px 20px;
             width:100px;
             height:45px;
-            background-color:${palette.orange_btn};
+            background-color:${palette.main_text_color};
             border-radius:50px;
-            color:${palette.main_text_color};
+            color:${palette.main_color};
             font-size:20px;
             font-weight:bold;
             text-align:center;

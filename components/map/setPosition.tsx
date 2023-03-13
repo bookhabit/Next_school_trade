@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import MarkerIcon from "../../public/static/svg/map/marker.svg"
 import CloseXIcon from "../../public/static/svg/map/modal_close_x_icon.svg"
-import useModal from '../../hooks/useModal';
-
+import { useEffect, useRef, useState } from 'react';
 
 const Container = styled.div`
     .mordal-close-x-icon {
@@ -106,7 +105,57 @@ interface IProps {
     closeModal: () => void;
 }
 
+declare global{
+    interface Window{
+        initMap:()=>void;
+    }
+}
+// 구글 지도 script 불러오기
+const loadMapScript = () => {
+    return new Promise<void>((resolve) => {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`;
+      script.defer = true;
+      document.head.appendChild(script);
+      script.onload = () => {
+        resolve();
+      };
+    });
+  };
+
 const SetPosition:React.FC<IProps> = ({closeModal}) => {
+    const mapRef = useRef<HTMLDivElement>(null);
+    // 대학교의 주소를 구글api에 요청하여 위도,경도를 반환하는 api 필요
+
+    const [currentLocation, setCurrentLocation] = useState({
+        latitude: 37.5666784,
+        longitude: 126.9778436,
+    });
+
+    const loadMap = async () => {
+        await loadMapScript();
+    };
+    
+    useEffect(() => {
+        const initMap = () => {
+          //* 지도 불러오기
+          if (mapRef.current) {
+            const map = new window.google.maps.Map(mapRef.current, {
+              center: {
+                lat: currentLocation.latitude,
+                lng: currentLocation.longitude,
+              },
+              zoom: 14,
+            });
+          }
+        };
+    
+        
+        loadMapScript().then(() => {
+          window.initMap = initMap;
+          initMap();
+        });
+      }, [currentLocation]);
     
     return (
         <Container className='modal-contents'>
@@ -114,7 +163,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                 <p>거래 위치 설정하기</p>
                 <CloseXIcon className="mordal-close-x-icon" onClick={closeModal}/>
             </div>
-            <div className='set-position-map'>
+            <div className='set-position-map' id="map" ref={mapRef}>
                 <MarkerIcon/>
             </div>
             <div className='set-position-name'>
