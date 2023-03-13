@@ -6,6 +6,8 @@ import CloseXIcon from "../../public/static/svg/map/modal_close_x_icon.svg"
 import { useEffect, useRef, useState } from 'react';
 import Head from "next/head";
 import throttle from "lodash/throttle";
+import { useDispatch } from 'react-redux';
+import { registerPositionActions } from './../../store/registerPosition';
 
 const Container = styled.div`
     .mordal-close-x-icon {
@@ -120,23 +122,32 @@ const loadMapScript = () => {
       script.defer = true;
       document.head.appendChild(script);
       script.onload = () => {
-        resolve();
-      };
+          resolve();
+        };
     });
-  };
+};
 
 const SetPosition:React.FC<IProps> = ({closeModal}) => {
     const mapRef = useRef<HTMLDivElement>(null);
+    const dispatch = useDispatch();
     // 대학교의 주소를 구글api에 요청하여 위도,경도를 반환하는 api 필요
 
+    // 유저 정보의 위도,경도 값을 받아서 첫 위치로 지정하여 지도를 표시해준다 - 지금은 한서대학교 위도경도로 테스트
     const [currentLocation, setCurrentLocation] = useState({
         latitude: 36.6908896,
         longitude: 126.5806732,
     });
 
+    // 위치 설명 string
+    const [inputLocation,setInputLocation] = useState('')
+    console.log(inputLocation)
+    const onChangeInput = (e:any)=>{
+        setInputLocation(e.target.value)
+    }
     const loadMap = async ()=>{
         await loadMapScript();
     }
+
 
     const initMap = ()=>{
         // 지도 불러오기
@@ -174,6 +185,13 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
         window.initMap = initMap
     },[])
 
+    // 주 거래 위치로 설정하기  - 위치,위도,경도를 registerPositon 리덕스 스토어에 저장한다
+    const savePosition = ()=>{
+        dispatch(registerPositionActions.setLatitude(currentLocation.latitude));
+        dispatch(registerPositionActions.setLongitude(currentLocation.longitude));
+        dispatch(registerPositionActions.setLocation(inputLocation));
+        closeModal();
+    }
     
     return (
         <Container className='modal-contents'>
@@ -188,6 +206,8 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                 <p>선택한 곳의 장소명을 입력해주세요</p>
                 <input
                     placeholder='예) 한서대학교 대정문 앞 씨유'
+                    value={inputLocation}
+                    onChange={onChangeInput}
                 />
             </div>
             <div className='set-position-footer'>
@@ -195,7 +215,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                     <button>대학교 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>
-                    <button>거래 위치로 설정하기</button>
+                    <button onClick={savePosition}>거래 위치로 설정하기</button>
                 </div>
             </div>
         </Container>
