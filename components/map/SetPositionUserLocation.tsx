@@ -132,6 +132,10 @@ const Container = styled.div`
 `
 interface IProps {
     closeModal: () => void;
+    currentLocation:{
+        latitude: number,
+        longitude: number,
+    }
 }
 
 declare global{
@@ -152,22 +156,20 @@ const loadMapScript = () => {
     });
 };
 
-const SetPositionUserLocation:React.FC<IProps> = ({closeModal}) => {
+const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
-    // 대학교의 주소를 구글api에 요청하여 위도,경도를 반환하는 api 필요
+    // 주소 검색 api 필요
+    // 주소를 위도,경도로 반환하여 다시 지도를 그리는 api 필요
 
-    // 유저 정보의 위도,경도 값을 받아서 첫 위치로 지정하여 지도를 표시해준다 - 지금은 한서대학교 위도경도로 테스트
-    const userLocation = useSelector((state:any)=>state.user.location)
-    const userLatitude = useSelector((state:any)=>state.user.latitude)
-    const userLongitude = useSelector((state:any)=>state.user.longitude)
+    // props로 받은 현재 위치를 state에 넣어준다
     const [currentMapLocation, setCurrentMapLocation] = useState({
-        latitude: userLatitude,
-        longitude: userLongitude,
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
     });
 
     // 위치 설명 string
-    const [inputLocation,setInputLocation] = useState(userLocation)
+    const [inputLocation,setInputLocation] = useState('')
     
     const onChangeInput = (e:any)=>{
         setInputLocation(e.target.value)
@@ -179,7 +181,6 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal}) => {
 
     // 지도 불러오기
     const initMap = ()=>{
-        console.log('지도불러온 횟수 - initMap')
         if(mapRef.current){
             const map:any = new window.google.maps.Map(mapRef.current,{
                 center:{
@@ -210,38 +211,12 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal}) => {
     }
 
     useEffect(()=>{
-        console.log('지도불러온 횟수 - useEffect')
         loadMap();
         window.initMap = initMap
     },[currentMapLocation])
 
     const [loading,setLoading] = useState(false)
-    // 현재 위치 불러오기에 성공했을 때
-    const onSuccessGetLocation = async ({coords}:any)=>{
-        try{
-          setCurrentMapLocation({
-                latitude:coords.latitude,
-                longitude:coords.longitude
-          })
-          
-          Swal.fire('현재 위치를 설정하였습니다.')
-          
-        }catch(e){
-          console.log(e)
-          alert(e)
-        }
-        setLoading(false);
-      }
-  
-      
-    // 현재 위치 설정하기 클릭 시
-    const setCurrentPosition = ()=>{
-        setLoading(true);
-        navigator.geolocation.getCurrentPosition(onSuccessGetLocation,(e)=>{
-            console.log(e)
-            alert(e?.message)
-          })
-    }
+
 
     // 주 거래 위치로 설정하기  - 위치,위도,경도를 registerPositon 리덕스 스토어에 저장한다
     const savePosition = ()=>{
@@ -289,15 +264,12 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal}) => {
                     onChange={onChangeInput}
                 />
             </div>
-            <div className='set-position-current-location'>
-                {loading?<p>불러오는 중...</p>:<button onClick={setCurrentPosition}>현재위치로 설정하기</button>}
-            </div>
             <div className='set-position-footer'>
                 <div className='search-university'>
                     <button>주소 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>
-                    <button onClick={savePosition}>거래 위치로 설정하기</button>
+                    <button onClick={savePosition}>주 거래 위치로 설정</button>
                 </div>
             </div>
         </Container>

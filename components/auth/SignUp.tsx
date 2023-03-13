@@ -109,6 +109,8 @@ const Container = styled.form`
 `
 
 const SignUp = () => {
+    // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
+    
 
     // 비밀번호 토글 state
     const [hidePassword,setHidePassword] = useState(true)
@@ -271,6 +273,36 @@ const SignUp = () => {
     // ModalPortal 
     const {openModal,ModalPortal,closeModal} = useModal();
 
+    const [currentLocation, setCurrentLocation] = useState({
+        latitude: 0,
+        longitude: 0,
+    });
+
+    // 현재위치 정보가져오기 - 모달창에 넘겨줌
+        // 현재 위치 불러오기에 성공했을 때
+    const onSuccessGetLocation = async ({coords}:any)=>{
+        try{
+          setCurrentLocation({
+                latitude:coords.latitude,
+                longitude:coords.longitude
+          })
+        }catch(e){
+          console.log(e)
+          alert(e)
+        }
+        
+      }
+    // 현재 위치 설정
+    const setCurrentPosition = ()=>{
+        navigator.geolocation.getCurrentPosition(onSuccessGetLocation,(e)=>{
+            console.log(e)
+            alert(e?.message)
+          })
+    }
+    useEffect(()=>{
+        setCurrentPosition();
+    },[])
+
     return (
         <Container onSubmit={onSubmitSignUp}>
             <div className='input-wrapper'>
@@ -413,7 +445,7 @@ const SignUp = () => {
                 <Button type='submit'>가입하기</Button>
             </div>
             <ModalPortal>
-                <SetPositionUserLocation closeModal={closeModal}/>
+                <SetPositionUserLocation closeModal={closeModal} currentLocation={currentLocation}/>
             </ModalPortal>
         </Container>
     );

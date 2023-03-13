@@ -297,7 +297,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                     <button>주소 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>
-                    <button onClick={savePosition}>거래 위치로 설정하기</button>
+                    <button onClick={savePosition}>거래 희망장소 설정</button>
                 </div>
             </div>
         </Container>
