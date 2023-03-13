@@ -8,7 +8,10 @@ interface SignUpAPIBody{
     email:string;
     password:string;
     university:string;
-    birthDay:string
+    birthDay:string;
+    location:string;
+    latitude:number;
+    longitude:number;
 }
 // 회원가입 api
 export const signupAPI = (body:SignUpAPIBody)=>axios.post<UserType>("/api/auth/signup",body)

@@ -8,8 +8,9 @@ export type StoredUserType = {
     university: string;
     birthDay:string;
     profileImage: string;
-    latitude?:number;
-    longitude?:number;
+    location:string;
+    latitude:number;
+    longitude:number;
 
   };
   
@@ -22,7 +23,8 @@ export type StoredUserType = {
     university: string;
     birthDay:string;
     profileImage: string;
-    latitude?:number;
-    longitude?:number;
+    location:string;
+    latitude:number;
+    longitude:number;
   };
   

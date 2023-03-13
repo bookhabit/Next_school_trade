@@ -4,4 +4,4 @@ node_modules
 
 .env.local
 
-/data/users.json
+data/users.json

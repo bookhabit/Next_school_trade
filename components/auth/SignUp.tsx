@@ -26,6 +26,7 @@ import useModal from '../../hooks/useModal';
 import SetPosition from '../map/SetPosition';
 import SetPositionUserLocation from '../map/SetPositionUserLocation';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const Container = styled.form`
     width:100%;
@@ -111,9 +112,11 @@ const Container = styled.form`
 
 const SignUp = () => {
     // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
-    const setUserLocation = useSelector((state:any)=>state.registerPosition.location)
-    const setUserLatitude = useSelector((state:any)=>state.registerPosition.latitude)
-    const setUserLongitude = useSelector((state:any)=>state.registerPosition.longitude)
+    const location = useSelector((state:any)=>state.registerPosition.location)
+    const latitude = useSelector((state:any)=>state.registerPosition.latitude)
+    const longitude = useSelector((state:any)=>state.registerPosition.longitude)
+
+    const router = useRouter();
 
     // 비밀번호 토글 state
     const [hidePassword,setHidePassword] = useState(true)
@@ -217,7 +220,7 @@ const SignUp = () => {
     // 회원가입 폼 입력 값 확인하는 함수
     const validateSignUpForm = ()=>{
     // 폼 요소의 값이 없다면
-        if(!userName|| !userNickname || !email || !password || !university || !birthDay){
+        if(!userName|| !userNickname || !email || !password || !university || !birthDay || !location || !latitude || !longitude){
             return false;
         }
         
@@ -233,35 +236,6 @@ const SignUp = () => {
         return true;
     }
 
-    // 회원가입 폼 제출하는 함수
-    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
-    event.preventDefault();
-
-    // validateMode true - 유효성검사 실시
-    setValidateMode(true)
-
-    if(validateSignUpForm()){
-        try{
-            const signUpBody={
-                userName,
-                userNickname,            
-                email,
-                password,
-                university,
-                birthDay:new Date(
-                    `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
-                    ).toUTCString()
-            }
-            
-            const {data} = await signupAPI(signUpBody);
-            console.log('클라이언트 받은 데이터',data)
-            dispatch(userActions.setLoggedUser(data))   
-
-        }catch(e){
-            console.log(e)
-        }
-    }
-    }
     // 대학교명 리스트 가져오기
     const [universityNameList,setUniversityNameList] = useState<string[]>();
 
@@ -305,6 +279,40 @@ const SignUp = () => {
     useEffect(()=>{
         setCurrentPosition();
     },[])
+
+     // 회원가입 폼 제출하는 함수
+     const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
+        event.preventDefault();
+    
+        // validateMode true - 유효성검사 실시
+        setValidateMode(true)
+    
+        if(validateSignUpForm()){
+            try{
+                const signUpBody={
+                    userName,
+                    userNickname,            
+                    email,
+                    password,
+                    university,
+                    birthDay:new Date(
+                        `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
+                        ).toUTCString(),
+                    location,
+                    latitude,
+                    longitude,
+                }
+                console.log(signUpBody)
+                const {data} = await signupAPI(signUpBody);
+                console.log('클라이언트 받은 데이터',data)
+                dispatch(userActions.setLoggedUser(data)) 
+                router.push("/")
+    
+            }catch(e){
+                console.log(e)
+            }
+            }
+        }
 
     return (
         <Container onSubmit={onSubmitSignUp}>
