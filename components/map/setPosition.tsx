@@ -11,6 +11,8 @@ import registerPosition, { registerPositionActions } from './../../store/registe
 import Swal from 'sweetalert2';
 import { getLocationInfoAPI } from '../../lib/api/map';
 import { useSelector } from 'react-redux';
+import GeoCoding from './GeoCoding';
+import DaumPostcodeEmbed from 'react-daum-postcode';
 
 const Container = styled.div`
     .mordal-close-x-icon {
@@ -155,7 +157,9 @@ const loadMapScript = () => {
 const SetPosition:React.FC<IProps> = ({closeModal}) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
-    // 대학교의 주소를 구글api에 요청하여 위도,경도를 반환하는 api 필요
+    // 주소 검색 api
+    const [openPostcode, setOpenPostcode] = React.useState<boolean>(false);
+
 
     // 유저 정보의 위도,경도 값을 받아서 첫 위치로 지정하여 지도를 표시해준다 - 지금은 한서대학교 위도경도로 테스트
     const userLocation = useSelector((state:any)=>state.user.location)
@@ -175,11 +179,40 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
     const loadMap = async ()=>{
         await loadMapScript();
     }
+    // 주소 검색 api
+    const handle = {
+        // 버튼 클릭 이벤트
+        clickButton: () => {
+            setOpenPostcode(current => !current);
+        },
 
+        // 주소 선택 이벤트
+        selectAddress: async  (data: any) => {
+            console.log(`
+                주소: ${data.address},
+                우편번호: ${data.zonecode}
+            `)
+            // 주소 > 위도,경도 변환 지오코딩
+            const currentAddr = data.address;
+            if(currentAddr){
+                try{
+                    // 여기에 받아온 주소로 위도,경도값을 알아내고 
+                    const {lat, lng} =  await GeoCoding(currentAddr)
+                    // 위도,경도값을 지도의 currentMapLocation state를 변경시킨다
+                    setCurrentMapLocation({
+                        latitude:lat,
+                        longitude:lng
+                    })
+                }catch(e){
+                    console.log('지도를 불러오는데 실패하였습니다.')
+                }
+            }
+            setOpenPostcode(false);
+        },
+    }
 
     // 지도 불러오기
     const initMap = ()=>{
-        console.log('지도불러온 횟수 - initMap')
         if(mapRef.current){
             const map:any = new window.google.maps.Map(mapRef.current,{
                 center:{
@@ -209,8 +242,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
         }
     }
 
-    useEffect(()=>{
-        console.log('지도불러온 횟수 - useEffect')
+    useEffect(()=>{        
         loadMap();
         window.initMap = initMap
     },[currentMapLocation])
@@ -290,9 +322,19 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                 <p>거래 위치 설정하기</p>
                 <CloseXIcon className="mordal-close-x-icon" onClick={closeModal}/>
             </div>
-            <div className='set-position-map' id="map" ref={mapRef}>
-                <MarkerIcon/>
-            </div>
+            {openPostcode ? 
+                <DaumPostcodeEmbed 
+                    // 값을 선택할 경우 실행되는 이벤트
+                    onComplete={handle.selectAddress}  
+                    // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+                    autoClose={false} 
+                    // 팝업을 열때 기본적으로 입력되는 검색어 
+                    defaultQuery='판교역로 235' 
+                /> : 
+                <div className='set-position-map' id="map" ref=     {mapRef}>
+                    <MarkerIcon/>
+                </div>}
+            
             <div className='set-position-name'>
                 <p>선택한 곳의 장소명을 입력해주세요</p>
                 <input
@@ -305,7 +347,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                 {loading?<p>불러오는 중...</p>:<button onClick={setCurrentPosition}>현재위치로 설정하기</button>}
             </div>
             <div className='set-position-footer'>
-                <div className='search-university'>
+                <div className='search-university' onClick={handle.clickButton}>
                     <button>주소 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>
