@@ -141,25 +141,13 @@ declare global{
         initMap:()=>void;
     }
 }
-// 구글 지도 script 불러오기
-const loadMapScript = () => {
-    return new Promise<void>((resolve) => {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
-      script.defer = true;
-      document.head.appendChild(script);
-      script.onload = () => {
-          resolve();
-        };
-    });
-};
+
 
 const SetPosition:React.FC<IProps> = ({closeModal}) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
     // 주소 검색 api
     const [openPostcode, setOpenPostcode] = React.useState<boolean>(false);
-
 
     // 유저 정보의 위도,경도 값을 받아서 첫 위치로 지정하여 지도를 표시해준다 - 지금은 한서대학교 위도경도로 테스트
     const userLocation = useSelector((state:any)=>state.user.location)
@@ -176,9 +164,20 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
     const onChangeInput = (e:any)=>{
         setInputLocation(e.target.value)
     }
-    const loadMap = async ()=>{
-        await loadMapScript();
-    }
+
+    // 지도 리로드
+    const reloadMap = () => {
+        console.log('지도 reload')
+        const existingScript = document.getElementById("googleMaps");
+        if (existingScript) {
+          existingScript.remove();
+        }
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+        script.id = "googleMaps";
+        document.body.appendChild(script);
+    };
+    
     // 주소 검색 api
     const handle = {
         // 버튼 클릭 이벤트
@@ -203,6 +202,8 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                         latitude:lat,
                         longitude:lng
                     })
+                    console.log('위치를 새로 변경하였습니다')
+                    reloadMap();
                 }catch(e){
                     console.log('지도를 불러오는데 실패하였습니다.')
                 }
@@ -212,7 +213,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
     }
 
     // 지도 불러오기
-    const initMap = ()=>{
+    window.initMap = ()=>{
         if(mapRef.current){
             const map:any = new window.google.maps.Map(mapRef.current,{
                 center:{
@@ -242,10 +243,18 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
         }
     }
 
-    useEffect(()=>{        
-        loadMap();
-        window.initMap = initMap
-    },[currentMapLocation])
+    useEffect(()=>{
+        const loadMap = () => {
+            const script = document.createElement("script");
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+            script.id = "googleMaps";
+            document.body.appendChild(script);
+            script.onload = () => {
+              console.log("Google Maps loaded!");
+            };
+          };
+          loadMap();
+    },[])
 
     const [loading,setLoading] = useState(false)
     // 현재 위치 불러오기에 성공했을 때
@@ -255,6 +264,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                 latitude:coords.latitude,
                 longitude:coords.longitude
           })
+          reloadMap();
           setInputLocation("")
           Swal.fire('현재 위치를 설정하였습니다.')
           
