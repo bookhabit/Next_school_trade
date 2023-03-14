@@ -4,13 +4,12 @@ import palette from '../../styles/palette';
 import MarkerIcon from "../../public/static/svg/map/marker.svg"
 import CloseXIcon from "../../public/static/svg/map/modal_close_x_icon.svg"
 import { useEffect, useRef, useState } from 'react';
-import Head from "next/head";
 import throttle from "lodash/throttle";
 import { useDispatch } from 'react-redux';
 import registerPosition, { registerPositionActions } from './../../store/registerPosition';
 import Swal from 'sweetalert2';
-import { getLocationInfoAPI } from '../../lib/api/map';
-import { useSelector } from 'react-redux';
+import DaumPostcodeEmbed from 'react-daum-postcode';
+
 
 const Container = styled.div`
     .mordal-close-x-icon {
@@ -47,6 +46,10 @@ const Container = styled.div`
         border-bottom:1px solid ${palette.divistion_color}
     }
 
+    #__daum__layer_2{
+        width:100%;
+        height:400px !important;
+    }
     .set-position-current-location{
         background-color:${palette.main_color};
         height:20px;
@@ -160,13 +163,35 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
     const mapRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
     // 주소 검색 api 필요
-    // 주소를 위도,경도로 반환하여 다시 지도를 그리는 api 필요
+    const [openPostcode, setOpenPostcode] = React.useState<boolean>(false);
+    
 
     // props로 받은 현재 위치를 state에 넣어준다
     const [currentMapLocation, setCurrentMapLocation] = useState({
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
     });
+    console.log(currentMapLocation)
+
+    const handle = {
+        // 버튼 클릭 이벤트
+        clickButton: () => {
+            setOpenPostcode(current => !current);
+        },
+
+        // 주소 선택 이벤트
+        selectAddress: (data: any) => {
+            console.log(`
+                주소: ${data.address},
+                우편번호: ${data.zonecode}
+            `)
+            // 주소를 위도,경도로 반환하여 다시 지도를 그리는 api 필요
+            // 여기에 받아온 주소로 위도,경도값을 알아내고 
+            // 위도,경도값을 지도의 currentMapLocation state를 변경시킨다
+            setOpenPostcode(false);
+        },
+    }
+
 
     // 위치 설명 string
     const [inputLocation,setInputLocation] = useState('')
@@ -264,9 +289,19 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
                 <p>거래 위치 설정하기</p>
                 <CloseXIcon className="mordal-close-x-icon" onClick={closeModal}/>
             </div>
-            <div className='set-position-map' id="map" ref={mapRef}>
-                <MarkerIcon/>
-            </div>
+            {openPostcode ? 
+                <DaumPostcodeEmbed 
+                    // 값을 선택할 경우 실행되는 이벤트
+                    onComplete={handle.selectAddress}  
+                    // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+                    autoClose={false} 
+                    // 팝업을 열때 기본적으로 입력되는 검색어 
+                    defaultQuery='판교역로 235' 
+                /> : 
+                <div className='set-position-map' id="map" ref=     {mapRef}>
+                    <MarkerIcon/>
+                </div>}
+            
             <div className='set-position-name'>
                 <p>선택한 곳의 장소명을 입력해주세요</p>
                 <input
@@ -276,7 +311,7 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
                 />
             </div>
             <div className='set-position-footer'>
-                <div className='search-university'>
+                <div className='search-university' onClick={handle.clickButton}>
                     <button>주소 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>
