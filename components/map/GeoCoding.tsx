@@ -5,14 +5,15 @@ Geocode.setLanguage('ko')
 Geocode.setRegion('es')
 Geocode.enableDebug()
 
-const GeoCoding = async (currentAddr:string) => {
-  return Geocode.fromAddress(currentAddr)
-    .then( response => {
-        const { lat, lng } = response.results[0].geometry.location;
-      console.log('GeoCoding',lat,lng)
-      return {lat, lng}
-    })
-    .catch(err => console.log(err))
-}
+type GeoLocation = {
+    lat: number;
+    lng: number;
+  }
+
+  const GeoCoding = async (currentAddr:string): Promise<GeoLocation> => {
+    const response = await Geocode.fromAddress(currentAddr);
+    const { lat, lng } = response.results[0].geometry.location;
+    return {lat, lng};
+  }
 
 export default GeoCoding 

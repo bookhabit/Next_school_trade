@@ -147,23 +147,40 @@ declare global{
         initMap:()=>void;
     }
 }
+
 // 구글 지도 script 불러오기
-const loadMapScript = () => {
-    return new Promise<void>((resolve) => {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
-      script.defer = true;
-      document.head.appendChild(script);
-      script.onload = () => {
-          resolve();
-        };
-    });
-};
+// const loadMapScript = () => {
+//     return new Promise<void>((resolve) => {
+//       const script = document.createElement("script");
+//       script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+//       script.defer = true;
+//       document.head.appendChild(script);
+//       script.onload = () => {
+//           resolve();
+//         };
+//     });
+// };
+
+
+// const loadMap = () => {
+//     const existingScript = document.getElementById("googleMaps");
+//     console.log('로드맵',existingScript)
+//     if (!existingScript) {
+//         console.log('구글맵 로드 시작!')
+//         const script = document.createElement("script");
+//         script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+//         script.id = "googleMaps";
+//         document.body.appendChild(script);
+//         script.onload = () => {
+//         console.log("구글맵 로드완료!");
+//         };
+//     }
+// };
 
 const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
-    // 주소 검색 api 필요
+    // 주소 검색 api 
     const [openPostcode, setOpenPostcode] = React.useState<boolean>(false);
     
 
@@ -173,6 +190,19 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
         longitude: currentLocation.longitude,
     });
     console.log(currentMapLocation)
+
+    
+    const reloadMap = () => {
+        console.log('지도 reload')
+        const existingScript = document.getElementById("googleMaps");
+        if (existingScript) {
+          existingScript.remove();
+        }
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+        script.id = "googleMaps";
+        document.body.appendChild(script);
+    };
 
     // 주소 검색 api
     const handle = {
@@ -198,6 +228,9 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
                         latitude:lat,
                         longitude:lng
                     })
+                    console.log('위치를 새로 변경하였습니다')
+                    reloadMap();
+                    
                 }catch(e){
                     console.log('지도를 불러오는데 실패하였습니다.')
                 }
@@ -213,13 +246,13 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
     const onChangeInput = (e:any)=>{
         setInputLocation(e.target.value)
     }
-    const loadMap = async ()=>{
-        await loadMapScript();
-    }
-
+    // const loadMap = async ()=>{
+    //     await loadMapScript();
+    // }
 
     // 지도 불러오기
-    const initMap = ()=>{
+    window.initMap = ()=>{
+        console.log('initMap 호출')
         if(mapRef.current){
             const map:any = new window.google.maps.Map(mapRef.current,{
                 center:{
@@ -235,27 +268,32 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
                     lng:currentMapLocation.longitude
                 },
             })
-            // map.addListener("center_changed",throttle(()=>{
-            //     console.log('map은 읽힘')
-            //     const centerLat = map.getCenter().lat();
-            //     const centerLng = map.getCenter().lng();
-            //     console.log(centerLat,centerLng)
-            //     console.log('marker가 읽히지 않음',marker)
-            //     marker.setPosition({lat:centerLat,lng:centerLng})
-            //     setCurrentMapLocation({
-            //         latitude:centerLat,
-            //         longitude:centerLng
-            //     })
-            // },300)
-            // )
+            map.addListener("center_changed",throttle(()=>{
+                const centerLat = map.getCenter().lat();
+                const centerLng = map.getCenter().lng();
+                console.log(centerLat,centerLng)
+                marker.setPosition({lat:centerLat,lng:centerLng})
+                setCurrentMapLocation({
+                    latitude:centerLat,
+                    longitude:centerLng
+                })
+            },300)
+            )
         }
         
     }
     useEffect(()=>{
-        loadMap();
-        window.initMap = initMap
-    },[currentMapLocation])
-
+        const loadMap = () => {
+            const script = document.createElement("script");
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+            script.id = "googleMaps";
+            document.body.appendChild(script);
+            script.onload = () => {
+              console.log("Google Maps loaded!");
+            };
+          };
+          loadMap();
+    },[])
 
     // 지도 위치,위도,경도 입력값 확인하는 함수
     const validateLocation = ()=>{
