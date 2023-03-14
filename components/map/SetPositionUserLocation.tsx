@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import registerPosition, { registerPositionActions } from './../../store/registerPosition';
 import Swal from 'sweetalert2';
 import DaumPostcodeEmbed from 'react-daum-postcode';
+import GeoCoding from './GeoCoding';
 
 
 const Container = styled.div`
@@ -173,6 +174,7 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
     });
     console.log(currentMapLocation)
 
+    // 주소 검색 api
     const handle = {
         // 버튼 클릭 이벤트
         clickButton: () => {
@@ -180,14 +182,26 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
         },
 
         // 주소 선택 이벤트
-        selectAddress: (data: any) => {
+        selectAddress: async  (data: any) => {
             console.log(`
                 주소: ${data.address},
                 우편번호: ${data.zonecode}
             `)
-            // 주소를 위도,경도로 반환하여 다시 지도를 그리는 api 필요
-            // 여기에 받아온 주소로 위도,경도값을 알아내고 
-            // 위도,경도값을 지도의 currentMapLocation state를 변경시킨다
+            // 주소 > 위도,경도 변환 지오코딩
+            const currentAddr = data.address;
+            if(currentAddr){
+                try{
+                    // 여기에 받아온 주소로 위도,경도값을 알아내고 
+                    const {lat, lng} =  await GeoCoding(currentAddr)
+                    // 위도,경도값을 지도의 currentMapLocation state를 변경시킨다
+                    setCurrentMapLocation({
+                        latitude:lat,
+                        longitude:lng
+                    })
+                }catch(e){
+                    console.log('지도를 불러오는데 실패하였습니다.')
+                }
+            }
             setOpenPostcode(false);
         },
     }
@@ -215,26 +229,28 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
                 zoom:16,
             });
             const marker = new window.google.maps.Marker({
+                map:map,
                 position:{
                     lat:currentMapLocation.latitude,
                     lng:currentMapLocation.longitude
                 },
-                map,
             })
-            map.addListener("center_changed",throttle(()=>{
-                const centerLat = map.getCenter().lat();
-                const centerLng = map.getCenter().lng();
-                console.log(centerLat,centerLng)
-                marker.setPosition({lat:centerLat,lng:centerLng})
-                setCurrentMapLocation({
-                    latitude:centerLat,
-                    longitude:centerLng
-                })
-            },300)
-            )
+            // map.addListener("center_changed",throttle(()=>{
+            //     console.log('map은 읽힘')
+            //     const centerLat = map.getCenter().lat();
+            //     const centerLng = map.getCenter().lng();
+            //     console.log(centerLat,centerLng)
+            //     console.log('marker가 읽히지 않음',marker)
+            //     marker.setPosition({lat:centerLat,lng:centerLng})
+            //     setCurrentMapLocation({
+            //         latitude:centerLat,
+            //         longitude:centerLng
+            //     })
+            // },300)
+            // )
         }
+        
     }
-
     useEffect(()=>{
         loadMap();
         window.initMap = initMap

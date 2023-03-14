@@ -400,6 +400,11 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-geocode@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@types/react-geocode/-/react-geocode-0.2.1.tgz#0ec8d5d8d3e8994136f147a3d3cb8a4136ad2fd6"
+  integrity sha512-iZAvDCFNYc3jZqB/MoPkOE/Gc0AzrBkCjpQnVpRKrDB6v8k6i4Cp+fpV7y3MLg13zasovTpuguo25nkVc31fcA==
+
 "@types/react-outside-click-handler@^1.3.1":
   version "1.3.1"
   resolved "https://registry.npmjs.org/@types/react-outside-click-handler/-/react-outside-click-handler-1.3.1.tgz"
@@ -2374,6 +2379,13 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-geocode@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-geocode/-/react-geocode-0.2.3.tgz#e27fa3f212a2629b2b2bb2a3a325a12b802b2dae"
+  integrity sha512-sIpbgmn1IUzAxO4haOZ6jeeFnMD8ya9PC38yiNrmJ9vPWbvAO2D/2yfCBzZjGZVUm4PRzKAc0KghXfaEnug0TQ==
+  dependencies:
+    regenerator-runtime "^0.13.3"
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -2451,7 +2463,7 @@ reflect.ownkeys@^0.2.0:
   resolved "https://registry.npmjs.org/reflect.ownkeys/-/reflect.ownkeys-0.2.0.tgz"
   integrity sha512-qOLsBKHCpSOFKK1NUOCGC5VyeufB6lEsFe92AL2bhIJsacZS1qdoOZSbPk3MYKuT2cFlRDnulKXuuElIrMjGUg==
 
-regenerator-runtime@^0.13.11:
+regenerator-runtime@^0.13.11, regenerator-runtime@^0.13.3:
   version "0.13.11"
   resolved "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz"
   integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
