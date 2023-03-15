@@ -135,8 +135,8 @@ const SignUp = () => {
 
     // input창 관리할 state
     const [inputs, setInputs] = useState({
-        userName:'',
-        userNickname: '',
+        name:'',
+        nickname: '',
         studentID:'',
         email: '',
         password:'',
@@ -154,13 +154,13 @@ const SignUp = () => {
 
 
     // 비구조화 할당을 통해 값 추출
-    const { userName,userNickname,email,password,confirmPassword} = inputs; 
+    const { name,nickname,email,password,confirmPassword} = inputs; 
     const {university,inputGender,birthMonth,birthDay,birthYear} = selectInputs;
-    console.log(university,inputGender)
 
     // input과 select onChange함수들
     const onChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = event.target; 
+
         setInputs({
         ...inputs, // 기존의 input 객체를 복사한 뒤
         [name]: value // name 키를 가진 값을 value 로 설정
@@ -207,10 +207,10 @@ const SignUp = () => {
     const isPasswordHasNameOrEmail = useMemo(
         () =>
         !password ||
-        !userName || !email ||
-        password.includes(userName) ||
+        !name || !email ||
+        password.includes(name) ||
         password.includes(email.split("@")[0]),
-        [password, userName, email]
+        [password, name, email]
     );
 
     //* 비밀번호가 최수 자리수 이상인지
@@ -250,7 +250,7 @@ const SignUp = () => {
     // ModalPortal 
     const {openModal,ModalPortal,closeModal} = useModal();
     
-    const [currentLocation, setCurrentLocation] = useState({
+    const [currentLocation, setCurrentLocation] = useState<{latitude:number,longitude:number}>({
         latitude: 0,
         longitude: 0,
     });
@@ -283,7 +283,7 @@ const SignUp = () => {
     // 회원가입 폼 입력 값 확인하는 함수
     const validateSignUpForm = ()=>{
     // 폼 요소의 값이 없다면
-        if(!userName|| !userNickname || !email || !password || !university || !birthDay || !location || !latitude || !longitude||!inputGender){
+        if(!name|| !nickname || !email || !password || !university || !birthMonth|| !birthDay || !birthYear || !location || !latitude || !longitude||!inputGender){
             return false;
         }
         
@@ -313,15 +313,15 @@ const SignUp = () => {
         if(validateSignUpForm()){
             try{
                 const signUpBody={
-                    userName,
-                    userNickname,            
+                    name,
+                    nickname,            
                     email,
                     password,
                     university,
                     gender,
-                    birthDay:new Date(
+                    birth:new Date(
                         `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
-                        ).toUTCString(),
+                        ).toISOString(),
                     location,
                     latitude,
                     longitude,
@@ -344,9 +344,9 @@ const SignUp = () => {
                 <Input 
                     placeholder="이름" 
                     icon={<PersonIcon/>}
-                    name='userName'
+                    name='name'
                     onChange={onChangeInput}
-                    isValid={!!userName}
+                    isValid={!!name}
                     errorMessage="이름을 입력해주세요"
                     usevalidation
                 />
@@ -355,9 +355,9 @@ const SignUp = () => {
                 <Input 
                     placeholder="닉네임" 
                     icon={<PersonIcon/>}
-                    name='userNickname'
+                    name='nickname'
                     onChange={onChangeInput}
-                    isValid={!!userNickname}
+                    isValid={!!nickname}
                     errorMessage="닉네임을 입력해주세요"
                     usevalidation
                 />

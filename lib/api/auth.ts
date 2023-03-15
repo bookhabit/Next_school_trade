@@ -3,19 +3,19 @@ import { UserType } from '../../types/user';
 
 // 회원가입 body
 interface SignUpAPIBody{
-    userName:string;
-    userNickname:string;
+    name:string;
+    nickname:string;
     email:string;
     password:string;
     university:string;
     gender:number;
-    birthDay:string;
+    birth:string;
     location:string;
     latitude:number;
     longitude:number;
 }
 // 회원가입 api
-export const signupAPI = (body:SignUpAPIBody)=>axios.post<UserType>("/api/auth/signup",body)
+export const signupAPI = (body:SignUpAPIBody)=>axios.post<UserType>("http://localhost:4000/auth/local/signup",body)
 
 // 로그인 api
 export const loginAPI = (body:{email:string;password:string})=>
