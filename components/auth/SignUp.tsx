@@ -266,8 +266,7 @@ const SignUp = () => {
         }catch(e){
           console.log(e)
           alert(e)
-        }
-        
+        }        
       }
     // 현재 위치 설정
     const setCurrentPosition = ()=>{
@@ -328,8 +327,8 @@ const SignUp = () => {
                 }
                 console.log('signUpBody',signUpBody)
                 const {data} = await signupAPI(signUpBody);
-                console.log('클라이언트 받은 데이터',data)
-                dispatch(userActions.setLoggedUser(data)) 
+                console.log('클라이언트 받은 데이터',data.user)
+                dispatch(userActions.setLoggedUser(data.user)) 
                 router.push("/home")
     
             }catch(e){

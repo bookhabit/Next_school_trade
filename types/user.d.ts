@@ -30,3 +30,9 @@ export type StoredUserType = {
     longitude:number;
   };
   
+  // local-login 응답값
+  export type LoggedUserType = {
+    token:string;
+    isLogged:boolean;
+    user:object;
+  }
