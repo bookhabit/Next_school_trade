@@ -48,6 +48,7 @@ interface IProps {
 const CommonHeader:React.FC<IProps> = ({pathName}) => {
     // 알림페이지,카테고리페이지,채팅방페이지 는 편집 버튼 생성
     const showEditBtn = pathName=== "/user/alarm" || pathName==="/user/chatting" || pathName === "/user/favorite"; 
+    
     const LoggedUser = useSelector((state:any)=>state.user)
     
     const goToBackpage = ()=>{
@@ -78,7 +79,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
           case "/category":
             return "카테고리";
           case "/user":
-            return `${LoggedUser.user.name}`
+            return `${LoggedUser.name}`
           case "/user/alarm":
             return "알림";
           case "/user/favorite":

@@ -83,18 +83,18 @@ const Profile = () => {
     }
 
     // 유저 정보 불러오기
-    const loggedUser = useSelector((state:any)=>state.user)
+    const LoggedUser = useSelector((state:any)=>state.user)
 
     return (
         <Container>
             <div className='profile-image'>
-                <img src={loggedUser.profileImage} alt="프로필 이미지"/>
+                <img src={LoggedUser.profileImage} alt="프로필 이미지"/>
                 <label htmlFor='file-input'/>
                 <input type="file" id="file-input"/>
             </div>
             <div className='profile-input'>
                 <input type='text' placeholder='닉네임'
-                defaultValue={loggedUser.user.nickname}
+                defaultValue={LoggedUser.nickname}
                 />
                 <button onClick={showPasswordInput} className='profile-input'>
                     비밀번호 변경
