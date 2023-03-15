@@ -48,14 +48,20 @@ const Container = styled.form`
         margin-bottom:8px;
     }
     
-    /* 대학교 셀렉터 */
-    .sign-up-university-selectors{
+    /* 대학교 성별 셀렉터 */
+    .sign-up-universityAndGender-selectors{
         display:flex;
         margin-bottom:24px;
+        .sign-up-gender-selector{
+            width:40%;
+            margin-right:16px;
+        }
         .sign-up-university-selector{
-            width:100%;
+            width:60%;
+            margin-right:16px;
         }
     }
+
 
     /* 생년월일 셀렉터 */
     .sign-up-modal-birthday-selectors{
@@ -140,15 +146,18 @@ const SignUp = () => {
     // select 관리할 state
     const [selectInputs,setSelectInputs] = useState({
         university:"",
+        gender:"",
         birthMonth:"",
         birthDay:"",
         birthYear:""
     })
 
+ 
+
 
     // 비구조화 할당을 통해 값 추출
     const { userName,userNickname,email,password,confirmPassword} = inputs; 
-    const {university,birthMonth,birthDay,birthYear} = selectInputs;
+    const {university,gender,birthMonth,birthDay,birthYear} = selectInputs;
 
     // input과 select onChange함수들
     const onChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -161,6 +170,7 @@ const SignUp = () => {
 
     const onChangeSelector = (event:React.ChangeEvent<HTMLSelectElement>)=>{
     const { value, name } = event.target; // 우선 e.target 에서 name 과 value 를 추출
+    console.log(value,name);
     setSelectInputs({
         ...selectInputs, // 기존의 input 객체를 복사한 뒤
         [name]: value // name 키를 가진 값을 value 로 설정
@@ -400,8 +410,18 @@ const SignUp = () => {
                     onFocus={onFocusedConfirmPassword}
                 />
             </div>
-
-            <div className='sign-up-university-selectors'>
+            
+            <div className='sign-up-universityAndGender-selectors'>
+                <div className='sign-up-gender-selector'>
+                    <Selector
+                        options={['남자','여자']}
+                        disabledoptions={["성별"]}
+                        defaultValue="성별"
+                        name="gender"
+                        onChange={onChangeSelector}
+                        isValid={!!gender}
+                    />
+                </div>
                 <div className='sign-up-university-selector'>
                     <Selector 
                         options={universityNameList}
@@ -413,7 +433,6 @@ const SignUp = () => {
                     />
                 </div>
             </div>
-            
             <div className='sign-up-modal-birthday-selectors'>
                 <div className='sign-up-modal-birthday-month-selector'>
                     <Selector 

@@ -148,41 +148,17 @@ declare global{
     }
 }
 
-// 구글 지도 script 불러오기
-// const loadMapScript = () => {
-//     return new Promise<void>((resolve) => {
-//       const script = document.createElement("script");
-//       script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
-//       script.defer = true;
-//       document.head.appendChild(script);
-//       script.onload = () => {
-//           resolve();
-//         };
-//     });
-// };
-
-
-// const loadMap = () => {
-//     const existingScript = document.getElementById("googleMaps");
-//     console.log('로드맵',existingScript)
-//     if (!existingScript) {
-//         console.log('구글맵 로드 시작!')
-//         const script = document.createElement("script");
-//         script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
-//         script.id = "googleMaps";
-//         document.body.appendChild(script);
-//         script.onload = () => {
-//         console.log("구글맵 로드완료!");
-//         };
-//     }
-// };
-
 const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
     // 주소 검색 api 
     const [openPostcode, setOpenPostcode] = React.useState<boolean>(false);
+    // 위치 설명 string
+    const [inputLocation,setInputLocation] = useState('')
     
+    const onChangeInput = (e:any)=>{
+        setInputLocation(e.target.value)
+    }
 
     // props로 받은 현재 위치를 state에 넣어준다
     const [currentMapLocation, setCurrentMapLocation] = useState({
@@ -191,7 +167,7 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
     });
     console.log(currentMapLocation)
 
-    
+    // 지도 리로드
     const reloadMap = () => {
         console.log('지도 reload')
         const existingScript = document.getElementById("googleMaps");
@@ -230,7 +206,6 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
                     })
                     console.log('위치를 새로 변경하였습니다')
                     reloadMap();
-                    
                 }catch(e){
                     console.log('지도를 불러오는데 실패하였습니다.')
                 }
@@ -238,21 +213,10 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
             setOpenPostcode(false);
         },
     }
-
-
-    // 위치 설명 string
-    const [inputLocation,setInputLocation] = useState('')
     
-    const onChangeInput = (e:any)=>{
-        setInputLocation(e.target.value)
-    }
-    // const loadMap = async ()=>{
-    //     await loadMapScript();
-    // }
 
     // 지도 불러오기
     window.initMap = ()=>{
-        console.log('initMap 호출')
         if(mapRef.current){
             const map:any = new window.google.maps.Map(mapRef.current,{
                 center:{

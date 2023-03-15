@@ -5,7 +5,7 @@ import PriceWonIcon from "../../public/static/svg/product/price_won.svg"
 import MapIcon from "../../public/static/svg/product/map.svg"
 import PositionIcon from "../../public/static/svg/product/register_position.svg"
 import useModal from './../../hooks/useModal';
-import SetPosition from '../map/setPosition';
+import SetPosition from '../map/SetPosition';
 import { useState, useMemo } from 'react';
 import { makeMoneyString } from '../../lib/utils';
 import Delete from "../../public/static/svg/product/thumnailXicon.svg"
