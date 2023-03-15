@@ -94,7 +94,7 @@ const Profile = () => {
             </div>
             <div className='profile-input'>
                 <input type='text' placeholder='닉네임'
-                defaultValue={loggedUser.userNickname}
+                defaultValue={loggedUser.user.nickname}
                 />
                 <button onClick={showPasswordInput} className='profile-input'>
                     비밀번호 변경
