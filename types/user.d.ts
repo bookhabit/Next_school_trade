@@ -24,7 +24,7 @@ export type StoredUserType = {
     university: string;
     gender:number;
     birth:string;
-    profileImage: string;
+    // profileImage: string;
     location:string;
     latitude:number;
     longitude:number;
