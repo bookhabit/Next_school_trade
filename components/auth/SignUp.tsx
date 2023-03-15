@@ -146,18 +146,17 @@ const SignUp = () => {
     // select 관리할 state
     const [selectInputs,setSelectInputs] = useState({
         university:"",
-        gender:"",
+        inputGender:"",
         birthMonth:"",
         birthDay:"",
         birthYear:""
     })
 
- 
-
 
     // 비구조화 할당을 통해 값 추출
     const { userName,userNickname,email,password,confirmPassword} = inputs; 
-    const {university,gender,birthMonth,birthDay,birthYear} = selectInputs;
+    const {university,inputGender,birthMonth,birthDay,birthYear} = selectInputs;
+    console.log(university,inputGender)
 
     // input과 select onChange함수들
     const onChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -168,9 +167,20 @@ const SignUp = () => {
         });
     };
 
+    // 성별을 string으로 받고 number로 변환
+    let gender:number;
+    // gender 매핑
+    const strToNumGender = (inputGender:string):number=>{
+        if(inputGender==='남자'){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+    
+
     const onChangeSelector = (event:React.ChangeEvent<HTMLSelectElement>)=>{
     const { value, name } = event.target; // 우선 e.target 에서 name 과 value 를 추출
-    console.log(value,name);
     setSelectInputs({
         ...selectInputs, // 기존의 input 객체를 복사한 뒤
         [name]: value // name 키를 가진 값을 value 로 설정
@@ -181,8 +191,6 @@ const SignUp = () => {
     const toggleHidePassword = ()=>{
         setHidePassword(!hidePassword);
     }
-
-
 
     // 비밀번호 인풋 포커스 되었을 때 이벤트함수
     const onFocusPassword= ()=>{
@@ -227,28 +235,10 @@ const SignUp = () => {
     const {setValidateMode } = useValidateMode();
 
 
-    // 회원가입 폼 입력 값 확인하는 함수
-    const validateSignUpForm = ()=>{
-    // 폼 요소의 값이 없다면
-        if(!userName|| !userNickname || !email || !password || !university || !birthDay || !location || !latitude || !longitude){
-            return false;
-        }
-        
-        //* 비밀번호가 올바르지 않다면
-        if (
-            isPasswordHasNameOrEmail ||
-            !isPasswordOverMinLength ||
-            !isPasswordHasNumberOrSymbol
-        ) {
-            console.log('비밀번호가 올바르지 않다')
-            return false;
-        }    
-        return true;
-    }
-
+    
     // 대학교명 리스트 가져오기
     const [universityNameList,setUniversityNameList] = useState<string[]>();
-
+    
     useEffect(()=>{
         async function fetchUniversityName() {
             const response = await axios.get("/api/school/universityName");
@@ -259,7 +249,7 @@ const SignUp = () => {
 
     // ModalPortal 
     const {openModal,ModalPortal,closeModal} = useModal();
-
+    
     const [currentLocation, setCurrentLocation] = useState({
         latitude: 0,
         longitude: 0,
@@ -284,19 +274,42 @@ const SignUp = () => {
         navigator.geolocation.getCurrentPosition(onSuccessGetLocation,(e)=>{
             console.log(e)
             alert(e?.message)
-          })
+        })
     }
     useEffect(()=>{
         setCurrentPosition();
     },[])
-
-     // 회원가입 폼 제출하는 함수
-     const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
+    
+    // 회원가입 폼 입력 값 확인하는 함수
+    const validateSignUpForm = ()=>{
+    // 폼 요소의 값이 없다면
+        if(!userName|| !userNickname || !email || !password || !university || !birthDay || !location || !latitude || !longitude||!inputGender){
+            return false;
+        }
+        
+        //* 비밀번호가 올바르지 않다면
+        if (
+            isPasswordHasNameOrEmail ||
+            !isPasswordOverMinLength ||
+            !isPasswordHasNumberOrSymbol
+        ) {
+            console.log('비밀번호가 올바르지 않다')
+            return false;
+        }    
+        return true;
+    }
+    
+    // 회원가입 폼 제출하는 함수
+    const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
         event.preventDefault();
     
         // validateMode true - 유효성검사 실시
         setValidateMode(true)
-    
+
+        // 성별 남자,여자 number로 변환
+        if(inputGender){
+            gender = strToNumGender(inputGender);
+        }
         if(validateSignUpForm()){
             try{
                 const signUpBody={
@@ -305,6 +318,7 @@ const SignUp = () => {
                     email,
                     password,
                     university,
+                    gender,
                     birthDay:new Date(
                         `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
                         ).toUTCString(),
@@ -312,7 +326,7 @@ const SignUp = () => {
                     latitude,
                     longitude,
                 }
-                console.log(signUpBody)
+                console.log('signUpBody',signUpBody)
                 const {data} = await signupAPI(signUpBody);
                 console.log('클라이언트 받은 데이터',data)
                 dispatch(userActions.setLoggedUser(data)) 
@@ -417,9 +431,9 @@ const SignUp = () => {
                         options={['남자','여자']}
                         disabledoptions={["성별"]}
                         defaultValue="성별"
-                        name="gender"
+                        name="inputGender"
                         onChange={onChangeSelector}
-                        isValid={!!gender}
+                        isValid={!!inputGender}
                     />
                 </div>
                 <div className='sign-up-university-selector'>

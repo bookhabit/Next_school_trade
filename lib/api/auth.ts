@@ -8,6 +8,7 @@ interface SignUpAPIBody{
     email:string;
     password:string;
     university:string;
+    gender:number;
     birthDay:string;
     location:string;
     latitude:number;
