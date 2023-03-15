@@ -102,19 +102,20 @@ const Login = () => {
             try{
                 const {data} = await loginAPI(loginBody)
                 
-                console.log('data',data)
-                dispatch(userActions.setLoggedUser(data))
+                console.log('로그인 data',data)
+                // 엑세스 키 저장하는 로직 필요
+                dispatch(userActions.setLoggedUser(data.user))
                 router.push("/home")
             }catch(e:any){
                 // data에 있는 상태코드에 따라 에러메시지 출력
                 console.log('에러',e.response)
                 // 해당 이메일의 유저가 없을 때
                 if(e.response.status === 404){
-                    setErrorMessage('해당 이메일의 유저가 없습니다.')
+                    setErrorMessage(e.response.data.message)
                 }
                 // 유저의 비밀번호가 일치하지 않을 때
-                if(e.response.status === 403){
-                    setErrorMessage('비밀번호가 일치하지 않습니다')
+                if(e.response.status === 401){
+                    setErrorMessage(e.response.data.message)
                 }
             }
         }

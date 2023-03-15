@@ -328,6 +328,7 @@ const SignUp = () => {
                 console.log('signUpBody',signUpBody)
                 const {data} = await signupAPI(signUpBody);
                 console.log('클라이언트 받은 데이터',data.user)
+                // 엑세스 키 저장하는 로직 필요
                 dispatch(userActions.setLoggedUser(data.user)) 
                 router.push("/home")
     

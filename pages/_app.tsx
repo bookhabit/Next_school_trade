@@ -1,6 +1,7 @@
 import { AppContext, AppProps } from "next/app";
 import GlobalStyle from "../styles/GlobalStyle";
-import { wrapper } from "../store";
+import {  wrapper } from "../store";
+import { useSelector } from 'react-redux';
 import App from "next/app";
 import { cookieStringToObject } from './../lib/utils';
 import axios from "../lib/api";
@@ -19,6 +20,8 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
             dispatch(userActions.setLoggedUser(clientData))
         }
     },[])
+    
+    const LoggedUser = useSelector((state:any)=>state.user)
 
     return(
         <>
