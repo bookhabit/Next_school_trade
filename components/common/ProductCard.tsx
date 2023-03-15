@@ -108,12 +108,12 @@ const ProductCard:React.FC<IProps> = ({product}) => {
 
     return (
         <>
-            <Container onClick={goToDetail}>
-                <div className='productImg'>
+            <Container>
+                <div className='productImg' onClick={goToDetail}>
                     <img src={product.img.src}/>
                 </div>
                 <div className='productInfo'>
-                    <p className='productTitle'>{product.title}</p>
+                    <p className='productTitle' onClick={goToDetail}>{product.title}</p>
                     <p className='productPrice'>{product.price}</p>
                     <div className='info-footer'>
                         <p>{product.updatedDate}</p>
