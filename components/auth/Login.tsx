@@ -126,7 +126,7 @@ const Login = () => {
 
     const REDIRECT_URI = "http://localhost:3000/oauth/callback/kakao"
 
-    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=account_email`
 
     // 카카오 로그인 - 인가코드 받기
     const kakaoLogin = ()=>{
