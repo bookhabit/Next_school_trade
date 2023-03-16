@@ -121,6 +121,18 @@ const Login = () => {
         }
     }
 
+    // 환경변수 설정
+    const KAKAO_REST_API_KEY= "1e71e50aa0333c4fc579cf84718fdd4b"
+
+    const REDIRECT_URI = "http://localhost:3000/oauth/callback/kakao"
+
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
+
+    // 카카오 로그인 - 인가코드 받기
+    const kakaoLogin = ()=>{
+      window.location.href = KAKAO_AUTH_URL
+    }
+
     useEffect(()=>{
         return ()=>{
             setValidateMode(false)
@@ -166,7 +178,7 @@ const Login = () => {
               로그인
             </Button>
           </div>
-          <div className="kakao-btn">
+          <div className="kakao-btn" onClick={kakaoLogin}>
                 <KakaoBtn/>
           </div>
         </Container>
