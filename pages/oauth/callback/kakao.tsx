@@ -3,18 +3,35 @@ import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
+import { useDispatch } from 'react-redux';
+import { userActions } from './../../../store/user';
+import { useRouter } from 'next/router';
 
 const Kakao = (query:any) => {
-    console.log('리다이렉트 성공')
-    console.log('인가코드',query.code)
     const authCode = query.code;
 
+    // 로그인 시 유저정보 저장
+    const dispatch = useDispatch();
+    const router = useRouter();
+
     const getUserInfo = async (authCode:string)=>{
-        console.log('api 요청')
         const response = await axios.post("http://localhost:4000/auth/kakao",
         {code:authCode})
         console.log(response)
-        // 유저정보에서 이메일만 있다면 회원가입 페이지로 이동시켜서 유저정보 입력받기 + currentLeft 설정과 카카오 로그인시라고 알려주는 방법 찾기
+        if(response.data){
+            if(response.data.user.university){
+                // 유저정보에서 대학교 데이터가 있다면 로그인시키기 
+                dispatch(userActions.setLoggedUser(response.data.user))
+                router.push('/home')
+            }else{
+                // 유저정보에서 대학교 데이터가 없다면 카카오 첫 로그인이라는 뜻 > 회원가입 페이지로 보내기
+                router.push({
+                    pathname:'/auth',
+                    query:{kakaoLogin:true}
+                })
+            }
+        }
+        // 유저정보에서 대학교 데이터가 있다면 만 있다면 회원가입 페이지로 이동시켜서 유저정보 입력받기 + currentLeft 설정과 카카오 로그인시라고 알려주는 방법 찾기
 
         // 유저정보에서 이메일 외 다른 정보가 있다면 기존회원 > 로그인시키기
 
