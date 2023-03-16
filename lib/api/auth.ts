@@ -1,7 +1,7 @@
 import axios from '../../lib/api';
 import { LoggedUserType, UserType } from '../../types/user';
 
-// 회원가입 body
+// 로컬 회원가입 body
 interface SignUpAPIBody{
     name:string;
     nickname:string;
@@ -14,8 +14,25 @@ interface SignUpAPIBody{
     latitude:number;
     longitude:number;
 }
-// 회원가입 api
+
+// 카카오 회원가입 body
+interface KakaoSignUpAPIBody{
+    name:string;
+    nickname:string;
+    email:string;
+    university:string;
+    gender:number;
+    birth:string;
+    location:string;
+    latitude:number;
+    longitude:number;
+}
+
+// 로컬 회원가입 api
 export const signupAPI = (body:SignUpAPIBody)=>axios.post<LoggedUserType>("http://localhost:4000/auth/local/signup",body)
+
+// 카카오 회원가입 api
+export const kakaoSignupAPI = (body:KakaoSignUpAPIBody,headers:object)=>axios.post<LoggedUserType>("http://localhost:4000/user/info",body,headers)
 
 // 로그인 api
 export const loginAPI = (body:{email:string;password:string})=>

@@ -13,7 +13,7 @@ import { monthList,dayList,yearList,universityList } from '../../lib/staticData'
 import palette from '../../styles/palette';
 import { majorList } from './../../lib/staticData';
 import Button from '../common/Button';
-import { signupAPI } from '../../lib/api/auth';
+import { kakaoSignupAPI, signupAPI } from '../../lib/api/auth';
 import { useDispatch } from 'react-redux';
 import { userActions } from './../../store/user';
 import axios from "axios";
@@ -27,6 +27,7 @@ import SetPosition from '../map/SetPosition';
 import SetPositionUserLocation from '../map/SetPositionUserLocation';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import { UserType } from '../../types/user';
 
 type KaKaoSignUp = {
     kakaoSignUp : string;
@@ -132,12 +133,11 @@ interface IProps{
 }
 
 const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
+    console.log(kakaoSignUp)
     // 카카오 로그인 회원인 경우
-    let kakaoUserEmail
+    let user:UserType
     if(kakaoSignUp==='true'){
-        kakaoUserEmail = useSelector((state:any)=>state.user.email)
-        const token = localStorage.getItem('login-token')
-        console.log(kakaoUserEmail, '---', token)
+        user = useSelector((state:any)=>state.user)
     }
 
     // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
@@ -302,7 +302,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
         setCurrentPosition();
     },[])
     
-    // 회원가입 폼 입력 값 확인하는 함수
+    // 로컬 회원가입 폼 검증
     const validateSignUpForm = ()=>{
     // 폼 요소의 값이 없다면
         if(!name|| !nickname || !email || !password || !university || !birthMonth|| !birthDay || !birthYear || !location || !latitude || !longitude||!inputGender){
@@ -321,7 +321,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
         return true;
     }
     
-    // 회원가입 폼 제출하는 함수
+    // 로컬 회원가입 api 호출
     const onSubmitSignUp = async (event:React.FormEvent<HTMLFormElement>)=>{
         event.preventDefault();
     
@@ -364,8 +364,63 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             }
         }
 
+
+    // 카카오 회원가입 폼 검증
+    const validateKakaoForm = ()=>{
+        // 폼 요소의 값이 없다면
+            if(!name|| !nickname || !user.email || !university || !birthMonth|| !birthDay || !birthYear || !location || !latitude || !longitude||!inputGender){
+                return false;
+            }
+            return true;
+        }
+
+    // 카카오 회원가입 api 호출
+    const onSubmitUpdate = async (event:React.FormEvent<HTMLFormElement>)=>{
+        event.preventDefault();
+    
+        // validateMode true - 유효성검사 실시
+        setValidateMode(true)
+
+        // 성별 남자,여자 number로 변환
+        if(inputGender){
+            gender = strToNumGender(inputGender);
+        }
+        if(validateKakaoForm()){
+            // 헤더에 토큰 추가
+            const token = localStorage.getItem('login-token') as string;
+            const headers = { Authorization: `Bearer ${token}` };
+            try{
+                const signUpBody={
+                    name,
+                    nickname,            
+                    email:user.email,
+                    university,
+                    gender,
+                    birth:new Date(
+                        `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
+                        ).toISOString(),
+                    location,
+                    latitude,
+                    longitude,
+                }
+                console.log('signUpBody',signUpBody)
+                const {data} = await kakaoSignupAPI(signUpBody,headers);
+                console.log('클라이언트 받은 데이터',data.user)
+                // 엑세스 토큰 저장하는 로직 필요 - 우선 로컬스토리지 저장
+                localStorage.setItem('login-token', data.token);
+
+                // 유저정보 저장
+                dispatch(userActions.setLoggedUser(data.user)) 
+                router.push("/home")
+    
+            }catch(e){
+                console.log(e)
+            }
+            }
+    }
+
     return (
-        <Container onSubmit={onSubmitSignUp} kakaoSignUp={kakaoSignUp}>
+        <Container onSubmit={kakaoSignUp ?onSubmitUpdate :onSubmitSignUp } kakaoSignUp={kakaoSignUp}>
             <div className='input-wrapper input-wrapper-first'>
                 <Input 
                     placeholder="이름" 
