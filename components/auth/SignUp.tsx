@@ -41,12 +41,12 @@ const Container = styled.form<KaKaoSignUp>`
 
     /* 카카오 로그인 시 가운데로 옮기기 */
     .input-wrapper-first{
-        margin-top: ${(props)=>(props ?'70px;' : '0px')};
+        margin-top: ${(props)=>(props.kakaoSignUp ==='true' ?'70px;' : '0px')};
     }
     /* input */
     .input-wrapper{
         position:relative;
-        margin-bottom:${(props)=>(props ?'40px;' : '30px')};   
+        margin-bottom:${(props)=>(props.kakaoSignUp ==='true' ?'40px;' : '30px')};   
     }
 
     /* 셀렉터 */
@@ -60,7 +60,7 @@ const Container = styled.form<KaKaoSignUp>`
     /* 대학교 성별 셀렉터 */
     .sign-up-universityAndGender-selectors{
         display:flex;
-        margin-bottom:${(props)=>(props ?'40px;' : '24px')};   
+        margin-bottom:${(props)=>(props.kakaoSignUp ==='true' ?'40px;' : '24px')};   
         .sign-up-gender-selector{
             width:40%;
             margin-right:16px;
@@ -75,7 +75,7 @@ const Container = styled.form<KaKaoSignUp>`
     /* 생년월일 셀렉터 */
     .sign-up-modal-birthday-selectors{
         display:flex;
-        margin-bottom:${(props)=>(props ?'40px;' : '24px')};   
+        margin-bottom:${(props)=>(props.kakaoSignUp ==='true' ?'40px;' : '24px')};   
         .sign-up-modal-birthday-month-selector{
             margin-right:16px;
             flex-grow:1;
@@ -97,7 +97,7 @@ const Container = styled.form<KaKaoSignUp>`
         align-items:center;
         justify-content:center;
         background-color:#EDEBEB;
-        margin-bottom:${(props)=>(props ?'40px;' : '30px')};   
+        margin-bottom:${(props)=>(props.kakaoSignUp ==='true' ?'40px;' : '30px')};   
         border-radius:10px;
         cursor: pointer;
         .signup-setMyPosition{
