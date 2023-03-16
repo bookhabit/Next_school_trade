@@ -28,16 +28,24 @@ import SetPositionUserLocation from '../map/SetPositionUserLocation';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
-const Container = styled.form`
+type KaKaoSignUp = {
+    kakaoSignUp : string;
+}
+
+const Container = styled.form<KaKaoSignUp>`
     width:100%;
     padding:50px 20px;
     background-color:white;
     z-index:11;
 
+    /* 카카오 로그인 시 가운데로 옮기기 */
+    .input-wrapper-first{
+        margin-top: ${(props)=>(props ?'70px;' : '0px')};
+    }
     /* input */
     .input-wrapper{
         position:relative;
-        margin-bottom:30px;   
+        margin-bottom:${(props)=>(props ?'40px;' : '30px')};   
     }
 
     /* 셀렉터 */
@@ -51,7 +59,7 @@ const Container = styled.form`
     /* 대학교 성별 셀렉터 */
     .sign-up-universityAndGender-selectors{
         display:flex;
-        margin-bottom:24px;
+        margin-bottom:${(props)=>(props ?'40px;' : '24px')};   
         .sign-up-gender-selector{
             width:40%;
             margin-right:16px;
@@ -66,7 +74,7 @@ const Container = styled.form`
     /* 생년월일 셀렉터 */
     .sign-up-modal-birthday-selectors{
         display:flex;
-        margin-bottom:24px;
+        margin-bottom:${(props)=>(props ?'40px;' : '24px')};   
         .sign-up-modal-birthday-month-selector{
             margin-right:16px;
             flex-grow:1;
@@ -77,6 +85,27 @@ const Container = styled.form`
         }
         .sign-up-modal-birthday-year-selector{
             width:33.3333%
+        }
+    }
+    
+    /* 주 거래 위치 설정하기 */
+    .signup-setMyPosition-wrapper{
+        width:100%;
+        height:40px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background-color:#EDEBEB;
+        margin-bottom:${(props)=>(props ?'40px;' : '30px')};   
+        border-radius:10px;
+        cursor: pointer;
+        .signup-setMyPosition{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            p{
+                margin-left:15px;
+            }
         }
     }
 
@@ -94,29 +123,23 @@ const Container = styled.form`
         cursor: pointer;
     }
 
-    /* 주 거래 위치 설정하기 */
-    .signup-setMyPosition-wrapper{
-        width:100%;
-        height:40px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        background-color:#EDEBEB;
-        margin-bottom:30px;
-        border-radius:10px;
-        cursor: pointer;
-        .signup-setMyPosition{
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            p{
-                margin-left:15px;
-            }
-        }
-    }
+
+
 `
 
-const SignUp = () => {
+interface IProps{
+    kakaoSignUp:string;
+}
+
+const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
+    // 카카오 로그인 회원인 경우
+    let kakaoUserEmail
+    if(kakaoSignUp==='true'){
+        kakaoUserEmail = useSelector((state:any)=>state.user.email)
+        const token = localStorage.getItem('login-token')
+        console.log(kakaoUserEmail, '---', token)
+    }
+
     // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
     const location = useSelector((state:any)=>state.registerPosition.location)
     const latitude = useSelector((state:any)=>state.registerPosition.latitude)
@@ -328,7 +351,10 @@ const SignUp = () => {
                 console.log('signUpBody',signUpBody)
                 const {data} = await signupAPI(signUpBody);
                 console.log('클라이언트 받은 데이터',data.user)
-                // 엑세스 키 저장하는 로직 필요
+                // 엑세스 토큰 저장하는 로직 필요 - 우선 로컬스토리지 저장
+                localStorage.setItem('login-token', data.token);
+
+                // 유저정보 저장
                 dispatch(userActions.setLoggedUser(data.user)) 
                 router.push("/home")
     
@@ -339,8 +365,8 @@ const SignUp = () => {
         }
 
     return (
-        <Container onSubmit={onSubmitSignUp}>
-            <div className='input-wrapper'>
+        <Container onSubmit={onSubmitSignUp} kakaoSignUp={kakaoSignUp}>
+            <div className='input-wrapper input-wrapper-first'>
                 <Input 
                     placeholder="이름" 
                     icon={<PersonIcon/>}
@@ -362,6 +388,7 @@ const SignUp = () => {
                     usevalidation
                 />
             </div>
+            {kakaoSignUp ? null :
             <div className='input-wrapper'>
                 <Input 
                     placeholder="이메일 주소" 
@@ -373,6 +400,9 @@ const SignUp = () => {
                     usevalidation
                 />
             </div>
+            }
+            
+            {kakaoSignUp ? null : 
             <div className='input-wrapper'>
                 <Input 
                     placeholder="비밀번호 설정" 
@@ -393,6 +423,7 @@ const SignUp = () => {
                     onFocus={onFocusPassword}
                 />
             </div>
+            }
             {passwordFocused && (
                 <>
                     <PasswordWarning
@@ -406,7 +437,8 @@ const SignUp = () => {
                         text="숫자나 기호를 포함하세요."/>
                 </>
             )}
-            <div className='input-wrapper'>
+            {kakaoSignUp ? null : 
+                <div className='input-wrapper'>
                 <Input 
                     placeholder="비밀번호 확인" 
                     icon={hidePassword? 
@@ -422,8 +454,9 @@ const SignUp = () => {
                     errorMessage="입력하신 비밀번호가 일치하지 않습니다."
                     usevalidation
                     onFocus={onFocusedConfirmPassword}
-                />
-            </div>
+                    />
+                </div>
+            }
             
             <div className='sign-up-universityAndGender-selectors'>
                 <div className='sign-up-gender-selector'>

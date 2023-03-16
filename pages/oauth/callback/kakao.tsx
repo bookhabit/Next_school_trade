@@ -22,22 +22,18 @@ const Kakao = (query:any) => {
             if(response.data.user.university){
                 // 유저정보에서 대학교 데이터가 있다면 로그인시키기 
                 dispatch(userActions.setLoggedUser(response.data.user))
+                localStorage.setItem('login-token', response.data.token);
                 router.push('/home')
             }else{
                 // 유저정보에서 대학교 데이터가 없다면 카카오 첫 로그인이라는 뜻 > 회원가입 페이지로 보내기
+                localStorage.setItem('login-token', response.data.token);
+                dispatch(userActions.setLoggedUser(response.data.user))
                 router.push({
                     pathname:'/auth',
-                    query:{kakaoLogin:true}
+                    query:{firstLogin:true}
                 })
             }
         }
-        // 유저정보에서 대학교 데이터가 있다면 만 있다면 회원가입 페이지로 이동시켜서 유저정보 입력받기 + currentLeft 설정과 카카오 로그인시라고 알려주는 방법 찾기
-
-        // 유저정보에서 이메일 외 다른 정보가 있다면 기존회원 > 로그인시키기
-
-        // 로컬 스토리지에 token 저장
-        
-        // 리덕스에 User데이터 저장
     }
     useEffect(()=>{
         getUserInfo(authCode);
