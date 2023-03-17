@@ -7,6 +7,7 @@ import DivisionIcon from "../../public/static/svg/product/divisionIcon.svg"
 import ModalClickIcon from "../../public/static/svg/product/modal_click_icon.svg"
 import DownArrowIcon from "../../public/static/svg/product/down_arrow.svg"
 import PositionIcon from "../../public/static/svg/product/position.svg"
+import BorderHeartIcon from "../../public/static/svg/product/detailBorderHeartIcon.svg"
 import SellerStarIcon from "../../public/static/svg/product/sellerStarIcon.svg"
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -340,6 +341,14 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
 
     const selectOptions = ["판매중","거래완료"]
 
+    const [favoriteProduct,setFavoriteProduct] = useState(true)
+    console.log('favoriteProduct',favoriteProduct)
+    // 하트아이콘 변경
+    const toggleHeartIcon = ()=>{
+        setFavoriteProduct(!favoriteProduct)
+        // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
+    }
+
     return (
         <Container>
             {/* 헤더 */}
@@ -423,8 +432,9 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
             </div>
             {/* 푸터 */}
             <div className='detail-footer'>
+            
                 <div className="detail-footer-icon">
-                    <HeartIcon className="detail-heartIcon"/>
+                    {favoriteProduct? <HeartIcon className="detail-heartIcon" onClick={toggleHeartIcon}/>:<BorderHeartIcon className="detail-heartIcon" onClick={toggleHeartIcon}/>}
                     <DivisionIcon/>
                 </div>
                 <p className='detail-footer-price'>
