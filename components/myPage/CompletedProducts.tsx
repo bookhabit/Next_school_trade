@@ -1,6 +1,10 @@
 import React from 'react';
 import ProductList from '../home/ProductList';
 import styled from 'styled-components';
+import { getSoldList } from '../../lib/api/product';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -15,7 +19,21 @@ const Container = styled.div`
 `
 
 const CompletedProducts = () => {
-    // 사용자의 거래완료된 상품들을 불러오는 api요청해서 ProductList컴포넌트에 props로 상품데이터를 전달한다  
+    // 사용자의 판매완료된 상품들을 불러오는 api요청해서 ProductList컴포넌트에 props로 상품데이터를 전달한다  
+    const [soldList,setSoldList]= useState([])
+
+    const router= useRouter();
+   
+    const getSoldListFunc = async()=>{
+        const res = await getSoldList(Number(router.query.id))
+        console.log(res.data)
+    }
+
+    useEffect(()=>{
+        getSoldListFunc()
+    },[])
+
+
 
     const showProductList = true
     return (

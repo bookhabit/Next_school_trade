@@ -9,8 +9,8 @@ export const getFavoriteList = (id:number)=>axios.get(`http://localhost:4000/fav
 
 
 // 특정 회원 판매 중 조회 - user/sellList 페이지
-
+export const getSellingList = (id:number)=>axios.get(`http://localhost:4000/content/list/user/selling/${id}`)
 
 
 // 특정 회원 판매 완료 조회 - user/sellList 페이지
-
+export const getSoldList = (id:number)=>axios.get(`http://localhost:4000/content/list/user/sold/${id}`)

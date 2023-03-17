@@ -11,12 +11,17 @@ const Container = styled.div`
         font-weight:bold;
     }
 `
-const OnSale = () => {
-    // 사용자의 판매중인 상품들을 불러오는 api요청해서 ProductList컴포넌트에 props로 상품데이터를 전달한다
-    const showProductList = true
+interface IProps{
+    sellingList:object[];
+}
+
+const OnSale:React.FC<IProps>  = ({sellingList}) => {
+    // 사용자의 판매중인 상품들을 props로 받아서 ProductList컴포넌트에 props로 상품데이터를 전달한다
+    const sellingListData = sellingList as productListType[];
+    
     return (
         <Container>
-            {showProductList ? <ProductList completedProducts={false}/> : <h2>상품 리스트가 없습니다.</h2>}
+            {sellingList ? <ProductList completedProducts={false} data={sellingListData}/> : <h2>상품 리스트가 없습니다.</h2>}
         </Container>
     );
 };

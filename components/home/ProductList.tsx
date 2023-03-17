@@ -18,7 +18,6 @@ interface IProps{
 }
 
 const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
-    console.log('리스트')
     const productList = data;
     console.log('productList',productList)
     // UI 테스트 데이터

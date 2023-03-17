@@ -3,13 +3,14 @@ import OnSale from './OnSale';
 import CompletedProducts from './../CompletedProducts';
 
 interface IProps{
-    currentLeft:boolean
+    currentLeft:boolean;
+    sellingList:object[];
 }
 
-const SellList:React.FC<IProps> = ({currentLeft}) => {
+const SellList:React.FC<IProps> = ({currentLeft,sellingList}) => {
     return (
         <div>
-            {currentLeft?<OnSale/>:<CompletedProducts/>}
+            {currentLeft?<OnSale sellingList={sellingList} />:<CompletedProducts/>}
         </div>
     );
 };
