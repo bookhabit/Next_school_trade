@@ -46,7 +46,6 @@ interface IProps {
   
 
 const CommonHeader:React.FC<IProps> = ({pathName}) => {
-  console.log(pathName)
     // 알림페이지,카테고리페이지,채팅방페이지 는 편집 버튼 생성
     const showEditBtn = pathName=== "/user/alarm" || pathName==="/user/chatting" || pathName === "/user/favorite/[id]"; 
     

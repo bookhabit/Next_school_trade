@@ -11,15 +11,20 @@ const Container = styled.div`
         font-weight:bold;
     }
 `
+interface IProps{
+    favoriteList:{id:number;content:object}[];
+}
 
-const FavoriteList = () => {
-    // 사용자의 favorite 상품들을 불러오는 api요청해서 ProductList컴포넌트에 props로 상품데이터를 전달한다
+const FavoriteList:React.FC<IProps> = ({favoriteList}) => {
+    // 관심목록의 content만 추출해서 ProductList에 넘겨준다
+    const productListData = favoriteList.map(item => item.content) as productListType[];
+    console.log(productListData)
     // 하트를 누르면 관심목록에서 삭제하는 api요청
     const showProductList = true
     return (
         <Container>
             <h2>관심 상품</h2>
-            {showProductList ? <ProductList completedProducts={false}/> : <h2>상품 리스트가 없습니다.</h2>}
+            {showProductList ? <ProductList completedProducts={false} data={productListData}/> : <h2>상품 리스트가 없습니다.</h2>}
         </Container>
     );
 };

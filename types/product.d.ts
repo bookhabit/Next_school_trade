@@ -1,3 +1,4 @@
+// 상품 타입
 type productListType = {
     id: number;
     title: string;

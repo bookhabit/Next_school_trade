@@ -5,10 +5,11 @@ import FavoriteList from '../../../components/myPage/FavoriteList';
 import { getFavoriteList } from '../../../lib/api/product';
 import { useSelector } from 'react-redux';
 
-const favorite = () => {
+const favorite = ({favoriteList}:any) => {
+    console.log('favoriteList',favoriteList.content)
     return (
         <>
-            <FavoriteList/>
+            <FavoriteList favoriteList={favoriteList} />
             <LinkFooter/>
         </>
     );
@@ -18,10 +19,15 @@ const favorite = () => {
 export const getServerSideProps : GetServerSideProps = async ({query}) => {
     const {id} = query;
     try{
-        const {data} = await getFavoriteList(Number(id));
+        const res = await getFavoriteList(Number(id));
+        let favoriteList ;
+        if(res.status===200){
+            console.log(res.data)
+            favoriteList = res.data;
+        }
         return {
             props : {
-                data
+                favoriteList
             }
         }
     } catch(err){
