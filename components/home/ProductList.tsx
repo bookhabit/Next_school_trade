@@ -13,10 +13,15 @@ const Container = styled.div<{completedProducts:boolean}>`
 `
 
 interface IProps{
-    completedProducts:boolean
+    completedProducts:boolean,
+    data:productListType[]
 }
 
-const ProductList:React.FC<IProps> = ({completedProducts}) => {
+const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
+    console.log('리스트')
+    const productList = data;
+    console.log('productList',productList)
+    // UI 테스트 데이터
     const testProduct = [{
         id:1,
         title:"전공책 팝니다",
@@ -63,6 +68,7 @@ const ProductList:React.FC<IProps> = ({completedProducts}) => {
         img:NikeImg,
         favorite:true,
     }]
+
     return (
         <Container completedProducts={completedProducts}>  
             {testProduct.map((product)=>(
