@@ -12,7 +12,6 @@ const Container = styled.div`
     height:105px;
     margin-bottom:10px;
     display:flex;
-    background-color:${palette.main_text_color};
     
     .productImg{
         width:116px;
