@@ -10,7 +10,8 @@ import UniversityAuthIcon from "../../public/static/svg/myPage/universityAuthIco
 import PassWordIcon from "../../public/static/svg/myPage/passWordIcon.svg"
 import MarkerIcon from "../../public/static/svg/myPage/marker.svg"
 import useModal from '../../hooks/useModal';
-import SetPosition from '../map/setPosition';
+import SetPosition from '../map/SetPosition';
+import { useSelector } from 'react-redux';
 
 const Container = styled.div`
 
@@ -77,6 +78,10 @@ const Container = styled.div`
 
 const MyPage = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
+    const userId = useSelector((state:any)=>state.user.id)
+    console.log(userId)
+    // 관심목록 라우팅
+    const goToFavorite = `/user/favorite/${userId}`
     return (
         <Container>
             <div className='myUniversity'>
@@ -84,7 +89,7 @@ const MyPage = () => {
             </div>
             <div className='myTradeList myPageBody'>
                 <p className='myPageTitle'>거래목록</p>
-                <Link href="/user/favorite" className='myPage-list'>
+                <Link href={goToFavorite} className='myPage-list'>
                     <HeartIcon className='myPageIcon'/>
                     <p>관심목록</p>
                 </Link>
