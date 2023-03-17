@@ -79,7 +79,7 @@ const Container = styled.div`
 const MyPage = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
     const userId = useSelector((state:any)=>state.user.id)
-    console.log(userId)
+    
     // 관심목록 라우팅
     const goToFavorite = `/user/favorite/${userId}`
     return (
@@ -93,7 +93,7 @@ const MyPage = () => {
                     <HeartIcon className='myPageIcon'/>
                     <p>관심목록</p>
                 </Link>
-                <Link href="/user/sellList" className='myPage-list'>
+                <Link href="/user/sellList/[id]" className='myPage-list'>
                     <SellListIcon className='myPageIcon sellListIcon'/>
                     <p>판매내역</p>
                 </Link>

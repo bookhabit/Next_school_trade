@@ -53,7 +53,7 @@ const SubHeader:React.FC<IProps> = ({currentLeft,setCurrentLeft}) => {
         switch (pathname) {
             case "/auth":
                 return "로그인"
-            case "/user/sellList":
+            case "/user/sellList/[id]":
                 return "판매중"
             case "/seller/[id]":
                 return "리뷰"
@@ -65,7 +65,7 @@ const SubHeader:React.FC<IProps> = ({currentLeft,setCurrentLeft}) => {
         switch (pathname) {
             case "/auth":
                 return "회원가입"
-            case "/user/sellList":
+            case "/user/sellList/[id]":
                 return "거래완료"
             case "/seller/[id]":
                 return "리뷰 작성"

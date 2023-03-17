@@ -6,7 +6,7 @@ import { getFavoriteList } from '../../../lib/api/product';
 import { useSelector } from 'react-redux';
 
 const favorite = ({favoriteList}:any) => {
-    console.log('favoriteList',favoriteList.content)
+    console.log('favoriteList',favoriteList)
     return (
         <>
             <FavoriteList favoriteList={favoriteList} />
