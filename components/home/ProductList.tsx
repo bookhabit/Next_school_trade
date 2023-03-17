@@ -7,6 +7,7 @@ import DataStructureBook from "../../public/static/image/testProudct/자료구�
 import SoccershoesImg from "../../public/static/image/testProudct/축구화.jpg"
 import ToeicImg from "../../public/static/image/testProudct/토익.jpg"
 import CompletedProductCard from '../common/CompletedProductCard';
+import { isEmpty } from 'lodash';
 
 const Container = styled.div<{completedProducts:boolean}>`
     margin-top:${props=>props.completedProducts? "0px" :"20px"};
@@ -70,10 +71,15 @@ const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
 
     return (
         <Container completedProducts={completedProducts}>  
-            {testProduct.map((product)=>(
-                completedProducts ? <CompletedProductCard key={product.id} product={product}/>  : <ProductCard key={product.id} product={product}/>
-            ))}
-            
+        {/* 데이터가 들어있는지 확인 후 map 함수 실행 - 에러처리 */}
+            {
+            isEmpty(productList) ? null
+            :testProduct.map((product)=>(
+                completedProducts ? 
+                <CompletedProductCard key={product.id} product={product}/>  : 
+                <ProductCard key={product.id} product={product}/>
+            )) 
+            }
         </Container>
     );
 };

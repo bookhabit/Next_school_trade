@@ -26,20 +26,18 @@ const CompletedProducts = () => {
    
     const getSoldListFunc = async()=>{
         const res = await getSoldList(Number(router.query.id))
-        console.log(res.data)
+        setSoldList(res.data)
     }
 
     useEffect(()=>{
         getSoldListFunc()
     },[])
 
-
-
     const showProductList = true
     return (
         <Container>
             <div className='hideProductBox'></div>
-            {showProductList ? <ProductList completedProducts={true} /> : <h2>상품 리스트가 없습니다.</h2>}
+            {soldList ? <ProductList completedProducts={true} data={soldList} /> : <h2>상품들을 불러오는 중입니다.</h2>}
         </Container>
     );
 };
