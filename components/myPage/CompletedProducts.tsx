@@ -19,11 +19,10 @@ const Container = styled.div`
 `
 
 const CompletedProducts = () => {
-    // 사용자의 판매완료된 상품들을 불러오는 api요청해서 ProductList컴포넌트에 props로 상품데이터를 전달한다  
     const [soldList,setSoldList]= useState([])
-
     const router= useRouter();
    
+    // 판매 완료된 상품 불러오기
     const getSoldListFunc = async()=>{
         const res = await getSoldList(Number(router.query.id))
         setSoldList(res.data)
@@ -33,7 +32,6 @@ const CompletedProducts = () => {
         getSoldListFunc()
     },[])
 
-    const showProductList = true
     return (
         <Container>
             <div className='hideProductBox'></div>

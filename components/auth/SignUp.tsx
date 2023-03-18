@@ -404,7 +404,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     longitude,
                 }
                 console.log('signUpBody',signUpBody)
-                const {data} = await kakaoSignupAPI(signUpBody,headers);
+                const {data} = await kakaoSignupAPI(signUpBody,token);
                 console.log('클라이언트 받은 데이터',data.user)
                 // 엑세스 토큰 저장하는 로직 필요 - 우선 로컬스토리지 저장
                 localStorage.setItem('login-token', data.token);

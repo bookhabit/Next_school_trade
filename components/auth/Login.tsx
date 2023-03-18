@@ -103,7 +103,8 @@ const Login = () => {
                 const {data} = await loginAPI(loginBody)
                 
                 console.log('로그인 data',data)
-                // 엑세스 키 저장하는 로직 필요
+                // 엑세스 토큰 저장하는 로직 필요 - 우선 로컬스토리지 저장
+                localStorage.setItem('login-token', data.token);
                 dispatch(userActions.setLoggedUser(data.user))
                 router.push("/home")
             }catch(e:any){

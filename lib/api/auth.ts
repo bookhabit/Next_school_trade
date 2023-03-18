@@ -32,7 +32,15 @@ interface KakaoSignUpAPIBody{
 export const signupAPI = (body:SignUpAPIBody)=>axios.post<LoggedUserType>("http://localhost:4000/auth/local/signup",body)
 
 // 카카오 회원가입 api
-export const kakaoSignupAPI = (body:KakaoSignUpAPIBody,headers:object)=>axios.post<LoggedUserType>("http://localhost:4000/user/info",body,headers)
+export const kakaoSignupAPI = (body:KakaoSignUpAPIBody,token:string)=>
+axios.post<LoggedUserType>("http://localhost:4000/user/info",
+                body,
+                {
+                    headers:{
+                        Authorization : `Bearer ${token}`
+                    }
+                })
+// axios.post<LoggedUserType>("http://localhost:4000/user/info",body,headers)
 
 // 로그인 api
 export const loginAPI = (body:{email:string;password:string})=>
