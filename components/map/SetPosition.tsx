@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import Head from "next/head";
 import throttle from "lodash/throttle";
 import { useDispatch } from 'react-redux';
-import registerPosition, { registerPositionActions } from './../../store/registerPosition';
+import registerPosition, { registerPositionActions } from '../../store/registerPosition';
 import Swal from 'sweetalert2';
 import { getLocationInfoAPI } from '../../lib/api/map';
 import { useSelector } from 'react-redux';
