@@ -33,14 +33,13 @@ export const signupAPI = (body:SignUpAPIBody)=>axios.post<LoggedUserType>("http:
 
 // 카카오 회원가입 api
 export const kakaoSignupAPI = (body:KakaoSignUpAPIBody,token:string)=>
-axios.post<LoggedUserType>("http://localhost:4000/user/info",
+axios.post<LoggedUserType>("http://localhost:4000/auth/kakao/signup",
                 body,
                 {
                     headers:{
                         Authorization : `Bearer ${token}`
                     }
                 })
-// axios.post<LoggedUserType>("http://localhost:4000/user/info",body,headers)
 
 // 로그인 api
 export const loginAPI = (body:{email:string;password:string})=>
@@ -48,6 +47,14 @@ export const loginAPI = (body:{email:string;password:string})=>
 
 // 쿠키의 access_token의 유저 정보를 받아오는 api
 export const meAPI = ()=> axios.get<UserType>("api/auth/me");
+
+// 로컬스토리지의 access_token의 유저 정보를 받아오는 api
+export const getUserInfo = (token:string)=>axios.post("http://localhost:4000/user/islogin",{
+        headers:{
+            Authorization : `Bearer ${token}`
+        }
+    }
+)
 
 // 로그아웃 api
 export const logoutAPI = ()=> axios.delete("/api/auth/logout")
