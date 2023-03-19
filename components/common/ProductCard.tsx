@@ -7,6 +7,7 @@ import palette from '../../styles/palette';
 import { Division } from './Division';
 import { useRouter } from 'next/router';
 import { productListType } from '../../types/product';
+import { makeMoneyString } from '../../lib/utils';
 
 const Container = styled.div`
     width:350px;
@@ -115,7 +116,7 @@ const ProductCard:React.FC<IProps> = ({product}) => {
                 </div>
                 <div className='productInfo'>
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
-                    <p className='productPrice'>{product.price}</p>
+                    <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>
                         <p>{product.updatedAt}</p>
                         <div className='info-footerRight'>
