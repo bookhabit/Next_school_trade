@@ -8,6 +8,8 @@ import { Division } from './Division';
 import { useRouter } from 'next/router';
 import { productListType } from '../../types/product';
 import { makeMoneyString } from '../../lib/utils';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 const Container = styled.div`
     width:350px;
@@ -93,7 +95,6 @@ interface IProps{
 }
 
 const ProductCard:React.FC<IProps> = ({product}) => {
-    console.log('ProductCard',product)
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
     const userFavoriteState = false // product.favorite
     const [favoriteProduct,setFavoriteProduct] = useState(userFavoriteState)
@@ -111,6 +112,9 @@ const ProductCard:React.FC<IProps> = ({product}) => {
         })
     }
 
+    // dateTime 상대시간으로 출력하기
+    const now = moment();
+    const productDate = moment(product.updatedAt)
 
     return (
         <>
@@ -122,7 +126,7 @@ const ProductCard:React.FC<IProps> = ({product}) => {
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
                     <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>
-                        <p className='info-footerLeft'>{product.updatedAt}</p>
+                        <p className='info-footerLeft'>{productDate.from(now)}</p>
                         <div className='info-footerRight'>
                             <div className='heartDiv'>
                                 {favoriteProduct? <HeartIcon onClick={toggleHeartIcon}/>:<BorderHeartIcon onClick={toggleHeartIcon}/>}
