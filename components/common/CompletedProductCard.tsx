@@ -5,6 +5,7 @@ import BorderHeartIcon from "../../public/static/svg/product/borderHeartIcon.svg
 import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg"
 import palette from '../../styles/palette';
 import { Division } from './Division';
+import { productListType } from '../../types/product';
 
 const Container = styled.div`
     width:350px;
@@ -76,23 +77,24 @@ const Container = styled.div`
   
 `
 
-
-type Product = {
-        id:number,
-        title:string,
-        price:string,
-        updatedDate:string,
-        heartCount:number,
-        chattingCount:number,
-        img:{src:string},
-        favorite:boolean
-}
+// 테스트 데이터 타입
+// type Product = {
+//         id:number,
+//         title:string,
+//         price:string,
+//         updatedDate:string,
+//         heartCount:number,
+//         chattingCount:number,
+//         img:{src:string},
+//         favorite:boolean
+// }
 
 interface IProps{
-    product:Product
+    product:productListType
 }
 
 const CompletedProductCard:React.FC<IProps> = ({product}) => {
+    console.log('CompletedProductCard',product)
     return (
         <>
             <Container>
@@ -100,21 +102,21 @@ const CompletedProductCard:React.FC<IProps> = ({product}) => {
                     <h2>거래완료</h2>
                 </div>
                 <div className='productImg'>
-                    <img src={product.img.src}/>
+                    <img src={product.images}/>
                 </div>
                 <div className='productInfo'>
                     <p className='productTitle'>{product.title}</p>
                     <p className='productPrice'>{product.price}</p>
                     <div className='info-footer'>
-                        <p>{product.updatedDate}</p>
+                        <p>{product.updatedAt}</p>
                         <div className='info-footerRight'>
                             <div className='heartDiv'>
                                 <BorderHeartIcon/>
-                                <span>{product.heartCount}</span>
+                                <span>{product.like_cnt}</span>
                             </div>
                             <div className='chattingDiv'>
                                 <ChattingIcon/>
-                                <span>{product.chattingCount}</span>
+                                <span>{product.chat_cnt}</span>
                             </div>
                         </div>
                     </div>

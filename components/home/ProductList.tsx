@@ -8,6 +8,7 @@ import SoccershoesImg from "../../public/static/image/testProudct/축구화.jpg"
 import ToeicImg from "../../public/static/image/testProudct/토익.jpg"
 import CompletedProductCard from '../common/CompletedProductCard';
 import { isEmpty } from 'lodash';
+import { productListType } from '../../types/product';
 
 const Container = styled.div<{completedProducts:boolean}>`
     margin-top:${props=>props.completedProducts? "0px" :"20px"};
@@ -20,7 +21,7 @@ interface IProps{
 
 const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
     const productList = data;
-    // console.log('productList',productList)
+    console.log('productList',productList)
     // UI 테스트 데이터
     const testProduct = [{
         id:1,
@@ -74,7 +75,7 @@ const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
         {/* 데이터가 들어있는지 확인 후 map 함수 실행 - 에러처리 */}
             {
             isEmpty(productList) ? null
-            :testProduct.map((product)=>(
+            :productList.map((product)=>(
                 completedProducts ? 
                 <CompletedProductCard key={product.id} product={product}/>  : 
                 <ProductCard key={product.id} product={product}/>

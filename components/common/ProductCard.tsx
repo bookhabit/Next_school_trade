@@ -6,6 +6,7 @@ import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg"
 import palette from '../../styles/palette';
 import { Division } from './Division';
 import { useRouter } from 'next/router';
+import { productListType } from '../../types/product';
 
 const Container = styled.div`
     width:350px;
@@ -70,25 +71,26 @@ const Container = styled.div`
   
 `
 
-// 내가 만든 테스트
-type Product = {
-        id:number,
-        title:string,
-        price:string,
-        updatedDate:string,
-        heartCount:number,
-        chattingCount:number,
-        img:{src:string},
-        favorite:boolean
-}
+// // 내가 만든 테스트 데이터 타입
+// type Product = {
+//         id:number,
+//         title:string,
+//         price:string,
+//         updatedDate:string,
+//         heartCount:number,
+//         chattingCount:number,
+//         img:{src:string},
+//         favorite:boolean
+// }
 
 interface IProps{
-    product:Product
+    product:productListType
 }
 
 const ProductCard:React.FC<IProps> = ({product}) => {
+    console.log('ProductCard',product)
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
-    const userFavoriteState = product.favorite
+    const userFavoriteState = false // product.favorite
     const [favoriteProduct,setFavoriteProduct] = useState(userFavoriteState)
     
     // 하트아이콘 변경
@@ -109,21 +111,21 @@ const ProductCard:React.FC<IProps> = ({product}) => {
         <>
             <Container>
                 <div className='productImg' onClick={goToDetail}>
-                    <img src={product.img.src}/>
+                    <img src={product.images}/>
                 </div>
                 <div className='productInfo'>
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
                     <p className='productPrice'>{product.price}</p>
                     <div className='info-footer'>
-                        <p>{product.updatedDate}</p>
+                        <p>{product.updatedAt}</p>
                         <div className='info-footerRight'>
                             <div className='heartDiv'>
                                 {favoriteProduct? <HeartIcon onClick={toggleHeartIcon}/>:<BorderHeartIcon onClick={toggleHeartIcon}/>}
-                                <span>{product.heartCount}</span>
+                                <span>{product.like_cnt}</span>
                             </div>
                             <div className='chattingDiv'>
                                 <ChattingIcon/>
-                                <span>{product.chattingCount}</span>
+                                <span>{product.chat_cnt}</span>
                             </div>
                         </div>
                     </div>
