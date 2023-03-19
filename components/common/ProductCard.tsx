@@ -44,6 +44,10 @@ const Container = styled.div`
                 color:${palette.updatedDate}
             }
         }
+        .info-footerLeft{
+            display:flex;
+            align-items:center;
+        }
         .info-footerRight{
             display:flex;
             align-items:center;
@@ -118,7 +122,7 @@ const ProductCard:React.FC<IProps> = ({product}) => {
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
                     <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>
-                        <p>{product.updatedAt}</p>
+                        <p className='info-footerLeft'>{product.updatedAt}</p>
                         <div className='info-footerRight'>
                             <div className='heartDiv'>
                                 {favoriteProduct? <HeartIcon onClick={toggleHeartIcon}/>:<BorderHeartIcon onClick={toggleHeartIcon}/>}

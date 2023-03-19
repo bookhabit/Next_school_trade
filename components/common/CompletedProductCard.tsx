@@ -6,6 +6,7 @@ import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg"
 import palette from '../../styles/palette';
 import { Division } from './Division';
 import { productListType } from '../../types/product';
+import { makeMoneyString } from '../../lib/utils';
 
 const Container = styled.div`
     width:350px;
@@ -50,6 +51,10 @@ const Container = styled.div`
                 font-size:13px;
                 color:${palette.updatedDate}
             }
+        }
+        .info-footerLeft{
+            display:flex;
+            align-items:center;
         }
         .info-footerRight{
             display:flex;
@@ -106,9 +111,9 @@ const CompletedProductCard:React.FC<IProps> = ({product}) => {
                 </div>
                 <div className='productInfo'>
                     <p className='productTitle'>{product.title}</p>
-                    <p className='productPrice'>{product.price}</p>
+                    <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>
-                        <p>{product.updatedAt}</p>
+                        <p className='info-footerLeft'>{product.updatedAt}</p>
                         <div className='info-footerRight'>
                             <div className='heartDiv'>
                                 <BorderHeartIcon/>
