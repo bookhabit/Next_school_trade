@@ -39,4 +39,4 @@ const CompletedProducts = () => {
         </Container>
     );
 };
-export default CompletedProducts;
+export default React.memo(CompletedProducts);

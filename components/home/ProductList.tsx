@@ -85,4 +85,4 @@ const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
     );
 };
 
-export default ProductList;
+export default React.memo(ProductList);

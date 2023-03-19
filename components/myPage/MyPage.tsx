@@ -82,6 +82,8 @@ const MyPage = () => {
     
     // 관심목록 라우팅
     const goToFavorite = `/user/favorite/${userId}`
+    // 판매내역 라우팅
+    const goToSellList = `/user/sellList/${userId}`
     return (
         <Container>
             <div className='myUniversity'>
@@ -93,7 +95,7 @@ const MyPage = () => {
                     <HeartIcon className='myPageIcon'/>
                     <p>관심목록</p>
                 </Link>
-                <Link href="/user/sellList/[id]" className='myPage-list'>
+                <Link href={goToSellList}className='myPage-list'>
                     <SellListIcon className='myPageIcon sellListIcon'/>
                     <p>판매내역</p>
                 </Link>
