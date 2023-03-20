@@ -283,11 +283,15 @@ const RegisterProduct = () => {
 
     // 이미지 저장
     const [showImages, setShowImages] = useState<string[]>([]);
+    const [registerImages,setRegisterImages] = useState<string[]>([])
+    console.log(showImages)
+    console.log(registerImages)
 
     // 이미지 상대경로 저장 (썸네일 미리보기)
     const handleAddImages = (event: any) => {
       const imageLists = event.target.files;
       console.log('imageLists',imageLists)
+      setRegisterImages(imageLists)
       let imageUrlLists = [...showImages]; // 하나씩 추가할 수도 있으니까
       console.log(imageUrlLists)
       for (let i = 0; i < imageLists.length; i++) {
@@ -310,7 +314,7 @@ const RegisterProduct = () => {
     // 상품등록 폼 검증
     const validateRegisterForm = ()=>{
         // 폼 요소의 값이 없다면
-        if(!title||!price||!body||!category||!latitude||!longitude||!mapLocation){
+        if(!registerImages|| !title||!price||!body||!category||!latitude||!longitude||!mapLocation){
             console.log(title,price,body,category,latitude,longitude,mapLocation)
             return false
         }
@@ -325,10 +329,11 @@ const RegisterProduct = () => {
         const formData: FormData = new FormData();
         // formData에 데이터 넣기
         // 가격은 콤마뺴고 넣기
-        // formData.append('images',showImages);
-        showImages.forEach((image) => {
-            formData.append('images', image);
-        });
+        if(registerImages){
+            for(let i=0; i<registerImages.length; i++){
+                formData.append('images', registerImages[i]);
+            }
+        }
         formData.append('title',title);
         formData.append('price',makeMoneyNumber(price));
         formData.append('body',body);
@@ -339,8 +344,10 @@ const RegisterProduct = () => {
 
         // formdata 출력하기
         for (const [key, value] of formData.entries()) {
-            console.log(key,typeof value);
+            console.log(key,value);
         }
+
+        console.log(formData.getAll('images'))
 
         // 현재 모든 formData는 string으로 되어있음
 
