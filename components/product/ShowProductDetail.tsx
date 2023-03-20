@@ -17,7 +17,9 @@ import { makeMoneyString } from '../../lib/utils';
 import Slider from "react-slick";
 import Item from './Item';
 import Slick from './Slick';
-
+import { productListType } from '../../types/product';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 const Container = styled.div`
     /* 헤더 css */
@@ -84,6 +86,7 @@ const Container = styled.div`
                 .slick-dots{
                     bottom:15px !important;
                 }
+
             } 
         }
         
@@ -264,27 +267,13 @@ const SliderItem = styled.div`
 `
 
 interface IProps{
-    testProductDeatail:{
-        id:number,
-        title:string,
-        price:number,
-        body:string,
-        chat_cnt:number,
-        like_cnt:number,
-        sellerId:number,
-        category:string,
-        created_at:string,
-        position:string,
-        images: itemsProps[],
-    }
+    productDetail:productListType
 }
 
-interface itemsProps {
-    item: string,
-    name: string
-}
 
-const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
+
+const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
+    console.log('props로 데이터 받음',productDetail)
     const goToBackpage = ()=>{
         window.history.back();
     }
@@ -292,7 +281,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     const router= useRouter();
     const goToSellerProfile = ()=>{
         router.push({
-            pathname:`/seller/${testProductDeatail.sellerId}`
+            pathname:`/seller/${productDetail.owner.id}`
         })
     }
     
@@ -300,7 +289,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     const goToChattingRoom = ()=>{
         router.push({
             pathname:`/user/chatting/[id]`,
-            query:{id:testProductDeatail.sellerId}
+            query:{id:productDetail.owner.id}
         })
     }
 
@@ -311,18 +300,14 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
         })
     }
 
-    // sellerId값을 통해서 판매자 정보를 받아오고 프로필이미지와 이름을 가져온다
-    const testSellerInfo = {
-        id:1,
-        profileImage:"/static/image/user/default_user_profile_image.jpg",
-        userNickname:"제리님",
-        sellerStarCount:3,
-    }
+    // 판매자 정보
+    const ownerInfo = productDetail.owner;
+    console.log(ownerInfo)
     
     // 로그인 - 현재 유저 id
     const userId = useSelector((state:any)=>state.user.id)
     // 로그인 되어 있는 사용자의 id와 sellerId를 비교하여 작성자인지 구분하는 변수
-    const postOwner = userId === testProductDeatail.sellerId  
+    const postOwner = userId === productDetail.owner.id;  
 
     // 수정,삭제 버튼 모달보이기 state
     const [showBtnModal,setShowBtnModal] = useState(false);
@@ -333,7 +318,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     //  판매자 별점 개수에 따라서 별점아이콘 출력하기
     const starLoop = () => {
         let starCount = []
-        for (let i = 0; i < testSellerInfo.sellerStarCount; i++) {
+        for (let i = 0; i < ownerInfo.grade; i++) {
             starCount.push(i)
         }
         return starCount
@@ -342,12 +327,16 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
     const selectOptions = ["판매중","거래완료"]
 
     const [favoriteProduct,setFavoriteProduct] = useState(true)
-    console.log('favoriteProduct',favoriteProduct)
+    
     // 하트아이콘 변경
     const toggleHeartIcon = ()=>{
         setFavoriteProduct(!favoriteProduct)
         // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
     }
+
+    // dateTime 상대시간으로 출력하기
+    const now = moment();
+    const productDate = moment(productDetail.updatedAt)
 
     return (
         <Container>
@@ -357,7 +346,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     <div className="detail-header-left-icon">
                         <BeforeIcon onClick={goToBackpage}/>
                     </div>
-                    <p>{testProductDeatail.title}</p>
+                    <p>{productDetail.title}</p>
                 </div>
             </div>
             {/* 본문 */}
@@ -365,7 +354,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
             
                 <div className='detail-product-image'>
                     <Slick>
-                        {testProductDeatail.images.map((item, index) => (
+                        {productDetail.images && productDetail.images.map((item:any, index:number) => (
                             <SliderItem key={index}>
                             <img src={item.item} alt={item.name} />
                             </SliderItem>
@@ -384,8 +373,8 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                             
                         </> 
                         : <>
-                            <img src={testSellerInfo.profileImage} alt="판매자 프로필이미지"/>
-                            <p onClick={goToSellerProfile}>{testSellerInfo.userNickname}</p>
+                            {/* <img src={ownerInfo.profileImage} alt="판매자 프로필이미지"/> */}
+                            <p onClick={goToSellerProfile}>{ownerInfo.nickname}</p>
                         </>}
                         
                     </div>
@@ -408,24 +397,24 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                 </div>
                 <div className='detail-product-info'>
                     <div className='detail-product-title'>
-                        <p>{testProductDeatail.title}</p>
+                        <p>{productDetail.title}</p>
                     </div>
                     <div className='detail-product-sub-info'>
                         <div className='detail-product-category'>
-                            <p>{testProductDeatail.category}</p>
+                            <p>{productDetail.category}</p>
                         </div>
                         <div className='detail-product-updateDate'>
-                            <p>{testProductDeatail.created_at}</p>
+                            <p>{productDate.from(now)}</p>
                         </div>
                     </div>
                     <div className='detail-product-desc'>
                         <p>
-                        {testProductDeatail.body}
+                        {productDetail.body}
                         </p>
                     </div>
                     <div className='detail-product-position'>
                         <PositionIcon className="detail-product-positionIcon"/>
-                        <p>거래희망장소 : <span>{testProductDeatail.position}</span></p>
+                        <p>거래희망장소 : <span>{productDetail.location}</span></p>
                     </div>
                 </div>
 
@@ -438,7 +427,7 @@ const ShowProductDetail:React.FC<IProps> = ({testProductDeatail}) => {
                     <DivisionIcon/>
                 </div>
                 <p className='detail-footer-price'>
-                    {makeMoneyString(String(testProductDeatail.price))} 원
+                    {makeMoneyString(String(productDetail.price))} 원
                 </p>
                 {postOwner ?<button onClick={goToChattinList}>채팅목록</button> :<button onClick={goToChattingRoom}>채팅하기</button> }
             </div>

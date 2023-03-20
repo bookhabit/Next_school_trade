@@ -350,7 +350,6 @@ const RegisterProduct = () => {
         console.log(formData.getAll('images'))
 
         // 현재 모든 formData는 string으로 되어있음
-
         if(validateRegisterForm()){
             try{
                 // 상품등록 api 호출

@@ -50,7 +50,9 @@ export type StoredUserType = {
     location:string;
     longitude:number;
     name:string;
+    nickname:string;
     password:string;
     university:string;
     updatedAt:string;
+    // profile_image추가해야함
   }

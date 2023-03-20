@@ -14,3 +14,6 @@ export const getSellingList = (id:number)=>axios.get(`http://localhost:4000/cont
 
 // 특정 회원 판매 완료 조회 - user/sellList 페이지
 export const getSoldList = (id:number)=>axios.get(`http://localhost:4000/content/list/user/sold/${id}`)
+
+// 상품 상세 조회 
+export const getProductDetail = (id:number)=>axios.get(`http://localhost:4000/content/read/${id}`)
