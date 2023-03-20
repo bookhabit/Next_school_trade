@@ -13,6 +13,7 @@ import Slick from './Slick';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { registerPositionActions } from './../../store/registerPosition';
+import axios from 'axios';
 
 
 const Container = styled.form`
@@ -107,9 +108,7 @@ const Container = styled.form`
                         }
                     }
                 }
-                
             }
-
         }
     }
 
@@ -303,8 +302,6 @@ const RegisterProduct = () => {
       setShowImages(imageUrlLists);
     }
 
-console.log(title,price,body,category,latitude,longitude,mapLocation)
-
       // X버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id: number) => {
         setShowImages(showImages.filter((_, index) => index !== id));
@@ -314,7 +311,7 @@ console.log(title,price,body,category,latitude,longitude,mapLocation)
     const validateRegisterForm = ()=>{
         // 폼 요소의 값이 없다면
         if(!title||!price||!body||!category||!latitude||!longitude||!mapLocation){
-            
+            console.log(title,price,body,category,latitude,longitude,mapLocation)
             return false
         }
         return true
@@ -323,46 +320,53 @@ console.log(title,price,body,category,latitude,longitude,mapLocation)
     const router= useRouter();
 
     // 상품등록 api
-    const registerProduct = async(e:React.FormEvent<HTMLFormElement>)=>{
+    const registerProduct = async (e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-
-        const formData = new FormData();
+        const formData: FormData = new FormData();
         // formData에 데이터 넣기
         // 가격은 콤마뺴고 넣기
+        // formData.append('images',showImages);
+        showImages.forEach((image) => {
+            formData.append('images', image);
+        });
         formData.append('title',title);
-        // formData.append('price', price);
-        // formData.append('image', showImages);
-        // console.log(makeMoneyNumber(price))
+        formData.append('price',makeMoneyNumber(price));
+        formData.append('body',body);
+        formData.append('category',category);
+        formData.append('latitude',latitude);
+        formData.append('longitude',longitude);
+        formData.append('location',mapLocation);
 
         // formdata 출력하기
-        // let entries = formData.entries();
-        // for (const pair of entries) {
-        // console.log("보낼 데이터 : ", pair[0] + ", " + pair[1]);
-        // }
+        for (const [key, value] of formData.entries()) {
+            console.log(key,typeof value);
+        }
+
+        // 현재 모든 formData는 string으로 되어있음
 
         if(validateRegisterForm()){
             try{
-                const registerBody ={
-
-                }
+                // 상품등록 api 호출
+                const res = await axios.post('http://localhost:4000/content/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization : `Bearer ${localStorage.getItem('login-token')}`
+                  },
+                body: formData,
+                });
+                console.log(res)
+                 // 응답값에 따라서 라우팅처리
+                // if (res.ok) {
+                //     router.push('/products');
+                // } else {
+                //     console.error('Failed to create product.');
+                // }
             }catch(e){
                 console.log(e)
             }
 
         }
-
-        // 상품등록 api 호출
-        // const res = await fetch('/api/products', {
-        // method: 'POST',
-        // body: formData,
-        // });
-
-        // 응답값에 따라서 라우팅처리
-        // if (res.ok) {
-        //     router.push('/products');
-        // } else {
-        //     console.error('Failed to create product.');
-        // }
     }
 
 

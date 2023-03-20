@@ -42,7 +42,7 @@ export type productListType = {
 
 // 상품 등록 타입
 export type registerProductType = {
-    images:Array;
+    images: File[];
     
     title:string;
 
