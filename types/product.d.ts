@@ -39,3 +39,22 @@ export type productListType = {
   
     updatedAt: string;
 }
+
+// 상품 등록 타입
+export type registerProductType = {
+    images:Array;
+    
+    title:string;
+
+    price:number;
+
+    body:string;
+
+    category:string;
+
+    latitude: number;
+
+    location: string;
+    
+    longitude: number;
+}

@@ -7,11 +7,15 @@ import PositionIcon from "../../public/static/svg/product/register_position.svg"
 import useModal from './../../hooks/useModal';
 import SetPosition from '../map/SetPosition';
 import { useState, useMemo } from 'react';
-import { makeMoneyString } from '../../lib/utils';
+import { makeMoneyNumber, makeMoneyString } from '../../lib/utils';
 import Delete from "../../public/static/svg/product/thumnailXicon.svg"
 import Slick from './Slick';
+import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
+import { registerPositionActions } from './../../store/registerPosition';
 
-const Container = styled.div`
+
+const Container = styled.form`
     /* 이미지 css */
     .register-image-box{
         width:100%;
@@ -132,7 +136,7 @@ const Container = styled.div`
             margin-right:5px;
         }
         input{
-            width:80px;
+            width:100%;
         }
     }
 
@@ -226,6 +230,7 @@ const Container = styled.div`
         }
     }
 `
+
 const SliderItem = styled.div`
   width: 100%;
   img{
@@ -237,6 +242,31 @@ const SliderItem = styled.div`
 const RegisterProduct = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
 
+    // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
+   const mapLocation = useSelector((state:any)=>state.registerPosition.location)
+   const latitude = useSelector((state:any)=>state.registerPosition.latitude)
+   const longitude = useSelector((state:any)=>state.registerPosition.longitude)
+    
+    // input - title,price,body,
+    const [productInputs,setProductInputs] = useState({
+            title:'',
+            body:'',
+            category:'',
+    })
+
+    // 비구조화 할당으로 값 추출
+    const { title,body,category} = productInputs; 
+
+    // input과 select onChange함수들
+    const onChangeInput = (event:any) => {
+        const { name,value } = event.target; 
+        setProductInputs({
+        ...productInputs, // 기존의 input 객체를 복사한 뒤
+        [name]: value // name 키를 가진 값을 value 로 설정
+        });
+    };
+    
+    // 가격 input - 콤마찍기
     const [price,setPrice] = useState('');
 
     const onChangePrice = (e:any)=>{
@@ -245,11 +275,17 @@ const RegisterProduct = () => {
         setPrice(commaPrice)
     }
 
-    // 썸네일 미리보기
-    const [showImages, setShowImages] = useState<string[]>([]);
-    console.log('showImages',showImages)
+    const dispatch = useDispatch();
+    // 위치 input- 리덕스 
+    const onChangeLocation = (e:any)=>{
+        dispatch(registerPositionActions.setLocation(e.target.value))
+    }
 
-    // 이미지 상대경로 저장
+
+    // 이미지 저장
+    const [showImages, setShowImages] = useState<string[]>([]);
+
+    // 이미지 상대경로 저장 (썸네일 미리보기)
     const handleAddImages = (event: any) => {
       const imageLists = event.target.files;
       console.log('imageLists',imageLists)
@@ -267,13 +303,71 @@ const RegisterProduct = () => {
       setShowImages(imageUrlLists);
     }
 
+console.log(title,price,body,category,latitude,longitude,mapLocation)
+
       // X버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id: number) => {
         setShowImages(showImages.filter((_, index) => index !== id));
     };
 
+    // 상품등록 폼 검증
+    const validateRegisterForm = ()=>{
+        // 폼 요소의 값이 없다면
+        if(!title||!price||!body||!category||!latitude||!longitude||!mapLocation){
+            
+            return false
+        }
+        return true
+    }
+
+    const router= useRouter();
+
+    // 상품등록 api
+    const registerProduct = async(e:React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault();
+
+        const formData = new FormData();
+        // formData에 데이터 넣기
+        // 가격은 콤마뺴고 넣기
+        formData.append('title',title);
+        // formData.append('price', price);
+        // formData.append('image', showImages);
+        // console.log(makeMoneyNumber(price))
+
+        // formdata 출력하기
+        // let entries = formData.entries();
+        // for (const pair of entries) {
+        // console.log("보낼 데이터 : ", pair[0] + ", " + pair[1]);
+        // }
+
+        if(validateRegisterForm()){
+            try{
+                const registerBody ={
+
+                }
+            }catch(e){
+                console.log(e)
+            }
+
+        }
+
+        // 상품등록 api 호출
+        // const res = await fetch('/api/products', {
+        // method: 'POST',
+        // body: formData,
+        // });
+
+        // 응답값에 따라서 라우팅처리
+        // if (res.ok) {
+        //     router.push('/products');
+        // } else {
+        //     console.error('Failed to create product.');
+        // }
+    }
+
+
     return (
-        <Container>
+        <Container onSubmit={registerProduct}>
             <div className='register-image-box'>
                 <div className='register-image-slide'>
                     <div className='file-image-box'>
@@ -300,17 +394,29 @@ const RegisterProduct = () => {
                 </div>
             </div>
             <div className='register-input-title'>
-                <input type="text" placeholder='상품 제목을 입력해주세요.' />
+                <input type="text" 
+                        placeholder='상품 제목을 입력해주세요.' 
+                        name="title"
+                        value={title}
+                        onChange={onChangeInput}
+                        />
             </div>
             <div className='register-input-price'>
                 <PriceWonIcon/>
-                <input type="text" placeholder='가격' value={price} onChange={onChangePrice}/> 
+                <input type="text" 
+                        name="price"
+                        value={price} 
+                        onChange={onChangePrice}/> 
             </div>
             <div className='register-input-desc'>
-                <textarea placeholder='상품에 대해서 설명해주세요.'/>
+                <textarea 
+                        placeholder='상품에 대해서 설명해주세요.'
+                        name="body" 
+                        onChange={onChangeInput}
+                        />
             </div> 
             <div className='register-select-category'>
-                <select name="category">
+                <select name="category" onChange={onChangeInput}>
                     <option disabled>카테고리</option>
                     <option value="electronic">전자제품</option>
                     <option value="clothes">의류</option>
@@ -329,10 +435,15 @@ const RegisterProduct = () => {
             </div>
             <div className='register-setPosition-input'>
                 <PositionIcon/>
-                <input type="text" placeholder='거래 희망장소명 입력'/>
+                <input type="text" 
+                        placeholder='거래 희망장소명 입력'
+                        name="location"
+                        value={mapLocation}
+                        onChange={onChangeLocation}
+                        />
             </div>
             <div className='register-footer'>
-                <button>등록하기</button>
+                <button type='submit'>등록하기</button>
             </div>
             <ModalPortal>
                 <SetPosition closeModal={closeModal}/>

@@ -27,4 +27,4 @@ const OnSale:React.FC<IProps>  = ({sellingList}) => {
     );
 };
 
-export default OnSale;
+export default React.memo(OnSale);

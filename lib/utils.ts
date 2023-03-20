@@ -21,3 +21,10 @@ if (amountString) {
 }
 return "";
 };
+
+// ,콤마가 들어있는 string을 number로 바꿔주기
+export const makeMoneyNumber = (input:string)=>{
+  const price = input.replace(/,/g,"")
+  return price
+
+}
