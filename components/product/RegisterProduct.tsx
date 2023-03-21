@@ -250,16 +250,17 @@ const RegisterProduct = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
 
     // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
-   const mapLocation = useSelector((state:any)=>state.registerPosition.location)
-   const latitude = useSelector((state:any)=>state.registerPosition.latitude)
-   const longitude = useSelector((state:any)=>state.registerPosition.longitude)
-    
-    // input - title,price,body,
+    const mapLocation = useSelector((state:any)=>state.registerPosition.location)
+    const latitude = useSelector((state:any)=>state.registerPosition.latitude)
+    const longitude = useSelector((state:any)=>state.registerPosition.longitude)
+    // input 폼
     const [productInputs,setProductInputs] = useState({
             title:'',
             body:'',
             category:'',
     })
+    const [price,setPrice] = useState('');
+    const dispatch = useDispatch();
 
     // 비구조화 할당으로 값 추출
     const { title,body,category} = productInputs; 
@@ -274,15 +275,12 @@ const RegisterProduct = () => {
     };
     
     // 가격 input - 콤마찍기
-    const [price,setPrice] = useState('');
-
     const onChangePrice = (e:any)=>{
         console.log(e.target.value)
         const commaPrice = makeMoneyString(String(e.target.value))
         setPrice(commaPrice)
     }
 
-    const dispatch = useDispatch();
     // 위치 input- 리덕스 
     const onChangeLocation = (e:any)=>{
         dispatch(registerPositionActions.setLocation(e.target.value))
@@ -299,20 +297,25 @@ const RegisterProduct = () => {
     // 이미지 상대경로 저장 (썸네일 미리보기)
     const handleAddImages = (event: any) => {
       const imageLists = event.target.files;
+      
       if (imageLists && imageLists.length > 5) {
         setErrorImgCountMessage('이미지는 5개만 등록가능합니다')
         return
       }else {
-        // 이전 이미지 복사
+        // 파일의 데이터
+        if(isEmpty(registerImages)){
+            setRegisterImages(Array.from(imageLists))
+            // setRegisterImages(imageLists)
+        }else{
+            const filesArray = Array.from(imageLists) as any
+            setRegisterImages((prev)=>[...prev,filesArray])
+        }
+            
+        // 썸네일 
         let imageUrlLists = [...showImages]; // 썸네일
-        let registerImgList = {...registerImages} // 등록 폼 이미지
-        console.log('registerImgList',registerImgList)
         for (let i = 0; i < imageLists.length; i++) {
             const currentImageUrl = URL.createObjectURL(imageLists[i]);
             imageUrlLists.push(currentImageUrl);
-            const currentImageFile = imageLists[i]
-            registerImgList.push(currentImageFile)
-            console.log('currentImageFile',currentImageFile)
         }
         // 썸네일 배열 최대 5개 
         if (imageUrlLists.length > 5) {
@@ -320,7 +323,7 @@ const RegisterProduct = () => {
         }
       
         setShowImages(imageUrlLists);
-        setRegisterImages(registerImgList)
+        
     }
 
 }
@@ -330,12 +333,13 @@ const RegisterProduct = () => {
         // 해당 썸네일 이미지 삭제
         setShowImages(showImages.filter((_, index) => index !== id));
         // 해당 상품등록 폼 이미지 삭제
-        // const files:Array = Array.from(registerImages) as Array;
-        // files.splice(id,1); // 인덱스 id에 해당하는 원소 1개 삭제
+        const files = Array.from(registerImages) ;
+        files.splice(id,1); // 인덱스 id에 해당하는 원소 1개 삭제
         // const newFileList = new FileList(files);
-        // setRegisterImages(newFileList);
+        setRegisterImages(files);
         
 };
+
 
     // 상품등록 폼 검증
     const validateRegisterForm = ()=>{
