@@ -1,10 +1,10 @@
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import LinkFooter from '../components/footer/LinkFooter';
-import Home from "../components/home/Home";
-import { GetproductList } from '../lib/api/product';
+import LinkFooter from '../../components/footer/LinkFooter';
+import Home from "../../components/home/Home";
+import { GetproductList } from '../../lib/api/product';
 
-const home = ({data}:any) => {
+const categoryHome = ({data}:any) => {
     return (
         <>
             <Home data={data}/>
@@ -13,8 +13,11 @@ const home = ({data}:any) => {
     )
 };
 
+
 // 서버사이드 렌더링으로 url 파라미터의 인가코드 가져옴
-export const getServerSideProps : GetServerSideProps = async () => {
+export const getServerSideProps : GetServerSideProps = async ({query}) => {
+    const {name} = query;
+    console.log(name)
     try{
         const {data} = await GetproductList();
         return {
@@ -29,4 +32,4 @@ export const getServerSideProps : GetServerSideProps = async () => {
         }
     }
 }
-export default home;
+export default categoryHome;

@@ -10,6 +10,7 @@ import PencilIcon from "../../public/static/svg/category/pencil.svg"
 import BallIcon from "../../public/static/svg/category/ball.svg"
 import MouthIcon from "../../public/static/svg/category/mouth.svg"
 import HandIcon from "../../public/static/svg/category/hand.svg"
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
     padding:50px 20px;
@@ -24,7 +25,7 @@ const Container = styled.div`
         align-items:center;
         padding:20px 0px;
         margin:20px 0px;
-        a{
+        div{
             display:flex;
             flex-direction:column;
             justify-content:center;
@@ -41,61 +42,118 @@ const Container = styled.div`
 
 
 const Category = () => {
+
+    const router= useRouter();
+    // router.push('/')
     return (
         <Container>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"electronic"},
+                    },
+                    "/category")
+                    }}>
                     <ElectronicIcon/>
                     <p>전자제품</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"clothes"},
+                    },
+                    "/category")
+                    }}>
                     <ClothesIcon/>
                     <p>의류</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"lecture"},
+                    },
+                    "/category")
+                    }}>
                     <LectureIcon/>
                     <p>강의자료</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"furniture"},
+                    },
+                    "/category")
+                    }}>
                     <ChairIcon/>
                     <p>가구/주방</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"book"},
+                    },
+                    "/category")
+                    }}>
                     <BookIcon/>
                     <p>책</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"householdGoods"},
+                    },
+                    "/category")
+                    }}>
                     <PencilIcon/>
                     <p>생활용품</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"sports"},
+                    },
+                    "/category")
+                    }}>
                     <BallIcon/>
                     <p>스포츠/레저</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"hobby"},
+                    },
+                    "/category")
+                    }}>
                     <MouthIcon/>
                     <p>취미/게임</p>
-                </Link>
+                </div>
             </div>
             <div className='category-box'>
-                <Link href="/home">
+                <div onClick={() => {
+                    router.push({
+                    pathname: '/home/[name]',
+                    query: { name:"beauty"},
+                    },
+                    "/category")
+                    }}>
                     <HandIcon/>
                     <p>뷰티/미용</p>
-                </Link>
+                </div>
             </div>
         </Container>
     );
