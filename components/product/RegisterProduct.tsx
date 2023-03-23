@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { registerPositionActions } from './../../store/registerPosition';
 import axios from 'axios';
-
+import { isEmpty } from 'lodash';
 
 const Container = styled.form`
     /* 이미지 css */
@@ -64,6 +64,13 @@ const Container = styled.form`
                 display:flex;
                 flex-direction:row;
                 align-items:center;
+                .preview-image-box-error-message{
+                    width:100%;
+                    color:${palette.error_message};
+                    p{
+                        color:${palette.error_message};
+                    }
+                }
                 section{
                     width:100%;
                     .slick-slider{
@@ -106,6 +113,7 @@ const Container = styled.form`
                         .slick-dots{
                             display:none !important;
                         }
+
                     }
                 }
             }
@@ -242,16 +250,17 @@ const RegisterProduct = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
 
     // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
-   const mapLocation = useSelector((state:any)=>state.registerPosition.location)
-   const latitude = useSelector((state:any)=>state.registerPosition.latitude)
-   const longitude = useSelector((state:any)=>state.registerPosition.longitude)
-    
-    // input - title,price,body,
+    const mapLocation = useSelector((state:any)=>state.registerPosition.location)
+    const latitude = useSelector((state:any)=>state.registerPosition.latitude)
+    const longitude = useSelector((state:any)=>state.registerPosition.longitude)
+    // input 폼
     const [productInputs,setProductInputs] = useState({
             title:'',
             body:'',
             category:'',
     })
+    const [price,setPrice] = useState('');
+    const dispatch = useDispatch();
 
     // 비구조화 할당으로 값 추출
     const { title,body,category} = productInputs; 
@@ -266,15 +275,12 @@ const RegisterProduct = () => {
     };
     
     // 가격 input - 콤마찍기
-    const [price,setPrice] = useState('');
-
     const onChangePrice = (e:any)=>{
         console.log(e.target.value)
         const commaPrice = makeMoneyString(String(e.target.value))
         setPrice(commaPrice)
     }
 
-    const dispatch = useDispatch();
     // 위치 input- 리덕스 
     const onChangeLocation = (e:any)=>{
         dispatch(registerPositionActions.setLocation(e.target.value))
@@ -283,33 +289,57 @@ const RegisterProduct = () => {
 
     // 이미지 저장
     const [showImages, setShowImages] = useState<string[]>([]);
-    const [registerImages,setRegisterImages] = useState<string[]>([])
+    const [registerImages,setRegisterImages] = useState<Blob[]>([])
+    const [errorImgCountMessage,setErrorImgCountMessage] = useState<string>('')
     console.log(showImages)
     console.log(registerImages)
-
+    
     // 이미지 상대경로 저장 (썸네일 미리보기)
     const handleAddImages = (event: any) => {
       const imageLists = event.target.files;
-      console.log('imageLists',imageLists)
-      setRegisterImages(imageLists)
-      let imageUrlLists = [...showImages]; // 하나씩 추가할 수도 있으니까
-      console.log(imageUrlLists)
-      for (let i = 0; i < imageLists.length; i++) {
-        const currentImageUrl = URL.createObjectURL(imageLists[i]);
-        imageUrlLists.push(currentImageUrl);
-      }
-  
-      if (imageUrlLists.length > 10) {
-        imageUrlLists = imageUrlLists.slice(0, 10);
-      }
-  
-      setShowImages(imageUrlLists);
+      
+      if (imageLists && imageLists.length > 5) {
+        setErrorImgCountMessage('이미지는 5개만 등록가능합니다')
+        return
+      }else {
+        // 파일의 데이터
+        if(isEmpty(registerImages)){
+            setRegisterImages(Array.from(imageLists))
+            // setRegisterImages(imageLists)
+        }else{
+            const filesArray = Array.from(imageLists) as any
+            setRegisterImages((prev)=>[...prev,filesArray])
+        }
+            
+        // 썸네일 
+        let imageUrlLists = [...showImages]; // 썸네일
+        for (let i = 0; i < imageLists.length; i++) {
+            const currentImageUrl = URL.createObjectURL(imageLists[i]);
+            imageUrlLists.push(currentImageUrl);
+        }
+        // 썸네일 배열 최대 5개 
+        if (imageUrlLists.length > 5) {
+            imageUrlLists = imageUrlLists.slice(0, 5);
+        }
+      
+        setShowImages(imageUrlLists);
+        
     }
 
+}
+
       // X버튼 클릭 시 이미지 삭제
-  const handleDeleteImage = (id: number) => {
+    const handleDeleteImage = (id: number) => {
+        // 해당 썸네일 이미지 삭제
         setShowImages(showImages.filter((_, index) => index !== id));
-    };
+        // 해당 상품등록 폼 이미지 삭제
+        const files = Array.from(registerImages) ;
+        files.splice(id,1); // 인덱스 id에 해당하는 원소 1개 삭제
+        // const newFileList = new FileList(files);
+        setRegisterImages(files);
+        
+};
+
 
     // 상품등록 폼 검증
     const validateRegisterForm = ()=>{
@@ -351,13 +381,14 @@ const RegisterProduct = () => {
 
         // 현재 모든 formData는 string으로 되어있음
         if(validateRegisterForm()){
+            const token = localStorage.getItem('login-token')
             try{
                 // 상품등록 api 호출
                 const res = await axios.post('http://localhost:4000/content/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    Authorization : `Bearer ${localStorage.getItem('login-token')}`
+                    'Authorization' : `Bearer ${token}`
                   },
                 body: formData,
                 });
@@ -392,6 +423,7 @@ const RegisterProduct = () => {
                         <p className='file-image-count'>{showImages.length}/5</p>
                     </div>
                     <div className='preview-image-box-wrap'>
+                        {isEmpty(showImages) &&errorImgCountMessage !== '' ? <p className='preview-image-box-error-message'>{errorImgCountMessage}</p>:null}
                         <Slick>
                             {showImages.map((image: string, id: number)  => (
                                 <SliderItem key={id} className="preview-image-box">

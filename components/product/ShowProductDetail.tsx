@@ -306,7 +306,8 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     
     // 로그인 - 현재 유저 id
     const userId = useSelector((state:any)=>state.user.id)
-    // 로그인 되어 있는 사용자의 id와 sellerId를 비교하여 작성자인지 구분하는 변수
+
+    // 로그인된 사용자의 id와 상품의 owner.id 비교
     const postOwner = userId === productDetail.owner.id;  
 
     // 수정,삭제 버튼 모달보이기 state

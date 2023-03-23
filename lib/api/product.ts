@@ -17,3 +17,6 @@ export const getSoldList = (id:number)=>axios.get(`http://localhost:4000/content
 
 // 상품 상세 조회 
 export const getProductDetail = (id:number)=>axios.get(`http://localhost:4000/content/read/${id}`)
+
+// 카테고리 상품 조회
+export const getCategoryProductList = (name:string)=>axios.get(`http://localhost:4000/content/list/category`,{params: {category: name}})
