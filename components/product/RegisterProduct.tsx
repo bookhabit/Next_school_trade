@@ -291,39 +291,36 @@ const RegisterProduct = () => {
     const [showImages, setShowImages] = useState<string[]>([]);
     const [registerImages,setRegisterImages] = useState<Blob[]>([])
     const [errorImgCountMessage,setErrorImgCountMessage] = useState<string>('')
-    console.log(showImages)
-    console.log(registerImages)
     
     // 이미지 상대경로 저장 (썸네일 미리보기)
     const handleAddImages = (event: any) => {
       const imageLists = event.target.files;
       
       if (imageLists && imageLists.length > 5) {
-        setErrorImgCountMessage('이미지는 5개만 등록가능합니다')
+        setErrorImgCountMessage('이미지는 최소 1개, 최대 5개 등록가능합니다')
         return
-      }else {
-        // 파일의 데이터
-        if(isEmpty(registerImages)){
-            setRegisterImages(Array.from(imageLists))
-            // setRegisterImages(imageLists)
-        }else{
-            const filesArray = Array.from(imageLists) as any
-            setRegisterImages((prev)=>[...prev,filesArray])
-        }
-            
+      }else {   
         // 썸네일 
         let imageUrlLists = [...showImages]; // 썸네일
+        let registerImageList = [...registerImages] // 등록 이미지
         for (let i = 0; i < imageLists.length; i++) {
             const currentImageUrl = URL.createObjectURL(imageLists[i]);
+            const currentRegisterImage = imageLists[i]
             imageUrlLists.push(currentImageUrl);
+            registerImageList.push(currentRegisterImage)
         }
         // 썸네일 배열 최대 5개 
         if (imageUrlLists.length > 5) {
             imageUrlLists = imageUrlLists.slice(0, 5);
         }
-      
+
+        // 등록 폼 이미지 배열 최대 5개
+        if (registerImageList.length > 5) {
+            registerImageList = registerImageList.slice(0, 5);
+        }
+
         setShowImages(imageUrlLists);
-        
+        setRegisterImages(registerImageList)
     }
 
 }
@@ -372,26 +369,28 @@ const RegisterProduct = () => {
         formData.append('longitude',longitude);
         formData.append('location',mapLocation);
 
-        // formdata 출력하기
-        for (const [key, value] of formData.entries()) {
-            console.log(key,value);
-        }
-
+        
         console.log(formData.getAll('images'))
-
+        
         // 현재 모든 formData는 string으로 되어있음
         if(validateRegisterForm()){
+            // formdata 출력하기
+            for (const [key, value] of formData.entries()) {
+                console.log(key,value);
+            }
             const token = localStorage.getItem('login-token')
             try{
+                console.log("formData : ", formData)
                 // 상품등록 api 호출
-                const res = await axios.post('http://localhost:4000/content/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization' : `Bearer ${token}`
-                  },
-                body: formData,
-                });
+                const res = await axios.post('http://localhost:4000/content/create', 
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization' : `Bearer ${token}`
+                     },
+                }
+                );
                 console.log(res)
                  // 응답값에 따라서 라우팅처리
                 // if (res.ok) {
