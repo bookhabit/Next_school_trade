@@ -16,6 +16,7 @@ const Container = styled.div`
     height:105px;
     margin-bottom:10px;
     display:flex;
+    padding-bottom:100px;
     
     .productImg{
         width:116px;

@@ -127,6 +127,7 @@ const Container = styled.form`
         height:70px;
         padding:20px;
         input{
+            width:100%;
             font-size:20px;
         }
         border-bottom:1px solid ${palette.divistion_color}
@@ -345,8 +346,7 @@ const RegisterProduct = () => {
         const files = Array.from(registerImages) ;
         files.splice(id,1); // 인덱스 id에 해당하는 원소 1개 삭제
         // const newFileList = new FileList(files);
-        setRegisterImages(files);
-        
+        setRegisterImages(files);      
 };
 
 
@@ -403,13 +403,13 @@ const RegisterProduct = () => {
                      },
                 }
                 );
-                console.log(res)
-                 // 응답값에 따라서 라우팅처리
-                // if (res.ok) {
-                //     router.push('/products');
-                // } else {
-                //     console.error('Failed to create product.');
-                // }
+                // 응답값에 따라서 라우팅처리
+                if (res.status===201) {
+                    alert('상품등록이 완료되었습니다')
+                    router.push('/home');
+                } else {
+                    alert('Failed to create product.');
+                }
             }catch(e){
                 console.log(e)
             }
