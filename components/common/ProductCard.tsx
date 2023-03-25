@@ -96,6 +96,8 @@ interface IProps{
 }
 
 const ProductCard:React.FC<IProps> = ({product}) => {
+    const imagepath = product.images[0].path
+
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
     const userFavoriteState = false // product.favorite
     const [favoriteProduct,setFavoriteProduct] = useState(userFavoriteState)
@@ -121,7 +123,7 @@ const ProductCard:React.FC<IProps> = ({product}) => {
         <>
             <Container>
                 <div className='productImg' onClick={goToDetail}>
-                    <img src={product.images}/>
+                    <img src={`http://localhost:4000/${imagepath}`}/>
                 </div>
                 <div className='productInfo'>
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>

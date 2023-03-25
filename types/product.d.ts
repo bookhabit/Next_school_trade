@@ -19,7 +19,7 @@ export type productListType = {
 
     id: number;
 
-    images: Array;
+    images: Array<ImageType>;
     
     latitude: number;
     
@@ -38,6 +38,29 @@ export type productListType = {
     buyer: Users;
   
     updatedAt: string;
+}
+
+type ImageType = {
+    id: number;
+    filename: string;
+
+    path: string;
+
+    fieldname: string;
+
+    originalname: string;
+
+    encoding: string;
+
+    mimetype: string;
+
+    destination: string;
+
+    size: number;
+
+    createdAt: Date;
+
+    updatedAt: Date;
 }
 
 // 상품 등록 타입
