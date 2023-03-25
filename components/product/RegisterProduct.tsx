@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import PriceWonIcon from "../../public/static/svg/product/price_won.svg"
@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { registerPositionActions } from './../../store/registerPosition';
 import axios from 'axios';
 import { isEmpty } from 'lodash';
+import { RootState } from '../../store';
 
 const Container = styled.form`
     /* 이미지 css */
@@ -249,52 +250,63 @@ const SliderItem = styled.div`
 const RegisterProduct = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
 
-    // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
-    const mapLocation = useSelector((state:any)=>state.registerPosition.location)
-    const latitude = useSelector((state:any)=>state.registerPosition.latitude)
-    const longitude = useSelector((state:any)=>state.registerPosition.longitude)
-    // input 폼
+    // Declare State
+
+    // Redux
+
+    // 지도
+    const mapLocation = useSelector((state:RootState)=>state.registerPosition.location)
+    const latitude = useSelector((state:RootState)=>state.registerPosition.latitude)
+    const longitude = useSelector((state:RootState)=>state.registerPosition.longitude)
+
+    
+    // Local
+
+    // 이미지
+    const [showImages, setShowImages] = useState<string[]>([]);
+    const [registerImages,setRegisterImages] = useState<Blob[]>([])
+    const [errorImgCountMessage,setErrorImgCountMessage] = useState<string>('')
+
+    // 상품 등록 폼
     const [productInputs,setProductInputs] = useState({
-            title:'',
-            body:'',
-            category:'',
+        title:'',
+        body:'',
+        category:'',
     })
     const [price,setPrice] = useState('');
-    const dispatch = useDispatch();
+    const { title,body,category } = productInputs; 
 
-    // 비구조화 할당으로 값 추출
-    const { title,body,category} = productInputs; 
+
+    // Event Handler
+    
+    const dispatch = useDispatch();
+    const onChangeLocation = (e: ChangeEvent<HTMLInputElement>)=>{
+        dispatch(registerPositionActions.setLocation(e.target.value))
+    }
+    // 가격 input - 콤마찍기
+    const onChangePrice = (e:ChangeEvent<HTMLInputElement>)=>{
+        console.log(e.target.value)
+        const commaPrice = makeMoneyString(String(e.target.value))
+        setPrice(commaPrice)
+    }
 
     // input과 select onChange함수들
-    const onChangeInput = (event:any) => {
+    const onChangeInput = (event: any) => {
         const { name,value } = event.target; 
         setProductInputs({
         ...productInputs, // 기존의 input 객체를 복사한 뒤
         [name]: value // name 키를 가진 값을 value 로 설정
         });
     };
-    
-    // 가격 input - 콤마찍기
-    const onChangePrice = (e:any)=>{
-        console.log(e.target.value)
-        const commaPrice = makeMoneyString(String(e.target.value))
-        setPrice(commaPrice)
-    }
+        
 
-    // 위치 input- 리덕스 
-    const onChangeLocation = (e:any)=>{
-        dispatch(registerPositionActions.setLocation(e.target.value))
-    }
-
-
-    // 이미지 저장
-    const [showImages, setShowImages] = useState<string[]>([]);
-    const [registerImages,setRegisterImages] = useState<Blob[]>([])
-    const [errorImgCountMessage,setErrorImgCountMessage] = useState<string>('')
-    
     // 이미지 상대경로 저장 (썸네일 미리보기)
-    const handleAddImages = (event: any) => {
+    const handleAddImages = (event: ChangeEvent<HTMLInputElement>) => {
       const imageLists = event.target.files;
+      if(imageLists == null) {
+        console.error("handleAddImages imageLists is Null")
+        return
+      }
       
       if (imageLists && imageLists.length > 5) {
         setErrorImgCountMessage('이미지는 최소 1개, 최대 5개 등록가능합니다')
@@ -355,18 +367,18 @@ const RegisterProduct = () => {
         e.preventDefault();
         const formData: FormData = new FormData();
         // formData에 데이터 넣기
-        // 가격은 콤마뺴고 넣기
+       
         if(registerImages){
-            for(let i=0; i<registerImages.length; i++){
-                formData.append('images', registerImages[i]);
+            for(const image of registerImages){
+                formData.append('images', image);
             }
         }
         formData.append('title',title);
         formData.append('price',makeMoneyNumber(price));
         formData.append('body',body);
         formData.append('category',category);
-        formData.append('latitude',latitude);
-        formData.append('longitude',longitude);
+        formData.append('latitude',String(latitude));
+        formData.append('longitude',String(longitude));
         formData.append('location',mapLocation);
 
         
