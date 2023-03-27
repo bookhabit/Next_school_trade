@@ -72,10 +72,16 @@ const Container = styled.div`
                         div{
                             width:100%;
                             height:230px;
+                            background-color:${palette.gray_80};
                             img{
                                 width:100%;
                                 height:230px;
                                 object-fit:fill;
+                            }
+                            .default-img{
+                                width: 116px;
+                                height:40%;
+                                margin-top:50px;
                             }
                         }
                     }
@@ -365,11 +371,14 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
             
                 <div className='detail-product-image'>
                     <Slick>
-                        {productDetail.images && productDetail.images.map((item:any, index:number) => (
+                        {!isEmpty(productDetail.images[0]) ? productDetail.images.map((item:any, index:number) => (
                             <SliderItem key={index}>
-                            <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>
+                                <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>
                             </SliderItem>
-                        ))}
+                        ))
+                        :   
+                            <img src={"/static/svg/product/default_img.svg"} className="default-img" alt="기본이미지"/>
+                        }
                     </Slick>
                 </div>
                 

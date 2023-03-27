@@ -11,6 +11,7 @@ import { makeMoneyString } from '../../lib/utils';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
+import DefaultImgIcon from "../../public/static/svg/product/default_img.svg"
 
 const Container = styled.div`
     width:350px;
@@ -22,9 +23,15 @@ const Container = styled.div`
     .productImg{
         width:116px;
         height:105px;
+        background-color:${palette.gray_80};
         img {
-          width: 100%;
+          width: 116px;
           height: 100%;
+        }
+        .default-img{
+            width: 116px;
+            height:40%;
+            margin-top:30px;
         }
     }
     .productInfo{
@@ -98,7 +105,7 @@ interface IProps{
 
 const ProductCard:React.FC<IProps> = ({product}) => {
     let imagepath
-    let imageAlt
+    let imageAlt    
     if(!isEmpty(product.images[0])){
         console.log(product.images[0].path)
         imagepath = product.images[0].path
@@ -130,7 +137,11 @@ const ProductCard:React.FC<IProps> = ({product}) => {
         <>
             <Container>
                 <div className='productImg' onClick={goToDetail}>
+                    {imagepath? 
                     <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>
+                    :
+                    <img src={"/static/svg/product/default_img.svg"} className="default-img" alt="기본이미지"/>
+                    }
                 </div>
                 <div className='productInfo'>
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
