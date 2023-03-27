@@ -20,6 +20,7 @@ import Slick from './Slick';
 import { productListType } from '../../types/product';
 import moment from 'moment';
 import 'moment/locale/ko';
+import { isEmpty } from 'lodash';
 
 const Container = styled.div`
     /* 헤더 css */
@@ -86,6 +87,7 @@ const Container = styled.div`
                 .slick-dots{
                     bottom:15px !important;
                 }
+
 
             } 
         }
@@ -274,10 +276,18 @@ interface IProps{
 
 const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     console.log('props로 데이터 받음',productDetail)
+    let imagepath:string
+    let imageAlt:string
+    if(!isEmpty(productDetail.images[0])){
+        console.log(productDetail.images[0].path)
+        imagepath = productDetail.images[0].path
+        imageAlt = productDetail.images[0].filename
+    }
+    // 이전 페이지 이동
     const goToBackpage = ()=>{
         window.history.back();
     }
-    // 판매자 정보를 클릭하면 판매자 정보 페이지로 이동하기 - sellerId로 넘기기
+    // 판매자 정보 페이지로 이동 - owner.id 넘김
     const router= useRouter();
     const goToSellerProfile = ()=>{
         router.push({
@@ -285,7 +295,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         })
     }
     
-    // 게시글 주인이 아닐 경우 채팅하기 클릭 
+    // 게시글 주인이 아닐 경우 채팅하기 버튼 이벤트 
     const goToChattingRoom = ()=>{
         router.push({
             pathname:`/user/chatting/[id]`,
@@ -293,7 +303,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         })
     }
 
-    // 게시글 주인일 경우 채팅방 클릭
+    // 게시글 주인일 경우 채팅방 버튼 이벤트
     const goToChattinList = ()=>{
         router.push({
             pathname:`/user/chatting`
@@ -357,7 +367,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                     <Slick>
                         {productDetail.images && productDetail.images.map((item:any, index:number) => (
                             <SliderItem key={index}>
-                            <img src={item.item} alt={item.name} />
+                            <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>
                             </SliderItem>
                         ))}
                     </Slick>

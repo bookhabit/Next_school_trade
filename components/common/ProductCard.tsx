@@ -10,6 +10,7 @@ import { productListType } from '../../types/product';
 import { makeMoneyString } from '../../lib/utils';
 import moment from 'moment';
 import 'moment/locale/ko';
+import { isEmpty } from 'lodash';
 
 const Container = styled.div`
     width:350px;
@@ -96,7 +97,13 @@ interface IProps{
 }
 
 const ProductCard:React.FC<IProps> = ({product}) => {
-    const imagepath = product.images[0].path
+    let imagepath
+    let imageAlt
+    if(!isEmpty(product.images[0])){
+        console.log(product.images[0].path)
+        imagepath = product.images[0].path
+        imageAlt = product.images[0].filename
+    }
 
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
     const userFavoriteState = false // product.favorite
@@ -123,7 +130,7 @@ const ProductCard:React.FC<IProps> = ({product}) => {
         <>
             <Container>
                 <div className='productImg' onClick={goToDetail}>
-                    <img src={`http://localhost:4000/${imagepath}`}/>
+                    <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>
                 </div>
                 <div className='productInfo'>
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
