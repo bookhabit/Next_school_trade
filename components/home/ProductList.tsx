@@ -22,53 +22,6 @@ interface IProps{
 const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
     const productList = data;
     console.log(productList)
-    // UI 테스트 데이터
-    const testProduct = [{
-        id:1,
-        title:"전공책 팝니다",
-        price:"30,000 원",
-        updatedDate:"17분 전",
-        heartCount:3,
-        chattingCount:3,
-        img:ToeicImg,
-        favorite:false,
-    },{
-        id:2,
-        title:"운영체제 책 살 사람??",
-        price:"25,000 원",
-        updatedDate:"20분 전",
-        heartCount:2,
-        chattingCount:4,
-        img:OperatingBook,
-        favorite:false,
-    },{
-        id:3,
-        title:"자료구조 알고리즘 책 팔아요~~",
-        price:"15,000 원",
-        updatedDate:"35분 전",
-        heartCount:0,
-        chattingCount:1,
-        img:DataStructureBook,
-        favorite:true,
-    },{
-        id:4,
-        title:"축구화 살 사람??",
-        price:"30,000 원",
-        updatedDate:"1시간 전",
-        heartCount:1,
-        chattingCount:0,
-        img:SoccershoesImg
-        ,favorite:true,
-    },{
-        id:5,
-        title:"나이키 바지 팔아요!!",
-        price:"21,000 원",
-        updatedDate:"2시간 전",
-        heartCount:0,
-        chattingCount:1,
-        img:NikeImg,
-        favorite:true,
-    }]
 
     return (
         <Container completedProducts={completedProducts}>  
