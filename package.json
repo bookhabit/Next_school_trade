@@ -38,7 +38,8 @@
     "styled-reset": "^4.4.5",
     "sweetalert2": "^11.7.3",
     "swiper": "^9.1.0",
-    "throttle": "^1.0.3"
+    "throttle": "^1.0.3",
+    "use-dehydrated-state": "^0.1.0"
   },
   "scripts": {
     "build": "next build",
