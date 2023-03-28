@@ -17,9 +17,10 @@ const Container = styled.div<{completedProducts:boolean}>`
 interface IProps{
     completedProducts:boolean,
     data:productListType[]
+    setTarget:React.Dispatch<React.SetStateAction<HTMLElement | null | undefined>>
 }
 
-const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
+const ProductList:React.FC<IProps> = ({completedProducts,data,setTarget}) => {
     const productList = data;
     console.log(productList)
 
@@ -34,6 +35,7 @@ const ProductList:React.FC<IProps> = ({completedProducts,data}) => {
                 <ProductCard key={product.id} product={product}/>
             )) 
             }
+            <div ref={setTarget}></div>
         </Container>
     );
 };
