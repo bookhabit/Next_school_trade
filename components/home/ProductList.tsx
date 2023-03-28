@@ -8,7 +8,7 @@ import SoccershoesImg from "../../public/static/image/testProudct/축구화.jpg"
 import ToeicImg from "../../public/static/image/testProudct/토익.jpg"
 import CompletedProductCard from '../common/CompletedProductCard';
 import { isEmpty } from 'lodash';
-import { productListType } from '../../types/product';
+import { productListType } from '../../types/product/product';
 
 const Container = styled.div<{completedProducts:boolean}>`
     margin-top:${props=>props.completedProducts? "0px" :"20px"};

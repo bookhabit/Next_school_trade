@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { GetproductList } from '../../lib/api/product';
 import { GetServerSideProps, NextPage } from 'next';
 import axios from 'axios';
-import { productListType } from '../../types/product';
+import { productListType } from '../../types/product/product';
 
 const Container = styled.div`
     padding:0px 20px;

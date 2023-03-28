@@ -1,4 +1,4 @@
-import { Users } from "./user";
+import { Users } from "../user";
 
 // 상품 타입
 export type productListType = {
@@ -80,4 +80,13 @@ export type registerProductType = {
     location: string;
     
     longitude: number;
+}
+
+// 리액트쿼리 - infinitePage
+export interface IInfinitePage {
+    nextCursor: number | undefined;
+    page: {
+      productList: productListType[];
+      hasMore: boolean;
+    };
 }

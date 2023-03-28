@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductList from '../../home/ProductList';
 import styled from 'styled-components';
-import { productListType } from '../../../types/product';
+import { productListType } from '../../../types/product/product';
 
 const Container = styled.div`
     padding:0px 20px;

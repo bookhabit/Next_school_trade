@@ -5,7 +5,7 @@ import BorderHeartIcon from "../../public/static/svg/product/borderHeartIcon.svg
 import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg"
 import palette from '../../styles/palette';
 import { Division } from './Division';
-import { productListType } from '../../types/product';
+import { productListType } from '../../types/product/product';
 import { makeMoneyString } from '../../lib/utils';
 import moment from 'moment';
 import 'moment/locale/ko';

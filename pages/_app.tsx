@@ -1,8 +1,8 @@
-import { AppContext, AppProps } from "next/app";
+import React from 'react'
+import { AppContext, AppProps,AppInitialProps } from "next/app";
 import GlobalStyle from "../styles/GlobalStyle";
 import {  wrapper } from "../store";
 import { useSelector } from 'react-redux';
-import App from "next/app";
 import { cookieStringToObject } from './../lib/utils';
 import axios from "../lib/api";
 import { meAPI } from "../lib/api/auth";
@@ -10,43 +10,60 @@ import { useEffect } from "react";
 import { userActions } from "../store/user";
 import { useDispatch } from "react-redux";
 import Header from "../components/header/Header";
+import { QueryClient,QueryClientProvider,Hydrate } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const MyApp = ({Component,pageProps,...data}:AppProps)=>{
-    // getInitialProps에서 받아온 data를 받아서 리덕스 스토어에 저장하기
-    const clientData = Object(data).data
-    const dispatch = useDispatch();
-    useEffect(()=>{
-        if(clientData){
-            dispatch(userActions.setLoggedUser(clientData))
-        }
-    },[])
+    // 리액트쿼리 하이드레이션
+    const queryClientRef = React.useRef<QueryClient>()
+    if (!queryClientRef.current) {
+        queryClientRef.current = new QueryClient()
+    }
+    // 로그인유지 - 유저정보 받아오기
+    // const clientData = Object(data).data
+    // const dispatch = useDispatch();
+    // useEffect(()=>{
+    //     if(clientData){
+    //         dispatch(userActions.setLoggedUser(clientData))
+    //     }
+    // },[])
     
-    const LoggedUser = useSelector((state:any)=>state.user)
+    // const LoggedUser = useSelector((state:any)=>state.user)
 
     return(
         <>
-            <Header/>
-            <GlobalStyle/>
-            <Component {...pageProps}/>
-            <div id="root-modal"/>
+            <QueryClientProvider client={queryClientRef.current}>
+                <Hydrate state={pageProps.dehydratedState}>
+                    <Header/>
+                    <GlobalStyle/>
+                    <Component {...pageProps}/>
+                    <div id="root-modal"/>
+                </Hydrate>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
         </>
     )
 }
 
-MyApp.getInitialProps = async (context:AppContext)=>{
-    const appInitialProps = await App.getInitialProps(context);
-    const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie)
-    let data
-    try{
-        if(cookieObject.access_token){
-            axios.defaults.headers.cookie = cookieObject.access_token;
-            data = await (await meAPI()).data;
-        }
-    }catch(e){
-        console.log(e)
+MyApp.getInitialProps = async ({ Component, ctx }: AppContext): Promise<AppInitialProps>=>{
+    let pageProps = {}
+
+    if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps(ctx)
     }
+    // const appInitialProps = await App.getInitialProps(context);
+    // const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie)
+    // let data
+    // try{
+    //     if(cookieObject.access_token){
+    //         axios.defaults.headers.cookie = cookieObject.access_token;
+    //         data = await (await meAPI()).data;
+    //     }
+    // }catch(e){
+    //     console.log(e)
+    // }
     
-    return {...appInitialProps,data}
+    return {pageProps }
 }
 
 export default wrapper.withRedux(MyApp);

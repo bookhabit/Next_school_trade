@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import React from 'react';
 import ShowProductDetail from '../../components/product/ShowProductDetail';
 import { getProductDetail } from '../../lib/api/product';
-import { productListType } from '../../types/product';
+import { productListType } from '../../types/product/product';
 
 const productDetail:NextPage = ({data}:any)=>{
     // const testProductDeatail = {

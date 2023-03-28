@@ -1,7 +1,9 @@
 import axios from "axios"
+import { QueryFunctionContext } from '@tanstack/react-query';
+
 
 // 상품 전체 조회 - home 페이지
-export const GetproductList = ()=>axios.get("http://localhost:4000/content/list")
+export const GetproductList = ({pageParam=0}:QueryFunctionContext)=>axios.get(`http://localhost:4000/content/list?page=${pageParam}`)
 
 
 // 특정 회원 관심목록 - user/favorite 페이지

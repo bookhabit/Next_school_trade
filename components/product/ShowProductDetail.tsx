@@ -17,7 +17,7 @@ import { makeMoneyString } from '../../lib/utils';
 import Slider from "react-slick";
 import Item from './Item';
 import Slick from './Slick';
-import { productListType } from '../../types/product';
+import { productListType } from '../../types/product/product';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
