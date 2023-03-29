@@ -39,7 +39,6 @@ const categoryHome = ({categoryName}:any) => {
 
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
-            console.log('isIntersecting',isIntersecting)
             if(isIntersecting){
                 fetchNextPage();
             }
@@ -70,13 +69,12 @@ export const getServerSideProps : GetServerSideProps = async ({query}) => {
 
     try{
         await queryClient.prefetchInfiniteQuery(
-            ['categoryList'],async()=>{
+            ['categoryList',categoryName],async()=>{
               const res = await axios.get(`http://localhost:4000/content/list/category`,{params: {category: categoryName}})
               console.log('서버사이드 카테고리 data',res.data)
               return res.data;
             }
           )
-          console.log('카테고리 queryClient데이터',queryClient)
         
           return {
               props: {

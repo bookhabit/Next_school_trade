@@ -46,7 +46,6 @@ const home = () => {
 
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
-            console.log('isIntersecting',isIntersecting)
             if(isIntersecting){
                 fetchNextPage();
             }
@@ -76,11 +75,9 @@ export const getServerSideProps : GetServerSideProps = async ()=> {
         await queryClient.prefetchInfiniteQuery(
             ['productList'],async()=>{
               const res = await axios.get('http://localhost:4000/content/list')
-              console.log('서버사이드 홈페이지 data',res.data)
               return res.data;
             }
           )
-          console.log('홈페이지 queryClient데이터',queryClient)
           return {
               props: {
                   // infiniteQuery를 사용하거나 Promise.all을 사용할 경우 JSON처리 필수
