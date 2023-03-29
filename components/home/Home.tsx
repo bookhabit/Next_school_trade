@@ -55,8 +55,8 @@ const Home:React.FC= () => {
                 {status === "loading" && <div>loading...</div>}
                 {status === "error" && <div>error</div>}
                 {status === "success" &&
-                data.pages.map((page, index) => 
-                <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} />
+                    data.pages.map((page, index) => 
+                        <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} />
                 )}
             </Container>
     );

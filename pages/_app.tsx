@@ -6,14 +6,14 @@ import App from "next/app";
 import { cookieStringToObject } from './../lib/utils';
 import axios from "../lib/api";
 import { meAPI } from "../lib/api/auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { userActions } from "../store/user";
 import { useDispatch } from "react-redux";
 import Header from "../components/header/Header";
-import { QueryClient,QueryClientProvider } from '@tanstack/react-query'
+import { Hydrate, QueryClient,QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 const MyApp = ({Component,pageProps,...data}:AppProps)=>{
     // 로그인유지 - 유저정보 받아오기
@@ -24,17 +24,21 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
             dispatch(userActions.setLoggedUser(clientData))
         }
     },[])
-    
     const LoggedUser = useSelector((state:any)=>state.user)
+
+    const [queryClient] = useState(() => new QueryClient());
+    
 
     return(
         <>
             <QueryClientProvider client={queryClient}>
-                <Header/>
-                <GlobalStyle/>
-                <Component {...pageProps}/>
-                <div id="root-modal"/>
-                <ReactQueryDevtools initialIsOpen={false} />
+                <Hydrate state={pageProps.dehydratedState}>
+                    <Header/>
+                    <GlobalStyle/>
+                    <Component {...pageProps}/>
+                    <div id="root-modal"/>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                </Hydrate>
             </QueryClientProvider>
         </>
     )
