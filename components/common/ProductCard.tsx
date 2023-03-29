@@ -106,7 +106,10 @@ interface IProps{
 const ProductCard:React.FC<IProps> = ({product}) => {
     let imagepath
     let imageAlt    
-    if(!isEmpty(product.images[0])){
+    if(product.images === undefined){
+        imagepath = undefined
+    }else if 
+    (!isEmpty(product.images[0])){
         imagepath = product.images[0].path
         imageAlt = product.images[0].filename
     }
