@@ -22,7 +22,7 @@ interface IProps{
 
 const ProductList:React.FC<IProps> = ({completedProducts,data,setTarget}) => {
     const productList = data;
-    console.log('productList',productList)
+    // console.log('productList',productList)
 
     return (
         <Container completedProducts={completedProducts}>  

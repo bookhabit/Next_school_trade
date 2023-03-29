@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import ProductList from '../../components/home/ProductList';
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 
 const Container = styled.div`
@@ -21,7 +22,7 @@ const categoryHome = ({categoryName}:any) => {
         hasNextPage, // 다음 페이지가 있는지 여부, Boolean
         status, 
     } = useInfiniteQuery(
-          ["categoryList"] 
+          ["categoryList",categoryName] 
         , async ()=> await getCategoryProductList(categoryName)
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
@@ -35,7 +36,6 @@ const categoryHome = ({categoryName}:any) => {
           }
         )
         console.log('infinitquery',data)
-        console.log('typeof data',typeof data)
 
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -65,16 +65,18 @@ const categoryHome = ({categoryName}:any) => {
 // 서버사이드 렌더링으로 카테고리의 쿼리를 보내서 상품리스트 가져옴
 export const getServerSideProps : GetServerSideProps = async ({query}) => {
     const {name} = query;
-    const categoryName = String(name);
+    const categoryName = name
     const queryClient = new QueryClient()
 
     try{
         await queryClient.prefetchInfiniteQuery(
             ['categoryList'],async()=>{
-              const res = await getCategoryProductList(categoryName)
+              const res = await axios.get(`http://localhost:4000/content/list/category`,{params: {category: categoryName}})
+              console.log('서버사이드 카테고리 data',res.data)
               return res.data;
             }
           )
+          console.log('카테고리 queryClient데이터',queryClient)
         
           return {
               props: {
