@@ -15,7 +15,7 @@ const Container = styled.div`
 `
 const categoryHome = ({categoryName}:any) => {
     console.log(categoryName)
-    const lastPageNumber=1 // 백엔드 offset 받아와야함
+    const lastPageNumber=3 // 백엔드 offset 받아와야함
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -23,7 +23,7 @@ const categoryHome = ({categoryName}:any) => {
         status, 
     } = useInfiniteQuery(
           ["categoryList",categoryName] 
-        , async ()=> await getCategoryProductList(categoryName)
+        , async (pageParam)=> await getCategoryProductList(pageParam,categoryName)
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
             getNextPageParam: (_lastPage,pages) => {
@@ -71,7 +71,6 @@ export const getServerSideProps : GetServerSideProps = async ({query}) => {
         await queryClient.prefetchInfiniteQuery(
             ['categoryList',categoryName],async()=>{
               const res = await axios.get(`http://localhost:4000/content/list/category`,{params: {category: categoryName}})
-              console.log('서버사이드 카테고리 data',res.data)
               return res.data;
             }
           )

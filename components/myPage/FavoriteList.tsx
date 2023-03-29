@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import ProductList from './../home/ProductList';
+import { productListType } from '../../types/product/product';
+import ProductList from '../home/ProductList';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -16,6 +17,7 @@ interface IProps{
 }
 
 const FavoriteList:React.FC<IProps> = ({favoriteList}) => {
+    console.log('favoriteList',favoriteList)
     // 관심목록의 content만 추출해서 ProductList에 넘겨준다
     const productListData = favoriteList.map(item => item.content) as productListType[];
     console.log(productListData)
