@@ -2,6 +2,7 @@ import React from 'react';
 import styled,{css} from 'styled-components';
 import palette from '../../styles/palette';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Container = styled.div<{ isValid:boolean; validateMode:boolean;}>`
     width:100%;
@@ -44,7 +45,7 @@ interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement>{
 
 const Selector:React.FC<IProps> = ({options=[],disabledoptions=[],isValid,...props}) => {
 
-    const validateMode = useSelector((state:any)=>state.common.validateMode)
+    const validateMode = useSelector((state:RootState)=>state.common.validateMode)
 
     return (
         <Container isValid={!!isValid} validateMode={validateMode}>

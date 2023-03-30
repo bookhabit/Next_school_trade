@@ -5,6 +5,7 @@ import ProfileUserIcon from "../../public/static/svg/myPage/ProfileUserIcon.svg"
 import CameraIcon from "../../public/static/svg/myPage/profileCamera.svg"
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 
 const Container = styled.div`
@@ -83,7 +84,7 @@ const Profile = () => {
     }
 
     // 유저 정보 불러오기
-    const LoggedUser = useSelector((state:any)=>state.user)
+    const LoggedUser = useSelector((state:RootState)=>state.user)
 
     return (
         <Container>

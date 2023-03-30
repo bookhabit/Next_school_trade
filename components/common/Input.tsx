@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled,{css} from 'styled-components';
+import { RootState } from '../../store';
 import palette from '../../styles/palette';
 
 type InputContainerProps = {
@@ -100,7 +101,7 @@ const Input:React.FC<IProps> = ({
     errorMessage,
     ...props
 }) => {
-    const validateMode = useSelector((state:any)=>state.common.validateMode)
+    const validateMode = useSelector((state:RootState)=>state.common.validateMode)
     return (
         <>
         <Container 

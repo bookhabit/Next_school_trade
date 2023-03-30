@@ -13,6 +13,7 @@ import { getLocationInfoAPI } from '../../lib/api/map';
 import { useSelector } from 'react-redux';
 import GeoCoding from './GeoCoding';
 import DaumPostcodeEmbed from 'react-daum-postcode';
+import { RootState } from '../../store';
 
 const Container = styled.div`
     .mordal-close-x-icon {
@@ -150,9 +151,9 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
     const [openPostcode, setOpenPostcode] = React.useState<boolean>(false);
 
     // 유저 정보의 위도,경도 값을 받아서 첫 위치로 지정하여 지도를 표시해준다 - 지금은 한서대학교 위도경도로 테스트
-    const userLocation = useSelector((state:any)=>state.user.location)
-    const userLatitude = useSelector((state:any)=>state.user.latitude)
-    const userLongitude = useSelector((state:any)=>state.user.longitude)
+    const userLocation = useSelector((state:RootState)=>state.user.location)
+    const userLatitude = useSelector((state:RootState)=>state.user.latitude)
+    const userLongitude = useSelector((state:RootState)=>state.user.longitude)
     const [currentMapLocation, setCurrentMapLocation] = useState({
         latitude: userLatitude,
         longitude: userLongitude,

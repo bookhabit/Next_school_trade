@@ -1,6 +1,6 @@
 import { AppContext, AppProps } from "next/app";
 import GlobalStyle from "../styles/GlobalStyle";
-import {  wrapper } from "../store";
+import {  RootState, wrapper } from "../store";
 import { useSelector } from 'react-redux';
 import App from "next/app";
 import { cookieStringToObject } from './../lib/utils';
@@ -24,7 +24,7 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
             dispatch(userActions.setLoggedUser(clientData))
         }
     },[])
-    const LoggedUser = useSelector((state:any)=>state.user)
+    const LoggedUser = useSelector((state:RootState)=>state.user)
 
     const [queryClient] = useState(() => new QueryClient());
     

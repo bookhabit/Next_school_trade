@@ -28,6 +28,7 @@ import SetPositionUserLocation from '../map/SetPositionUserLocation';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { UserType } from '../../types/user';
+import { RootState } from '../../store';
 
 type KaKaoSignUp = {
     kakaoSignUp : string;
@@ -137,13 +138,13 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     // 카카오 로그인 회원인 경우
     let user:UserType
     if(kakaoSignUp==='true'){
-        user = useSelector((state:any)=>state.user)
+        user = useSelector((state:RootState)=>state.user)
     }
 
     // 지도 위치 - 리덕스 스토어에서 가져와서 폼 요소에 추가하기
-    const location = useSelector((state:any)=>state.registerPosition.location)
-    const latitude = useSelector((state:any)=>state.registerPosition.latitude)
-    const longitude = useSelector((state:any)=>state.registerPosition.longitude)
+    const location = useSelector((state:RootState)=>state.registerPosition.location)
+    const latitude = useSelector((state:RootState)=>state.registerPosition.latitude)
+    const longitude = useSelector((state:RootState)=>state.registerPosition.longitude)
 
     const router = useRouter();
 

@@ -21,6 +21,7 @@ import { productListType } from '../../types/product/product';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
+import { RootState } from '../../store';
 
 const Container = styled.div`
     /* 헤더 css */
@@ -321,7 +322,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     console.log(ownerInfo)
     
     // 로그인 - 현재 유저 id
-    const userId = useSelector((state:any)=>state.user.id)
+    const userId = useSelector((state:RootState)=>state.user.id)
 
     // 로그인된 사용자의 id와 상품의 owner.id 비교
     const postOwner = userId === productDetail.owner.id;  
@@ -355,6 +356,19 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     const now = moment();
     const productDate = moment(productDetail.updatedAt)
 
+    // 판매중 거래완료 이벤트핸들러
+    const onChangeSelector = (e:React.ChangeEvent<HTMLSelectElement>)=>{
+        let completed
+        if (e.target.value === "selling"){
+            completed = false
+        }else{
+            completed = true
+        }
+        console.log(completed)
+        return completed
+        // 판매중 , 거래완료 바꾸는 api 호출
+    }
+
     return (
         <Container>
             {/* 헤더 */}
@@ -386,7 +400,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                     <div className='seller-info-left'>
                         {postOwner
                         ? <>
-                            <select name="sell-state" className='sell-state'>
+                            <select name="sell-state" className='sell-state' onChange={onChangeSelector}>
                                 <option value="selling">판매중</option>
                                 <option value="completed">거래완료</option>
                             </select>

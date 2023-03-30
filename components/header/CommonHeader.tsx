@@ -4,6 +4,7 @@ import palette from '../../styles/palette';
 import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.svg"
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import { RootState } from '../../store';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -49,7 +50,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
     // 알림페이지,카테고리페이지,채팅방페이지 는 편집 버튼 생성
     const showEditBtn = pathName=== "/user/alarm" || pathName==="/user/chatting" || pathName === "/user/favorite/[id]"; 
     
-    const LoggedUser = useSelector((state:any)=>state.user)
+    const LoggedUser = useSelector((state:RootState)=>state.user)
     
     const goToBackpage = ()=>{
         window.history.back();

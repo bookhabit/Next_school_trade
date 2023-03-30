@@ -19,8 +19,8 @@ interface IProps{
 const FavoriteList:React.FC<IProps> = ({favoriteList}) => {
     console.log('favoriteList',favoriteList)
     // 관심목록의 content만 추출해서 ProductList에 넘겨준다
-    // const productListData = favoriteList.map(item => item.content) as productListType[];
-    // console.log(productListData)
+    const productListData = favoriteList.map(item => item.content) as productListType[];
+    console.log(productListData)
     // 하트를 누르면 관심목록에서 삭제하는 api요청
     
     return (
