@@ -14,7 +14,7 @@ export const getFavoriteList = ({pageParam=0}:QueryFunctionContext,id:number)=>a
 
 
 // 특정 회원 판매 중 조회 - user/sellList 페이지
-export const getSellingList = (id:number)=>axios.get(`http://localhost:4000/content/list/user/selling/${id}`)
+export const getSellingList = ({pageParam=0}:QueryFunctionContext,id:number)=>axios.get(`http://localhost:4000/content/list/user/selling/${id}?page=${pageParam}`).then(res=>res?.data)
 
 
 // 특정 회원 판매 완료 조회 - user/sellList 페이지
