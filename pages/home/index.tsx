@@ -46,7 +46,7 @@ const home = () => {
 
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
-            if(isIntersecting){
+            if(isIntersecting && hasNextPage){
                 fetchNextPage();
             }
         };

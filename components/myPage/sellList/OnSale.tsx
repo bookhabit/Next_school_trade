@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import { productListType } from '../../../types/product/product';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import { getSellingList } from './../../../lib/api/product';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import axios from 'axios';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -25,6 +26,9 @@ const OnSale = () => {
     // testId - 판매중상품 불러오기 위한
     const testId = 5
     const lastPageNumber=2 // 백엔드 offset 받아와야함
+
+    const getSellingList = ({pageParam=0}:QueryFunctionContext)=>axios.get(`http://localhost:4000/content/list/user/selling/${testId}?page=${pageParam}`).then(res=>res?.data)
+
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -33,7 +37,7 @@ const OnSale = () => {
         isFetching 
     } = useInfiniteQuery(
           ["onSaleList"] 
-        , async (pageParam)=> await getSellingList(pageParam,testId)
+        , async (pageParam)=> await getSellingList(pageParam)
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
             getNextPageParam: (_lastPage,pages) => {
@@ -46,15 +50,17 @@ const OnSale = () => {
           }
         )
         console.log('infinitquery onSale',data)
-
+        console.log('infinitquery completed',hasNextPage)
+        
         // 무한스크롤 구현
-        // const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
-        //     if(isIntersecting){
-        //         fetchNextPage();
-        //     }
-        // };
+        const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
+            console.log(isIntersecting)
+            if(isIntersecting && hasNextPage){
+                fetchNextPage();
+            }
+        };
         // 스크롤 이벤트 타겟 지정
-        // const { setTarget } = useIntersectionObserver({ onIntersect });
+        const { setTarget } = useIntersectionObserver({ onIntersect });
     
     return (
         <Container>
@@ -62,7 +68,7 @@ const OnSale = () => {
             {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
             {status === "success" ?
                 data.pages.map((page, index) => 
-                    <ProductList key={index} completedProducts={false} data={page} showChangeCompleted={true}  />
+                    <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} showChangeCompleted={true}  />
             ):<h2>상품이 없습니다</h2>}
         </Container>
     );
