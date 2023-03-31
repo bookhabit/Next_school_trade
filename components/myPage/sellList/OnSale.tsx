@@ -26,9 +26,6 @@ const OnSale = () => {
     // testId - 판매중상품 불러오기 위한
     const testId = 5
     const lastPageNumber=2 // 백엔드 offset 받아와야함
-
-    const getSellingList = ({pageParam=0}:QueryFunctionContext)=>axios.get(`http://localhost:4000/content/list/user/selling/${testId}?page=${pageParam}`).then(res=>res?.data)
-
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -37,7 +34,7 @@ const OnSale = () => {
         isFetching 
     } = useInfiniteQuery(
           ["onSaleList"] 
-        , async (pageParam)=> await getSellingList(pageParam)
+        , async (pageParam)=> await getSellingList(pageParam,testId)
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
             getNextPageParam: (_lastPage,pages) => {
@@ -50,8 +47,7 @@ const OnSale = () => {
           }
         )
         console.log('infinitquery onSale',data)
-        console.log('infinitquery completed',hasNextPage)
-        
+
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
             console.log(isIntersecting)

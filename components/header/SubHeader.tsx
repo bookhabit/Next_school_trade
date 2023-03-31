@@ -48,15 +48,15 @@ const SubHeader:React.FC<IProps> = ({currentLeft,setCurrentLeft}) => {
     // left,right를 페이지의 props마다 다른 text로 변경
     const router = useRouter();
     const pathname = router.pathname
-
+    
     const setLeftHeaderName = () => {
         switch (pathname) {
             case "/auth":
                 return "로그인"
             case "/user/sellList/[id]":
                 return "판매중"
-            case "/seller/[id]":
-                return "리뷰"
+            case "/seller/[id]/sellingProducts":
+                return "판매중"
             default:
                 return "잘못된경로";
         }
@@ -67,8 +67,8 @@ const SubHeader:React.FC<IProps> = ({currentLeft,setCurrentLeft}) => {
                 return "회원가입"
             case "/user/sellList/[id]":
                 return "거래완료"
-            case "/seller/[id]":
-                return "리뷰 작성"
+            case "/seller/[id]/sellingProducts":
+                return "거래완료"
             default:
                 return "잘못된경로";
         }

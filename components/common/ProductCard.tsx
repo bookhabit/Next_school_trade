@@ -109,7 +109,6 @@ interface IProps{
 }
 
 const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
-    console.log('card',showChangeCompleted)
     let imagepath
     let imageAlt    
     if(product.images === undefined){

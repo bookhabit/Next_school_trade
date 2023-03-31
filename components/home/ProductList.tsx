@@ -17,7 +17,6 @@ interface IProps{
 }
 
 const ProductList:React.FC<IProps> = ({completedProducts,data,showChangeCompleted,setTarget}) => {
-    console.log('list',showChangeCompleted)
     const productList = data;
     // console.log('productList',productList)
 

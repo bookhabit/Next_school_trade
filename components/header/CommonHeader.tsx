@@ -60,12 +60,12 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
     // 이 sellerId 값으로 유저정보를 불러오는 api호출하고 유저의 이름으로 바꿔준다
     const sellerId = router.query.id 
     // case "/seller/[id]":
-    const testSellerNameForProfile = "제리님"
+    const testSellerNameForProfile = "이너런"
 
     // case "/user/chatting/[id]":
-    const testSellerNameForChatting = "제리님"
+    const testSellerNameForChatting = "이너런"
     
-
+    console.log(pathName)
 
     const changeURLName = () => {
         switch (pathName) {
@@ -99,6 +99,12 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "프로필 정보 수정";
           case "/seller/[id]":
             return `${testSellerNameForProfile}`;
+          case "/seller/[id]/sellerReview":
+            return `${testSellerNameForProfile} 님의 거래후기`;
+          case "/seller/[id]/writeReview":
+            return `거래후기 작성`;
+          case "/seller/[id]/sellingProducts":
+              return `${testSellerNameForProfile} 님의 판매상품`;
           default:
             return "지정된 페이지 없음";
         }
