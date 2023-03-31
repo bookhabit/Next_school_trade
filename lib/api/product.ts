@@ -18,7 +18,7 @@ export const getSellingList = ({pageParam=0}:QueryFunctionContext,id:number)=>ax
 
 
 // 특정 회원 판매 완료 조회 - user/sellList 페이지
-export const getSoldList = (id:number)=>axios.get(`http://localhost:4000/content/list/user/sold/${id}`)
+export const getSoldList = ({pageParam=0}:QueryFunctionContext,id:number)=>axios.get(`http://localhost:4000/content/list/user/sold/${id}?page=${pageParam}`).then(res=>res?.data)
 
 // 상품 상세 조회 
 export const getProductDetail = (id:number)=>axios.get(`http://localhost:4000/content/read/${id}`)

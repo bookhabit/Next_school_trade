@@ -64,7 +64,7 @@ const OnSale:React.FC<IProps>  = ({sellingList}) => {
             {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
             {status === "success" ?
                 data.pages.map((page, index) => 
-                    <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} />
+                    <ProductList key={index} completedProducts={false} data={page} />
             ):<h2>상품이 없습니다</h2>}
         </Container>
     );
