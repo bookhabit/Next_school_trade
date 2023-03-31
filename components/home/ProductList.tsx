@@ -13,9 +13,11 @@ interface IProps{
     completedProducts:boolean,
     data:productListType[]
     setTarget?:React.Dispatch<React.SetStateAction<HTMLElement | null | undefined>>
+    showChangeCompleted?:boolean
 }
 
-const ProductList:React.FC<IProps> = ({completedProducts,data,setTarget}) => {
+const ProductList:React.FC<IProps> = ({completedProducts,data,showChangeCompleted,setTarget}) => {
+    console.log('list',showChangeCompleted)
     const productList = data;
     // console.log('productList',productList)
 
@@ -27,7 +29,7 @@ const ProductList:React.FC<IProps> = ({completedProducts,data,setTarget}) => {
             :productList.map((product)=>(
                 completedProducts ? 
                 <CompletedProductCard key={product.id} product={product}/>  : 
-                <ProductCard key={product.id} product={product}/>
+                <ProductCard key={product.id} product={product} showChangeCompleted={showChangeCompleted}/>
             )) 
             }
             <div ref={setTarget}></div>

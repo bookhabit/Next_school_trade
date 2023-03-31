@@ -66,7 +66,7 @@ const CompletedProducts = () => {
             {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
             {status === "success" ?
                 data.pages.map((page, index) => 
-                    <ProductList key={index} completedProducts={false} data={page} />
+                    <ProductList key={index} completedProducts={true} data={page} />
             ):<h2>상품이 없습니다</h2>}
             {/* {soldList ? <ProductList completedProducts={true} data={soldList} /> : <h2>상품들을 불러오는 중입니다.</h2>} */}
         </Container>

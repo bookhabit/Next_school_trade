@@ -15,32 +15,9 @@ const sellList = ({sellingList}:any) => {
     return (
         <>
             <SubHeader currentLeft={currentLeft} setCurrentLeft={setCurrentLeft} />
-            <SellList currentLeft={currentLeft} sellingList={sellingList} />
+            <SellList currentLeft={currentLeft} />
             <LinkFooter/>
         </>
     );
 };
-
-// 서버사이드 렌더링으로 url 파라미터의 인가코드 가져옴
-// export const getServerSideProps : GetServerSideProps = async ({query}) => {
-//     const {id} = query;
-//     try{
-//         const res = await getSellingList(Number(id));
-//         let sellingList ;
-//         if(res.status===200){
-//             sellingList = res.data;
-//         }
-//         return {
-//             props : {
-//                 sellingList
-//             }
-//         }
-//     } catch(err){
-//         console.log(err);
-//         return {
-//             props : {},
-//         }
-//     }
-// }
-
 export default sellList;

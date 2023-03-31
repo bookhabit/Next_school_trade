@@ -17,11 +17,9 @@ const Container = styled.div`
         font-weight:bold;
     }
 `
-interface IProps{
-    sellingList:object[];
-}
 
-const OnSale:React.FC<IProps>  = ({sellingList}) => {
+
+const OnSale = () => {
     // 로그인된 사용자의 id값을 받아서 판매중인 상품 받아오는 api호출
     const loginId = useSelector((state:RootState)=>state.user)
     // testId - 판매중상품 불러오기 위한
@@ -64,7 +62,7 @@ const OnSale:React.FC<IProps>  = ({sellingList}) => {
             {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
             {status === "success" ?
                 data.pages.map((page, index) => 
-                    <ProductList key={index} completedProducts={false} data={page} />
+                    <ProductList key={index} completedProducts={false} data={page} showChangeCompleted={true}  />
             ):<h2>상품이 없습니다</h2>}
         </Container>
     );

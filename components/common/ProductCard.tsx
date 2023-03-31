@@ -12,6 +12,7 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
 import DefaultImgIcon from "../../public/static/svg/product/default_img.svg"
+import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon.svg"
 
 const Container = styled.div`
     width:350px;
@@ -37,6 +38,21 @@ const Container = styled.div`
     .productInfo{
         padding:10px;
         width:100%;
+        .change-completed-wrap{
+            position: absolute;
+            right:20px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            flex-direction:row-reverse;
+            .change-completed{
+                background-color:white;
+                color:${palette.updatedDate};
+                font-size:15px;
+                font-weight:bold;
+                margin-right:10px;
+            }
+        }
         .productTitle{
             font-size:16px;
             font-weight:bold;
@@ -87,23 +103,13 @@ const Container = styled.div`
   
 `
 
-// // 내가 만든 테스트 데이터 타입
-// type Product = {
-//         id:number,
-//         title:string,
-//         price:string,
-//         updatedDate:string,
-//         heartCount:number,
-//         chattingCount:number,
-//         img:{src:string},
-//         favorite:boolean
-// }
-
 interface IProps{
     product:productListType
+    showChangeCompleted?:boolean
 }
 
-const ProductCard:React.FC<IProps> = ({product}) => {
+const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
+    console.log('card',showChangeCompleted)
     let imagepath
     let imageAlt    
     if(product.images === undefined){
@@ -112,6 +118,12 @@ const ProductCard:React.FC<IProps> = ({product}) => {
     (!isEmpty(product.images[0])){
         imagepath = product.images[0].path
         imageAlt = product.images[0].filename
+    }
+    // 거래완료로 바꾸는 버튼 모달
+    const [showCompletedBtn,setShowCompletedBtn] = useState(false)
+
+    const showCompletedHandler = ()=>{
+        setShowCompletedBtn(!showCompletedBtn)
     }
 
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
@@ -146,6 +158,15 @@ const ProductCard:React.FC<IProps> = ({product}) => {
                     }
                 </div>
                 <div className='productInfo'>
+                    {showChangeCompleted ? 
+                    <div className='change-completed-wrap'>
+                        <ShowCompletedIcon onClick={showCompletedHandler} />
+                        {showCompletedBtn?
+                            <p className='change-completed'>거래완료로 변경하기</p>
+                        :null}
+                    </div>
+                    : null}
+                    
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
                     <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>
