@@ -7,6 +7,8 @@ import HambergerIcon from "../../public/static/svg/header/mainHeader/hambergerIc
 import AlarmIcon from "../../public/static/svg/header/mainHeader/alarmIcon.svg"
 import { useState } from 'react';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -30,6 +32,8 @@ const Conatainer = styled.div`
             font-size:20px;
             color:${palette.main_text_color};
             font-weight:bold;
+            width:60px;
+            line-height:30px;
         }
 
         .searchBar{
@@ -82,10 +86,11 @@ const Conatainer = styled.div`
 const mainHeader = () => {
     const [testAlarmState,setTestAlarmState] = useState<boolean>(true)
     const testAlarmCount = 2
+    const userUniversity = useSelector((state:RootState)=>state.user.university)
     return (
         <Conatainer>
             <div className='headerDiv'>
-                <p>한서대</p>
+                <p>{userUniversity}</p>
                 <div className='searchBar'>
                     <input className='searchInput' placeholder='검색'/>
                     <SearchIcon className="searchIcon"/>
