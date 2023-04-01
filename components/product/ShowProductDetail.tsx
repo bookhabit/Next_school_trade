@@ -369,6 +369,32 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         // 판매중 , 거래완료 바꾸는 api 호출
     }
 
+    // 카테고리 한글 변환
+    const switchCategoryName = () => {
+        switch (productDetail.category) {
+            case "electronic":
+                return "전자제품"
+            case "clothes":
+                return "의류"
+            case "lecture":
+                return "강의자료"
+            case "furniture":
+                return "가구/주방"
+            case "book":
+                return "책"
+            case "householdGoods":
+                return "생활용품"
+            case "sports":
+                return "스포츠/레저"
+            case "hobby":
+                return "취미/게임"
+            case "beauty":
+                return "뷰티/미용"
+            default:
+                return "잘못된경로";
+        }
+    }
+
     return (
         <Container>
             {/* 헤더 */}
@@ -435,7 +461,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                     </div>
                     <div className='detail-product-sub-info'>
                         <div className='detail-product-category'>
-                            <p>{productDetail.category}</p>
+                            <p>{switchCategoryName()}</p>
                         </div>
                         <div className='detail-product-updateDate'>
                             <p>{productDate.from(now)}</p>
