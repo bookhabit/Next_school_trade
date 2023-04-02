@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import SellerStarIcon from "../../public/static/svg/product/sellerStarIcon.svg"
 import palette from '../../styles/palette';
 import { Division } from '../../components/common/Division';
+import ReviewCard from '../../components/seller/ReviewCard';
 
 const Container = styled.div`
   margin:40px 35px;
@@ -60,37 +61,6 @@ const Container = styled.div`
       }
     }
   }
-  .seller-review-preview{
-    .seller-review-list{
-      width:100%;
-      height:90px;
-      margin:0px 20px;
-      .reviewer-name-wrap{
-        display:flex;
-        align-items:center;
-        /* 리뷰 작성자 프로필 이미지 */
-        .reviewer-profile-img{
-          width:25px;
-          height:25px;
-          background-color:${palette.main_color};
-          border-radius:50%;
-          display:flex;
-          justify-content:center;
-          align-items:center;
-        }
-        /* 리뷰 작성자 닉네임 */
-        p{
-          margin-left:5px;
-          font-size:18px;
-          font-weight:bold;
-        }
-      }
-      .review-content{
-        margin-top:20px;
-        font-size:16px;
-      }
-    }
-  }
 `
 
 const profile:NextPage = ({id}:any) => {
@@ -108,7 +78,26 @@ const profile:NextPage = ({id}:any) => {
           starCount.push(i)
       }
       return starCount
-  };
+    };
+
+    // 테스트 데이터 - 리뷰리스트
+    const reviewList = [
+      {
+        reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
+        reviewer_name:"이너런",
+        reviewer_content:"시간 약속을 잘 지켜서 너무 좋아요"
+      },
+      {
+        reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
+        reviewer_name:"이현진",
+        reviewer_content:"가격이 합리적이에요"
+      },
+      {
+        reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
+        reviewer_name:"김상원",
+        reviewer_content:"사람 좋아요"
+      }
+    ]
 
     return (
       <>
@@ -138,42 +127,11 @@ const profile:NextPage = ({id}:any) => {
             </div>
           </div>
           <div className='seller-review-preview'>
-            <Division/>
-            <div className='seller-review-list'>
-              <div className='reviewer-name-wrap'>
-                <div className='reviewer-profile-img'>
-                  <ReviewerProfileImg/>
-                </div>
-                <p className='reviewer-name'>이너런</p>
-              </div>
-              <div className='review-content'>
-                <p>시간약속을 잘 지켜서 너무 좋았어요!</p>
-              </div>
-            </div>
-            <Division/>
-            <div className='seller-review-list'>
-              <div className='reviewer-name-wrap'>
-                <div className='reviewer-profile-img'>
-                  <ReviewerProfileImg/>
-                </div>
-                <p className='reviewer-name'>이너런</p>
-              </div>
-              <div className='review-content'>
-                <p>시간약속을 잘 지켜서 너무 좋았어요!</p>
-              </div>
-            </div>
-            <Division/>
-            <div className='seller-review-list'>
-              <div className='reviewer-name-wrap'>
-                <div className='reviewer-profile-img'>
-                  <ReviewerProfileImg/>
-                </div>
-                <p className='reviewer-name'>이너런</p>
-              </div>
-              <div className='review-content'>
-                <p>시간약속을 잘 지켜서 너무 좋았어요!</p>
-              </div>
-            </div>
+            {reviewList ? 
+              reviewList.map((review)=>(
+                <ReviewCard reviewList={review}/>    
+              ))
+             : null}
           </div>
         </Container>
         <LinkFooter/>  
