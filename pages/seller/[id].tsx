@@ -9,9 +9,11 @@ import ReviewerProfileImg from "../../public/static/svg/seller/reviewer_profileI
 import { useRouter } from 'next/router';
 import SellerStarIcon from "../../public/static/svg/product/sellerStarIcon.svg"
 import palette from '../../styles/palette';
+import { Division } from '../../components/common/Division';
 
 const Container = styled.div`
   margin:40px 35px;
+  padding-bottom:30px;
   .seller-profile{
     width:320px;
     height:50px;
@@ -41,13 +43,53 @@ const Container = styled.div`
     }
   }
   .seller-profile-link{
+    margin-top: 60px;
     div{
-      width:320px;
+      width:310px;
       height:50px;
+      background-color:#F5F2F2;
+      border-radius:20px;
+      margin-bottom:30px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      p{
+        font-size:25px;
+        font-weight:bold;
+        line-height:40px;
+      }
     }
   }
   .seller-review-preview{
-
+    .seller-review-list{
+      width:100%;
+      height:90px;
+      margin:0px 20px;
+      .reviewer-name-wrap{
+        display:flex;
+        align-items:center;
+        /* 리뷰 작성자 프로필 이미지 */
+        .reviewer-profile-img{
+          width:25px;
+          height:25px;
+          background-color:${palette.main_color};
+          border-radius:50%;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+        }
+        /* 리뷰 작성자 닉네임 */
+        p{
+          margin-left:5px;
+          font-size:18px;
+          font-weight:bold;
+        }
+      }
+      .review-content{
+        margin-top:20px;
+        font-size:16px;
+      }
+    }
   }
 `
 
@@ -69,6 +111,7 @@ const profile:NextPage = ({id}:any) => {
   };
 
     return (
+      <>
         <Container>
           <div className='seller-profile'>
             <div className='seller-name-wrap'>
@@ -95,27 +138,36 @@ const profile:NextPage = ({id}:any) => {
             </div>
           </div>
           <div className='seller-review-preview'>
+            <Division/>
             <div className='seller-review-list'>
               <div className='reviewer-name-wrap'>
-                <ReviewerProfileImg/>
+                <div className='reviewer-profile-img'>
+                  <ReviewerProfileImg/>
+                </div>
                 <p className='reviewer-name'>이너런</p>
               </div>
               <div className='review-content'>
                 <p>시간약속을 잘 지켜서 너무 좋았어요!</p>
               </div>
             </div>
+            <Division/>
             <div className='seller-review-list'>
               <div className='reviewer-name-wrap'>
-                <ReviewerProfileImg/>
+                <div className='reviewer-profile-img'>
+                  <ReviewerProfileImg/>
+                </div>
                 <p className='reviewer-name'>이너런</p>
               </div>
               <div className='review-content'>
                 <p>시간약속을 잘 지켜서 너무 좋았어요!</p>
               </div>
             </div>
+            <Division/>
             <div className='seller-review-list'>
               <div className='reviewer-name-wrap'>
-                <ReviewerProfileImg/>
+                <div className='reviewer-profile-img'>
+                  <ReviewerProfileImg/>
+                </div>
                 <p className='reviewer-name'>이너런</p>
               </div>
               <div className='review-content'>
@@ -123,8 +175,9 @@ const profile:NextPage = ({id}:any) => {
               </div>
             </div>
           </div>
-          <LinkFooter/>  
         </Container>
+        <LinkFooter/>  
+      </>
     );
 };
 
