@@ -10,7 +10,7 @@ const Container = styled.div`
     align-items:center;
     .trade-review-title{
         background-color:#F5F2F2;
-        width:120px;
+        width:320px;
         height:40px;
         border-radius:10px;
         display:flex;
@@ -28,12 +28,12 @@ interface IProps{
     reviewList:Object[];
 }
 
-const ShowReview:React.FC<IProps> = ({reviewList}) => {    
-
+const ShowReview:React.FC<IProps> = ({reviewList}:any) => {    
+    console.log(reviewList.reviewerName)
     return (
         <Container>
             <div className='trade-review-title'>
-                <h2>거래후기</h2>
+                <h2>{reviewList && reviewList.reviewerName} 님의 거래후기</h2>
             </div>
             {reviewList.map((review:any)=>(
                 <UserReivewList key={review.id} reviewList={review} />
