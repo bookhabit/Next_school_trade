@@ -33,6 +33,7 @@ const Container = styled.div`
       .review-content{
         margin-top:20px;
         font-size:16px;
+        line-height:20px;
       }
     }
 `

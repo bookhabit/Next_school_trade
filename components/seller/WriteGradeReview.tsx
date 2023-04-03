@@ -166,12 +166,14 @@ const WriteGradeReview = () => {
             );
             console.log('res데이터',res)
             // 라우팅 - 리뷰리스트 페이지로 
-            Swal.fire({
-                title: '성공',
-                text: '리뷰가 작성되었습니다',
-                icon: 'success',
-            })
-            router.push(`/seller/${sellerId}`)
+            if(res.status===201){
+                Swal.fire({
+                    title: res.statusText,
+                    text: '리뷰가 작성되었습니다',
+                    icon: 'success',
+                })
+                router.push(`/seller/${sellerId}`)
+            }
         }catch(e){
             console.log(e)
         }

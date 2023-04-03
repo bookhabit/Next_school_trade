@@ -49,7 +49,7 @@ const Container = styled.div`
     margin-top: 60px;
     div{
       width:310px;
-      height:50px;
+      min-height:50px;
       background-color:#F5F2F2;
       border-radius:20px;
       margin-bottom:30px;
@@ -57,7 +57,7 @@ const Container = styled.div`
       align-items:center;
       justify-content:center;
       p{
-        font-size:25px;
+        font-size:18px;
         font-weight:bold;
         line-height:40px;
       }
@@ -104,10 +104,10 @@ const profile:NextPage = ({data}:any) => {
               <p>거래후기 작성하기</p>
             </div>
             <div className='goToSellingProducts' onClick={()=>router.push(`/seller/${sellerId}/sellingProducts`)}>
-              <p>이너런 님의 판매상품</p>
+              <p>{sellerName}님의 판매상품</p>
             </div>
             <div className='goToSellerReview' onClick={()=>router.push(`/seller/${sellerId}/sellerReview`)}>
-              <p>이너런 님의 거래후기</p>
+              <p>{sellerName}님의 거래후기</p>
             </div>
             </div>
           <div className='seller-review-preview'>
