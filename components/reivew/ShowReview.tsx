@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import UserReivewList from './UserReviewList';
 import { reviewListType } from '../../types/review';
 import ReviewCard from '../seller/ReviewCard';
 import { Division } from '../common/Division';
@@ -39,7 +38,7 @@ const ShowReview:React.FC<IProps> = ({reviewList}) => {
     return (
         <Container>
             <div className='trade-review-title'>
-                <h2>판매자 님의 거래후기</h2>
+                <h2>거래후기</h2>
             </div>
             <div className='seller-review-preview'>
                 <Division/>
