@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import StarIcon from "../../public/static/svg/review/star.svg"
 import Emtpy_starIcon from "../../public/static/svg/review/emtpy_star.svg"
 import { useState } from 'react';
 import palette from '../../styles/palette';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Container = styled.div`
     width:100%;
@@ -113,6 +116,8 @@ const Container = styled.div`
 const WriteGradeReview = () => {
     // 별점이랑 작성한 거래후기 text를 모아서 판매자의 리뷰정보에 글작성하는 api호출
 
+    const [review,setReview] = useState<string>('')
+
     // 별점 기본값 설정
     const [clicked, setClicked] = useState([false, false, false, false, false]);
 
@@ -127,9 +132,50 @@ const WriteGradeReview = () => {
          setClicked(clickStates);
     };
 
+    const onChangeReview = (e:ChangeEvent<HTMLTextAreaElement>)=>{
+        setReview(e.target.value)
+    }
+
     // 별점 계산
-    let score = clicked.filter(Boolean).length;
-    
+    let score:number = clicked.filter(Boolean).length;
+
+    // sellerId 구하기
+    const router = useRouter();
+    const sellerId = Number(router.query.id)
+
+    const submitData = {
+        // grade:score,
+        review:review
+    }
+
+    const createReview = async ()=>{
+        const token = localStorage.getItem('login-token')
+        // 폼 검증
+        if(!token || score<=0 || review==''){
+            return false
+        }
+        // 리뷰작성 api 호출
+        try{
+            const res = await axios.post(`http://localhost:4000/review/create/${sellerId}`, 
+            submitData,
+            {
+                headers: {
+                    'Authorization' : `Bearer ${token}`
+                    },
+            }
+            );
+            console.log('res데이터',res)
+            // 라우팅 - 리뷰리스트 페이지로 
+            Swal.fire({
+                title: '성공',
+                text: '리뷰가 작성되었습니다',
+                icon: 'success',
+            })
+            router.push(`/seller/${sellerId}`)
+        }catch(e){
+            console.log(e)
+        }
+    }
 
     return (
         <Container>
@@ -152,10 +198,14 @@ const WriteGradeReview = () => {
                         <h2>거래후기 작성</h2>
                     </div>
                     <div className='write-review-content'>
-                        <textarea placeholder='거래후기를 남겨주세요'/>
+                        <textarea 
+                            placeholder='거래후기를 남겨주세요'
+                            value={review}
+                            onChange={onChangeReview}
+                        />
                     </div>
-                    <div className='submit-btn'>
-                        <p>완료</p>
+                    <div className='submit-btn' onClick={createReview}>
+                        <p>작성하기</p>
                     </div>
             </div>
         </Container>
