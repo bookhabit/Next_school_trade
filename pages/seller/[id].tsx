@@ -66,8 +66,8 @@ const Container = styled.div`
 `
 
 const profile:NextPage = ({data}:any) => {
-    const userReviewList:reviewListResponseType[] = data
-    const preViewList = userReviewList.slice(0,2)
+    const reviewList:reviewListResponseType[] = data
+    const preViewList = reviewList.slice(0,2)
     const sellerGrade:number = data[0].seller.grade
     const sellerName:string = data[0].seller.nickname
     const sellerId :number = data[0].seller.id
@@ -94,7 +94,7 @@ const profile:NextPage = ({data}:any) => {
               <p className='seller-name'>{sellerName}</p>
             </div>
             <div className='seller-grade'>
-            {userReviewList && starLoop().map((index)=>(
+            {reviewList && starLoop().map((index)=>(
                   <SellerStarIcon key={index}/>
               ))}
             </div>
