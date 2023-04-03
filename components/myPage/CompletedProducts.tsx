@@ -31,7 +31,7 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
     console.log('CompletedProducts id',APIuserId)
     // testId - 판매중상품 불러오기 위한
     const testId = 5
-    const lastPageNumber=1 // 백엔드 offset 받아와야함
+    const lastPageNumber=3 // 백엔드 offset 받아와야함
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수

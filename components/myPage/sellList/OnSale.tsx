@@ -28,7 +28,7 @@ const OnSale:React.FC<IProps> = ({userId}) => {
     console.log('OnSale id',APIuserId)
     // testId - 테스트 > userId로 변경
     const testId = 5
-    const lastPageNumber=2 // 백엔드 offset 받아와야함
+    const lastPageNumber=3 // 백엔드 offset 받아와야함
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수

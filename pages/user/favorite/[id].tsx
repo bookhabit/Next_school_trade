@@ -80,6 +80,7 @@ export const getServerSideProps : GetServerSideProps = async ({query}) => {
         await queryClient.prefetchInfiniteQuery(
             ['favoriteList'],async()=>{
               const res = await axios.get(`http://localhost:4000/favorite/${id}`)
+              console.log(res.data)
               const favoriteList = res.data.map((item:{id:number,content:object[],users:object[]}) => item.content) as productListType[];
               return favoriteList;
             }
