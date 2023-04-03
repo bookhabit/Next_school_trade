@@ -6,8 +6,12 @@ import { GetReviewList } from '../../../lib/api/review';
 import { reviewListResponseType } from '../../../types/review';
 
 const tradeReview:NextPage = ({data}:any) => {
-    const userReviewList = data
-    const ownerName = data[0].seller.nickname
+    let userReviewList
+    let ownerName
+    if(!data){
+        userReviewList = data
+        ownerName = data[0].seller.nickname
+    }
     return (
         <>
             <TradeReview reviewList={userReviewList} ownerName={ownerName} />

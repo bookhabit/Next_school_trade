@@ -11,6 +11,8 @@ import SellerStarIcon from "../../public/static/svg/product/sellerStarIcon.svg"
 import palette from '../../styles/palette';
 import { Division } from '../../components/common/Division';
 import ReviewCard from '../../components/seller/ReviewCard';
+import { GetReviewList } from '../../lib/api/review';
+import { reviewListResponseType } from '../../types/review';
 
 const Container = styled.div`
   margin:40px 35px;
@@ -34,7 +36,7 @@ const Container = styled.div`
         align-items:center;
       }
       p{
-        font-size:25px;
+        font-size:20px;
         font-weight:bold;
         margin-left:15px;
       }
@@ -63,11 +65,12 @@ const Container = styled.div`
   }
 `
 
-const profile:NextPage = ({id}:any) => {
-    console.log('seller의 userId',id)
-    const sellerId = id
-    const sellerGrade = 4
-    // seller의 유저정보를 받아서 데이터를 SellerProfile에 넘겨주고 그에 맞게 정보를 렌더링해준다
+const profile:NextPage = ({data}:any) => {
+    const userReviewList:reviewListResponseType[] = data
+    const preViewList = userReviewList.slice(0,2)
+    const sellerGrade:number = data[0].seller.grade
+    const sellerName:string = data[0].seller.nickname
+    const sellerId :number = data[0].seller.id
 
     const router = useRouter();
 
@@ -80,25 +83,6 @@ const profile:NextPage = ({id}:any) => {
       return starCount
     };
 
-    // 테스트 데이터 - 리뷰리스트
-    const reviewList = [
-      {
-        reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
-        reviewer_name:"이너런",
-        reviewer_content:"시간 약속을 잘 지켜서 너무 좋아요"
-      },
-      {
-        reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
-        reviewer_name:"이현진",
-        reviewer_content:"가격이 합리적이에요"
-      },
-      {
-        reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
-        reviewer_name:"김상원",
-        reviewer_content:"사람 좋아요"
-      }
-    ]
-
     return (
       <>
         <Container>
@@ -107,11 +91,11 @@ const profile:NextPage = ({id}:any) => {
               <div className='profile-icon'>
                 <SellerProfileImg/>
               </div>
-              <p className='seller-name'>이너런</p>
+              <p className='seller-name'>{sellerName}</p>
             </div>
             <div className='seller-grade'>
-            {starLoop().map((index)=>(
-                            <SellerStarIcon key={index}/>
+            {userReviewList && starLoop().map((index)=>(
+                  <SellerStarIcon key={index}/>
               ))}
             </div>
           </div>
@@ -128,8 +112,8 @@ const profile:NextPage = ({id}:any) => {
             </div>
           <div className='seller-review-preview'>
             <Division/>
-            {reviewList ? 
-              reviewList.map((review,index)=>(
+            {preViewList ? 
+              preViewList.map((review,index)=>(
                 <ReviewCard key={index} reviewList={review}/>    
               ))
              : <h2>거래후기가 없습니다.</h2>}
@@ -142,8 +126,14 @@ const profile:NextPage = ({id}:any) => {
 
 profile.getInitialProps = async ({query})=>{
   const {id} = query;
-  // 이 id값은 seller의 userId를 뜻한다  
-  // 이 userId에 해당하는 유저 정보를 받아오는 api를 호출하고 응답받은 데이터를 클라이언트로 넘겨준다
-  return {id}
+  const userId = Number(id)
+  try{
+      const {data} = await GetReviewList(userId);
+      return {data:data}
+  }catch(e){
+      console.log(e)
+  }
+  
+  return {}
 }
 export default profile;
