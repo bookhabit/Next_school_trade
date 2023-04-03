@@ -128,8 +128,8 @@ const profile:NextPage = ({id}:any) => {
           </div>
           <div className='seller-review-preview'>
             {reviewList ? 
-              reviewList.map((review)=>(
-                <ReviewCard reviewList={review}/>    
+              reviewList.map((review,index)=>(
+                <ReviewCard key={index} reviewList={review}/>    
               ))
              : null}
           </div>

@@ -64,8 +64,6 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
 
     // case "/user/chatting/[id]":
     const testSellerNameForChatting = "이너런"
-    
-    console.log(pathName)
 
     const changeURLName = () => {
         switch (pathName) {

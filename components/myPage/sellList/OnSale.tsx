@@ -18,12 +18,15 @@ const Container = styled.div`
         font-weight:bold;
     }
 `
+interface IProps{
+    userId:number;
+}
 
-
-const OnSale = () => {
+const OnSale:React.FC<IProps> = ({userId}) => {
     // 로그인된 사용자의 id값을 받아서 판매중인 상품 받아오는 api호출
-    const loginId = useSelector((state:RootState)=>state.user)
-    // testId - 판매중상품 불러오기 위한
+    const APIuserId = userId
+    console.log('OnSale id',APIuserId)
+    // testId - 테스트 > userId로 변경
     const testId = 5
     const lastPageNumber=2 // 백엔드 offset 받아와야함
     const {
