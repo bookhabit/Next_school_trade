@@ -3,6 +3,7 @@ import ReviewerProfileImg from "../../public/static/svg/seller/reviewer_profileI
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import { Division } from '../common/Division';
+import { reviewListType } from '../../types/review';
 
 const Container = styled.div`
     .seller-review-list{
@@ -35,11 +36,6 @@ const Container = styled.div`
       }
     }
 `
-type reviewListType = {
-    reviewer_profileImg:string;
-    reviewer_name:string;
-    reviewer_content:string;
-}
 
 interface IProps{
     reviewList:reviewListType
@@ -48,7 +44,6 @@ interface IProps{
 const ReviewCard:React.FC<IProps> = ({reviewList}) => {
     return (
         <Container>
-            <Division/>
             <div className='seller-review-list'>
               <div className='reviewer-name-wrap'>
                 <div className='reviewer-profile-img'>
@@ -61,6 +56,7 @@ const ReviewCard:React.FC<IProps> = ({reviewList}) => {
                 <p>{reviewList.reviewer_content}</p>
               </div>
             </div>
+            <Division/>
         </Container>
     );
 };

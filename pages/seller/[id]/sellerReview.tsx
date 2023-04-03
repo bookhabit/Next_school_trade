@@ -1,11 +1,11 @@
 import React from 'react';
 import LinkFooter from '../../../components/footer/LinkFooter';
-import SellerReview from '../../../components/seller/SellerReview';
+import TradeReview from '../../../components/reivew/TradeReview';
 
 const sellerReview = () => {
     return (
         <div>
-            <SellerReview/>
+            <TradeReview/>
             <LinkFooter/>  
         </div>
     );

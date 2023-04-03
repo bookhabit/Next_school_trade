@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import UserReivewList from './UserReviewList';
+import { reviewListType } from '../../types/review';
+import ReviewCard from '../seller/ReviewCard';
+import { Division } from '../common/Division';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -23,21 +26,29 @@ const Container = styled.div`
             font-weight:bold;
         }
     }
+    .seller-review-preview{
+        width:320px;
+    }
 `
 interface IProps{
-    reviewList:Object[];
+    reviewList:reviewListType[];
 }
 
-const ShowReview:React.FC<IProps> = ({reviewList}:any) => {    
-    console.log(reviewList.reviewerName)
+const ShowReview:React.FC<IProps> = ({reviewList}) => {    
+    console.log('reviewList',reviewList)
     return (
         <Container>
             <div className='trade-review-title'>
-                <h2>{reviewList && reviewList.reviewerName} 님의 거래후기</h2>
+                <h2>판매자 님의 거래후기</h2>
             </div>
-            {reviewList.map((review:any)=>(
-                <UserReivewList key={review.id} reviewList={review} />
-            ))}
+            <div className='seller-review-preview'>
+                <Division/>
+                {reviewList ? 
+                reviewList.map((review,index)=>(
+                    <ReviewCard key={index} reviewList={review}/>    
+                ))
+                : <h2>거래후기가 없습니다.</h2>}
+            </div>
         </Container>
     );
 };

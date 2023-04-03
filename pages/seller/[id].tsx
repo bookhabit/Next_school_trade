@@ -125,13 +125,14 @@ const profile:NextPage = ({id}:any) => {
             <div className='goToSellerReview' onClick={()=>router.push(`/seller/${sellerId}/sellerReview`)}>
               <p>이너런 님의 거래후기</p>
             </div>
-          </div>
+            </div>
           <div className='seller-review-preview'>
+            <Division/>
             {reviewList ? 
               reviewList.map((review,index)=>(
                 <ReviewCard key={index} reviewList={review}/>    
               ))
-             : null}
+             : <h2>거래후기가 없습니다.</h2>}
           </div>
         </Container>
         <LinkFooter/>  

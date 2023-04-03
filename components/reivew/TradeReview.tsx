@@ -5,44 +5,32 @@ import styled from 'styled-components';
 
 const Container = styled.div`
     padding:40px 20px;
+    width:100%;
 `
 
 const TradeReview = () => {
 // 내 정보에서 거래후기를 남긴 거래후기글들을 받는 api를 요청한다
-const testReview = [
+const reviewList = [
     {
-        id:1,
-        reviewerProfileImage:"/static/svg/review/userIcon.svg",
-        reviewerName:"이성범",
-        reviewContent:"시간약속을 잘 지켜서 좋았고 너무 친절했어요!!",
-        starCount:5
+      reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
+      reviewer_name:"이너런",
+      reviewer_content:"시간 약속을 잘 지켜서 너무 좋아요"
     },
     {
-        id:2,
-        reviewerProfileImage:"/static/svg/review/userIcon.svg",
-        reviewerName:"차민재",
-        reviewContent:"중고인데 물품이 깨끗해서 좋아요!",
-        starCount:3
+      reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
+      reviewer_name:"이현진",
+      reviewer_content:"가격이 합리적이에요"
     },
     {
-        id:3,
-        reviewerProfileImage:"/static/svg/review/userIcon.svg",
-        reviewerName:"이성범",
-        reviewContent:"믿을만한 사람입니다.",
-        starCount:4
-    },
-    {
-        id:4,
-        reviewerProfileImage:"/static/svg/review/userIcon.svg",
-        reviewerName:"조우제",
-        reviewContent:"사람이 착합니다..",
-        starCount:2
+      reviewer_profileImg:"/static/svg/seller/reviewer_profileImg.svg",
+      reviewer_name:"김상원",
+      reviewer_content:"사람 좋아요"
     }
-]
+  ]
     return (
         <Container>
-            <GradeReview reviewList={testReview}/>
-            <ShowReview reviewList={testReview}/>
+            <GradeReview reviewList={reviewList}/>
+            <ShowReview reviewList={reviewList}/>
         </Container>
     );
 };
