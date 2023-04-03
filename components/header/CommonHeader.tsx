@@ -91,7 +91,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "채팅";
           case "/user/chatting/[id]":
             return `${testSellerNameForChatting}`;
-          case "/user/tradeReview":
+          case "/user/tradeReview/[id]":
             return "거래후기";
           case "/user/profile":
             return "프로필 정보 수정";

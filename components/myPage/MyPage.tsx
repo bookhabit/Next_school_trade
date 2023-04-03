@@ -84,6 +84,8 @@ const MyPage = () => {
     const goToFavorite = `/user/favorite/${userId}`
     // 판매내역 라우팅
     const goToSellList = `/user/sellList/${userId}`
+    // 거래후기 라우팅
+    const goToTradeReview = `/user/tradeReview/${userId}`
     return (
         <Container>
             <div className='myUniversity'>
@@ -106,7 +108,7 @@ const MyPage = () => {
             </div>
             <div className='myTradeEvaluation myPageBody'>
                 <p className='myPageTitle'>거래 평가</p>
-                <Link href="/user/tradeReview" className='myPage-list'>
+                <Link href={goToTradeReview}className='myPage-list'>
                     <UniversityHatIcon className='myPageIcon'/>
                     <p>나의 거래후기</p>
                 </Link>

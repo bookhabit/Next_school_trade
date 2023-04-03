@@ -3,13 +3,13 @@ import ReviewerProfileImg from "../../public/static/svg/seller/reviewer_profileI
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import { Division } from '../common/Division';
-import { reviewListType } from '../../types/review';
+import { reviewListResponseType, reviewListType } from '../../types/review';
 
 const Container = styled.div`
     .seller-review-list{
       width:100%;
-      height:90px;
-      margin:0px 20px;
+      height:auto;
+      margin:20px;
       .reviewer-name-wrap{
         display:flex;
         align-items:center;
@@ -38,7 +38,7 @@ const Container = styled.div`
 `
 
 interface IProps{
-    reviewList:reviewListType
+    reviewList:reviewListResponseType
 }
 
 const ReviewCard:React.FC<IProps> = ({reviewList}) => {
@@ -47,13 +47,12 @@ const ReviewCard:React.FC<IProps> = ({reviewList}) => {
             <div className='seller-review-list'>
               <div className='reviewer-name-wrap'>
                 <div className='reviewer-profile-img'>
-                    <img src={reviewList.reviewer_profileImg} alt="리뷰작성자 프로필 이미지"/>
-                  {/* <ReviewerProfileImg/> */}
+                    <img src={"/static/svg/seller/reviewer_profileImg.svg"} alt="리뷰작성자 프로필 이미지"/>
                 </div>
-                <p className='reviewer-name'>{reviewList.reviewer_name}</p>
+                <p className='reviewer-name'>{reviewList.buyer.nickname}</p>
               </div>
               <div className='review-content'>
-                <p>{reviewList.reviewer_content}</p>
+                <p>{reviewList.review}</p>
               </div>
             </div>
             <Division/>

@@ -72,7 +72,7 @@ const favorite = ({id}:{id:number}) => {
     );
 };
 
-// 서버사이드 렌더링으로 url 파라미터의 인가코드 가져옴
+// 서버사이드 렌더링으로 favoriteList 가져옴
 export const getServerSideProps : GetServerSideProps = async ({query}) => {
     const {id} = query;
     const queryClient = new QueryClient()

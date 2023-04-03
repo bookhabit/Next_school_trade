@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { reviewListType } from '../../types/review';
+import { reviewListResponseType, reviewListType } from '../../types/review';
 import ReviewCard from '../seller/ReviewCard';
 import { Division } from '../common/Division';
 
@@ -13,7 +13,7 @@ const Container = styled.div`
     .trade-review-title{
         background-color:#F5F2F2;
         width:320px;
-        height:40px;
+        height:50px;
         border-radius:10px;
         display:flex;
         justify-content:center;
@@ -21,7 +21,7 @@ const Container = styled.div`
         margin-bottom:30px;
         h2{
             display:inline-block;
-            font-size:25px;
+            font-size:20px;
             font-weight:bold;
         }
     }
@@ -30,15 +30,15 @@ const Container = styled.div`
     }
 `
 interface IProps{
-    reviewList:reviewListType[];
+    reviewList:reviewListResponseType[];
+    ownerName:string;
 }
 
-const ShowReview:React.FC<IProps> = ({reviewList}) => {    
-    console.log('reviewList',reviewList)
+const ShowReview:React.FC<IProps> = ({reviewList,ownerName}) => {    
     return (
         <Container>
             <div className='trade-review-title'>
-                <h2>거래후기</h2>
+                <h2>{ownerName} 님의 거래후기</h2>
             </div>
             <div className='seller-review-preview'>
                 <Division/>
