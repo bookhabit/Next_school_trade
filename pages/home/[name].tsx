@@ -26,8 +26,10 @@ const categoryHome = ({categoryName}:any) => {
           ["categoryList",categoryName] 
         , async (pageParam)=> await getCategoryProductList(pageParam,categoryName)
         , {
-            // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
             getNextPageParam: (lastPage:Page,pages:Page[]) => {
+                const lastPageNumber = 
+                Math.ceil(lastPage.totalPage/10)
+                // 이 값으로 라스트넘버값 지정
                 if(pages.length<lastPageNumber){
                     return pages.length
                 }else{
