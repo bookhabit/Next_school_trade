@@ -30,9 +30,7 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
     // 로그인된 사용자의 id값을 받아서 판매중인 상품 받아오는 api호출
     const APIuserId = userId
     console.log('CompletedProducts id',APIuserId)
-    // testId - 판매중상품 불러오기 위한
-    const testId = 5
-    const lastPageNumber=3 // 백엔드 offset 받아와야함
+
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -41,7 +39,7 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
         isFetching 
     } = useInfiniteQuery(
           ["SoldList"] 
-        , async (pageParam)=> await getSoldList(pageParam,5)
+        , async (pageParam)=> await getSoldList(pageParam,APIuserId)
         , {
             getNextPageParam: (lastPage:Page,pages:Page[]) => {
                 const lastPageNumber = 
@@ -56,7 +54,6 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
           }
         )
         console.log('infinitquery completed',data)
-        console.log('infinitquery completed',hasNextPage)
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
             if(isIntersecting && hasNextPage){

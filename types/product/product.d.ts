@@ -88,3 +88,13 @@ interface Page {
     contents: productListType[];
     totalPage: number;
 }
+
+interface FavoriteProduct{
+    id:number;
+    content:productListType[]
+}
+
+interface FavoritePage {
+    favorites: FavoriteProduct[];
+    totalPage: number;
+}
