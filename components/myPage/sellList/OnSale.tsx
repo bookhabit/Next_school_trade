@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductList from '../../home/ProductList';
 import styled from 'styled-components';
-import { productListType } from '../../../types/product/product';
+import { Page, productListType } from '../../../types/product/product';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
@@ -39,8 +39,10 @@ const OnSale:React.FC<IProps> = ({userId}) => {
           ["onSaleList"] 
         , async (pageParam)=> await getSellingList(pageParam,testId)
         , {
-            // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
-            getNextPageParam: (_lastPage,pages) => {
+            getNextPageParam: (lastPage:Page,pages:Page[]) => {
+                const lastPageNumber = 
+                Math.ceil(lastPage.totalPage/10)
+                // 이 값으로 라스트넘버값 지정
                 if(pages.length<lastPageNumber){
                     return pages.length
                 }else{
@@ -67,7 +69,7 @@ const OnSale:React.FC<IProps> = ({userId}) => {
             {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
             {status === "success" ?
                 data.pages.map((page, index) => 
-                    <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} showChangeCompleted={true}  />
+                    <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} showChangeCompleted={true}  />
             ):<h2>상품이 없습니다</h2>}
         </Container>
     );

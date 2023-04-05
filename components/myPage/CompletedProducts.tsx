@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import { Page } from '../../types/product/product';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -42,8 +43,10 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
           ["SoldList"] 
         , async (pageParam)=> await getSoldList(pageParam,5)
         , {
-            // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
-            getNextPageParam: (_lastPage,pages) => {
+            getNextPageParam: (lastPage:Page,pages:Page[]) => {
+                const lastPageNumber = 
+                Math.ceil(lastPage.totalPage/10)
+                // 이 값으로 라스트넘버값 지정
                 if(pages.length<lastPageNumber){
                     return pages.length
                 }else{
@@ -70,7 +73,7 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
             {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
             {status === "success" ?
                 data.pages.map((page, index) => 
-                    <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page} />
+                    <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page.contents} />
             ):<h2>상품이 없습니다</h2>}
             {/* {soldList ? <ProductList completedProducts={true} data={soldList} /> : <h2>상품들을 불러오는 중입니다.</h2>} */}
         </Container>
