@@ -144,7 +144,7 @@ const WriteGradeReview = () => {
     const sellerId = Number(router.query.id)
 
     const submitData = {
-        // grade:score,
+        grade:score,
         review:review
     }
 

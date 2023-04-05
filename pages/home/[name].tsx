@@ -7,6 +7,7 @@ import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import ProductList from '../../components/home/ProductList';
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { Page } from '../../types/product/product';
 
 
 const Container = styled.div`
@@ -26,7 +27,7 @@ const categoryHome = ({categoryName}:any) => {
         , async (pageParam)=> await getCategoryProductList(pageParam,categoryName)
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
-            getNextPageParam: (_lastPage,pages) => {
+            getNextPageParam: (lastPage:Page,pages:Page[]) => {
                 if(pages.length<lastPageNumber){
                     return pages.length
                 }else{
@@ -53,7 +54,7 @@ const categoryHome = ({categoryName}:any) => {
                     {status === "error" && <div>error</div>}
                     {status === "success" &&
                         data.pages.map((page, index) => 
-                            <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} />
+                            <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />
                     )}
             </Container>
             <LinkFooter/>

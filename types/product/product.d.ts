@@ -83,10 +83,8 @@ export type registerProductType = {
 }
 
 // 리액트쿼리 - infinitePage
-export interface IInfinitePage {
-    nextCursor: number | undefined;
-    page: {
-      productList: productListType[];
-      hasMore: boolean;
-    };
+
+interface Page {
+    contents: productListType[];
+    totalPage: number;
 }

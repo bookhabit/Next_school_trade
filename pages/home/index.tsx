@@ -1,4 +1,4 @@
-import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { dehydrate, InfiniteData, QueryClient, useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
 import axios from 'axios';
 import { GetServerSideProps,  } from 'next';
 import React from 'react';
@@ -7,6 +7,7 @@ import { GetproductList } from '../../lib/api/product';
 import styled from 'styled-components';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import ProductList from '../../components/home/ProductList';
+import {  Page, productListType } from '../../types/product/product';
 
 
 const Container = styled.div`
@@ -15,34 +16,31 @@ const Container = styled.div`
 `
 
 const home = () => {
-    const lastPageNumber=4
+    // const lastPageNumber=4
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
         hasNextPage, // 다음 페이지가 있는지 여부, Boolean
-        status, 
-    } = useInfiniteQuery(
+        status,
+      }  =  useInfiniteQuery(
           ["productList"] 
         , GetproductList
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
-            getNextPageParam: (_lastPage,pages) => {
+            getNextPageParam: (lastPage:Page,pages:Page[]) => {
+                const lastPageNumber = 
+                Math.ceil(lastPage.totalPage/10)
+                // 이 값으로 라스트넘버값 지정
                 if(pages.length<lastPageNumber){
                     return pages.length
                 }else{
                     return undefined
-            // getNextPageParam 메서드가 falsy한 값을 반환하면 추가 fetch를 실행하지 않는다
-            //     }
-            //     // offset 값 받기 - 백엔드
-            //     // const { nextOffset, hasMore } = lastPage?.data;
-			// 	// if (!hasMore) return false;
-			// 	// else {
-			// 	// 	return Number(nextOffset);
 				}
             }
           }
         )
-        console.log('infinitquery',data)
+        console.log('최종 infinitquery데이터',data)
+        
 
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -59,7 +57,7 @@ const home = () => {
                     {status === "error" && <div>error</div>}
                     {status === "success" &&
                         data.pages.map((page, index) => 
-                            <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} />
+                            <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />
                     )}
             </Container>
             <LinkFooter/>

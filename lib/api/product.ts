@@ -1,6 +1,6 @@
 import axios from "axios"
 import { QueryFunctionContext } from '@tanstack/react-query';
-import { productListType } from "../../types/product/product";
+import { Page, productListType } from "../../types/product/product";
 import { AxiosResponse } from 'axios'
 
 
