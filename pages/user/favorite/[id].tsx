@@ -1,11 +1,10 @@
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import LinkFooter from '../../../components/footer/LinkFooter';
-import FavoriteList from '../../../components/myPage/FavoriteList';
 import { getFavoriteList } from '../../../lib/api/product';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { productListType } from '../../../types/product/product';
+import { FavoritePage, Page, productListType } from '../../../types/product/product';
 import styled from 'styled-components';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import ProductList from '../../../components/home/ProductList';
@@ -27,14 +26,13 @@ const favorite = ({id}:{id:number}) => {
         status, 
     } = useInfiniteQuery(
           ["favoriteList"] 
-        , async (pageParam)=> {
-            const res = await getFavoriteList(pageParam,id)
-            const favoriteList = res.map((item:{id:number,content:object[],users:object[]}) => item.content) as productListType[];
-              return favoriteList;
-        }
+        , async (pageParam)=> await getFavoriteList(pageParam,id) as FavoritePage
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
-            getNextPageParam: (_lastPage,pages) => {
+            getNextPageParam: (lastPage:FavoritePage,pages:FavoritePage[]) => {
+                const lastPageNumber = 
+                Math.ceil(lastPage.totalPage/10)
+                // 이 값으로 라스트넘버값 지정
                 if(pages.length<lastPageNumber){
                     return pages.length
                 }else{
@@ -44,6 +42,8 @@ const favorite = ({id}:{id:number}) => {
           }
         )
         console.log('infinitquery',data)
+        // return favoriteList
+
 
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -54,18 +54,21 @@ const favorite = ({id}:{id:number}) => {
         // 스크롤 이벤트 타겟 지정
         const { setTarget } = useIntersectionObserver({ onIntersect });
 
-
+        if(data == undefined) {
+            return
+        }
+        
 
     return (
         <>
             <Container>
-                {status === "loading" && <div>loading...</div>}
+                {/* {status === "loading" && <div>loading...</div>} */}
                 {status === "error" && <div>error</div>}
-                {status === "success" &&
-                    data.pages.map((page, index) => 
-                        <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} />
-                )}
-                {/* <FavoriteList favoriteList={favoriteList} /> */}
+                {/* {status === "success" &&
+                    data.pages.map((page, index) =>(
+                        <ProductList key={index} completedProducts={false} data={page.favorites} setTarget={setTarget} />)
+                    )
+                } */}
             </Container>
             <LinkFooter/>
         </>
@@ -80,9 +83,9 @@ export const getServerSideProps : GetServerSideProps = async ({query}) => {
         await queryClient.prefetchInfiniteQuery(
             ['favoriteList'],async()=>{
               const res = await axios.get(`http://localhost:4000/favorite/${id}`)
-              console.log(res.data)
-              const favoriteList = res.data.map((item:{id:number,content:object[],users:object[]}) => item.content) as productListType[];
-              return favoriteList;
+            //   const favoriteList = res.data.favorites.map((item:{id:number,content:object[]}) => item.content) as productListType[];
+            //   console.log('ssr data',favoriteList)
+              return res.data
             }
           )
         return {

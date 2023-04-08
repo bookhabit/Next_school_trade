@@ -1,5 +1,5 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { UserType } from "../types/user";
+import { Users } from "../types/user";
 import { UserState } from "../types/reduxState";
 
 // 초기상태
@@ -14,6 +14,7 @@ const initialState:UserState = {
     birth:"",
     isLogged:false,
     profileImage:"",
+    contents:[]
 }
 
 const user = createSlice({

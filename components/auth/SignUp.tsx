@@ -27,7 +27,7 @@ import SetPosition from '../map/SetPosition';
 import SetPositionUserLocation from '../map/SetPositionUserLocation';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { UserType } from '../../types/user';
+import { Users } from '../../types/user';
 import { RootState } from '../../store';
 
 type KaKaoSignUp = {
@@ -136,7 +136,7 @@ interface IProps{
 const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     console.log(kakaoSignUp)
     // 카카오 로그인 회원인 경우
-    let user:UserType
+    let user:Users;
     if(kakaoSignUp==='true'){
         user = useSelector((state:RootState)=>state.user)
     }
