@@ -469,7 +469,7 @@ const RegisterProduct = () => {
                         />
             </div> 
             <div className='register-select-category'>
-                <select name="category" onChange={onChangeInput}>
+                <select name="category" defaultValue='카테고리' onChange={onChangeInput}>
                     <option disabled>카테고리</option>
                     <option value="electronic">전자제품</option>
                     <option value="clothes">의류</option>
