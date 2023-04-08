@@ -1,15 +1,15 @@
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import LinkFooter from '../../../components/footer/LinkFooter';
-import FavoriteList from '../../../components/myPage/FavoriteList';
 import { getFavoriteList } from '../../../lib/api/product';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { productListType } from '../../../types/product/product';
+import { FavoritePage, Page, productListType } from '../../../types/product/product';
 import styled from 'styled-components';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import ProductList from '../../../components/home/ProductList';
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import ProductCard from '../../../components/common/ProductCard';
 
 
 const Container = styled.div`
@@ -19,22 +19,21 @@ const Container = styled.div`
 
 
 const favorite = ({id}:{id:number}) => {
-    const lastPageNumber=3 // 백엔드 offset 받아와야함
     const {
-        data, // 💡 data.pages를 갖고 있는 배열
-        fetchNextPage, // 💡 다음 페이지를 불러오는 함수
-        hasNextPage, // 다음 페이지가 있는지 여부, Boolean
+        data, 
+        fetchNextPage, 
+        hasNextPage, 
         status, 
+        isLoading
     } = useInfiniteQuery(
           ["favoriteList"] 
-        , async (pageParam)=> {
-            const res = await getFavoriteList(pageParam,id)
-            const favoriteList = res.map((item:{id:number,content:object[],users:object[]}) => item.content) as productListType[];
-              return favoriteList;
-        }
+        , async (pageParam)=> await getFavoriteList(pageParam,id) as FavoritePage
         , {
             // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
-            getNextPageParam: (_lastPage,pages) => {
+            getNextPageParam: (lastPage:FavoritePage,pages:FavoritePage[]) => {
+                const lastPageNumber = 
+                Math.ceil(lastPage.totalPage/10)
+                // 이 값으로 라스트넘버값 지정
                 if(pages.length<lastPageNumber){
                     return pages.length
                 }else{
@@ -44,6 +43,8 @@ const favorite = ({id}:{id:number}) => {
           }
         )
         console.log('infinitquery',data)
+        // return favoriteList
+
 
         // 무한스크롤 구현
         const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -54,18 +55,28 @@ const favorite = ({id}:{id:number}) => {
         // 스크롤 이벤트 타겟 지정
         const { setTarget } = useIntersectionObserver({ onIntersect });
 
-
+        if(data == undefined) {
+            return
+        }
+        
 
     return (
         <>
             <Container>
-                {status === "loading" && <div>loading...</div>}
+                {isLoading && <div>loading...</div>}
                 {status === "error" && <div>error</div>}
                 {status === "success" &&
-                    data.pages.map((page, index) => 
-                        <ProductList key={index} completedProducts={false} data={page} setTarget={setTarget} />
-                )}
-                {/* <FavoriteList favoriteList={favoriteList} /> */}
+                    data.pages.map((page,index) =>(
+                        page.favorites.map((content,id)=>
+                        <>
+                        <ProductCard key={id} product={content.content} />
+                        <div ref={setTarget}></div>
+                        </>
+                        )
+                        
+                        )
+                    )
+                }
             </Container>
             <LinkFooter/>
         </>
@@ -80,9 +91,8 @@ export const getServerSideProps : GetServerSideProps = async ({query}) => {
         await queryClient.prefetchInfiniteQuery(
             ['favoriteList'],async()=>{
               const res = await axios.get(`http://localhost:4000/favorite/${id}`)
-              console.log(res.data)
-              const favoriteList = res.data.map((item:{id:number,content:object[],users:object[]}) => item.content) as productListType[];
-              return favoriteList;
+            console.log('res.data',res.data)
+              return res.data
             }
           )
         return {

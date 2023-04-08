@@ -12,13 +12,15 @@ import { useDispatch } from "react-redux";
 import Header from "../components/header/Header";
 import { Hydrate, QueryClient,QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { LoggedUserType } from "../types/user";
 
 // const queryClient = new QueryClient();
 
 const MyApp = ({Component,pageProps,...data}:AppProps)=>{
     // 로그인유지 - 유저정보 받아오기
-    const clientData = Object(data).data
+    const clientData = Object(data).data as LoggedUserType
     const dispatch = useDispatch();
+    console.log('_app.tsx',clientData)
     useEffect(()=>{
         if(clientData){
             dispatch(userActions.setLoggedUser(clientData))
@@ -47,6 +49,7 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
 MyApp.getInitialProps = async (context:AppContext)=>{
     const appInitialProps = await App.getInitialProps(context);
     const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie)
+    console.log('cookieObject',cookieObject)
     let data
     try{
         if(cookieObject.access_token){

@@ -18,19 +18,19 @@ interface IProps{
 
 const ProductList:React.FC<IProps> = ({completedProducts,data,showChangeCompleted,setTarget}) => {
     const productList = data;
-    // console.log('productList',productList)
+    console.log('productList',productList)
 
     return (
         <Container completedProducts={completedProducts}>  
         {/* 데이터가 들어있는지 확인 후 map 함수 실행 - 에러처리 */}
-            {
+            {/* {
             isEmpty(productList) ? null
             :productList.map((product)=>(
                 completedProducts ? 
                 <CompletedProductCard key={product.id} product={product}/>  : 
                 <ProductCard key={product.id} product={product} showChangeCompleted={showChangeCompleted}/>
             )) 
-            }
+            } */}
             <div ref={setTarget}></div>
         </Container>
     );

@@ -91,7 +91,7 @@ interface Page {
 
 interface FavoriteProduct{
     id:number;
-    content:productListType[]
+    content:productListType
 }
 
 interface FavoritePage {
