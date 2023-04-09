@@ -5,6 +5,7 @@ import palette from '../../styles/palette';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { UserState } from '../../types/reduxState';
 
 const Container = styled.div`
     background-color:${palette.main_text_color};
@@ -57,7 +58,7 @@ const Container = styled.div`
 `
 
 const Introduce = () => {
-    const user = useSelector((state:RootState)=>state.user)
+    const user:UserState = useSelector((state:RootState):UserState=>state.user)
     const isLogged = user.isLogged;
     const linkAsIsLogged = ()=>{
         return isLogged ? "home" : "auth"

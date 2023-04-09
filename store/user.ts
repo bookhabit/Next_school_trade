@@ -4,17 +4,24 @@ import { UserState } from "../types/reduxState";
 
 // 초기상태
 const initialState:UserState = {
+    birth:'',
+    createdAt:'',
+    deleteAt:'',
+    email:'',
+    gender:0,
+    grade:0,
     id:0,
-    name:"",
-    nickname:"",
-    studentID:"",
-    email:"",
-    university:"",
-    major:"",
-    birth:"",
+    latitude:0,
+    location:'',
+    longitude:0,
+    name:'',
+    nickname:'',
+    password:'',
+    university:'',
+    updatedAt:'',
     isLogged:false,
-    profileImage:"",
-    contents:[]
+    // profileImage:"",
+    // contents:[],
 }
 
 const user = createSlice({
