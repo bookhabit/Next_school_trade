@@ -7,6 +7,7 @@ import palette from '../../styles/palette';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import Button from '../common/Button';
 
 const Container = styled.div`
     width:100%;
@@ -94,18 +95,7 @@ const Container = styled.div`
             }
         }
         .submit-btn{
-            width:300px;
-            height:55px;
-            background-color:${palette.main_color};
             margin-top:50px;
-            border-radius:30px;
-            p{
-                font-size:25px;
-                font-weight:bold;
-                color:${palette.main_text_color};
-                text-align:center;
-                padding-top:15px;
-            }
         }
     }
 
@@ -207,7 +197,7 @@ const WriteGradeReview = () => {
                         />
                     </div>
                     <div className='submit-btn' onClick={createReview}>
-                        <p>작성하기</p>
+                        <Button width='300px' height='55px' radius='30px'>작성하기</Button>
                     </div>
             </div>
         </Container>

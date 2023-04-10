@@ -2,21 +2,36 @@ import React from 'react';
 import styled,{css} from 'styled-components';
 import palette from "../../styles/palette"
 
-const Container = styled.button`
-    width:100%;
-    height:42px;
+// 푸터 버튼
+export const FooterButton = styled.button`
+
+`
+
+interface StyledButtonProps {
+    width: string
+    height:string
+    radius:string
+  }
+
+// 기본 버튼
+const Container = styled.button<StyledButtonProps>`
+    width:${(props)=>props.width};
+    height:${(props)=>props.height};
     border:0;
-    border-radius:10px;
+    border-radius:${(props)=>props.radius};
     background-color:${palette.main_color};
-    color:white;
+    color:${palette.main_text_color};
     font-size:25px;
-    font-weight:800;
+    font-weight:bold;
     outline:none;
     cursor: pointer;
 `
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement>{
     children:React.ReactNode;
+    width:string;
+    height:string;
+    radius:string;
 }
 
 const Button:React.FC<IProps> = ({children,...props}) => {

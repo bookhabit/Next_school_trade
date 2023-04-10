@@ -4,7 +4,7 @@ import { productListType } from "./product/product";
   export type LoggedUserType = {
     token:string;
     isLogged:boolean;
-    user:object;
+    user:Users;
   }
 
   // owner

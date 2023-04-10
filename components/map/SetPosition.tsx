@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import GeoCoding from './GeoCoding';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import { RootState } from '../../store';
+import Button from '../common/Button';
 
 const Container = styled.div`
     .mordal-close-x-icon {
@@ -118,18 +119,12 @@ const Container = styled.div`
         }
     }
     .set-position-submitBtn{
-        width:300px;
-        height:50px;
-        background-color:${palette.main_color};
         text-align:center;
-        border-radius:30px;
         margin-top:20px;
         display:flex;
         justify-content:center;
         button{
             font-size:20px;
-            font-weight:bold;
-            color:${palette.main_text_color};
         }
     }
 `
@@ -362,7 +357,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                     <button>주소 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>
-                    <button onClick={savePosition}>거래 희망장소 설정</button>
+                    <Button onClick={savePosition} width='300px' height='50px' radius='30px'>거래 희망 장소 설정</Button>
                 </div>
             </div>
         </Container>

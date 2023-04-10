@@ -68,7 +68,6 @@ const Container = styled.form<KaKaoSignUp>`
         }
         .sign-up-university-selector{
             width:60%;
-            margin-right:16px;
         }
     }
 
@@ -575,7 +574,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                 </div>
             </div>
             <div className='sign-up-modal-submit-button-wrapper'>
-                <Button type='submit'>가입하기</Button>
+                <Button type='submit' width='100%' height='42px' radius='10px'>가입하기</Button>
             </div>
             <ModalPortal>
                 <SetPositionUserLocation closeModal={closeModal} currentLocation={currentLocation}/>

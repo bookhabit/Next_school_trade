@@ -175,7 +175,7 @@ const Login = () => {
             <p>{errorMessage}</p>
           </div>
           <div className="login-submit-button-wrapper">
-            <Button type="submit">
+            <Button type="submit" width='100%' height='42px'radius='10px' >
               로그인
             </Button>
           </div>

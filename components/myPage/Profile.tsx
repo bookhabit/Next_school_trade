@@ -6,6 +6,7 @@ import CameraIcon from "../../public/static/svg/myPage/profileCamera.svg"
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import Button from '../common/Button';
 
 
 const Container = styled.div`
@@ -62,17 +63,7 @@ const Container = styled.div`
 
 
     .submit-btn{
-        width:280px;
-        height:40px;
-        background-color:${palette.main_color};
         margin-top:50px;
-        border-radius:30px;
-        text-align:center;
-        button{
-            font-size:25px;
-            font-weight:bold;
-            color:${palette.main_text_color};
-        }
     }
 `
 
@@ -89,7 +80,8 @@ const Profile = () => {
     return (
         <Container>
             <div className='profile-image'>
-                <img src={LoggedUser.profileImage} alt="프로필 이미지"/>
+                {/* <img src={LoggedUser.profileImage} alt="프로필 이미지"/> */}
+                <ProfileUserIcon/>
                 <label htmlFor='file-input'/>
                 <input type="file" id="file-input"/>
             </div>
@@ -108,7 +100,7 @@ const Profile = () => {
                 
             </div>
             <div className='submit-btn'>
-                <button>수정하기</button>
+                <Button width='280px' height='40px' radius='30px'>수정하기</Button>
             </div>
         </Container>
     );

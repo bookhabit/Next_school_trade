@@ -23,7 +23,7 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
     console.log('_app.tsx',clientData)
     useEffect(()=>{
         if(clientData){
-            dispatch(userActions.setLoggedUser(clientData))
+            dispatch(userActions.setLoggedUser(clientData.user))
         }
     },[])
     const LoggedUser = useSelector((state:RootState)=>state.user)

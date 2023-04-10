@@ -3,7 +3,7 @@ import {Users}  from "./user";
 
 // 유저 redux state
 export type UserState = Users & {
-    isLogged:boolean;
+    isLogged?:boolean;
 }
 
 // 공통 redux state

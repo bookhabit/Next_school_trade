@@ -9,7 +9,7 @@ const globalStyle = css`
     }
     body{
         font-family: Noto Sans,Noto Sans KR,Roboto;
-        color:${palette.black}
+        color:${palette.black};
     }
     a{
         text-decoration: none;

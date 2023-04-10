@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { UserState } from '../../types/reduxState';
+import Button from '../common/Button';
 
 const Container = styled.div`
-    background-color:${palette.main_text_color};
+    height:100vh;
+    background-color:white;
     padding:150px 0px;
     text-align:center;
 
@@ -33,16 +35,6 @@ const Container = styled.div`
     
     .startBtn{
         margin-top:170px;
-        button{
-            width:260px;
-            height:60px;
-            background-color:${palette.main_color};
-            border-radius:30px;
-            color:${palette.main_text_color};
-            font-size:25px;
-            font-weight:bold;
-            cursor: pointer;
-        }
     }
     .footerText{
         margin-top:30px;
@@ -72,7 +64,7 @@ const Introduce = () => {
             </div>
             <div className='startBtn'>
                 <Link href={linkAsIsLogged()}>
-                    <button>시작하기</button>
+                    <Button width='260px' height='60px' radius='30px'>시작하기</Button>
                 </Link>
             </div>
             <div className='footerText'>
