@@ -14,7 +14,7 @@ const Container = styled.div<{currentLeft:boolean}>`
         font-weight:bold;
     }
     .subHeader-left{
-        width:195px;
+        width:50%;
         height:50px;
         display:flex;
         justify-content:space-evenly;
@@ -23,7 +23,7 @@ const Container = styled.div<{currentLeft:boolean}>`
         background-color:${props=>props.currentLeft? "#FFFFFF" :"#D9D9D9"}
     }
     .subHeader-right{
-        width:195px;
+        width:50%;
         height:50px;
         display:flex;
         justify-content:space-evenly;

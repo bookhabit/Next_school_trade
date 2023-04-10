@@ -15,12 +15,17 @@ import { loginAPI } from "../../lib/api/auth";
 import { useRouter } from 'next/router';
 
 const Container = styled.form`
-  width: 100%;
+  width: 100%; // 모바일버전
   padding: 180px 20px;
   z-index: 11;
-
+  
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
 
   .login-input-wrapper {
+    width:100%;
     position: relative;
     margin-bottom: 30px;
   }
@@ -32,14 +37,17 @@ const Container = styled.form`
   }
 
   .login-submit-button-wrapper {
-    margin-top:50px;
-    margin-bottom: 30px;
+    width:100%;
+    margin:30px 0px;
     padding-bottom: 16px;
   }
   .login-modal-set-signup {
     color: ${palette.dark_cyan};
     margin-left: 8px;
     cursor: pointer;
+  }
+  .kakao-btn{
+    text-align:center;
   }
   /* 에러메시지 스타일링 */
   .input-error-message{
@@ -54,6 +62,28 @@ const Container = styled.form`
             font-size:14px;
        }
     }
+
+  /* 반응형 스타일링 */
+  /* 태블릿 버전 */
+  @media screen and (min-width: 768px) {
+    .login-input-wrapper{
+      width:50%;
+    }
+    .login-submit-button-wrapper{
+      width:50%;
+    }
+  }
+
+  /* pc버전 */
+  @media screen and (min-width: 1024px) {
+    .login-input-wrapper{
+      width:40%;
+    }
+    .login-submit-button-wrapper{
+      width:40%;
+    }
+  }
+  
 `;
 
 const Login = () => {
@@ -180,7 +210,7 @@ const Login = () => {
             </Button>
           </div>
           <div className="kakao-btn" onClick={kakaoLogin}>
-                <KakaoBtn/>
+                <img src={"/static/svg/auth/kakao_login.svg"} alt="카카오로그인"/>
           </div>
         </Container>
       );

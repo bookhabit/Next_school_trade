@@ -25,6 +25,22 @@ const globalStyle = css`
         outline: none;
         background-color: transparent;
     }
+
+    /* 반응형 스타일링 */
+    /* 태블릿 버전 */
+    /* @media screen and (min-width: 1023px) {
+        body{
+            padding:0px 100px;
+        }
+    } */
+
+    /* pc버전 */
+    /* @media screen and (min-width: 1440px) {
+        body{
+            padding:0px 300px;
+        }
+    } */
+
 `
 
 const GlobalStyle = createGlobalStyle`

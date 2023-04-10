@@ -37,8 +37,12 @@ type KaKaoSignUp = {
 const Container = styled.form<KaKaoSignUp>`
     width:100%;
     padding:50px 20px;
-    background-color:white;
     z-index:11;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
 
     /* 카카오 로그인 시 가운데로 옮기기 */
     .input-wrapper-first{
@@ -46,6 +50,7 @@ const Container = styled.form<KaKaoSignUp>`
     }
     /* input */
     .input-wrapper{
+        width:100%;
         position:relative;
         margin-bottom:${(props)=>(props.kakaoSignUp ==='true' ?'40px;' : '30px')};   
     }
@@ -60,6 +65,7 @@ const Container = styled.form<KaKaoSignUp>`
     
     /* 대학교 성별 셀렉터 */
     .sign-up-universityAndGender-selectors{
+        width:100%;
         display:flex;
         margin-bottom:${(props)=>(props.kakaoSignUp ==='true' ?'40px;' : '24px')};   
         .sign-up-gender-selector{
@@ -74,6 +80,7 @@ const Container = styled.form<KaKaoSignUp>`
 
     /* 생년월일 셀렉터 */
     .sign-up-modal-birthday-selectors{
+        width:100%;
         display:flex;
         margin-bottom:${(props)=>(props.kakaoSignUp ==='true' ?'40px;' : '24px')};   
         .sign-up-modal-birthday-month-selector{
@@ -112,19 +119,50 @@ const Container = styled.form<KaKaoSignUp>`
 
     /* 버튼 wrapper 스타일링 */
     .sign-up-modal-submit-button-wrapper{
+        width:100%;
         margin-bottom:16px;
         padding-bottom:16px;
         border-bottom:1px solid ${palette.gray_eb}
     }
 
-    /* 로그인 폼으로 변경하는 로그인버튼 */
-    .sign-up-modal-set-login{
-        color:${palette.dark_cyan};
-        margin-left:8px;
-        cursor: pointer;
+    /* 반응형 스타일링 */
+  /* 태블릿 버전 */
+  @media screen and (min-width: 768px) {
+    .input-wrapper{
+      width:50%;
     }
+    .sign-up-universityAndGender-selectors{
+        width:50%;
+    }
+    .sign-up-modal-birthday-selectors{
+        width:50%;
+    }
+    .signup-setMyPosition-wrapper{
+        width:50%;
+    }
+    .sign-up-modal-submit-button-wrapper{
+        width:50%;
+    }
+  }
 
-
+  /* pc버전 */
+  @media screen and (min-width: 1024px) {
+    .input-wrapper{
+        width:40%;
+    }
+    .sign-up-universityAndGender-selectors{
+        width:40%;
+    }
+    .sign-up-modal-birthday-selectors{
+        width:40%;
+    }
+    .signup-setMyPosition-wrapper{
+        width:40%;
+    }
+    .sign-up-modal-submit-button-wrapper{
+        width:40%;
+    }
+  }
 
 `
 
