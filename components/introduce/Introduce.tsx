@@ -44,6 +44,9 @@ const Container = styled.div`
             span{
                 margin-left:10px;
                 color:${palette.main_color};
+                &:hover{
+                    color:${palette.text_hover};
+                }
             }
         }
     }

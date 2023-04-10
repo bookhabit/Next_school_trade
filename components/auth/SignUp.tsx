@@ -115,6 +115,9 @@ const Container = styled.form<KaKaoSignUp>`
                 margin-left:15px;
             }
         }
+        &:hover{
+            background-color:#b7b2b2;
+        }
     }
 
     /* 버튼 wrapper 스타일링 */
@@ -125,7 +128,7 @@ const Container = styled.form<KaKaoSignUp>`
         border-bottom:1px solid ${palette.gray_eb}
     }
 
-    /* 반응형 스타일링 */
+  /* 반응형 스타일링 */
   /* 태블릿 버전 */
   @media screen and (min-width: 768px) {
     .input-wrapper{
@@ -605,8 +608,8 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     />
                 </div>
             </div>
-            <div className='signup-setMyPosition-wrapper'>
-                <div className='signup-setMyPosition' onClick={openModal}>
+            <div className='signup-setMyPosition-wrapper' onClick={openModal}>
+                <div className='signup-setMyPosition'>
                     <MapIcon/>
                         <p>주 거래 위치 설정하기</p>
                 </div>

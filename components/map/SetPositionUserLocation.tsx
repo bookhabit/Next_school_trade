@@ -91,9 +91,11 @@ const Container = styled.div`
             text-align:left;
             margin-top:20px;
             font-size:18px;
+            padding-top:5px;
             &::placeholder{
                 font-weight:bold;
-                color:${palette.updatedDate}
+                color:${palette.updatedDate};
+                padding-top:5px;
             }
         }
     }
@@ -117,6 +119,10 @@ const Container = styled.div`
             font-weight:bold;
             color:#4D4747;
         }
+        &:hover{
+            background-color:#b7b2b2;
+        }
+        cursor: pointer;
     }
     .set-position-submitBtn{
         width:80%;
@@ -132,6 +138,11 @@ const Container = styled.div`
             font-weight:bold;
             color:${palette.main_text_color};
         }
+        &:hover{
+            background-color:${palette.btn_hover};
+            color:${palette.text_hover};
+        }
+        cursor: pointer;
     }
     /* 반응형 스타일링 */
     /* 태블릿 버전 */

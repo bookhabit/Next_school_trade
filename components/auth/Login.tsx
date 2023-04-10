@@ -48,6 +48,7 @@ const Container = styled.form`
   }
   .kakao-btn{
     text-align:center;
+    cursor: pointer;
   }
   /* 에러메시지 스타일링 */
   .input-error-message{

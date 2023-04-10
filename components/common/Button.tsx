@@ -25,6 +25,10 @@ const Container = styled.button<StyledButtonProps>`
     font-weight:bold;
     outline:none;
     cursor: pointer;
+    &:hover{
+        background-color:${palette.btn_hover};
+        color:${palette.main_text_color};    
+    }
 `
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement>{

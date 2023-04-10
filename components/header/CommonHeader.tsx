@@ -39,6 +39,7 @@ const Conatainer = styled.div`
         }
         .headerLeftIcon{
             margin-right:15px;
+            cursor: pointer;
         }
     }
 `

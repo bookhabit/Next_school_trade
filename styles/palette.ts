@@ -32,8 +32,8 @@ export default {
     error_box_fill:"#FFF1EE",
     error_message:"#D93900",
     input_focus:"#008489",
-    btn_hover:"#D7A4ED",
-    text_hover:"#F1D8FB",
+    btn_hover:"#79FF6D",
+    text_hover:"#007513",
     divistion_color:"#D9D9D9",
     orange_btn:"#F36363"
   };
