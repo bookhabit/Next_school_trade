@@ -52,21 +52,25 @@ const Container = styled.div`
     }
 
     .set-position-current-location{
-        background-color:${palette.main_color};
         height:20px;
         border-bottom:1px solid ${palette.divistion_color};
+        background-color:${palette.main_text_color};
+        display:flex;
+        justify-content:center;
+        align-items:center;
         p{
             padding-top:2px;
-            color:${palette.main_text_color};
+            color:${palette.main_color};
             width:100%;
             font-size:14px;
             text-align:center;
         }
         button{
             padding-bottom:1px;
-            color:${palette.main_text_color};
+            color:${palette.main_color};
             width:100%;
             font-size:14px;
+            font-weight:bold;
             text-align:center;
         }
     }
@@ -103,8 +107,8 @@ const Container = styled.div`
         justify-content:center;
         align-items:center;
     }
-    .search-university{
-        width:300px;
+    .search-address{
+        width:80%;
         height:50px;
         background-color:#DED7E2;
         text-align:center;
@@ -119,14 +123,56 @@ const Container = styled.div`
         }
     }
     .set-position-submitBtn{
+        width:80%;
+        height:50px;
+        background-color:${palette.main_color};
         text-align:center;
+        border-radius:30px;
         margin-top:20px;
         display:flex;
         justify-content:center;
         button{
             font-size:20px;
+            font-weight:bold;
+            color:${palette.main_text_color};
         }
     }
+
+    /* 반응형 스타일링 */
+    /* 태블릿 버전 */
+    @media screen and (min-width: 768px) {
+        .search-address{
+            width:50%;
+            margin-top:50px;
+        }
+        .set-position-submitBtn{
+            width:50%;
+        }
+        .mordal-close-x-icon {
+            display:none;
+        }
+        .set-position-current-location{
+            height:40px;
+            p{
+                font-size:18px;
+            }
+            button{
+                font-size:18px;
+            }
+        }
+    }
+
+    /* pc버전 */
+    @media screen and (min-width: 1024px) {
+        .search-address{
+            width:40%;
+            margin-top:50px;
+        }
+        .set-position-submitBtn{
+            width:40%;
+        }
+    }
+
 `
 interface IProps {
     closeModal: () => void;
@@ -353,11 +399,11 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
                 {loading?<p>불러오는 중...</p>:<button onClick={setCurrentPosition}>현재위치로 설정하기</button>}
             </div>
             <div className='set-position-footer'>
-                <div className='search-university' onClick={handle.clickButton}>
+                <div className='search-address' onClick={handle.clickButton}>
                     <button>주소 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>
-                    <Button onClick={savePosition} width='300px' height='50px' radius='30px'>거래 희망 장소 설정</Button>
+                    <button onClick={savePosition}>주 거래 위치로 설정</button>
                 </div>
             </div>
         </Container>

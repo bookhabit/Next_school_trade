@@ -103,8 +103,8 @@ const Container = styled.div`
         justify-content:center;
         align-items:center;
     }
-    .search-university{
-        width:300px;
+    .search-address{
+        width:80%;
         height:50px;
         background-color:#DED7E2;
         text-align:center;
@@ -119,7 +119,7 @@ const Container = styled.div`
         }
     }
     .set-position-submitBtn{
-        width:300px;
+        width:80%;
         height:50px;
         background-color:${palette.main_color};
         text-align:center;
@@ -131,6 +131,31 @@ const Container = styled.div`
             font-size:20px;
             font-weight:bold;
             color:${palette.main_text_color};
+        }
+    }
+    /* 반응형 스타일링 */
+    /* 태블릿 버전 */
+    @media screen and (min-width: 768px) {
+        .search-address{
+            width:50%;
+            margin-top:50px;
+        }
+        .set-position-submitBtn{
+            width:50%;
+        }
+        .mordal-close-x-icon {
+            display:none;
+        }
+    }
+
+    /* pc버전 */
+    @media screen and (min-width: 1024px) {
+        .search-address{
+            width:40%;
+            margin-top:50px;
+        }
+        .set-position-submitBtn{
+            width:40%;
         }
     }
 `
@@ -329,7 +354,7 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
                 />
             </div>
             <div className='set-position-footer'>
-                <div className='search-university' onClick={handle.clickButton}>
+                <div className='search-address' onClick={handle.clickButton}>
                     <button>주소 검색</button>
                 </div>
                 <div className='set-position-submitBtn'>

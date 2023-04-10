@@ -5,6 +5,7 @@ import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.s
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { RootState } from '../../store';
+import ProfileUserIcon from "../../public/static/svg/myPage/ProfileUserIcon.svg"
 
 const Conatainer = styled.div`
     position:sticky;
@@ -113,7 +114,8 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             <div className='headerDiv'>
                 <div className='headerLeft'>
                     <BeforeIcon className="headerLeftIcon" onClick={goToBackpage}/>
-                    {pathName=== "/user" ? <img src={LoggedUser.profileImage} alt="프로필이미지"/>:null}
+                    {/* LoggedUser.ProfileImage로 바꿔야함 */}
+                    {pathName=== "/user" ? <img src={"/static/svg/myPage/ProfileUserIcon.svg"} alt="프로필이미지"/>:null}
                     <p>{changeURLName()}</p>
                 </div>
                 <div className='headerRight'>

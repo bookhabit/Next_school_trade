@@ -19,8 +19,8 @@ const Container = styled.div`
     background-color: rgba(0, 0, 0, 0.75);
   }
   .modal-contents{
-        width:350px;
-        height:780px;
+        width:90%;
+        height:90%;
         background-color:white;
         z-index:11;
         text-align:center;
