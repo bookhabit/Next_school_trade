@@ -16,6 +16,7 @@ import { registerPositionActions } from './../../store/registerPosition';
 import axios from 'axios';
 import { isEmpty } from 'lodash';
 import { RootState } from '../../store';
+import FooterButton from '../common/FooterButton';
 
 const Container = styled.form`
     /* 이미지 css */
@@ -223,20 +224,6 @@ const Container = styled.form`
         background-color:${palette.main_color};
         width:100%;
         height:70px;
-        button{
-            float:right;
-            margin:15px 20px;
-            width:100px;
-            height:45px;
-            background-color:${palette.main_text_color};
-            border-radius:50px;
-            color:${palette.main_color};
-            font-size:20px;
-            font-weight:bold;
-            text-align:center;
-            padding:5px;
-            line-height: 18px;
-        }
     }
 `
 
@@ -496,7 +483,7 @@ const RegisterProduct = () => {
                         />
             </div>
             <div className='register-footer'>
-                <button type='submit'>등록하기</button>
+                <FooterButton type='submit'>등록하기</FooterButton>
             </div>
             <ModalPortal>
                 <SetPosition closeModal={closeModal}/>

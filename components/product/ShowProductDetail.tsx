@@ -22,6 +22,7 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
 import { RootState } from '../../store';
+import FooterButton from '../common/FooterButton';
 
 const Container = styled.div`
     /* 헤더 css */
@@ -246,23 +247,6 @@ const Container = styled.div`
             font-weight:bold;
             color:${palette.main_text_color};
             flex-grow:1;
-        }
-
-
-
-        button{
-            float:right;
-            margin:15px 20px;
-            width:100px;
-            height:45px;
-            background-color:${palette.main_text_color};
-            border-radius:50px;
-            color:${palette.main_color};
-            font-size:20px;
-            font-weight:bold;
-            text-align:center;
-            padding:5px;
-            line-height: 18px;
         }
     }
 `
@@ -489,7 +473,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                 <p className='detail-footer-price'>
                     {makeMoneyString(String(productDetail.price))} 원
                 </p>
-                {postOwner ?<button onClick={goToChattinList}>채팅목록</button> :<button onClick={goToChattingRoom}>채팅하기</button> }
+                {postOwner ?<FooterButton onClick={goToChattinList}>채팅목록</FooterButton>:<FooterButton onClick={goToChattingRoom}>채팅하기</FooterButton> }
             </div>
         </Container>
     );
