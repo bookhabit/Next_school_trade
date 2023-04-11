@@ -149,9 +149,7 @@ const WriteGradeReview = () => {
             const res = await axios.post(`http://localhost:4000/review/create/${sellerId}`, 
             submitData,
             {
-                headers: {
-                    'Authorization' : `Bearer ${token}`
-                    },
+                withCredentials: true,
             }
             );
             console.log('res데이터',res)

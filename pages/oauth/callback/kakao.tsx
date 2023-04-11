@@ -16,7 +16,8 @@ const Kakao = (query:any) => {
 
     const getUserInfo = async (authCode:string)=>{
         const response = await axios.post("http://localhost:4000/auth/kakao",
-        {code:authCode})
+        {code:authCode},
+        { withCredentials: true })
         console.log(response)
         if(response.data){
             if(response.data.user.university){

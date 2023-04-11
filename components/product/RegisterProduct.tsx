@@ -386,8 +386,8 @@ const RegisterProduct = () => {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization' : `Bearer ${token}`
                      },
+                     withCredentials: true,
                 }
                 );
                 // 응답값에 따라서 라우팅처리
