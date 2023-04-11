@@ -13,6 +13,7 @@ import ProductCard from '../../../components/common/ProductCard';
 
 
 const Container = styled.div`
+    min-height:100vh;
     padding:0px 20px;
     padding-top:20px;
     padding-bottom:60px;
@@ -70,8 +71,8 @@ const favorite = ({id}:{id:number}) => {
                     data.pages.map((page,index) =>(
                         page.favorites.map((content,id)=>
                         <>
-                        <ProductCard key={id} product={content.content} />
-                        <div ref={setTarget}></div>
+                            <ProductCard key={id} product={content.content} />
+                            <div ref={setTarget}></div>
                         </>
                         )
                         

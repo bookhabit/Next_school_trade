@@ -2,7 +2,11 @@ import React from 'react';
 import Login from './Login';
 import SignUp from './SignUp';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 
+const Container = styled.div`
+    min-height:100vh;
+`
 interface IProps{
     currentLeft:boolean;
 }
@@ -13,11 +17,11 @@ const Auth:React.FC<IProps> = ({currentLeft}) => {
     const kakaoSignUp = router.query.firstLogin as string;
 
     return (
-        <div>
+        <Container>
             {currentLeft? <Login/>
             : <SignUp kakaoSignUp={kakaoSignUp}/> 
             }
-        </div>
+        </Container>
     );
 };
 

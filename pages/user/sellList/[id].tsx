@@ -6,6 +6,11 @@ import LinkFooter from '../../../components/footer/LinkFooter';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSellingList } from '../../../lib/api/product';
 import { ParsedUrlQuery } from 'querystring';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    min-height:100vh;
+`
 
 const sellList:NextPage = ({id}:ParsedUrlQuery) => {
     const loginUserId = Number(id)
@@ -13,11 +18,11 @@ const sellList:NextPage = ({id}:ParsedUrlQuery) => {
     // 왼쪽 - 판매중 / 오른쪽 - 거래완료
     const [currentLeft,setCurrentLeft] = useState(true);
     return (
-        <>
+        <Container>
             <SubHeader currentLeft={currentLeft} setCurrentLeft={setCurrentLeft} />
             <SellList userId={loginUserId} currentLeft={currentLeft} />
             <LinkFooter/>
-        </>
+        </Container>
     );
 };
 

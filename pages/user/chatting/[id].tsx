@@ -3,14 +3,19 @@ import ChattingRoom from '../../../components/chattingList/ChattingRoom';
 import ChattingRoomFooter from '../../../components/footer/ChattingRoomFooter';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    min-height:100vh;
+`
 
 const chattingRoom:NextPage = (id) => {
     console.log('채팅방페이지의 sellerId')
     return (
-        <>
-         <ChattingRoom/>
-         <ChattingRoomFooter/>
-        </>
+        <Container>
+            <ChattingRoom/>
+            <ChattingRoomFooter/>
+        </Container>
     );
 };
 

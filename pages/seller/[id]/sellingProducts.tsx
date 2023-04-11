@@ -7,16 +7,21 @@ import { useRouter } from 'next/router';
 import OnSale from '../../../components/myPage/sellList/OnSale';
 import CompletedProducts from '../../../components/myPage/CompletedProducts';
 import SellList from '../../../components/myPage/sellList/SellList';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    min-height:100vh;
+`
 
 const sellingProducts:NextPage = ({id}:ParsedUrlQuery) => {
     const sellerId = Number(id)
     const [currentLeft,setCurrentLeft] = useState(true);
     return (
-        <div>
+        <Container>
             <SubHeader currentLeft={currentLeft} setCurrentLeft={setCurrentLeft}/>
             <SellList currentLeft={currentLeft} userId={sellerId}/>
             <LinkFooter/>  
-        </div>
+        </Container>
     );
 };
 

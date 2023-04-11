@@ -3,9 +3,18 @@ import React from 'react';
 import ShowProductDetail from '../../components/product/ShowProductDetail';
 import { getProductDetail } from '../../lib/api/product';
 import { productListType } from '../../types/product/product';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    min-height:100vh;
+`
 
 const productDetail:NextPage = ({data}:any)=>{
-    return <ShowProductDetail productDetail={data}/>
+    return (
+        <Container>
+            <ShowProductDetail productDetail={data}/>
+        </Container>
+    )
 }
 
 productDetail.getInitialProps = async ({query})=>{

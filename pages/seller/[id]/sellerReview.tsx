@@ -4,6 +4,11 @@ import TradeReview from '../../../components/reivew/TradeReview';
 import { NextPage } from 'next';
 import { GetReviewList } from '../../../lib/api/review';
 import { reviewListResponseType } from '../../../types/review';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    min-height:100vh;
+`
 
 const sellerReview:NextPage = ({data}:any) => {
     const reviewList=data
@@ -13,10 +18,10 @@ const sellerReview:NextPage = ({data}:any) => {
     // }
 
     return (
-        <div>
+        <Container>
             <TradeReview reviewList={reviewList} ownerName={ownerName}/>
             <LinkFooter/>  
-        </div>
+        </Container>
     );
 };
 

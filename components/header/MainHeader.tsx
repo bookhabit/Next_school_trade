@@ -104,7 +104,7 @@ const mainHeader = () => {
             router.push("/user/alarm")
         }else{
             alert('로그인이 필요합니다.')
-            router.push("auth")
+            router.push("/auth")
         }
     }
 

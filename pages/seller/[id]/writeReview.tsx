@@ -1,13 +1,18 @@
 import React from 'react';
 import LinkFooter from '../../../components/footer/LinkFooter';
 import WriteReview from '../../../components/seller/WriteReview';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    min-height:100vh;
+`
 
 const writeReview = () => {
     return (
-        <div>
+        <Container>
             <WriteReview/>
             <LinkFooter/>  
-        </div>
+        </Container>
     );
 };
 

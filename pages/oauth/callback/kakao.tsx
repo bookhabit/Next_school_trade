@@ -6,6 +6,11 @@ import { GetServerSideProps } from "next";
 import { useDispatch } from 'react-redux';
 import { userActions } from './../../../store/user';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    min-height:100vh;
+`
 
 const Kakao = (query:any) => {
     const authCode = query.code;
@@ -41,11 +46,9 @@ const Kakao = (query:any) => {
     },[])
 
     return (
-        <div>
-        <div>
+        <Container>
             <p>잠시만 기다려 주세요! 로그인 중입니다.</p>
-        </div>
-        </div>
+        </Container>
     );
     };
 

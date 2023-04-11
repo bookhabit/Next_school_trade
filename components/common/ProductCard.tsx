@@ -144,7 +144,7 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
             // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
         }else{
             alert('로그인이 필요합니다.')
-            router.push("auth")
+            router.push("/auth")
             return false;
         }
     }

@@ -61,7 +61,7 @@ const LinkFooter = () => {
                         })
                     }else{
                         alert('로그인이 필요합니다.')
-                        router.push("auth")
+                        router.push("/auth")
                     }
                 }}>
                     <RegisterIcon/>
@@ -75,7 +75,7 @@ const LinkFooter = () => {
                         })
                     }else{
                         alert('로그인이 필요합니다.')
-                        router.push("auth")
+                        router.push("/auth")
                     }
                 }}>
                     <ChattingIcon/>
@@ -89,7 +89,7 @@ const LinkFooter = () => {
                         })
                     }else{
                         alert('로그인이 필요합니다.')
-                        router.push("auth")
+                        router.push("/auth")
                     }
                 }}>
                      <UserIcon/>
