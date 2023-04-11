@@ -32,7 +32,7 @@ interface KakaoSignUpAPIBody{
 export const signupAPI = (body:SignUpAPIBody)=>axios.post<LoggedUserType>("http://localhost:4000/auth/local/signup",body)
 
 // 카카오 회원가입 api
-export const kakaoSignupAPI = (body:KakaoSignUpAPIBody,token:string)=>
+export const kakaoSignupAPI = (body:KakaoSignUpAPIBody)=>
 axios.post<LoggedUserType>("http://localhost:4000/auth/kakao/signup",
                 body,
                 {
@@ -47,7 +47,7 @@ export const loginAPI = (body:{email:string;password:string})=>
 export const meAPI = ()=> axios.post("http://localhost:4000/user/islogin",{withCredentials: true,});
 
 // 로컬스토리지의 access_token의 유저 정보를 받아오는 api
-export const getUserInfo = (token:string)=>axios.post("http://localhost:4000/user/islogin",{
+export const getUserInfo = ()=>axios.post("http://localhost:4000/user/islogin",{
         withCredentials: true,
     }
 )

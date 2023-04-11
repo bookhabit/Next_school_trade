@@ -377,7 +377,6 @@ const RegisterProduct = () => {
             for (const [key, value] of formData.entries()) {
                 console.log(key,value);
             }
-            const token = localStorage.getItem('login-token')
             try{
                 console.log("formData : ", formData)
                 // 상품등록 api 호출

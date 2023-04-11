@@ -388,9 +388,6 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             gender = strToNumGender(inputGender);
         }
         if(validateKakaoForm()){
-            // 헤더에 토큰 추가
-            const token = localStorage.getItem('login-token') as string;
-            const headers = { Authorization: `Bearer ${token}` };
             try{
                 const signUpBody={
                     name,
@@ -406,10 +403,8 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     longitude,
                 }
                 console.log('signUpBody',signUpBody)
-                const {data} = await kakaoSignupAPI(signUpBody,token);
+                const {data} = await kakaoSignupAPI(signUpBody);
                 console.log('클라이언트 받은 데이터',data.user)
-                // 엑세스 토큰 저장하는 로직 필요 - 우선 로컬스토리지 저장
-                localStorage.setItem('login-token', data.token);
 
                 // 유저정보 저장
                 dispatch(userActions.setLoggedUser(data.user)) 
