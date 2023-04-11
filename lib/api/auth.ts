@@ -36,9 +36,7 @@ export const kakaoSignupAPI = (body:KakaoSignUpAPIBody,token:string)=>
 axios.post<LoggedUserType>("http://localhost:4000/auth/kakao/signup",
                 body,
                 {
-                    headers:{
-                        Authorization : `Bearer ${token}`
-                    }
+                    withCredentials: true,
                 })
 
 // 로그인 api
@@ -50,9 +48,7 @@ export const meAPI = ()=> axios.post("http://localhost:4000/user/islogin",{withC
 
 // 로컬스토리지의 access_token의 유저 정보를 받아오는 api
 export const getUserInfo = (token:string)=>axios.post("http://localhost:4000/user/islogin",{
-        headers:{
-            Authorization : `Bearer ${token}`
-        }
+        withCredentials: true,
     }
 )
 
