@@ -10,9 +10,6 @@ const globalStyle = css`
     body{
         font-family: Noto Sans,Noto Sans KR,Roboto;
         color:${palette.black};
-        height: unset;
-        overflow: auto scroll;
-
     }
     a{
         text-decoration: none;

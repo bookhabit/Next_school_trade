@@ -27,7 +27,6 @@ interface BackgroundColor{
 const Container = styled.div<BackgroundColor>`
     display:flex;
     justify-content:center;
-    background-color:white;
     .pc-style{
         display:none;
     }

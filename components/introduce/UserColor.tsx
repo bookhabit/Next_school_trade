@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { userBackgroundActions } from '../../store/userBackground';
 
 const Container = styled.div`
-    position:absolute;
+    position:fixed;
     right:0;
     bottom:0;
     display:flex;

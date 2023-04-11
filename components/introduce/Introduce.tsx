@@ -12,6 +12,7 @@ import { productCategoryList } from '../../lib/staticData';
 import CategoryCard from './CategoryCard';
 
 const Container = styled.div`
+    position:fixed;
     height:100vh;
     background-color:white;
     padding:150px 0px;
