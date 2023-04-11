@@ -37,3 +37,14 @@ export const majorList = [
   ];
 
 // 상품 등록 카테고리
+export const productCategoryList = [
+  "전자제품",
+  "책/교재",
+  "스포츠/레저",
+  "강의자료",
+  "가구/주방",
+  "생활용품",
+  "의류",
+  "취미/게임",
+  "뷰티/미용"
+]

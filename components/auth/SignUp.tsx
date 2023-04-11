@@ -358,7 +358,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
 
                 // 유저정보 저장
                 dispatch(userActions.setLoggedUser(data.user)) 
-                router.push("/home")
+                router.push("/")
     
             }catch(e){
                 console.log(e)
