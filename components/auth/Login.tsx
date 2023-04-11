@@ -116,7 +116,7 @@ const Login = () => {
                 // 엑세스 토큰 저장하는 로직 필요 - 우선 로컬스토리지 저장
                 localStorage.setItem('login-token', data.token);
                 dispatch(userActions.setLoggedUser(data.user))
-                router.push("/home")
+                router.push("/")
             }catch(e:any){
                 // data에 있는 상태코드에 따라 에러메시지 출력
                 console.log('에러',e.response)

@@ -47,7 +47,7 @@ const LinkFooter = () => {
             <div className='link-flex-wrap'>
                 <div className='link-flex-item' onClick={()=>{
                     router.push({
-                        pathname:"/home"
+                        pathname:"/"
                     })
                 }}>
                     <HomeIcon/>

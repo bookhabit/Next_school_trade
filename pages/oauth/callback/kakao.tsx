@@ -23,7 +23,7 @@ const Kakao = (query:any) => {
                 // 유저정보에서 대학교 데이터가 있다면 로그인시키기 
                 dispatch(userActions.setLoggedUser(response.data.user))
                 localStorage.setItem('login-token', response.data.token);
-                router.push('/home')
+                router.push('/')
             }else{
                 // 유저정보에서 대학교 데이터가 없다면 카카오 첫 로그인이라는 뜻 > 회원가입 페이지로 보내기
                 localStorage.setItem('login-token', response.data.token);
