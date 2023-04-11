@@ -5,12 +5,14 @@ import user from "./user";
 import common from "./common";
 import auth from "./auth";
 import registerPosition from "./registerPosition";
+import userBackground from "./userBackground";
 
 const rootReducer = combineReducers({
     common:common.reducer,
     user:user.reducer,
     auth:auth.reducer,
     registerPosition:registerPosition.reducer,
+    userBackground:userBackground.reducer,
 })
 
 

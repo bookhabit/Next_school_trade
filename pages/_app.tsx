@@ -17,8 +17,14 @@ import styled from "styled-components";
 import Introduce from "../components/introduce/Introduce";
 import palette from "../styles/palette";
 import LinkFooter from "../components/footer/LinkFooter";
+import UserColor from "../components/introduce/UserColor";
 
-const Container = styled.div`
+interface BackgroundColor{
+    firstColor:string;
+    secondColor:string;
+}
+
+const Container = styled.div<BackgroundColor>`
     display:flex;
     justify-content:center;
     background-color:white;
@@ -27,7 +33,7 @@ const Container = styled.div`
     }
 
     @media only screen and (min-width: 430px) {
-        background-color:${palette.pc_background};
+        background: linear-gradient(${(props)=>props.firstColor}, ${(props)=>props.secondColor});
     }
     @media only screen and (min-width: 1023px) {
         .pc-style{
@@ -64,9 +70,12 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
 
     const [queryClient] = useState(() => new QueryClient());
     
+    // 사용자가 배경색 지정하기
+    const firstColor = useSelector((state:RootState)=>state.userBackground.firstColor)
+    const secondColor = useSelector((state:RootState)=>state.userBackground.secondColor)
 
     return(
-        <Container>
+        <Container firstColor={firstColor} secondColor={secondColor}>
             <QueryClientProvider client={queryClient}>
                 <Hydrate state={pageProps.dehydratedState}>
                     <GlobalStyle/>
@@ -79,6 +88,7 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
                         <div id="root-modal"/>
                         <ReactQueryDevtools initialIsOpen={false} />
                     </MobileContainer>
+                    <UserColor/>
                 </Hydrate>
             </QueryClientProvider>
         </Container>

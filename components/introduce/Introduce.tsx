@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LogoIcon from "../../public/static/svg/index/logo.svg"
 import styled from 'styled-components';
 import palette from '../../styles/palette';
@@ -13,7 +13,8 @@ const Container = styled.div`
     background-color:white;
     padding:150px 0px;
     text-align:center;
-    background-color:${palette.pc_background};
+    /* background-color:${palette.pc_background}; */
+    background-color:transparent;
 
     .introduce-text{
         margin-top:80px;
@@ -37,20 +38,6 @@ const Container = styled.div`
     .startBtn{
         margin-top:170px;
     }
-    .footerText{
-        margin-top:30px;
-        p{
-            font-size:15px;
-            font-weight:bold;
-            span{
-                margin-left:10px;
-                color:${palette.main_color};
-                &:hover{
-                    color:${palette.text_hover};
-                }
-            }
-        }
-    }
 `
 
 const Introduce = () => {
@@ -59,6 +46,7 @@ const Introduce = () => {
     const linkAsIsLogged = ()=>{
         return isLogged ? "home" : "auth"
     }
+
     return (
         <Container>
             <LogoIcon/>
@@ -68,15 +56,8 @@ const Introduce = () => {
             </div>
             <div className='startBtn'>
                 <Link href={linkAsIsLogged()}>
-                    <Button width='260px' height='60px' radius='30px'>시작하기</Button>
+                    <Button width='260px' height='60px' radius='30px'>로그인</Button>
                 </Link>
-            </div>
-            <div className='footerText'>
-                <p>이미 계정이 있으신가요? 
-                <Link href="auth">
-                    <span>로그인</span>
-                </Link>
-                </p>
             </div>
         </Container>
     );
