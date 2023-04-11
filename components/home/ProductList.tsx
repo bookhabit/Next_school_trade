@@ -24,7 +24,7 @@ const ProductList:React.FC<IProps> = ({completedProducts,data,showChangeComplete
         <Container completedProducts={completedProducts}>  
         {/* 데이터가 들어있는지 확인 후 map 함수 실행 - 에러처리 */}
             {
-            isEmpty(productList) ? null
+            isEmpty(productList) ? <h2>찾으시는 상품이 없습니다</h2>
             :productList.map((product)=>(
                 completedProducts ? 
                 <CompletedProductCard key={product.id} product={product}/>  : 

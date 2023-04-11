@@ -1,5 +1,5 @@
 import axios from '../../lib/api';
-import { LoggedUserType, UserType } from '../../types/user';
+import { LoggedUserType } from '../../types/user';
 
 // 로컬 회원가입 body
 interface SignUpAPIBody{
@@ -46,7 +46,7 @@ export const loginAPI = (body:{email:string;password:string})=>
     axios.post<LoggedUserType>("http://localhost:4000/auth/local/signin",body)
 
 // 쿠키의 access_token의 유저 정보를 받아오는 api
-export const meAPI = ()=> axios.get<UserType>("api/auth/me");
+export const meAPI = ()=> axios.post("http://localhost:4000/user/islogin",{withCredentials: true,});
 
 // 로컬스토리지의 access_token의 유저 정보를 받아오는 api
 export const getUserInfo = (token:string)=>axios.post("http://localhost:4000/user/islogin",{

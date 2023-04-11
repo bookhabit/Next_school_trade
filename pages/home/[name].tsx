@@ -15,7 +15,6 @@ const Container = styled.div`
     padding-top:20px;
 `
 const categoryHome = ({categoryName}:any) => {
-    console.log(categoryName)
     const lastPageNumber=3 // 백엔드 offset 받아와야함
     const {
         data, // 💡 data.pages를 갖고 있는 배열

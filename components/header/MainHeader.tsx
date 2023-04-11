@@ -108,6 +108,10 @@ const mainHeader = () => {
         }
     }
 
+    // 검색창 기능
+    // 변수설정 - 스토어
+    // onChange함수 - 디스패치
+
     return (
         <Conatainer>
             <div className='headerDiv'>
