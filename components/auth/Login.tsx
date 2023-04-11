@@ -64,27 +64,6 @@ const Container = styled.form`
        }
     }
 
-  /* 반응형 스타일링 */
-  /* 태블릿 버전 */
-  @media screen and (min-width: 768px) {
-    .login-input-wrapper{
-      width:50%;
-    }
-    .login-submit-button-wrapper{
-      width:50%;
-    }
-  }
-
-  /* pc버전 */
-  @media screen and (min-width: 1024px) {
-    .login-input-wrapper{
-      width:40%;
-    }
-    .login-submit-button-wrapper{
-      width:40%;
-    }
-  }
-  
 `;
 
 const Login = () => {

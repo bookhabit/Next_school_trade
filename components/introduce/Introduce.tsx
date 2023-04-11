@@ -13,6 +13,7 @@ const Container = styled.div`
     background-color:white;
     padding:150px 0px;
     text-align:center;
+    background-color:${palette.pc_background};
 
     .introduce-text{
         margin-top:80px;

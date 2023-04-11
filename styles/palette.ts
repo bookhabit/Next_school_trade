@@ -35,5 +35,6 @@ export default {
     btn_hover:"#79FF6D",
     text_hover:"#007513",
     divistion_color:"#D9D9D9",
-    orange_btn:"#F36363"
+    orange_btn:"#F36363",
+    pc_background:"#EFFFEE"
   };

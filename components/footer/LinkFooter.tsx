@@ -12,7 +12,7 @@ const Container = styled.div`
     position:fixed;
     bottom:0;      
     background-color:${palette.main_color};
-    width:100%;
+    min-width:430px;
     height:60px;
     
     .link-flex-wrap{

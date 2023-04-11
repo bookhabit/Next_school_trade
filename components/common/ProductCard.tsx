@@ -15,7 +15,7 @@ import DefaultImgIcon from "../../public/static/svg/product/default_img.svg"
 import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon.svg"
 
 const Container = styled.div`
-    width:350px;
+    width:100%;
     height:105px;
     margin-bottom:10px;
     display:flex;

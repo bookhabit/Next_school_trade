@@ -128,45 +128,6 @@ const Container = styled.form<KaKaoSignUp>`
         border-bottom:1px solid ${palette.gray_eb}
     }
 
-  /* 반응형 스타일링 */
-  /* 태블릿 버전 */
-  @media screen and (min-width: 768px) {
-    .input-wrapper{
-      width:50%;
-    }
-    .sign-up-universityAndGender-selectors{
-        width:50%;
-    }
-    .sign-up-modal-birthday-selectors{
-        width:50%;
-    }
-    .signup-setMyPosition-wrapper{
-        width:50%;
-    }
-    .sign-up-modal-submit-button-wrapper{
-        width:50%;
-    }
-  }
-
-  /* pc버전 */
-  @media screen and (min-width: 1024px) {
-    .input-wrapper{
-        width:40%;
-    }
-    .sign-up-universityAndGender-selectors{
-        width:40%;
-    }
-    .sign-up-modal-birthday-selectors{
-        width:40%;
-    }
-    .signup-setMyPosition-wrapper{
-        width:40%;
-    }
-    .sign-up-modal-submit-button-wrapper{
-        width:40%;
-    }
-  }
-
 `
 
 interface IProps{

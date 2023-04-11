@@ -222,7 +222,7 @@ const Container = styled.form`
         position:fixed;
         bottom:0;   
         background-color:${palette.main_color};
-        width:100%;
+        min-width:430px;
         height:70px;
     }
 `

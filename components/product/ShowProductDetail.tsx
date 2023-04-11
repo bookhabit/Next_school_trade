@@ -29,7 +29,7 @@ const Container = styled.div`
     .detail-header{
         position:fixed;
         top:0;
-        width:100%;
+        min-width:430px;
         height:90px;
         background-color: ${palette.main_color};
         display:flex;
@@ -229,7 +229,7 @@ const Container = styled.div`
         position:fixed;
         bottom:0;   
         background-color:${palette.main_color};
-        width:100%;
+        min-width:430px;
         height:70px;
         display:flex;
         align-items:center;

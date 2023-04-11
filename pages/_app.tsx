@@ -13,6 +13,40 @@ import Header from "../components/header/Header";
 import { Hydrate, QueryClient,QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { LoggedUserType } from "../types/user";
+import styled from "styled-components";
+import Introduce from "../components/introduce/Introduce";
+import palette from "../styles/palette";
+import LinkFooter from "../components/footer/LinkFooter";
+
+const Container = styled.div`
+    display:flex;
+    justify-content:center;
+    background-color:white;
+    .pc-style{
+        display:none;
+    }
+
+    @media only screen and (min-width: 430px) {
+        background-color:${palette.pc_background};
+    }
+    @media only screen and (min-width: 1023px) {
+        .pc-style{
+            display:block;
+        }
+    }
+`
+
+const PcContainer = styled.div`
+    width:430px;
+`
+
+const MobileContainer = styled.div`
+    width:430px;
+    background-color:white;
+    @media only screen and (min-width: 1023px) {
+        margin-left:80px;
+    }
+`
 
 // const queryClient = new QueryClient();
 
@@ -32,17 +66,22 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
     
 
     return(
-        <>
+        <Container>
             <QueryClientProvider client={queryClient}>
                 <Hydrate state={pageProps.dehydratedState}>
-                    <Header/>
                     <GlobalStyle/>
-                    <Component {...pageProps}/>
-                    <div id="root-modal"/>
-                    <ReactQueryDevtools initialIsOpen={false} />
+                    <PcContainer className="pc-style">
+                        <Introduce/>
+                    </PcContainer>
+                    <MobileContainer className="mobile-style">
+                        <Header/>
+                        <Component {...pageProps}/>
+                        <div id="root-modal"/>
+                        <ReactQueryDevtools initialIsOpen={false} />
+                    </MobileContainer>
                 </Hydrate>
             </QueryClientProvider>
-        </>
+        </Container>
     )
 }
 
