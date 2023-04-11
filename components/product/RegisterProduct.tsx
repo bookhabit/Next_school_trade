@@ -393,7 +393,7 @@ const RegisterProduct = () => {
                 // 응답값에 따라서 라우팅처리
                 if (res.status===201) {
                     alert('상품등록이 완료되었습니다')
-                    router.push('/home');
+                    router.push('/');
                 } else {
                     alert('Failed to create product.');
                 }
