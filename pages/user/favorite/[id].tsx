@@ -13,7 +13,9 @@ import ProductCard from '../../../components/common/ProductCard';
 
 
 const Container = styled.div`
-    min-height:100vh;
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
     padding:0px 20px;
     padding-top:20px;
     padding-bottom:60px;

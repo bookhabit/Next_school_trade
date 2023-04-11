@@ -5,7 +5,9 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    min-height:100vh;
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
 `
 interface IProps{
     currentLeft:boolean;

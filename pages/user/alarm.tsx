@@ -4,7 +4,9 @@ import AlarmList from './../../components/alarm/AlarmList';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    min-height:100vh;
+	@media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
 `
 const alarm = () => {
     // 사용자의 정보를 불러와서 알림내용 개수에 맞게 리스트를 map함수를 불러준다

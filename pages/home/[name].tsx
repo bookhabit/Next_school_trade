@@ -13,6 +13,9 @@ import { Page } from '../../types/product/product';
 const Container = styled.div`
     padding:0px 20px;
     padding-top:20px;
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
 `
 const categoryHome = ({categoryName}:any) => {
     const lastPageNumber=3 // 백엔드 offset 받아와야함

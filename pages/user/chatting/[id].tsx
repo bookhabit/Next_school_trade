@@ -6,7 +6,9 @@ import { NextPage } from 'next';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    min-height:100vh;
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
 `
 
 const chattingRoom:NextPage = (id) => {

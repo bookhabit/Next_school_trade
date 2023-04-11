@@ -15,7 +15,9 @@ import { GetReviewList } from '../../lib/api/review';
 import { reviewListResponseType } from '../../types/review';
 
 const Container = styled.div`
-  min-height:100vh;
+  @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+  }
   margin:40px 35px;
   padding-bottom:30px;
   .seller-profile{

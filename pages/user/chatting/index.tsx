@@ -4,7 +4,9 @@ import ChattingList from '../../../components/chattingList/ChattingList';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    min-height:100vh;
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
 `
 
 const chattingList = () => {

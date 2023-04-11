@@ -9,7 +9,9 @@ import { ParsedUrlQuery } from 'querystring';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    min-height:100vh;
+    @media only screen and (min-width: 1023px) {
+	    min-height:100vh;
+    }
 `
 
 const sellList:NextPage = ({id}:ParsedUrlQuery) => {

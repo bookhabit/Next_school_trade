@@ -25,7 +25,9 @@ import { RootState } from '../../store';
 import FooterButton from '../common/FooterButton';
 
 const Container = styled.div`
-    min-height:100vh;
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
     /* 헤더 css */
     .detail-header{
         position:fixed;
