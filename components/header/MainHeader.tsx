@@ -9,6 +9,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { useRouter } from 'next/router';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -58,11 +59,18 @@ const Conatainer = styled.div`
                     opacity: 0.7;
                 }
             }
+            .searchIcon{
+                cursor: pointer;
+            }
 
         }
         /* 사용자 알람정보 boolean state에 따라서 props를 전달받아야함 */
         .alarmBox{
+            div{
+                cursor: pointer;
+            }
             .showAlarm{
+                cursor: pointer;
                 position:absolute;
                 width:20px;
                 height:20px;
@@ -87,6 +95,19 @@ const mainHeader = () => {
     const [testAlarmState,setTestAlarmState] = useState<boolean>(true)
     const testAlarmCount = 2
     const userUniversity = useSelector((state:RootState)=>state.user.university)
+
+    // 로그인 확인
+    const isLogged = useSelector((state:RootState)=>state.user.isLogged)
+    const router = useRouter();
+    const goToAlarm = ()=>{
+        if(isLogged){
+            router.push("/user/alarm")
+        }else{
+            alert('로그인이 필요합니다.')
+            router.push("auth")
+        }
+    }
+
     return (
         <Conatainer>
             <div className='headerDiv'>
@@ -96,9 +117,9 @@ const mainHeader = () => {
                     <SearchIcon className="searchIcon"/>
                 </div>
                 <div className='alarmBox'>
-                    <Link href="/user/alarm">
+                    <div onClick={goToAlarm}>
                         <AlarmIcon className="alarmIcon"/>
-                    </Link>
+                    </div>
                     {testAlarmState ? <span className='showAlarm'>{testAlarmCount}</span>  : null}
                 </div>
                 <Link href="/category">

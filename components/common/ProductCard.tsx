@@ -13,6 +13,8 @@ import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
 import DefaultImgIcon from "../../public/static/svg/product/default_img.svg"
 import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon.svg"
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Container = styled.div`
     width:100%;
@@ -25,6 +27,7 @@ const Container = styled.div`
         width:116px;
         height:105px;
         background-color:${palette.gray_80};
+        cursor: pointer;
         img {
           width: 116px;
           height: 100%;
@@ -56,6 +59,7 @@ const Container = styled.div`
         .productTitle{
             font-size:16px;
             font-weight:bold;
+            cursor: pointer;
         }
         .productPrice{
             font-size:14px;
@@ -118,6 +122,9 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
         imagepath = product.images[0].path
         imageAlt = product.images[0].filename
     }
+    const router= useRouter();
+    const isLogged = useSelector((state:RootState)=>state.user.isLogged)
+
     // 거래완료로 바꾸는 버튼 모달
     const [showCompletedBtn,setShowCompletedBtn] = useState(false)
 
@@ -131,10 +138,17 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
     
     // 하트아이콘 변경
     const toggleHeartIcon = ()=>{
-        setFavoriteProduct(!favoriteProduct)
-        // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
+        // 로그인 확인
+        if(isLogged){
+            setFavoriteProduct(!favoriteProduct)
+            // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
+        }else{
+            alert('로그인이 필요합니다.')
+            router.push("auth")
+            return false;
+        }
     }
-    const router= useRouter();
+
     const goToDetail = ()=>{
         router.push({
             pathname:`/product/[id]`,

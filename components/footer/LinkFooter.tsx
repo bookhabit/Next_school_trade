@@ -7,6 +7,8 @@ import RegisterIcon from "../../public/static/svg/footer/register.svg"
 import UserIcon from "../../public/static/svg/footer/user.svg"
 import ChattingIcon from "../../public/static/svg/footer/chatting.svg"
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Container = styled.div`
     position:fixed;
@@ -19,6 +21,7 @@ const Container = styled.div`
         display:flex;
         justify-content:space-evenly;
         .link-flex-item{
+            cursor: pointer;
             display:flex;
             flex-direction:column;
             justify-content:center;
@@ -37,6 +40,8 @@ const Container = styled.div`
 
 const LinkFooter = () => {
     const router = useRouter();
+    // 로그인 확인
+    const isLogged = useSelector((state:RootState)=>state.user.isLogged)
     return (
         <Container>
             <div className='link-flex-wrap'>
@@ -50,27 +55,42 @@ const LinkFooter = () => {
                 </div>
                 
                 <div className='link-flex-item' onClick={()=>{
-                    router.push({
-                        pathname:"/product/register"
-                    })
+                    if(isLogged){
+                        router.push({
+                            pathname:"/product/register"
+                        })
+                    }else{
+                        alert('로그인이 필요합니다.')
+                        router.push("auth")
+                    }
                 }}>
                     <RegisterIcon/>
                     <p>등록</p>
                 </div>
                 
                 <div className='link-flex-item' onClick={()=>{
-                    router.push({
-                        pathname:"/user/chatting"
-                    })
+                    if(isLogged){
+                        router.push({
+                            pathname:"/user/chatting"
+                        })
+                    }else{
+                        alert('로그인이 필요합니다.')
+                        router.push("auth")
+                    }
                 }}>
                     <ChattingIcon/>
                     <p>채팅</p>
                 </div>
                 
                 <div className='link-flex-item' onClick={()=>{
-                    router.push({
-                        pathname:"/user"
-                    })
+                    if(isLogged){
+                        router.push({
+                            pathname:"/user"
+                        })
+                    }else{
+                        alert('로그인이 필요합니다.')
+                        router.push("auth")
+                    }
                 }}>
                      <UserIcon/>
                     <p>내정보</p>

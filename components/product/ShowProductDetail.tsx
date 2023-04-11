@@ -46,6 +46,7 @@ const Container = styled.div`
                 font-weight:bold;
             }
             .detail-header-left-icon{
+                cursor: pointer;
                 margin-right:15px;
             }
         }
@@ -111,6 +112,9 @@ const Container = styled.div`
             background-color:#EAEAEA;
             border-bottom:1px solid ${palette.divistion_color};
             .seller-info-left{
+                p{
+                    cursor: pointer;
+                }
                 width:110px;
                 display:flex;
                 align-items:center;
@@ -238,6 +242,7 @@ const Container = styled.div`
             margin-left:20px;
             margin-right:20px;
             .detail-heartIcon{
+                cursor: pointer;
                 margin-right:10px;
             }
         }
@@ -274,12 +279,19 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         imagepath = productDetail.images[0].path
         imageAlt = productDetail.images[0].filename
     }
+    const router= useRouter();
+    
+    const selectOptions = ["판매중","거래완료"]
+
+    const [favoriteProduct,setFavoriteProduct] = useState(true)
+    
+    const isLogged = useSelector((state:RootState)=>state.user.isLogged)
+
     // 이전 페이지 이동
     const goToBackpage = ()=>{
         window.history.back();
     }
     // 판매자 정보 페이지로 이동 - owner.id 넘김
-    const router= useRouter();
     const goToSellerProfile = ()=>{
         router.push({
             pathname:`/seller/${productDetail.owner.id}`
@@ -288,22 +300,33 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     
     // 게시글 주인이 아닐 경우 채팅하기 버튼 이벤트 
     const goToChattingRoom = ()=>{
-        router.push({
-            pathname:`/user/chatting/[id]`,
-            query:{id:productDetail.owner.id}
-        })
+        if(isLogged){
+            router.push({
+                pathname:`/user/chatting/[id]`,
+                query:{id:productDetail.owner.id}
+            })
+        }else{
+            alert('로그인이 필요합니다.')
+            router.push("/auth")
+            return false;
+        }
     }
 
     // 게시글 주인일 경우 채팅방 버튼 이벤트
     const goToChattinList = ()=>{
-        router.push({
-            pathname:`/user/chatting`
-        })
+        if(isLogged){
+            router.push({
+                pathname:`/user/chatting`
+            })
+        }else{
+            alert('로그인이 필요합니다.')
+            router.push("/auth")
+            return false;
+        }
     }
 
     // 판매자 정보
     const ownerInfo = productDetail.owner;
-    console.log(ownerInfo)
     
     // 로그인 - 현재 유저 id
     const userId = useSelector((state:RootState)=>state.user.id)
@@ -326,14 +349,16 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         return starCount
     };
 
-    const selectOptions = ["판매중","거래완료"]
-
-    const [favoriteProduct,setFavoriteProduct] = useState(true)
-    
     // 하트아이콘 변경
     const toggleHeartIcon = ()=>{
-        setFavoriteProduct(!favoriteProduct)
-        // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
+        if(isLogged){
+            setFavoriteProduct(!favoriteProduct)
+            // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
+        }else{
+            alert('로그인이 필요합니다.')
+            router.push("/auth")
+            return false;
+        }
     }
 
     // dateTime 상대시간으로 출력하기
@@ -378,6 +403,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                 return "잘못된경로";
         }
     }
+
 
     return (
         <Container>
