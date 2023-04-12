@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    @media only screen and (min-width: 1023px) {
+    @media only screen and (min-width: 430px) {
 	    min-height:100vh;
     }
 `

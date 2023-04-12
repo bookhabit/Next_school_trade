@@ -15,7 +15,6 @@ const Conatainer = styled.div`
     background-color: ${palette.main_color};
     display:flex;
     align-items:center;
-
     .headerDiv{
         display:flex;
         align-items:center;

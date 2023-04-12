@@ -31,15 +31,16 @@ const Conatainer = styled.div`
         height:45px;
 
         p{
+            width:20%;
             font-family:Roboto;
             font-size:20px;
             color:${palette.main_text_color};
             font-weight:bold;
-            width:60px;
             line-height:30px;
         }
 
         .searchBar{
+            width:60%;
             background-color:${palette.main_text_color};
             border-radius:20px;
             padding:5px;
@@ -68,25 +69,32 @@ const Conatainer = styled.div`
         }
         /* 사용자 알람정보 boolean state에 따라서 props를 전달받아야함 */
         .alarmBox{
+            width:5%;
             div{
                 cursor: pointer;
             }
-            .showAlarm{
-                cursor: pointer;
-                position:absolute;
-                width:20px;
-                height:20px;
-                background-color:#F1531A;
-                color:${palette.main_text_color};
-                font-size:15px;
-                font-weight:400px;
-                text-align:center;
-                align-items:center;
-                border-radius:50px;
-                padding-top:2px;
-                top:22px;
-                left: calc(50% - 9px/2 + 150px)
+            .alarmIcon{
+                position: relative;
+                .showAlarm{
+                    cursor: pointer;
+                    position:absolute;
+                    top:-10px;
+                    left: 10px;
+                    width:20px;
+                    height:20px;
+                    background-color:#F1531A;
+                    color:${palette.main_text_color};
+                    font-size:15px;
+                    font-weight:400px;
+                    text-align:center;
+                    align-items:center;
+                    border-radius:50px;
+                    padding-top:2px;
+                }
             }
+        }
+        .categoryBox{
+            width:5%;
         }
 
     }
@@ -131,12 +139,12 @@ const mainHeader = () => {
                     <SearchIcon className="searchIcon"/>
                 </div>
                 <div className='alarmBox'>
-                    <div onClick={goToAlarm}>
-                        <AlarmIcon className="alarmIcon"/>
+                    <div onClick={goToAlarm} className="alarmIcon">
+                        <AlarmIcon/>
+                        {testAlarmState ? <span className='showAlarm'>{testAlarmCount}</span>  : null}
                     </div>
-                    {testAlarmState ? <span className='showAlarm'>{testAlarmCount}</span>  : null}
                 </div>
-                <Link href="/category">
+                <Link href="/category" className='categoryBox'>
                     <HambergerIcon/>
                 </Link>
             </div>

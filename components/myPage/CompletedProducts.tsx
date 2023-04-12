@@ -72,7 +72,6 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
                 data.pages.map((page, index) => 
                     <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page.contents} />
             ):<h2>상품이 없습니다</h2>}
-            {/* {soldList ? <ProductList completedProducts={true} data={soldList} /> : <h2>상품들을 불러오는 중입니다.</h2>} */}
         </Container>
     );
 };

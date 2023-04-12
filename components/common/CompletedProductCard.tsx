@@ -16,26 +16,18 @@ const Container = styled.div`
     height:105px;
     margin-bottom:10px;
     display:flex;
-    
-    .complete-text{
-        position:absolute;
-        left:160px;
-        color:${palette.main_text_color};
-        margin-top:15px;
-    }
-    
+       
     .productImg{
         width:116px;
         height:105px;
         img {
           width: 100%;
           height: 100%;
-          opacity:0.6;
         }
         
     }
     .productInfo{
-        padding:10px;
+        padding:5px 10px;
         width:100%;
         .productTitle{
             font-size:16px;
@@ -49,7 +41,7 @@ const Container = styled.div`
         .info-footer{
             display:flex;
             justify-content:space-between;
-            margin-top:30px;
+            margin-top:35px;
             p{
                 font-size:13px;
                 color:${palette.updatedDate}
@@ -62,7 +54,6 @@ const Container = styled.div`
         .info-footerRight{
             display:flex;
             align-items:center;
-            
             .heartDiv{
                 display:flex;
                 align-items:center;
@@ -84,18 +75,6 @@ const Container = styled.div`
     }
   
 `
-
-// 테스트 데이터 타입
-// type Product = {
-//         id:number,
-//         title:string,
-//         price:string,
-//         updatedDate:string,
-//         heartCount:number,
-//         chattingCount:number,
-//         img:{src:string},
-//         favorite:boolean
-// }
 
 interface IProps{
     product:productListType
@@ -119,9 +98,6 @@ const CompletedProductCard:React.FC<IProps> = ({product}) => {
     return (
         <>
             <Container>
-                <div className='complete-text'>
-                    <h2>거래완료</h2>
-                </div>
                 <div className='productImg'>
                 {imagepath? 
                     <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>

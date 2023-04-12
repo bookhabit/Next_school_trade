@@ -39,27 +39,33 @@ const Container = styled.div`
         }
     }
     .productInfo{
-        padding:10px;
+        padding:5px 10px;
         width:100%;
-        .change-completed-wrap{
-            position: absolute;
-            right:20px;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            flex-direction:row-reverse;
-            .change-completed{
-                background-color:white;
-                color:${palette.updatedDate};
-                font-size:15px;
-                font-weight:bold;
-                margin-right:10px;
+        .change-completed-wrap-parent{
+            width:100%;
+            height:100%;
+            position: relative;
+            .change-completed-wrap{
+                position: absolute;
+                right:0px;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                flex-direction:row-reverse;
+                .change-completed{
+                    background-color:white;
+                    color:${palette.updatedDate};
+                    font-size:15px;
+                    font-weight:bold;
+                    margin-right:10px;
+                }
             }
         }
         .productTitle{
             font-size:16px;
             font-weight:bold;
             cursor: pointer;
+            display:inline-block;
         }
         .productPrice{
             font-size:14px;
@@ -69,7 +75,7 @@ const Container = styled.div`
         .info-footer{
             display:flex;
             justify-content:space-between;
-            margin-top:30px;
+            margin-top:35px;
             p{
                 font-size:13px;
                 color:${palette.updatedDate}
@@ -171,15 +177,16 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
                     }
                 </div>
                 <div className='productInfo'>
-                    {showChangeCompleted ? 
-                    <div className='change-completed-wrap'>
-                        <ShowCompletedIcon onClick={showCompletedHandler} />
-                        {showCompletedBtn?
-                            <p className='change-completed'>거래완료로 변경하기</p>
-                        :null}
+                    <div className='change-completed-wrap-parent'>
+                        {showChangeCompleted ? 
+                        <div className='change-completed-wrap'>
+                            <ShowCompletedIcon onClick={showCompletedHandler} />
+                            {showCompletedBtn?
+                                <p className='change-completed'>거래완료로 변경하기</p>
+                            :null}
+                        </div>
+                        : null}
                     </div>
-                    : null}
-                    
                     <p className='productTitle' onClick={goToDetail}>{product.title}</p>
                     <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>

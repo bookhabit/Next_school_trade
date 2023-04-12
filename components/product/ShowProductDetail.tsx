@@ -30,8 +30,9 @@ const Container = styled.div`
     }
     /* 헤더 css */
     .detail-header{
-        position:fixed;
+        position:sticky;
         top:0;
+        width:100%;
         min-width:430px;
         height:90px;
         background-color: ${palette.main_color};
@@ -57,7 +58,6 @@ const Container = styled.div`
 
     .detail-body{
         width:100%;
-        padding-top:90px;
         padding-bottom:70px;
         /* 이미지 슬라이드 부분 css */
         .detail-product-image{
@@ -154,21 +154,31 @@ const Container = styled.div`
                 }
             }
             .seller-info-right{
-             .correct-remove-modal{
-                width:80px;
-                height:60px;
-                background-color:white;
-                font-size:13px;
-                color:${palette.updatedDate};
-                text-align:center;
-                padding:15px;
-                position:absolute;
-                right:40px;
-                top: 322px;
-                p{
-                    margin-bottom:10px;
+                .correct-remove-modal-wrapper{
+                    position: relative;
+                    .correct-remove-modal-icon{
+                        cursor: pointer;
+                    }
+                    .correct-remove-modal{
+                        width:80px;
+                        height:60px;
+                        background-color:white;
+                        font-size:13px;
+                        color:${palette.updatedDate};
+                        text-align:center;
+                        padding:15px;
+                        position:absolute;
+                        right:15px;
+                        top: -16px;
+                        p{
+                            cursor: pointer;
+                            margin-bottom:10px;
+                            &:hover{
+                                color:black;
+                            }
+                        }
+                    }   
                 }
-             }   
             }
         }
 
@@ -454,14 +464,14 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                     <div className='seller-info-right'>
                         {postOwner 
                         ? 
-                        <>
-                            <ModalClickIcon onClick={clickShowBtnModal}/>
+                        <div className='correct-remove-modal-wrapper'>
+                            <ModalClickIcon onClick={clickShowBtnModal} className="correct-remove-modal-icon" />
                             {!showBtnModal? null : <div className='correct-remove-modal'>
                                 <p className='correct-btn'>수정하기</p>
                                 <p className='remove-btn'>삭제하기</p>
                             </div>
                             }
-                        </> 
+                        </div> 
                         :<>{starLoop().map((index)=>(
                             <SellerStarIcon key={index}/>
                         ))}</>
