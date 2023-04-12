@@ -31,8 +31,6 @@ const UserColor = () => {
     const secondColor = useSelector((state:RootState)=>state.userBackground.secondColor)
 
     const dispatch = useDispatch();
-    
-    dispatch(userBackgroundActions.setSecondColor)
 
     return (
         <Container className="pc-style">

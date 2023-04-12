@@ -6,6 +6,7 @@ import common from "./common";
 import auth from "./auth";
 import registerPosition from "./registerPosition";
 import userBackground from "./userBackground";
+import searchBar from "./searchBar";
 
 const rootReducer = combineReducers({
     common:common.reducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     auth:auth.reducer,
     registerPosition:registerPosition.reducer,
     userBackground:userBackground.reducer,
+    searchBar:searchBar.reducer,
 })
 
 

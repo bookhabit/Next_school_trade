@@ -10,6 +10,8 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { searchBarActions } from '../../store/searchBar';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -108,16 +110,24 @@ const mainHeader = () => {
         }
     }
 
-    // 검색창 기능
-    // 변수설정 - 스토어
-    // onChange함수 - 디스패치
+    // 검색창 - input
+    const searchValue = useSelector((state:RootState)=>state.searchBar.value)
+    console.log('serarchValue',searchValue)
+
+    const dispatch = useDispatch();
+    
+    // dispatch(searchBarActions.setSearchValue())
+    const onChangeValue=(event:React.ChangeEvent<HTMLInputElement>)=>{
+        dispatch(searchBarActions.setSearchValue(event.target.value))
+    }
+
 
     return (
         <Conatainer>
             <div className='headerDiv'>
                 <p>{userUniversity}</p>
                 <div className='searchBar'>
-                    <input className='searchInput' placeholder='검색'/>
+                    <input className='searchInput' value={searchValue} placeholder='검색' onChange={onChangeValue} />
                     <SearchIcon className="searchIcon"/>
                 </div>
                 <div className='alarmBox'>

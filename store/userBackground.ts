@@ -12,7 +12,7 @@ const initialState:userBackgroundColor={
 }
 
 const userBackground = createSlice({
-    name:"registerPosition",
+    name:"setUserColor",
     initialState,
     reducers:{
         setFirstColor(state,action:PayloadAction<string>){

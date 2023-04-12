@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEventHandler, useState } from 'react';
 import LogoIcon from "../../public/static/svg/index/logo.svg"
 import styled from 'styled-components';
 import palette from '../../styles/palette';
@@ -10,6 +10,8 @@ import Button from '../common/Button';
 import SearchIcon from "../../public/static/svg/introduce/searchIcon.svg"
 import { productCategoryList } from '../../lib/staticData';
 import CategoryCard from './CategoryCard';
+import { useDispatch } from 'react-redux';
+import { searchBarActions } from '../../store/searchBar';
 
 const Container = styled.div`
     position:fixed;
@@ -86,6 +88,16 @@ const Introduce = () => {
         return isLogged ? "/" : "/auth"
     }
 
+    // 검색창 value - 메인헤더와 일치시키기
+    const searchValue = useSelector((state:RootState)=>state.searchBar.value)
+    console.log('serarchValue',searchValue)
+
+    const dispatch = useDispatch();
+    
+    const onChangeValue=(event:React.ChangeEvent<HTMLInputElement>)=>{
+        dispatch(searchBarActions.setSearchValue(event.target.value))
+    }
+
     return (
         <Container>
             <LogoIcon/>
@@ -97,7 +109,7 @@ const Introduce = () => {
             {isLogged ? 
             <div className='introduce-bottom'>
                 <div className='introduce-search-bar'>
-                    <input className='searchInput' />
+                    <input className='searchInput' value={searchValue}  onChange={onChangeValue} />
                     <SearchIcon className="searchIcon"/>
                 </div>
                 <CategoryCard/>
