@@ -173,7 +173,7 @@ const Container = styled.form`
         padding:15px 20px;
         border-bottom:1px solid ${palette.divistion_color};
         select{
-            width:350px;
+            width:100%;
             border:none;
             outline:none;
         }
@@ -222,7 +222,8 @@ const Container = styled.form`
         position:fixed;
         bottom:0;   
         background-color:${palette.main_color};
-        min-width:430px;
+        width:100%;
+        max-width:430px;
         height:70px;
     }
 `

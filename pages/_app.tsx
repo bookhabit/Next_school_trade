@@ -49,6 +49,9 @@ const PcContainer = styled.div`
 const MobileContainer = styled.div`
     width:430px;
     background-color:white;
+    @media only screen and (max-width: 430px) {
+        width:100%;
+    }
     @media only screen and (min-width: 1023px) {
         margin-left:80px;
     }

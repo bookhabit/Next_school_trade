@@ -25,6 +25,8 @@ import { RootState } from '../../store';
 import FooterButton from '../common/FooterButton';
 
 const Container = styled.div`
+    width:100%;
+    height:100%;
     @media only screen and (min-width: 430px) {
 	    min-height:100vh;
     }
@@ -33,7 +35,6 @@ const Container = styled.div`
         position:sticky;
         top:0;
         width:100%;
-        min-width:430px;
         height:90px;
         background-color: ${palette.main_color};
         display:flex;
@@ -246,7 +247,8 @@ const Container = styled.div`
         position:fixed;
         bottom:0;   
         background-color:${palette.main_color};
-        min-width:430px;
+        width:100%;
+        max-width:430px;
         height:70px;
         display:flex;
         align-items:center;

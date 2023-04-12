@@ -12,7 +12,7 @@ import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
 
 const Container = styled.div`
-    width:350px;
+    width:100%;
     height:105px;
     margin-bottom:10px;
     display:flex;

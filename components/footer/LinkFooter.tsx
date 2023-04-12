@@ -14,7 +14,8 @@ const Container = styled.div`
     position:fixed;
     bottom:0;      
     background-color:${palette.main_color};
-    min-width:430px;
+    width:100%;
+    max-width:430px;
     height:60px;
     
     .link-flex-wrap{

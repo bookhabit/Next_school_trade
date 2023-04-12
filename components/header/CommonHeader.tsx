@@ -11,6 +11,7 @@ const Conatainer = styled.div`
     position:sticky;
     top:0;
     width:100%;
+    max-width:430px;
     height:90px;
     background-color: ${palette.main_color};
     display:flex;
