@@ -17,6 +17,7 @@ const Container = styled.div`
     align-items:center;
     .profile-image{
         margin-top:20px;
+        position: relative;
         img{
             background-color:#FEFAFA;
             padding:10px;
@@ -31,8 +32,8 @@ const Container = styled.div`
             width: 50px;
             height: 50px;
             position:absolute;
-            left:212px;
-            top:210px;
+            bottom:0px;
+            right:0px;
         }
         input[type="file"] {
             display:none;
