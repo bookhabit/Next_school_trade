@@ -1,6 +1,3 @@
-const pc_background1 = "#8edf71"
-const pc_background2 = "#ea5e12"
-
 export default {
     cardinal: "#a41850",
     davidson_orange: "#c13515",
@@ -39,6 +36,5 @@ export default {
     text_hover:"#007513",
     divistion_color:"#D9D9D9",
     orange_btn:"#F36363",
-    pc_background1:pc_background1,
-    pc_background2:pc_background2,
+    errorPage:"#FF9132",
   };

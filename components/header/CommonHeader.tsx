@@ -106,7 +106,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
           case "/seller/[id]/sellingProducts":
               return `${testSellerNameForProfile} 님의 판매상품`;
           default:
-            return "지정된 페이지 없음";
+            return "페이지를 찾을 수 없습니다";
         }
       };
     
