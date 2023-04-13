@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import ErrorImg from "../../public/static/svg/error404/caroon.svg"
+import QuestionSVG from "../../public/static/svg/error404/question.svg"
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -55,9 +56,10 @@ const Container = styled.div`
 `
 interface IProps {
     text:string;
+    showQuestionImg?:boolean
 }
 
-const DataNull:React.FC<IProps> = ({text}) => {
+const DataNull:React.FC<IProps> = ({text,showQuestionImg}) => {
     const goToBackpage = ()=>{
         window.history.back();
     }
@@ -65,6 +67,7 @@ const DataNull:React.FC<IProps> = ({text}) => {
         <Container>
             <div className="error-content">
                 <div className="error-image">
+                    {showQuestionImg? <QuestionSVG className="error-question"/> : null}
                     <ErrorImg/>
                 </div>
                 <div className="error-text">
