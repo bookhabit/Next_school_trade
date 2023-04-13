@@ -73,7 +73,7 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
             {status === "error" && <FailFetchData/>}
             {status === "success" &&
                 data.pages.map((page, index) => 
-                isEmpty(page.contents) ? <DataNull text='거래완료된 상품이 없습니다' key={index} /> :
+                isEmpty(page.contents) ? <DataNull key={index} text='거래완료된 상품이 없습니다'/> :
                 <>
                     <div className='hideProductBox'></div>
                     <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page.contents} />
