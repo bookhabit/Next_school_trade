@@ -8,6 +8,8 @@ import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import { getSellingList } from './../../../lib/api/product';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import axios from 'axios';
+import Loading from '../../common/Loading';
+import FailFetchData from '../../common/FailFetchData';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -61,8 +63,8 @@ const OnSale:React.FC<IProps> = ({userId}) => {
     
     return (
         <Container>
-            {status === "loading" && <div>loading...</div>}
-            {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
+            {status === "loading" && <Loading/>}
+            {status === "error" && <FailFetchData/>}
             {status === "success" ?
                 data.pages.map((page, index) => 
                     <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} showChangeCompleted={true}  />

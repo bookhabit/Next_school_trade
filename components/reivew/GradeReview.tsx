@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import StarIcon from "../../public/static/svg/seller/starIcon.svg"
 import palette from '../../styles/palette';
+import { reviewListResponseType } from '../../types/review';
 
 const Container = styled.div`
     width:100%;
@@ -44,19 +45,19 @@ const Container = styled.div`
 }
 `
 interface IProps{
-    reviewList:Object[];
+    reviewList:reviewListResponseType[];
 }
 
 
 const GradeReview:React.FC<IProps> = ({reviewList}) => {
-    // 전달받은 리스트에서 총 평점 점수를 렌더링한다
-    const starCount = reviewList;
-
+    console.log('reviewList',reviewList)
     //  판매자 별점 개수에 따라서 별점아이콘 출력하기
-    const sellerGrade = 4
+    const sellerGrade = reviewList
+    const sellerGradeTest = 4
+
     const starLoop = () => {
         let starCount = []
-        for (let i = 0; i < sellerGrade; i++) {
+        for (let i = 0; i < sellerGradeTest; i++) {
             starCount.push(i)
         }
         return starCount
@@ -68,9 +69,9 @@ const GradeReview:React.FC<IProps> = ({reviewList}) => {
                 <h2>평점</h2>
             </div>
             <div className='review-star-box'>
-            {starLoop().map((index)=>(
+            {sellerGradeTest ? starLoop().map((index)=>(
                 <StarIcon key={index} className="star-icon"/>
-              ))}
+              )): null}
             </div>
         </Container>
     );

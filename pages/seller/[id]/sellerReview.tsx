@@ -5,6 +5,7 @@ import { NextPage } from 'next';
 import { GetReviewList } from '../../../lib/api/review';
 import { reviewListResponseType } from '../../../types/review';
 import styled from 'styled-components';
+import FailFetchData from '../../../components/common/FailFetchData';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -13,11 +14,11 @@ const Container = styled.div`
 `
 
 const sellerReview:NextPage = ({data}:any) => {
+    if(!data){
+        return <FailFetchData/>
+    }
     const reviewList=data
     const ownerName = data[0].seller.nickname
-    // if(!data){
-    //     ownerName = data[0].seller.nickname
-    // }
 
     return (
         <Container>

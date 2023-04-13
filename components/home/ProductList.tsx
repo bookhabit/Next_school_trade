@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CompletedProductCard from '../common/CompletedProductCard';
 import { isEmpty } from 'lodash';
 import { productListType } from '../../types/product/product';
+import DataNull from '../common/DataNull';
 
 const Container = styled.div<{completedProducts:boolean}>`
     margin-top:${props=>props.completedProducts? "0px" :"20px"};
@@ -18,13 +19,13 @@ interface IProps{
 
 const ProductList:React.FC<IProps> = ({completedProducts,data,showChangeCompleted,setTarget}) => {
     const productList = data;
-    // console.log('productList',productList)
+    console.log('productList',productList)
 
     return (
         <Container completedProducts={completedProducts}>  
         {/* 데이터가 들어있는지 확인 후 map 함수 실행 - 에러처리 */}
             {
-            isEmpty(productList) ? <h2>찾으시는 상품이 없습니다</h2>
+            isEmpty(productList) ? <DataNull/>
             :productList.map((product)=>(
                 completedProducts ? 
                 <CompletedProductCard key={product.id} product={product}/>  : 

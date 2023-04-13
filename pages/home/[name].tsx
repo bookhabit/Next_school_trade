@@ -8,6 +8,8 @@ import ProductList from '../../components/home/ProductList';
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Page } from '../../types/product/product';
+import Loading from '../../components/common/Loading';
+import FailFetchData from '../../components/common/FailFetchData';
 
 
 const Container = styled.div`
@@ -54,8 +56,8 @@ const categoryHome = ({categoryName}:any) => {
     return (
         <>
             <Container>
-                    {status === "loading" && <div>loading...</div>}
-                    {status === "error" && <div>error</div>}
+                    {status === "loading" && <Loading/>}
+                    {status === "error" && <FailFetchData/>}
                     {status === "success" &&
                         data.pages.map((page, index) => 
                             <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />

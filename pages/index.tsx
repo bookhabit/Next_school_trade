@@ -8,9 +8,14 @@ import styled from 'styled-components';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import ProductList from '../components/home/ProductList';
 import {  Page, productListType } from '../types/product/product';
+import Loading from '../components/common/Loading';
+import FailFetchData from '../components/common/FailFetchData';
 
 
 const Container = styled.div`
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+    }
     padding:0px 20px;
     padding-top:20px;
 `
@@ -52,8 +57,8 @@ const home = () => {
     return (
         <>
             <Container>
-                    {status === "loading" && <div>loading...</div>}
-                    {status === "error" && <div>error</div>}
+                    {status === "loading" && <Loading/>}
+                    {status === "error" && <FailFetchData/>}
                     {status === "success" &&
                         data.pages.map((page, index) => 
                             <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />

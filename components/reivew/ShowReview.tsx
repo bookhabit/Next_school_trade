@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { reviewListResponseType, reviewListType } from '../../types/review';
 import ReviewCard from '../seller/ReviewCard';
 import { Division } from '../common/Division';
+import DataNull from '../common/DataNull';
+import FailFetchData from '../common/FailFetchData';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -46,7 +48,7 @@ const ShowReview:React.FC<IProps> = ({reviewList,ownerName}) => {
                 reviewList.map((review,index)=>(
                     <ReviewCard key={index} reviewList={review}/>    
                 ))
-                : <h2>거래후기가 없습니다.</h2>}
+                : <FailFetchData/>}
             </div>
         </Container>
     );

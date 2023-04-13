@@ -71,6 +71,8 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
         switch (pathName) {
           case "/auth":
             return "로그인/회원가입";
+          case "/oauth/callback/kakao":
+            return "카카오 로그인 중";
           case "/product/register":
             return "상품 등록하기";
           case "/product/correct":

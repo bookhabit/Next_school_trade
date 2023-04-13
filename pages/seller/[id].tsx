@@ -13,13 +13,21 @@ import { Division } from '../../components/common/Division';
 import ReviewCard from '../../components/seller/ReviewCard';
 import { GetReviewList } from '../../lib/api/review';
 import { reviewListResponseType } from '../../types/review';
+import { isEmpty } from 'lodash';
+import DataNull from '../../components/common/DataNull';
+import FailFetchData from '../../components/common/FailFetchData';
 
 const Container = styled.div`
   @media only screen and (min-width: 430px) {
 	    min-height:100vh;
+      margin:0px 35px;
   }
   margin:40px 35px;
   padding-bottom:30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
   .seller-profile{
     width:320px;
     height:50px;
@@ -51,7 +59,7 @@ const Container = styled.div`
   .seller-profile-link{
     margin-top: 60px;
     div{
-      width:310px;
+      min-width:310px;
       min-height:50px;
       background-color:#F5F2F2;
       border-radius:20px;
@@ -59,6 +67,10 @@ const Container = styled.div`
       display:flex;
       align-items:center;
       justify-content:center;
+      &:hover{
+        background-color:#dddddd;
+        cursor: pointer;
+      }
       p{
         font-size:18px;
         font-weight:bold;
@@ -70,6 +82,9 @@ const Container = styled.div`
 
 const profile:NextPage = ({data}:any) => {
     const reviewList:reviewListResponseType[] = data
+    if(isEmpty(reviewList)){
+      return <FailFetchData/>
+    }
     const preViewList = reviewList.slice(0,2)
     const sellerGrade:number = data[0].seller.grade
     const sellerName:string = data[0].seller.nickname
@@ -85,6 +100,8 @@ const profile:NextPage = ({data}:any) => {
       }
       return starCount
     };
+
+
 
     return (
       <>
@@ -119,7 +136,7 @@ const profile:NextPage = ({data}:any) => {
               preViewList.map((review,index)=>(
                 <ReviewCard key={index} reviewList={review}/>    
               ))
-             : <h2>거래후기가 없습니다.</h2>}
+             : <DataNull/>}
           </div>
         </Container>
         <LinkFooter/>  

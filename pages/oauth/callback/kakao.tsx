@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { userActions } from './../../../store/user';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import Loading from "../../../components/common/Loading";
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -49,7 +50,7 @@ const Kakao = (query:any) => {
 
     return (
         <Container>
-            <p>잠시만 기다려 주세요! 로그인 중입니다.</p>
+            <Loading/>
         </Container>
     );
     };

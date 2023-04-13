@@ -10,6 +10,8 @@ import { RootState } from '../../store';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Page } from '../../types/product/product';
+import Loading from '../common/Loading';
+import FailFetchData from '../common/FailFetchData';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -66,8 +68,8 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
     return (
         <Container>
             <div className='hideProductBox'></div>
-            {status === "loading" && <div>loading...</div>}
-            {status === "error" && <div>상품을 불러오지 못하였습니다</div>}
+            {status === "loading" && <Loading/>}
+            {status === "error" && <FailFetchData/>}
             {status === "success" ?
                 data.pages.map((page, index) => 
                     <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page.contents} />

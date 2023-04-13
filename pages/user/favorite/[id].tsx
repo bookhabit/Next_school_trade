@@ -10,6 +10,10 @@ import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import ProductList from '../../../components/home/ProductList';
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import ProductCard from '../../../components/common/ProductCard';
+import DataNull from '../../../components/common/DataNull';
+import Loading from '../../../components/common/Loading';
+import FailFetchData from '../../../components/common/FailFetchData';
+import { isEmpty } from 'lodash';
 
 
 const Container = styled.div`
@@ -28,7 +32,8 @@ const favorite = ({id}:{id:number}) => {
         fetchNextPage, 
         hasNextPage, 
         status, 
-        isLoading
+        isLoading,
+        isFetching
     } = useInfiniteQuery(
           ["favoriteList"] 
         , async (pageParam)=> await getFavoriteList(pageParam,id) as FavoritePage
@@ -59,18 +64,16 @@ const favorite = ({id}:{id:number}) => {
         // 스크롤 이벤트 타겟 지정
         const { setTarget } = useIntersectionObserver({ onIntersect });
 
-        if(data == undefined) {
-            return
-        }
         
-
+        console.log(data)
     return (
         <>
             <Container>
-                {isLoading && <div>loading...</div>}
-                {status === "error" && <div>error</div>}
+                {isLoading && isFetching && <Loading/>}
+                {status === "error" && <FailFetchData/>}
                 {status === "success" &&
                     data.pages.map((page,index) =>(
+                        isEmpty(page.favorites) ? <DataNull key={index}/> :
                         page.favorites.map((content,id)=>
                         <>
                             <ProductCard key={id} product={content.content} />
