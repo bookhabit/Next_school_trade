@@ -10,6 +10,8 @@ import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import axios from 'axios';
 import Loading from '../../common/Loading';
 import FailFetchData from '../../common/FailFetchData';
+import DataNull from '../../common/DataNull';
+import { isEmpty } from 'lodash';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -65,10 +67,13 @@ const OnSale:React.FC<IProps> = ({userId}) => {
         <Container>
             {status === "loading" && <Loading/>}
             {status === "error" && <FailFetchData/>}
-            {status === "success" ?
+            {status === "success" &&
                 data.pages.map((page, index) => 
-                    <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} showChangeCompleted={true}  />
-            ):<h2>상품이 없습니다</h2>}
+                isEmpty(page.contents) ?
+                <DataNull text='판매중인 상품이 없습니다' key={index} />
+                 :
+                 <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} showChangeCompleted={true}  />
+            )}
         </Container>
     );
 };

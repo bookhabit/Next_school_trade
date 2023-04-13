@@ -10,6 +10,8 @@ import axios from 'axios';
 import { Page } from '../../types/product/product';
 import Loading from '../../components/common/Loading';
 import FailFetchData from '../../components/common/FailFetchData';
+import DataNull from '../../components/common/DataNull';
+import { isEmpty } from 'lodash';
 
 
 const Container = styled.div`
@@ -60,7 +62,9 @@ const categoryHome = ({categoryName}:any) => {
                     {status === "error" && <FailFetchData/>}
                     {status === "success" &&
                         data.pages.map((page, index) => 
-                            <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />
+                        isEmpty(page.contents) ?
+                        <DataNull text='해당 카테고리의 상품이 없습니다' key={index} /> :
+                        <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />
                     )}
             </Container>
             <LinkFooter/>

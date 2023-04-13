@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { reviewListResponseType, reviewListType } from '../../types/review';
 import ReviewCard from '../seller/ReviewCard';
 import { Division } from '../common/Division';
-import DataNull from '../common/DataNull';
 import FailFetchData from '../common/FailFetchData';
 
 const Container = styled.div`

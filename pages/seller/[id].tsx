@@ -81,6 +81,7 @@ const Container = styled.div`
 `
 
 const profile:NextPage = ({data}:any) => {
+    console.log('판매자프로필 data',data)
     const reviewList:reviewListResponseType[] = data
     if(isEmpty(reviewList)){
       return <FailFetchData/>
@@ -136,7 +137,7 @@ const profile:NextPage = ({data}:any) => {
               preViewList.map((review,index)=>(
                 <ReviewCard key={index} reviewList={review}/>    
               ))
-             : <DataNull/>}
+             : <DataNull text='아직 거래후기가 없습니다'/>}
           </div>
         </Container>
         <LinkFooter/>  

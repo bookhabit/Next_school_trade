@@ -73,7 +73,7 @@ const favorite = ({id}:{id:number}) => {
                 {status === "error" && <FailFetchData/>}
                 {status === "success" &&
                     data.pages.map((page,index) =>(
-                        isEmpty(page.favorites) ? <DataNull key={index}/> :
+                        isEmpty(page.favorites) ? <DataNull text='추가하신 관심목록이 없습니다' key={index}/> :
                         page.favorites.map((content,id)=>
                         <>
                             <ProductCard key={id} product={content.content} />

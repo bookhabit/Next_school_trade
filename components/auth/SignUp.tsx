@@ -135,7 +135,6 @@ interface IProps{
 }
 
 const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
-    console.log(kakaoSignUp)
     // 카카오 로그인 회원인 경우
     let user:Users;
     if(kakaoSignUp==='true'){
@@ -296,7 +295,6 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     // 현재 위치 설정
     const setCurrentPosition = ()=>{
         navigator.geolocation.getCurrentPosition(onSuccessGetLocation,(e)=>{
-            console.log(e)
             alert(e?.message)
         })
     }
@@ -350,9 +348,9 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     latitude,
                     longitude,
                 }
-                console.log('signUpBody',signUpBody)
+                // console.log('signUpBody',signUpBody)
                 const {data} = await signupAPI(signUpBody);
-                console.log('클라이언트 받은 데이터',data.user)
+                // console.log('클라이언트 받은 데이터',data.user)
                 // 엑세스 토큰 저장하는 로직 필요 - 우선 로컬스토리지 저장
                 localStorage.setItem('login-token', data.token);
 
@@ -402,9 +400,9 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     latitude,
                     longitude,
                 }
-                console.log('signUpBody',signUpBody)
+                // console.log('signUpBody',signUpBody)
                 const {data} = await kakaoSignupAPI(signUpBody);
-                console.log('클라이언트 받은 데이터',data.user)
+                // console.log('클라이언트 받은 데이터',data.user)
 
                 // 유저정보 저장
                 dispatch(userActions.setLoggedUser(data.user)) 

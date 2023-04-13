@@ -18,7 +18,7 @@ interface IProps{
 const TradeReview:React.FC<IProps> = ({reviewList,ownerName}) => {
     return (
         <Container>
-            {isEmpty(reviewList) ? <DataNull/> : 
+            {isEmpty(reviewList) ? <DataNull text='아직 거래후기가 없습니다'/> : 
             <>
                 <GradeReview reviewList={reviewList}/>
                 <ShowReview reviewList={reviewList} ownerName={ownerName}/>

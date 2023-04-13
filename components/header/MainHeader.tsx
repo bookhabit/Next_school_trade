@@ -120,7 +120,6 @@ const mainHeader = () => {
 
     // 검색창 - input
     const searchValue = useSelector((state:RootState)=>state.searchBar.value)
-    console.log('serarchValue',searchValue)
 
     const dispatch = useDispatch();
     

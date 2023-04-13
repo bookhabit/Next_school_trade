@@ -90,7 +90,6 @@ const Introduce = () => {
 
     // 검색창 value - 메인헤더와 일치시키기
     const searchValue = useSelector((state:RootState)=>state.searchBar.value)
-    console.log('serarchValue',searchValue)
 
     const dispatch = useDispatch();
     

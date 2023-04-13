@@ -201,11 +201,11 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
     });
-    console.log(currentMapLocation)
+    // console.log(currentMapLocation)
 
     // 지도 리로드
     const reloadMap = () => {
-        console.log('지도 reload')
+        // console.log('지도 reload')
         const existingScript = document.getElementById("googleMaps");
         if (existingScript) {
           existingScript.remove();
@@ -271,7 +271,7 @@ const SetPositionUserLocation:React.FC<IProps> = ({closeModal,currentLocation}) 
             map.addListener("center_changed",throttle(()=>{
                 const centerLat = map.getCenter().lat();
                 const centerLng = map.getCenter().lng();
-                console.log(centerLat,centerLng)
+                // console.log(centerLat,centerLng)
                 marker.setPosition({lat:centerLat,lng:centerLng})
                 setCurrentMapLocation({
                     latitude:centerLat,

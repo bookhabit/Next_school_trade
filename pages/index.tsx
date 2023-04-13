@@ -10,6 +10,8 @@ import ProductList from '../components/home/ProductList';
 import {  Page, productListType } from '../types/product/product';
 import Loading from '../components/common/Loading';
 import FailFetchData from '../components/common/FailFetchData';
+import DataNull from '../components/common/DataNull';
+import { isEmpty } from 'lodash';
 
 
 const Container = styled.div`
@@ -53,6 +55,7 @@ const home = () => {
             }
         };
         const { setTarget } = useIntersectionObserver({ onIntersect });
+        console.log('data',data?.pages)
 
     return (
         <>
@@ -61,7 +64,8 @@ const home = () => {
                     {status === "error" && <FailFetchData/>}
                     {status === "success" &&
                         data.pages.map((page, index) => 
-                            <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />
+                        isEmpty(page.contents) ? <DataNull text='찾으시는 상품이 없습니다' key={index} />  :
+                        <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />
                     )}
             </Container>
             <LinkFooter/>

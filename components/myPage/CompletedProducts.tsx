@@ -12,6 +12,8 @@ import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Page } from '../../types/product/product';
 import Loading from '../common/Loading';
 import FailFetchData from '../common/FailFetchData';
+import DataNull from '../common/DataNull';
+import { isEmpty } from 'lodash';
 
 const Container = styled.div`
     padding:0px 20px;
@@ -67,13 +69,16 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
 
     return (
         <Container>
-            <div className='hideProductBox'></div>
             {status === "loading" && <Loading/>}
             {status === "error" && <FailFetchData/>}
-            {status === "success" ?
+            {status === "success" &&
                 data.pages.map((page, index) => 
+                isEmpty(page.contents) ? <DataNull text='거래완료된 상품이 없습니다' key={index} /> :
+                <>
+                    <div className='hideProductBox'></div>
                     <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page.contents} />
-            ):<h2>상품이 없습니다</h2>}
+                </>
+            )}
         </Container>
     );
 };
