@@ -1,11 +1,21 @@
-import React from 'react';
+import React from "react";
+import { DotLoader,BarLoader,BeatLoader } from "react-spinners";
+import styled from "styled-components";
+
+const Container = styled.div`
+    text-align:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:300px;
+`
 
 const Loading = () => {
-    return (
-        <div>
-            데이터를 불러오는 중입니다
-        </div>
-    );
+  return (
+    <Container>
+        <BeatLoader color="#54AA76"/>
+    </Container>
+  );
 };
 
 export default Loading;
