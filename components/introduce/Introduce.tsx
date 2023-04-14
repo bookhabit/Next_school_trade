@@ -17,7 +17,7 @@ const Container = styled.div`
     position:fixed;
     height:100vh;
     background-color:white;
-    padding:150px 0px;
+    padding-top:100px;
     text-align:center;
     background-color:transparent;
 

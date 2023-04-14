@@ -6,13 +6,16 @@ import OpenedEyeIcon from "../../public/static/svg/auth/opened_eye.svg"
 import KakaoBtn from "../../public/static/svg/auth/kakao_login.svg"
 import palette from "../../styles/palette";
 import Button from "../common/Button";
-import Input from "../common/Input";
+import FormInput from "../common/FormInput";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth";
 import useValidateMode from "../../hooks/useValidateMode";
 import { userActions } from './../../store/user';
 import { loginAPI } from "../../lib/api/auth";
 import { useRouter } from 'next/router';
+import { useForm } from "react-hook-form";
+import { SubmitHandler } from "react-hook-form/dist/types/form";
+import {DevTool} from "@hookform/devtools"
 
 const Container = styled.form`
   width: 100%; // 모바일버전
@@ -66,9 +69,24 @@ const Container = styled.form`
 
 `;
 
+export type LoginFormValues={
+  email:string;
+  password:string;
+}
+
 let renderCount = 0
 
-const Login = () => {
+const FormLogin = () => {
+    // react-hook-form
+    const Reactform = useForm<LoginFormValues>({
+      defaultValues:{
+          email:"",
+          password:"",
+      }
+    });
+    const {register,control,handleSubmit,formState: { errors }} = Reactform
+    
+    // 기존 방식
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     // 에러메시지 상태
@@ -99,6 +117,11 @@ const Login = () => {
     }
 
     const router = useRouter();
+
+    // 로그인 버튼 클릭시 react-hook-form api호출
+    const onSubmit: SubmitHandler<LoginFormValues> = data => {
+      alert(JSON.stringify(data));
+    };
 
     // 로그인 버튼 클릭 시 API호출
     const onSubmitLogin = async (event:React.FormEvent<HTMLFormElement>)=>{
@@ -152,33 +175,39 @@ const Login = () => {
         <Container onSubmit={onSubmitLogin}>
           <h1>Login Form ({renderCount/2})</h1>
           <div className="login-input-wrapper">
-            <Input
+            <FormInput
               placeholder="이메일 주소"
-              name="email"
-              type="email"
-              value={email}
-              onChange={onChangeEmail}
+              label="email"
+              register={register}
+              required 
               icon={<MailIcon />}
+              // name="email"
+              // type="email"
+              // value={email}
+              // onChange={onChangeEmail}
               usevalidation
               isValid={!!email}
-              errorMessage={"이메일을 입력해주세요"}
+              // errorMessage={"이메일을 입력해주세요"}
             />
           </div>
           <div className="login-input-wrapper login-password-input-wrapper">
-            <Input
+            <FormInput
               placeholder="비밀번호 입력"
-              name="password"
+              label="password"
+              register={register}
+              required 
+              // name="password"
               type={hidePassword ? "password" : "text"}
               icon={hidePassword? (
                 <ClosedEyeIcon onClick={toggleHidePassword}/>
             ):(
                 <OpenedEyeIcon onClick={toggleHidePassword}/>
                 )}
-              value={password}
-              onChange={onChangePassword}
+              // value={password}
+              // onChange={onChangePassword}
               usevalidation
               isValid={!!password}
-              errorMessage={"비밀번호를 입력해주세요"}
+              // errorMessage={"비밀번호를 입력해주세요"}
             />
           </div>
           <div className="input-error-message">
@@ -192,8 +221,9 @@ const Login = () => {
           <div className="kakao-btn" onClick={kakaoLogin}>
                 <img src={"/static/svg/auth/kakao_login.svg"} alt="카카오로그인"/>
           </div>
+          <DevTool control={control} />
         </Container>
       );
 };
 
-export default Login;
+export default FormLogin;

@@ -101,13 +101,23 @@ const Container = styled.div`
 
 `
 
-
+type registerForm = {
+    grade:number;
+    review:string;
+}
 
 const WriteGradeReview = () => {
-    // 별점이랑 작성한 거래후기 text를 모아서 판매자의 리뷰정보에 글작성하는 api호출
+    // sellerId 구하기
+    const router = useRouter();
+    const sellerId = Number(router.query.id)
 
+    // 거래후기
     const [review,setReview] = useState<string>('')
-
+    
+    const onChangeReview = (e:ChangeEvent<HTMLTextAreaElement>)=>{
+        setReview(e.target.value)
+    }
+    
     // 별점 기본값 설정
     const [clicked, setClicked] = useState([false, false, false, false, false]);
 
@@ -122,26 +132,19 @@ const WriteGradeReview = () => {
          setClicked(clickStates);
     };
 
-    const onChangeReview = (e:ChangeEvent<HTMLTextAreaElement>)=>{
-        setReview(e.target.value)
-    }
 
     // 별점 계산
     let score:number = clicked.filter(Boolean).length;
 
-    // sellerId 구하기
-    const router = useRouter();
-    const sellerId = Number(router.query.id)
-
-    const submitData = {
+    // 최종 폼데이터
+    const submitData:registerForm = {
         grade:score,
         review:review
     }
 
     const createReview = async ()=>{
-        const token = localStorage.getItem('login-token')
         // 폼 검증
-        if(!token || score<=0 || review==''){
+        if(score<=0 || review==''){
             return false
         }
         // 리뷰작성 api 호출

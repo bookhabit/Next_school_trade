@@ -3,6 +3,8 @@ import Login from './Login';
 import SignUp from './SignUp';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import FormLogin from './FormLogin';
+import FormSignUp from './FormSignUp';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -22,6 +24,9 @@ const Auth:React.FC<IProps> = ({currentLeft}) => {
         <Container>
             {currentLeft? <Login/>
             : <SignUp kakaoSignUp={kakaoSignUp}/> 
+            }
+            {currentLeft? <FormLogin/>
+            : <FormSignUp kakaoSignUp={kakaoSignUp}/> 
             }
         </Container>
     );

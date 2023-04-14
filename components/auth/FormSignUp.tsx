@@ -6,7 +6,7 @@ import PersonIcon from "../../public/static/svg/auth/person.svg"
 import OpenedEyeIcon from "../../public/static/svg/auth/opened_eye.svg"
 import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg"
 import MapIcon from "../../public/static/svg/auth/mapIcon.svg"
-import Input from '../common/Input';
+import FormInput from '../common/FormInput';
 import { useState, useEffect } from 'react';
 import Selector from '../common/Selector';
 import { monthList,dayList,yearList,universityList } from '../../lib/staticData';
@@ -29,6 +29,8 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Users } from '../../types/user';
 import { RootState } from '../../store';
+import { useForm } from "react-hook-form";
+import { DevTool } from '@hookform/devtools';
 
 type KaKaoSignUp = {
     kakaoSignUp : string;
@@ -134,9 +136,38 @@ interface IProps{
     kakaoSignUp:string;
 }
 
+export type SignUpFormValues = {
+    name:string;
+    nickname: string;
+    email: string;
+    password:string;
+    confirmPassword:string;
+    university:string;
+    inputGender:string;
+    birthMonth:string;
+    birthDay:string;
+    birthYear:string;
+}
+
 let renderCount = 0
 
-const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
+const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
+    const Reactform = useForm<SignUpFormValues>({
+        defaultValues:{
+            name:'',
+            nickname: '',
+            email: '',
+            password:'',
+            confirmPassword:'',
+            university:"",
+            inputGender:"",
+            birthMonth:"",
+            birthDay:"",
+            birthYear:""
+        }
+      });
+      const {register,control,handleSubmit,formState: { errors }} = Reactform
+
     // 카카오 로그인 회원인 경우
     let user:Users;
     if(kakaoSignUp==='true'){
@@ -163,7 +194,6 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     const [inputs, setInputs] = useState({
         name:'',
         nickname: '',
-        studentID:'',
         email: '',
         password:'',
         confirmPassword:''
@@ -279,10 +309,9 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     const [currentLocation, setCurrentLocation] = useState<{latitude:number,longitude:number}>({
         latitude: 0,
         longitude: 0,
-    });
+    });    
 
-    // 현재위치 정보가져오기 - 모달창에 넘겨줌
-        // 현재 위치 불러오기에 성공했을 때
+    // 현재 위치 불러오기에 성공했을 때
     const onSuccessGetLocation = async ({coords}:any)=>{
         try{
           setCurrentLocation({
@@ -294,6 +323,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
           alert(e)
         }        
       }
+
     // 현재 위치 설정
     const setCurrentPosition = ()=>{
         navigator.geolocation.getCurrentPosition(onSuccessGetLocation,(e)=>{
@@ -363,8 +393,8 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             }catch(e){
                 console.log(e)
             }
-            }
         }
+    }
 
 
     // 카카오 회원가입 폼 검증
@@ -418,9 +448,12 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     renderCount++
     return (
         <Container onSubmit={kakaoSignUp ?onSubmitUpdate :onSubmitSignUp } kakaoSignUp={kakaoSignUp}>
-             <h1>Signup Form ({renderCount/2})</h1>
+            <h1>Signup Form ({renderCount/2})</h1>
             <div className='input-wrapper input-wrapper-first'>
-                <Input 
+                <FormInput 
+                    label="name"
+                    register={register}
+                    required 
                     placeholder="이름" 
                     icon={<PersonIcon/>}
                     name='name'
@@ -431,7 +464,10 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                 />
             </div>
             <div className='input-wrapper'>
-                <Input 
+                <FormInput 
+                    label="nickname"
+                    register={register}
+                    required 
                     placeholder="닉네임" 
                     icon={<PersonIcon/>}
                     name='nickname'
@@ -443,11 +479,14 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             </div>
             {kakaoSignUp ? null :
             <div className='input-wrapper'>
-                <Input 
+                <FormInput 
+                    label="email"
+                    register={register}
+                    required 
                     placeholder="이메일 주소" 
                     icon={<MailIcon/>}
-                    name='email'
-                    onChange={onChangeInput}
+                    // name='email'
+                    // onChange={onChangeInput}
                     isValid={!!email}
                     errorMessage="이메일을 입력해주세요"
                     usevalidation
@@ -457,7 +496,10 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             
             {kakaoSignUp ? null : 
             <div className='input-wrapper'>
-                <Input 
+                <FormInput 
+                    label="password"
+                    register={register}
+                    required 
                     placeholder="비밀번호 설정" 
                     icon={hidePassword? 
                         (
@@ -492,7 +534,10 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             )}
             {kakaoSignUp ? null : 
                 <div className='input-wrapper'>
-                <Input 
+                <FormInput 
+                    label="confirmPassword"
+                    register={register}
+                    required 
                     placeholder="비밀번호 확인" 
                     icon={hidePassword? 
                         (
@@ -568,7 +613,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             <div className='signup-setMyPosition-wrapper' onClick={openModal}>
                 <div className='signup-setMyPosition'>
                     <MapIcon/>
-                        <p>주 거래 위치 설정하기</p>
+                    <p>주 거래 위치 설정하기</p>
                 </div>
             </div>
             <div className='sign-up-modal-submit-button-wrapper'>
@@ -577,8 +622,9 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             <ModalPortal>
                 <SetPositionUserLocation closeModal={closeModal} currentLocation={currentLocation}/>
             </ModalPortal>
+            <DevTool control={control} />
         </Container>
     );
 };
 
-export default React.memo(SignUp);
+export default React.memo(FormSignUp);
