@@ -458,9 +458,9 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     icon={<PersonIcon/>}
                     name='name'
                     onChange={onChangeInput}
-                    isValid={!!name}
-                    errorMessage="이름을 입력해주세요"
-                    usevalidation
+                    // isValid={!!name}
+                    // errorMessage="이름을 입력해주세요"
+                    // usevalidation
                 />
             </div>
             <div className='input-wrapper'>
@@ -472,9 +472,9 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     icon={<PersonIcon/>}
                     name='nickname'
                     onChange={onChangeInput}
-                    isValid={!!nickname}
-                    errorMessage="닉네임을 입력해주세요"
-                    usevalidation
+                    // isValid={!!nickname}
+                    // errorMessage="닉네임을 입력해주세요"
+                    // usevalidation
                 />
             </div>
             {kakaoSignUp ? null :
@@ -487,9 +487,9 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     icon={<MailIcon/>}
                     // name='email'
                     // onChange={onChangeInput}
-                    isValid={!!email}
-                    errorMessage="이메일을 입력해주세요"
-                    usevalidation
+                    // isValid={!!email}
+                    // errorMessage="이메일을 입력해주세요"
+                    // usevalidation
                 />
             </div>
             }
@@ -510,11 +510,11 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     type={hidePassword?"password":"text"}
                     name='password'
                     onChange={onChangeInput}
-                    isValid={!isPasswordHasNameOrEmail&&
-                        isPasswordOverMinLength &&
-                        isPasswordHasNumberOrSymbol}
-                    errorMessage="비밀번호를 입력해주세요"
-                    usevalidation
+                    // isValid={!isPasswordHasNameOrEmail&&
+                    //     isPasswordOverMinLength &&
+                    //     isPasswordHasNumberOrSymbol}
+                    // errorMessage="비밀번호를 입력해주세요"
+                    // usevalidation
                     onFocus={onFocusPassword}
                 />
             </div>
@@ -548,9 +548,9 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     type={hidePassword?"password":"text"}
                     name='confirmPassword'
                     onChange={onChangeInput}
-                    isValid={password===confirmPassword}
-                    errorMessage="입력하신 비밀번호가 일치하지 않습니다."
-                    usevalidation
+                    // isValid={password===confirmPassword &&confirmPassword === ''}
+                    // errorMessage="입력하신 비밀번호가 일치하지 않습니다."
+                    // usevalidation
                     onFocus={onFocusedConfirmPassword}
                     />
                 </div>

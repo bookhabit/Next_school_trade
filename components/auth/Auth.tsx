@@ -26,7 +26,7 @@ const Auth:React.FC<IProps> = ({currentLeft}) => {
             : <SignUp kakaoSignUp={kakaoSignUp}/> 
             }
             {currentLeft? <FormLogin/>
-            : <FormSignUp kakaoSignUp={kakaoSignUp}/> 
+            : null 
             }
         </Container>
     );

@@ -503,7 +503,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     type={hidePassword?"password":"text"}
                     name='confirmPassword'
                     onChange={onChangeInput}
-                    isValid={password===confirmPassword}
+                    isValid={password===confirmPassword &&confirmPassword === ''}
                     errorMessage="입력하신 비밀번호가 일치하지 않습니다."
                     usevalidation
                     onFocus={onFocusedConfirmPassword}

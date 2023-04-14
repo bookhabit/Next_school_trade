@@ -78,13 +78,12 @@ let renderCount = 0
 
 const FormLogin = () => {
     // react-hook-form
-    const Reactform = useForm<LoginFormValues>({
+    const {register,control,handleSubmit,formState: { errors }} = useForm<LoginFormValues>({
       defaultValues:{
           email:"",
           password:"",
       }
     });
-    const {register,control,handleSubmit,formState: { errors }} = Reactform
     
     // 기존 방식
     const [email,setEmail] = useState("");
@@ -99,18 +98,6 @@ const FormLogin = () => {
 
     const dispatch = useDispatch();
 
-    // 이메일 주소 onchange
-    const onChangeEmail = (event:React.ChangeEvent<HTMLInputElement>)=>{
-        setEmail(event.target.value)
-        setErrorMessage("")
-    }
-
-    // 비밀번호 onchange
-    const onChangePassword = (event:React.ChangeEvent<HTMLInputElement>)=>{
-        setPassword(event.target.value)
-        setErrorMessage("")
-    }
-
     // 비밀번호 숨김 토글 함수
     const toggleHidePassword = ()=>{
         setHidePaddword(!hidePassword)
@@ -119,8 +106,9 @@ const FormLogin = () => {
     const router = useRouter();
 
     // 로그인 버튼 클릭시 react-hook-form api호출
-    const onSubmit: SubmitHandler<LoginFormValues> = data => {
-      alert(JSON.stringify(data));
+    const onSubmitFormLogin: SubmitHandler<LoginFormValues> = data => {
+      console.log(data)
+      // api 호출한 다음 try catch문으로 이메일 일치하지 않을 시와 비밀번호 일치하지 않을 때 유효성 검사체크하기
     };
 
     // 로그인 버튼 클릭 시 API호출
@@ -172,42 +160,44 @@ const FormLogin = () => {
     },[])
     renderCount++
     return (
-        <Container onSubmit={onSubmitLogin}>
+        <Container onSubmit={handleSubmit(onSubmitFormLogin)}>
           <h1>Login Form ({renderCount/2})</h1>
           <div className="login-input-wrapper">
             <FormInput
               placeholder="이메일 주소"
-              label="email"
-              register={register}
-              required 
               icon={<MailIcon />}
-              // name="email"
-              // type="email"
-              // value={email}
-              // onChange={onChangeEmail}
-              usevalidation
-              isValid={!!email}
-              // errorMessage={"이메일을 입력해주세요"}
+              name="email" 
+              control={control} 
+              rules={{
+                required:{
+                    value:true,
+                    message:"E-mail is required"
+                },
+                pattern:{
+                    value:/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    message: "Invalid email format",
+                }
+            }}
             />
           </div>
           <div className="login-input-wrapper login-password-input-wrapper">
+            
             <FormInput
               placeholder="비밀번호 입력"
-              label="password"
-              register={register}
-              required 
-              // name="password"
+              name="password" 
               type={hidePassword ? "password" : "text"}
               icon={hidePassword? (
                 <ClosedEyeIcon onClick={toggleHidePassword}/>
-            ):(
+                 ):(
                 <OpenedEyeIcon onClick={toggleHidePassword}/>
                 )}
-              // value={password}
-              // onChange={onChangePassword}
-              usevalidation
-              isValid={!!password}
-              // errorMessage={"비밀번호를 입력해주세요"}
+                control={control} 
+                rules={{
+                  required:{
+                      value:true,
+                      message:"Password is required"
+                  }
+              }}
             />
           </div>
           <div className="input-error-message">

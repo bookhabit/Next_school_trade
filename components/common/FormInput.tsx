@@ -6,11 +6,19 @@ import palette from '../../styles/palette';
 import { Path, UseFormRegister } from 'react-hook-form/dist/types';
 import { LoginFormValues } from '../auth/FormLogin';
 import { SignUpFormValues } from '../auth/FormSignUp';
+import {
+    Control,
+    FieldPath,
+    FieldValues,
+    RegisterOptions,
+    useController,
+    UseControllerProps
+  } from "react-hook-form";
 
 type InputContainerProps = {
     iconExist:boolean;
-    isValid:boolean;
-    usevalidation:boolean;
+    // isValid:boolean;
+    // usevalidation:boolean;
 }
 
 const Container = styled.div<InputContainerProps>`
@@ -24,11 +32,11 @@ const Container = styled.div<InputContainerProps>`
         border-radius:10px;
         padding:0px 10px;
         // 인풋 밸리데이션 - 에러상태일 때 input창 스타일링
-        background-color:${(isValid)=> isValid ? null :palette.error_box_fill } ;
-        border-color: ${(isValid)=> isValid ? palette.dark_cyan : palette.error_border_color  } ;
+        /* background-color:${(isValid)=> isValid ? palette.error_box_fill : null } ;
+        border-color: ${(isValid)=> isValid ? palette.error_border_color  : palette.dark_cyan  } ;
         &:focus{
             border-color:${(isValid)=> isValid ? palette.error_box_fill : palette.input_focus } ;
-        }
+        } */
         input{
             width:100%;
             font-size:15px;
@@ -67,48 +75,44 @@ const ErrorContainer = styled.div`
     }
         
 `
-
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    icon?:JSX.Element;
-    isValid:boolean;
-    usevalidation:boolean;
-    errorMessage?:string;
-    label: Path<SignUpFormValues>
-    register: UseFormRegister<SignUpFormValues>;
-    required: boolean;
-    placeholder:string;
-    type?:string;
+type TControl<T extends FieldValues = FieldValues> = {
+    control?: Control<T>;
+    name: FieldPath<T>;
+    rules?: Omit<RegisterOptions<T>, "setValueAs" | "disabled" | "valueAsNumber" | "valueAsDate"> | undefined;
 }
+interface FormInputProps {
+    icon?: JSX.Element | undefined;
+    placeholder: string;
+    type?: string | undefined;
+  }
 
-const FormInput:React.FC<IProps> = ({
+  const FormInput = ({
     icon,
-    usevalidation,
-    isValid,
-    errorMessage,
-    label,
-    register,
-    required,
+    control, 
+    name, 
+    rules,
     placeholder,
-    type="text",
-    ...props
-}) => {
-    const validateMode = useSelector((state:RootState)=>state.common.validateMode)
-    console.log('isvalid',isValid)
+    type
+}:FormInputProps & UseControllerProps<LoginFormValues>) => {
+    const {
+        field: { value, onChange },
+        fieldState: { isDirty, isTouched, error },
+        formState,
+      } = useController({control,name,rules});
+      console.log('error',error)
+      console.log('formState',formState)
     return (
         <>
         <Container 
             iconExist={!!icon} 
-            isValid={isValid} 
-            usevalidation={validateMode&&usevalidation}>
+            >
             <div className='inner-input-wrapper'>
-                {/* <input {...props}/> */}
-                <input type={type} placeholder={placeholder} {...register(label, { required })} />
+                <input type={type} placeholder={placeholder} value={value} onChange={onChange} />
                 <div className='input-icon-wrapper'>{icon}</div>    
             </div>
         </Container>
         <ErrorContainer>
-            {usevalidation&&validateMode&&!isValid&&errorMessage&&
-            (<p>{errorMessage}</p>)}
+            <p>{error?.message}</p>
         </ErrorContainer>
       </>
     );
