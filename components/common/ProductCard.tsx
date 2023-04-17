@@ -153,7 +153,7 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
             setFavoriteProduct(!favoriteProduct)
             if(favoriteProduct===false){
                 // 사용자의 관심목록 추가 api
-                // const response = await addFavorite(product.id)
+                const response = await addFavorite(product.id)
                 
                 // 디스패치 - 관심목록 추가 모달창 
                 dispatch(favoriteActions.setShowFavoriteModal(true))
@@ -162,8 +162,8 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
                 }, 3000);
             }else{
                 // 사용자의 관심목록에서 삭제
-                // const response = await deleteFavorite(product.id)
-                // console.log('delete response',response)
+                const response = await deleteFavorite(product.id)
+                console.log('delete response',response)
             }
         }else{
             alert('로그인이 필요합니다.')

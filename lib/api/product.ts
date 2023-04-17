@@ -1,7 +1,6 @@
-import axios from "axios"
+import axios from "axios";
 import { QueryFunctionContext } from '@tanstack/react-query';
-import { Page, productListType } from "../../types/product/product";
-import { AxiosResponse } from 'axios'
+
 
 
 
@@ -29,11 +28,11 @@ export const getCategoryProductList = ({pageParam=0}:QueryFunctionContext,name:s
 
 // 특정 유저 관심목록 추가
 export const addFavorite = async (contentId:number)=>{
-    await axios.post(`http://localhost:4000/favorite/add/${contentId}`,{withCredentials: true,})
+    await axios.post(`http://localhost:4000/favorite/add/${contentId}`,{},{withCredentials: true,},)
 }
 
 
 // 특정 유저 관심목록 제거
 export const deleteFavorite = async (contentId:number)=>{
-    await axios.post(`http://localhost:4000/favorite/delete/${contentId}`,{withCredentials: true,})
+    await axios.post(`http://localhost:4000/favorite/delete/${contentId}`,{},{withCredentials: true,})
 }
