@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import App from "next/app";
 import { cookieStringToObject } from './../lib/utils';
 import axios from "../lib/api";
-import { getUserInfo, meAPI } from "../lib/api/auth";
+import { meAPI } from "../lib/api/auth";
 import { useEffect, useState } from "react";
 import { userActions } from "../store/user";
 import { useDispatch } from "react-redux";
@@ -18,6 +18,7 @@ import Introduce from "../components/introduce/Introduce";
 import palette from "../styles/palette";
 import LinkFooter from "../components/footer/LinkFooter";
 import UserColor from "../components/introduce/UserColor";
+import { UserState } from "../types/reduxState";
 
 interface BackgroundColor{
     firstColor:string;
@@ -60,6 +61,15 @@ const MobileContainer = styled.div`
 // const queryClient = new QueryClient();
 
 const MyApp = ({Component,pageProps,...data}:AppProps)=>{
+    const getCookieUser = async ()=>{
+        try{
+            const response = await meAPI() as UserState
+            return response
+        }catch(e){
+            console.log('meAPI실패')
+            console.log(e)
+        }
+    }
     // 로그인유지 - 유저정보 받아오기
     const clientData = Object(data).data as LoggedUserType
     const dispatch = useDispatch();
@@ -69,13 +79,23 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
             dispatch(userActions.setLoggedUser(clientData.user))
         }
     },[])
-    const LoggedUser = useSelector((state:RootState)=>state.user)
 
     const [queryClient] = useState(() => new QueryClient());
     
     // 사용자가 배경색 지정하기
     const firstColor = useSelector((state:RootState)=>state.userBackground.firstColor)
     const secondColor = useSelector((state:RootState)=>state.userBackground.secondColor)
+
+    useEffect(()=>{
+        getCookieUser().then((data) => {
+            if (data) { // Add a check for undefined values
+              dispatch(userActions.setLoggedUser(data as UserState)) // Cast data to UserState
+            }
+          }).catch((e) => {
+            console.log('meAPI실패')
+            console.log(e)
+          })
+    },[])
 
     return(
         <Container firstColor={firstColor} secondColor={secondColor}>
@@ -101,19 +121,20 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
 MyApp.getInitialProps = async (context:AppContext)=>{
     const appInitialProps = await App.getInitialProps(context);
     const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie)
-    console.log('cookieObject.access_token',cookieObject.access_token)
-    let data
-    try{
-        // if(cookieObject.access_token){
-        //     axios.defaults.headers.cookie = cookieObject.access_token;
-        //     data = await (await meAPI()).data;
-        //     console.log('meAPI - data',data)
-        // }
-    }catch(e){
-        console.log(e)
-    }
+
+    // let userData
+    // try{
+    //     if(cookieObject.access_token){
+    //         await meAPI().then((data)=>{
+    //             userData = data as UserState
+    //         })
+    //         console.log('meAPI -server response',userData)
+    //     }
+    // }catch(e){
+    //     console.log(e)
+    // }
     
-    return {...appInitialProps,data}
+    return {...appInitialProps}
 }
 
 export default wrapper.withRedux(MyApp);

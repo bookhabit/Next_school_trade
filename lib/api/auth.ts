@@ -45,13 +45,7 @@ export const loginAPI =  async (body:LoginFormValues)=>
     await axios.post("http://localhost:4000/auth/local/signin",body)
 
 // 쿠키의 access_token의 유저 정보를 받아오는 api
-export const meAPI = ()=> axios.post("http://localhost:4000/user/islogin",{withCredentials: true,});
-
-// 로컬스토리지의 access_token의 유저 정보를 받아오는 api
-export const getUserInfo = (token:string)=>axios.post("http://localhost:4000/user/islogin",{
-        headers: {Authorization: token,}
-    }
-)
+export const meAPI = async ()=> await axios.post("http://localhost:4000/user/islogin",{},{withCredentials: true,}).then(res=>res?.data)
 
 // 로그아웃 api
 export const logoutAPI = ()=> axios.delete("/api/auth/logout")

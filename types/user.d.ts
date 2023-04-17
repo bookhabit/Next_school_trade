@@ -24,6 +24,7 @@ import { productListType } from "./product/product";
     password:string;
     university:string;
     updatedAt:string;
+    contents:productListType[]
     // profile_image추가해야함
   }
 
