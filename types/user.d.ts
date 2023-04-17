@@ -2,8 +2,8 @@ import { productListType } from "./product/product";
 
   // local-login 응답값
   export type LoggedUserType = {
-    token:string;
-    isLogged:boolean;
+    // token:string;
+    // isLogged:boolean;
     user:Users;
   }
 

@@ -1,3 +1,4 @@
+import { LoginFormValues } from '../../components/auth/FormLogin';
 import axios from '../../lib/api';
 import { LoggedUserType } from '../../types/user';
 
@@ -39,16 +40,16 @@ axios.post<LoggedUserType>("http://localhost:4000/auth/kakao/signup",
                     withCredentials: true,
                 })
 
-// 로그인 api
-export const loginAPI = (body:{email:string;password:string})=>
-    axios.post<LoggedUserType>("http://localhost:4000/auth/local/signin",body)
+// 로그인 api - <LoggedUserType>
+export const loginAPI =  async(body:LoginFormValues)=>
+    await axios.post("http://localhost:4000/auth/local/signin",body)
 
 // 쿠키의 access_token의 유저 정보를 받아오는 api
 export const meAPI = ()=> axios.post("http://localhost:4000/user/islogin",{withCredentials: true,});
 
 // 로컬스토리지의 access_token의 유저 정보를 받아오는 api
-export const getUserInfo = ()=>axios.post("http://localhost:4000/user/islogin",{
-        withCredentials: true,
+export const getUserInfo = (token:string)=>axios.post("http://localhost:4000/user/islogin",{
+        headers: {Authorization: token,}
     }
 )
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import styled from "styled-components";
 import MailIcon from "../../public/static/svg/auth/email.svg";
 import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg";
@@ -8,14 +8,13 @@ import palette from "../../styles/palette";
 import Button from "../common/Button";
 import FormInput from "../common/FormInput";
 import { useDispatch } from "react-redux";
-import { authActions } from "../../store/auth";
-import useValidateMode from "../../hooks/useValidateMode";
 import { userActions } from './../../store/user';
 import { loginAPI } from "../../lib/api/auth";
 import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form/dist/types/form";
 import {DevTool} from "@hookform/devtools"
+import { LoggedUserType } from "../../types/user";
 
 const Container = styled.form`
   width: 100%; // 모바일버전
@@ -78,68 +77,51 @@ let renderCount = 0
 
 const FormLogin = () => {
     // react-hook-form
-    const {register,control,handleSubmit,formState: { errors }} = useForm<LoginFormValues>({
+    const {control,handleSubmit} = useForm<LoginFormValues>({
       defaultValues:{
           email:"",
           password:"",
       }
     });
     
-    // 기존 방식
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
     // 에러메시지 상태
     const [errorMessage,setErrorMessage] = useState("")
 
     // 비밀번호 토글 state
     const [hidePassword,setHidePaddword] = useState(true);
-    
-    const {setValidateMode} = useValidateMode()
 
     const dispatch = useDispatch();
+    const router = useRouter();
 
     // 비밀번호 숨김 토글 함수
     const toggleHidePassword = ()=>{
         setHidePaddword(!hidePassword)
     }
 
-    const router = useRouter();
 
     // 로그인 버튼 클릭시 react-hook-form api호출
-    const onSubmitFormLogin: SubmitHandler<LoginFormValues> = data => {
-      console.log(data)
+    const onSubmitFormLogin: SubmitHandler<LoginFormValues> = async (formValue) => {
       // api 호출한 다음 try catch문으로 이메일 일치하지 않을 시와 비밀번호 일치하지 않을 때 유효성 검사체크하기
-    };
-
-    // 로그인 버튼 클릭 시 API호출
-    const onSubmitLogin = async (event:React.FormEvent<HTMLFormElement>)=>{
-        event.preventDefault();
-        
-        setValidateMode(true)
-
-        if(!email||!password){
-            console.log("이메일과 비밀번호를 모두 입력해주세요.")
-        }else{
-            const loginBody = {email,password}
-            
-            try{
-                const {data} = await loginAPI(loginBody)
-                dispatch(userActions.setLoggedUser(data.user))
-                router.push("/")
-            }catch(e:any){
-                // data에 있는 상태코드에 따라 에러메시지 출력
-                console.log('에러',e.response)
-                // 해당 이메일의 유저가 없을 때
-                if(e.response.status === 404){
-                    setErrorMessage(e.response.data.message)
-                }
-                // 유저의 비밀번호가 일치하지 않을 때
-                if(e.response.status === 401){
-                    setErrorMessage(e.response.data.message)
-                }
-            }
+      try{
+        if(formValue){
+          const response = await loginAPI(formValue) 
+          const data:LoggedUserType = response.data
+          dispatch(userActions.setLoggedUser(data.user))
+          router.push("/")
+        }
+    }catch(e:any){
+        // data에 있는 상태코드에 따라 에러메시지 출력
+        console.log('에러',e.response)
+        // 해당 이메일의 유저가 없을 때
+        if(e.response.status === 404){
+            setErrorMessage(e.response.data.message)
+        }
+        // 유저의 비밀번호가 일치하지 않을 때
+        if(e.response.status === 401){
+            setErrorMessage(e.response.data.message)
         }
     }
+    };
 
     // 환경변수 설정
     const KAKAO_REST_API_KEY= "1e71e50aa0333c4fc579cf84718fdd4b"
@@ -153,11 +135,6 @@ const FormLogin = () => {
       window.location.href = KAKAO_AUTH_URL
     }
 
-    useEffect(()=>{
-        return ()=>{
-            setValidateMode(false)
-        }
-    },[])
     renderCount++
     return (
         <Container onSubmit={handleSubmit(onSubmitFormLogin)}>

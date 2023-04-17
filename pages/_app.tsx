@@ -101,19 +101,19 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
 MyApp.getInitialProps = async (context:AppContext)=>{
     const appInitialProps = await App.getInitialProps(context);
     const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie)
-    
+    console.log('cookieObject.access_token',cookieObject.access_token)
     let data
-    // try{
-    //     if(cookieObject.access_token){
-    //         axios.defaults.headers.cookie = cookieObject.access_token;
-    //         data = await (await getUserInfo()).data;
-    //         console.log('meAPI - data',data)
-    //     }
-    // }catch(e){
-    //     console.log(e)
-    // }
+    try{
+        if(cookieObject.access_token){
+            // axios.defaults.headers.cookie = cookieObject.access_token;
+            // data = await (await getUserInfo(cookieObject.access_token)).data;
+            console.log('meAPI - data',data)
+        }
+    }catch(e){
+        console.log(e)
+    }
     
-    return {...appInitialProps,data}
+    return {...appInitialProps}
 }
 
 export default wrapper.withRedux(MyApp);

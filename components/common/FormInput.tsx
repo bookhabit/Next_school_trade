@@ -75,16 +75,11 @@ const ErrorContainer = styled.div`
     }
         
 `
-type TControl<T extends FieldValues = FieldValues> = {
-    control?: Control<T>;
-    name: FieldPath<T>;
-    rules?: Omit<RegisterOptions<T>, "setValueAs" | "disabled" | "valueAsNumber" | "valueAsDate"> | undefined;
-}
 interface FormInputProps {
     icon?: JSX.Element | undefined;
     placeholder: string;
     type?: string | undefined;
-  }
+}
 
   const FormInput = ({
     icon,
@@ -99,8 +94,6 @@ interface FormInputProps {
         fieldState: { isDirty, isTouched, error },
         formState,
       } = useController({control,name,rules});
-      console.log('error',error)
-      console.log('formState',formState)
     return (
         <>
         <Container 
