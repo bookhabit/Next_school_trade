@@ -41,7 +41,7 @@ axios.post<LoggedUserType>("http://localhost:4000/auth/kakao/signup",
                 })
 
 // 로그인 api - <LoggedUserType>
-export const loginAPI =  async(body:LoginFormValues)=>
+export const loginAPI =  async (body:LoginFormValues)=>
     await axios.post("http://localhost:4000/auth/local/signin",body)
 
 // 쿠키의 access_token의 유저 정보를 받아오는 api

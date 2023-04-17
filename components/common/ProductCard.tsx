@@ -16,6 +16,8 @@ import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { addFavorite, deleteFavorite } from '../../lib/api/product';
+import { useDispatch } from 'react-redux';
+import { favoriteActions } from '../../store/favorite';
 
 const Container = styled.div`
     width:100%;
@@ -141,22 +143,27 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
 
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
     const [favoriteProduct,setFavoriteProduct] = useState(false)
+
+    const dispatch = useDispatch();
     
     // 하트아이콘 변경
     const toggleHeartIcon = async ()=>{
         // 로그인 확인
         if(isLogged){
             setFavoriteProduct(!favoriteProduct)
-            
             if(favoriteProduct===false){
                 // 사용자의 관심목록 추가 api
-                const response = await addFavorite(product.id)
+                // const response = await addFavorite(product.id)
                 
                 // 디스패치 - 관심목록 추가 모달창 
+                dispatch(favoriteActions.setShowFavoriteModal(true))
+                setTimeout(() => {
+                    dispatch(favoriteActions.setShowFavoriteModal(false))
+                }, 3000);
             }else{
                 // 사용자의 관심목록에서 삭제
-                const response = await deleteFavorite(product.id)
-                console.log('delete response',response)
+                // const response = await deleteFavorite(product.id)
+                // console.log('delete response',response)
             }
         }else{
             alert('로그인이 필요합니다.')
