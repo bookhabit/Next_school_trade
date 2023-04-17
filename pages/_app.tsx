@@ -104,16 +104,16 @@ MyApp.getInitialProps = async (context:AppContext)=>{
     console.log('cookieObject.access_token',cookieObject.access_token)
     let data
     try{
-        if(cookieObject.access_token){
-            // axios.defaults.headers.cookie = cookieObject.access_token;
-            // data = await (await getUserInfo(cookieObject.access_token)).data;
-            console.log('meAPI - data',data)
-        }
+        // if(cookieObject.access_token){
+        //     axios.defaults.headers.cookie = cookieObject.access_token;
+        //     data = await (await meAPI()).data;
+        //     console.log('meAPI - data',data)
+        // }
     }catch(e){
         console.log(e)
     }
     
-    return {...appInitialProps}
+    return {...appInitialProps,data}
 }
 
 export default wrapper.withRedux(MyApp);

@@ -25,3 +25,15 @@ export const getProductDetail = (id:number)=>axios.get(`http://localhost:4000/co
 
 // 카테고리 상품 조회
 export const getCategoryProductList = ({pageParam=0}:QueryFunctionContext,name:string)=>axios.get(`http://localhost:4000/content/list/category`,{params: {category: name,page:pageParam}}).then(res=>res?.data)
+
+
+// 특정 유저 관심목록 추가
+export const addFavorite = async (contentId:number)=>{
+    await axios.post(`http://localhost:4000/favorite/add/${contentId}`,{withCredentials: true,})
+}
+
+
+// 특정 유저 관심목록 제거
+export const deleteFavorite = async (contentId:number)=>{
+    await axios.post(`http://localhost:4000/favorite/delete/${contentId}`,{withCredentials: true,})
+}
