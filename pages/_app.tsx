@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import Header from "../components/header/Header";
 import { Hydrate, QueryClient,QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { LoggedUserType } from "../types/user";
+import { LoggedUserType, Users } from "../types/user";
 import styled from "styled-components";
 import Introduce from "../components/introduce/Introduce";
 import palette from "../styles/palette";
@@ -60,7 +60,10 @@ const MobileContainer = styled.div`
 
 // const queryClient = new QueryClient();
 
-const MyApp = ({Component,pageProps,...data}:AppProps)=>{
+const MyApp = ({Component,pageProps}:AppProps)=>{
+    const dispatch = useDispatch();
+    const [queryClient] = useState(() => new QueryClient());
+
     const getCookieUser = async ()=>{
         try{
             const response = await meAPI() as UserState
@@ -70,17 +73,6 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
             console.log(e)
         }
     }
-    // 로그인유지 - 유저정보 받아오기
-    const clientData = Object(data).data as LoggedUserType
-    const dispatch = useDispatch();
-    console.log('_app.tsx',clientData)
-    useEffect(()=>{
-        if(clientData){
-            dispatch(userActions.setLoggedUser(clientData.user))
-        }
-    },[])
-
-    const [queryClient] = useState(() => new QueryClient());
     
     // 사용자가 배경색 지정하기
     const firstColor = useSelector((state:RootState)=>state.userBackground.firstColor)
@@ -120,19 +112,6 @@ const MyApp = ({Component,pageProps,...data}:AppProps)=>{
 
 MyApp.getInitialProps = async (context:AppContext)=>{
     const appInitialProps = await App.getInitialProps(context);
-    const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie)
-
-    // let userData
-    // try{
-    //     if(cookieObject.access_token){
-    //         await meAPI().then((data)=>{
-    //             userData = data as UserState
-    //         })
-    //         console.log('meAPI -server response',userData)
-    //     }
-    // }catch(e){
-    //     console.log(e)
-    // }
     
     return {...appInitialProps}
 }
