@@ -70,8 +70,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
       setSellerName(response.data)
     }
 
-    if(pathName==="/seller/[id]" ||"/seller/[id]/sellerReview" || "/seller/[id]/sellingProducts" ){
-      console.log('api요청')
+    if(pathName==="/seller/[id]"|| pathName==="/seller/[id]/sellerReview" ||pathName === "/seller/[id]/sellingProducts" ){      
       getSellerNameAPI()
     }
 
