@@ -14,7 +14,6 @@ const Container = styled.div`
 `
 
 const sellerReview:NextPage = ({data}:any) => {
-    console.log('판매자정보',data)
     if(!data){
         return <FailFetchData/>
     }

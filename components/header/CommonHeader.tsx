@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import BeforeIcon from "../../public/static/svg/header/commonHeader/beforeIcon.svg"
@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { RootState } from '../../store';
 import ProfileUserIcon from "../../public/static/svg/myPage/ProfileUserIcon.svg"
+import { getSellerName } from '../../lib/api/user';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -46,7 +47,7 @@ const Conatainer = styled.div`
 interface IProps {
     pathName: string;
   }
-  
+
 
 const CommonHeader:React.FC<IProps> = ({pathName}) => {
     // 알림페이지,카테고리페이지,채팅방페이지 는 편집 버튼 생성
@@ -59,10 +60,19 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
     }
     
     const router = useRouter();
-    // 이 sellerId 값으로 유저정보를 불러오는 api호출하고 유저의 이름으로 바꿔준다
-    const sellerId = router.query.id 
-    // case "/seller/[id]":
-    const testSellerNameForProfile = "이너런"
+    
+    // sellerName 가져오기
+    const sellerId = Number(router.query.id)
+    const [sellerName,setSellerName] = useState<string>('')    
+    const getSellerNameAPI = async ()=> {
+      // sellerId로 api호출
+      const response = await getSellerName(sellerId);
+      setSellerName(response.data)
+    }
+
+    if(pathName==="/seller/[id]" ||"/seller/[id]/sellerReview" || "/seller/[id]/sellingProducts" ){
+      getSellerNameAPI()
+    }
 
     // case "/user/chatting/[id]":
     const testSellerNameForChatting = "이너런"
@@ -100,18 +110,17 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
           case "/user/profile":
             return "프로필 정보 수정";
           case "/seller/[id]":
-            return `${testSellerNameForProfile} 님의 프로필`;
+            return `${sellerName} 님의 프로필`;
           case "/seller/[id]/sellerReview":
-            return `${testSellerNameForProfile} 님의 거래후기`;
+            return `${sellerName} 님의 거래후기`;
           case "/seller/[id]/writeReview":
             return `거래후기 작성`;
           case "/seller/[id]/sellingProducts":
-              return `${testSellerNameForProfile} 님의 판매상품`;
+              return `${sellerName} 님의 판매상품`;
           default:
             return "페이지를 찾을 수 없습니다";
         }
       };
-    
     return (
         <Conatainer>
             <div className='headerDiv'>

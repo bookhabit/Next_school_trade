@@ -21,7 +21,7 @@ const initialState:UserState = {
     updatedAt:'',
     isLogged:false,
     // profileImage:"",
-    // contents:[],
+    contents:[],
 }
 
 const user = createSlice({

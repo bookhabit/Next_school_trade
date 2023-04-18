@@ -50,7 +50,6 @@ interface IProps{
 
 
 const GradeReview:React.FC<IProps> = ({reviewList}) => {
-    console.log('reviewList',reviewList)
     //  판매자 별점 개수에 따라서 별점아이콘 출력하기
     const sellerGrade = reviewList
     const sellerGradeTest = 4

@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import App from "next/app";
 import { cookieStringToObject } from './../lib/utils';
 import axios from "../lib/api";
-import { meAPI } from "../lib/api/auth";
 import { useEffect, useState } from "react";
 import { userActions } from "../store/user";
 import { useDispatch } from "react-redux";
@@ -19,6 +18,7 @@ import palette from "../styles/palette";
 import LinkFooter from "../components/footer/LinkFooter";
 import UserColor from "../components/introduce/UserColor";
 import { UserState } from "../types/reduxState";
+import { meAPI } from './../lib/api/user';
 
 interface BackgroundColor{
     firstColor:string;
