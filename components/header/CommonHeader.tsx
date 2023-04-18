@@ -71,6 +71,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
     }
 
     if(pathName==="/seller/[id]" ||"/seller/[id]/sellerReview" || "/seller/[id]/sellingProducts" ){
+      console.log('api요청')
       getSellerNameAPI()
     }
 

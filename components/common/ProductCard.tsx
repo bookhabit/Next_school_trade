@@ -133,6 +133,10 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
     }
     const router= useRouter();
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
+    // 판매자 페이지에서는 거래완료 모달 숨기기
+    if(router.pathname === "/seller/[id]/sellingProducts"){
+        showChangeCompleted=false
+    }
 
     // 거래완료로 바꾸는 버튼 모달
     const [showCompletedBtn,setShowCompletedBtn] = useState(false)
@@ -140,6 +144,7 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
     const showCompletedHandler = ()=>{
         setShowCompletedBtn(!showCompletedBtn)
     }
+
 
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
     const [favoriteProduct,setFavoriteProduct] = useState(false)
