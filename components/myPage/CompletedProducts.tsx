@@ -17,12 +17,6 @@ import { isEmpty } from 'lodash';
 
 const Container = styled.div`
     padding:0px 20px;
-    h2{
-        margin-top:20px;
-        margin-bottom:0px;
-        font-size:20px;
-        font-weight:bold;
-    }
     background-color: rgba( 0, 0, 0, 0.5 );
     
 `

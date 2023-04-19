@@ -18,6 +18,8 @@ const Container = styled.div`
 	@media only screen and (min-width: 430px) {
 	    min-height:100vh;
     }
+    padding:0px 20px;
+    background-color: rgba( 0, 0, 0, 0.5 );
 `
 
 const buyList = ({id}:{id:number}) => {
@@ -30,7 +32,7 @@ const buyList = ({id}:{id:number}) => {
         isLoading,
         isFetching
     } = useInfiniteQuery(
-        ["favoriteList"] 
+        ["buyList"] 
     , async (pageParam)=> await getBuyList(pageParam,id) as Page
     , {
         // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
@@ -46,9 +48,7 @@ const buyList = ({id}:{id:number}) => {
         }
         }
     )
-    console.log('infinitquery',data)
-    // return favoriteList
-
+    console.log('buyList data',data)
 
     // 무한스크롤 구현
     const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -59,16 +59,19 @@ const buyList = ({id}:{id:number}) => {
     // 스크롤 이벤트 타겟 지정
     const { setTarget } = useIntersectionObserver({ onIntersect });
 
-    
-    console.log(data)
     return (
         <>
             <Container>
                 {isLoading && isFetching && <Loading/>}
                 {status === "error" && <FailFetchData/>}
                 {status === "success" &&
-                    true
-                    
+                    data.pages.map((page, index) => 
+                    isEmpty(page.contents) ? <DataNull key={index} text='아직 구매한 상품이 없습니다'/> :
+                    <>
+                        <div className='hideProductBox'></div>
+                        <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page.contents} />
+                    </>
+                    )
                 }
             </Container>
             <LinkFooter/>
@@ -81,13 +84,13 @@ export const getServerSideProps : GetServerSideProps = async ({query}) => {
     const {id} = query;
     const queryClient = new QueryClient()
     try{
-        await queryClient.prefetchInfiniteQuery(
-            ['favoriteList'],async()=>{
-              const res = await axios.get(`http://localhost:4000/content/list/bought/${id}`)
-            console.log('res.data',res.data)
-              return res.data
-            }
-          )
+        // await queryClient.prefetchInfiniteQuery(
+        //     ['buyList'],async()=>{
+        //       const res = await axios.post(`http://localhost:4000/content/list/bought/${id}`,{}, {withCredentials: true,})
+        //     console.log('server res.data',res.data)
+        //       return res.data
+        //     }
+        //   )
         return {
             props : {
                 dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
