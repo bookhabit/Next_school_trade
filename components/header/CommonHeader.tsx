@@ -99,7 +99,7 @@ const CommonHeader:React.FC<IProps> = ({pathName}) => {
             return "관심목록";
           case "/user/sellList/[id]":
             return "판매내역";
-          case "/user/buyList":
+          case "/user/buyList/[id]":
             return "구매내역";
           case "/user/chatting":
             return "채팅";

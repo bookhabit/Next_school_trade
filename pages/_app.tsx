@@ -111,7 +111,6 @@ MyApp.getInitialProps = async (context:AppContext)=>{
     }catch(e){
         console.log(e)
     }
-    console.log('userData',userData)
     return {...appInitialProps,userData}
 }
 

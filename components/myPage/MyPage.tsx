@@ -84,6 +84,8 @@ const MyPage = () => {
     const goToFavorite = `/user/favorite/${userId}`
     // 판매내역 라우팅
     const goToSellList = `/user/sellList/${userId}`
+    // 구매내역 라우팅
+    const goToBuyList = `/user/buyList/${userId}`
     // 거래후기 라우팅
     const goToTradeReview = `/user/tradeReview/${userId}`
     return (
@@ -101,7 +103,7 @@ const MyPage = () => {
                     <SellListIcon className='myPageIcon sellListIcon'/>
                     <p>판매내역</p>
                 </Link>
-                <Link href="/user/buyList" className='myPage-list'>
+                <Link href={goToBuyList} className='myPage-list'>
                     <BuyListIcon className='myPageIcon buyListIcon'/>
                     <p>구매내역</p>
                 </Link>
