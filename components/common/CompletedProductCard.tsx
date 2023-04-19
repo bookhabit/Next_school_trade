@@ -93,7 +93,7 @@ const CompletedProductCard:React.FC<IProps> = ({product}) => {
 
     // dateTime 상대시간으로 출력하기
     const now = moment();
-    const productDate = moment(product.updatedAt)
+    const productDate = moment(product.completed_date)
 
     return (
         <>

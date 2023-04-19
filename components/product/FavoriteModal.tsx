@@ -6,10 +6,9 @@ import { RootState } from '../../store';
 import { useRouter } from 'next/router';
 
 const Container = styled.div`
-    position:fixed;
-    left: 50%;
-    transform: translateX( -50% );
-    bottom:80px !important;      
+    @media only screen and (min-width: 430px) {
+	    width:390px;
+    }
     width:320px;
     height:50px;
     padding:0px 20px;
@@ -19,14 +18,13 @@ const Container = styled.div`
     justify-content:space-between;
     align-items:center;
     .add-favorite-text{
-        font-size:12px;
+        font-size:16px;
         color:${palette.main_text_color}
     }
     .favorite-link{
         cursor: pointer;
-        font-size:12px;
+        font-size:16px;
         font-weight:bold;
-        color:black;
     }
 `
 

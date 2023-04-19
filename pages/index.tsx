@@ -18,15 +18,24 @@ import { RootState } from '../store';
 
 
 const Container = styled.div`
-    @media only screen and (min-width: 430px) {
-	    min-height:100vh;
-    }
     padding:0px 20px;
     padding-top:20px;
+    .favorite-modal{
+        position:fixed;
+        left: 50%;
+        transform: translateX( -50% );
+        bottom:80px !important;      
+    }
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+        .favorite-modal{
+            left:auto;
+            transform:none;
+        }
+    }
 `
 
 const home = () => {
-    // const lastPageNumber=4
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -58,7 +67,6 @@ const home = () => {
             }
         };
         const { setTarget } = useIntersectionObserver({ onIntersect });
-        console.log('data',data?.pages)
 
         // 관심목록 UI - 모달창 showState
         const showFavoriteModal = useSelector((state:RootState)=>state.favorite.showFavoriteModal)
@@ -74,6 +82,9 @@ const home = () => {
                     )}
                     {showFavoriteModal?
                     <FavoriteModal/> : null}
+                    <div className='favorite-modal'>
+                        <FavoriteModal/>
+                    </div>
             </Container>
             <LinkFooter/>
         </>
