@@ -9,7 +9,7 @@ export const GetproductList = ({pageParam=0}:QueryFunctionContext)=>axios.get(`h
 export const getFavoriteList = ({pageParam=0}:QueryFunctionContext,id:number)=>axios.get(`http://localhost:4000/favorite/${id}?page=${pageParam}`).then(res=>res?.data)
 
 // 특정 회원 구매내역 - user/buyList 페이지
-export const getBuyList = ({pageParam=0}:QueryFunctionContext,id:number)=>axios.get(`http://localhost:4000/content/list/bought/${id}?page=${pageParam}`,{withCredentials: true,}).then(res=>res?.data)
+export const getBuyList = ({pageParam=0}:QueryFunctionContext,id:number)=>axios.post(`http://localhost:4000/content/list/bought/${id}?page=${pageParam}`,{}, {withCredentials: true,}).then(res=>res?.data)
 
 
 // 특정 회원 판매 중 조회 - user/sellList 페이지
