@@ -18,7 +18,7 @@ import palette from "../styles/palette";
 import LinkFooter from "../components/footer/LinkFooter";
 import UserColor from "../components/introduce/UserColor";
 import { UserState } from "../types/reduxState";
-import { meAPI } from './../lib/api/user';
+import { getUserInfo, meAPI } from './../lib/api/user';
 
 interface BackgroundColor{
     firstColor:string;
@@ -60,33 +60,22 @@ const MobileContainer = styled.div`
 
 // const queryClient = new QueryClient();
 
-const MyApp = ({Component,pageProps}:AppProps)=>{
+const MyApp = ({Component,pageProps,...data}:AppProps)=>{
+    // 유저정보를 받아서 리덕스 스토어에 저장하기
+    const clientData = Object(data).userData as UserState
+    
     const dispatch = useDispatch();
     const [queryClient] = useState(() => new QueryClient());
 
-    const getCookieUser = async ()=>{
-        try{
-            const response = await meAPI() as UserState
-            return response
-        }catch(e){
-            console.log('meAPI실패')
-            console.log(e)
-        }
-    }
     
     // 사용자가 배경색 지정하기
     const firstColor = useSelector((state:RootState)=>state.userBackground.firstColor)
     const secondColor = useSelector((state:RootState)=>state.userBackground.secondColor)
 
     useEffect(()=>{
-        getCookieUser().then((data) => {
-            if (data) { // Add a check for undefined values
-              dispatch(userActions.setLoggedUser(data as UserState)) // Cast data to UserState
-            }
-          }).catch((e) => {
-            console.log('meAPI실패')
-            console.log(e)
-          })
+        if(clientData){
+            dispatch(userActions.setLoggedUser(clientData))
+        }
     },[])
 
     return(
@@ -112,8 +101,18 @@ const MyApp = ({Component,pageProps}:AppProps)=>{
 
 MyApp.getInitialProps = async (context:AppContext)=>{
     const appInitialProps = await App.getInitialProps(context);
-    
-    return {...appInitialProps}
+    const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie)
+    let userData
+    try{
+        if(cookieObject.access_token){
+            const response = await getUserInfo(cookieObject.access_token)
+            userData = response.data
+        }
+    }catch(e){
+        console.log(e)
+    }
+    console.log('userData',userData)
+    return {...appInitialProps,userData}
 }
 
 export default wrapper.withRedux(MyApp);
