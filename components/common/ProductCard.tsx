@@ -15,9 +15,10 @@ import DefaultImgIcon from "../../public/static/svg/product/default_img.svg"
 import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon.svg"
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { addFavorite, deleteFavorite } from '../../lib/api/product';
+import { addFavorite, changeCompletedAPI, deleteFavorite } from '../../lib/api/product';
 import { useDispatch } from 'react-redux';
 import { favoriteActions } from '../../store/favorite';
+import async from './../../pages/api/map/location';
 
 const Container = styled.div`
     width:100%;
@@ -48,6 +49,7 @@ const Container = styled.div`
             width:100%;
             height:100%;
             position: relative;
+            cursor: pointer;
             .change-completed-wrap{
                 position: absolute;
                 right:0px;
@@ -144,7 +146,12 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
     const showCompletedHandler = ()=>{
         setShowCompletedBtn(!showCompletedBtn)
     }
-
+console.log('procut.id 타입', typeof product.id)
+    // 거래완료로 바꾸기 api 
+    const changeCompleted = async ()=>{
+        const response = await changeCompletedAPI(product.id);
+        console.log('changeCompletedAPI',response)
+    }
 
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
     const [favoriteProduct,setFavoriteProduct] = useState(false)
@@ -204,7 +211,7 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
                         <div className='change-completed-wrap'>
                             <ShowCompletedIcon onClick={showCompletedHandler} />
                             {showCompletedBtn?
-                                <p className='change-completed'>거래완료로 변경하기</p>
+                                <p className='change-completed' onClick={changeCompleted}>거래완료로 변경하기</p>
                             :null}
                         </div>
                         : null}

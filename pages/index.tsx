@@ -81,10 +81,10 @@ const home = () => {
                         <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} />
                     )}
                     {showFavoriteModal?
-                    <FavoriteModal/> : null}
                     <div className='favorite-modal'>
                         <FavoriteModal/>
-                    </div>
+                    </div> 
+                    : null}
             </Container>
             <LinkFooter/>
         </>

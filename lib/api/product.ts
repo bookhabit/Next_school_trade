@@ -36,3 +36,10 @@ export const addFavorite = async (contentId:number)=>{
 export const deleteFavorite = async (contentId:number)=>{
     await axios.post(`http://localhost:4000/favorite/delete/${contentId}`,{},{withCredentials: true,})
 }
+
+// 특정상품 거래완료로 변경
+export const changeCompletedAPI = async (contentId:number)=>{
+    await axios.post(`http://localhost:4000/content/complete/${contentId}`,
+    {}
+    ,{withCredentials: true,})
+}
