@@ -146,11 +146,11 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
     const showCompletedHandler = ()=>{
         setShowCompletedBtn(!showCompletedBtn)
     }
-console.log('procut.id 타입', typeof product.id)
+
     // 거래완료로 바꾸기 api 
     const changeCompleted = async ()=>{
-        const response = await changeCompletedAPI(product.id);
-        console.log('changeCompletedAPI',response)
+        await changeCompletedAPI(product.id);
+        window.location.reload();
     }
 
     // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경

@@ -116,9 +116,6 @@ const Container = styled.div`
             background-color:#EAEAEA;
             border-bottom:1px solid ${palette.divistion_color};
             .seller-info-left{
-                p{
-                    cursor: pointer;
-                }
                 width:110px;
                 display:flex;
                 align-items:center;
@@ -131,26 +128,15 @@ const Container = styled.div`
                     margin-right:5px;
                 }
                 p{
+                    cursor: pointer;
                     font-size:20px;
                     font-weight:bold;
                 }
                 /* 작성자일경우 */
-                select{
-                    width: 100%;
-                    height: 20px;
-                    padding: 0 11px;
-                    background-color:#EAEAEA;
-                    border:none;
-                    outline: none;
-                    -webkit-appearance: none;
-                    background-image: url("/static/svg/common/selector/selector_down_arrow.svg");
-                    background-position: right center;
-                    background-repeat: no-repeat;
-                    font-size:20px;
-                    font-weight:bold;
-                    option{
-                        font-size:15px;
-                        font-weight:bold;
+                .seller-product-completed{
+                    margin-left:10px;
+                    p{
+                        cursor:default;
                     }
                 }
             }
@@ -295,8 +281,6 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         imageAlt = productDetail.images[0].filename
     }
     const router= useRouter();
-    
-    const selectOptions = ["판매중","거래완료"]
 
     const [favoriteProduct,setFavoriteProduct] = useState(true)
     
@@ -451,12 +435,14 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                     <div className='seller-info-left'>
                         {postOwner
                         ? <>
-                            <select name="sell-state" className='sell-state' onChange={onChangeSelector}>
-                                <option value="selling">판매중</option>
-                                <option value="completed">거래완료</option>
-                            </select>
-                            
-                        </> 
+                            {productDetail.completed ? 
+                            <div className='seller-product-completed'>
+                                <p>거래완료</p>
+                            </div> 
+                            :<div className='seller-product-completed'>
+                                <p>판매중</p>
+                            </div> }
+                          </> 
                         : <>
                             {/* <img src={ownerInfo.profileImage} alt="판매자 프로필이미지"/> */}
                             <p onClick={goToSellerProfile}>{ownerInfo.nickname}</p>
@@ -467,7 +453,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                         {postOwner 
                         ? 
                         <div className='correct-remove-modal-wrapper'>
-                            <ModalClickIcon onClick={clickShowBtnModal} className="correct-remove-modal-icon" />
+                            <ModalClickIcon onClick={productDetail.completed ? null : clickShowBtnModal} className="correct-remove-modal-icon" />
                             {!showBtnModal? null : <div className='correct-remove-modal'>
                                 <p className='correct-btn'>수정하기</p>
                                 <p className='remove-btn'>삭제하기</p>
