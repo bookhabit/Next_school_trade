@@ -8,6 +8,7 @@ import registerPosition from "./registerPosition";
 import userBackground from "./userBackground";
 import searchBar from "./searchBar";
 import favorite from "./favorite";
+import favoriteList from "./favoriteList";
 
 const rootReducer = combineReducers({
     common:common.reducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     userBackground:userBackground.reducer,
     searchBar:searchBar.reducer,
     favorite:favorite.reducer,
+    favoriteList:favoriteList.reducer,
 })
 
 

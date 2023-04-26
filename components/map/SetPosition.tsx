@@ -40,6 +40,7 @@ const Container = styled.div`
             color:${palette.main_text_color};
             font-weight:bold;
         }
+        cursor:default;
     }
     .set-position-map{
         width:100%;
@@ -72,6 +73,10 @@ const Container = styled.div`
             font-size:14px;
             font-weight:bold;
             text-align:center;
+            cursor: pointer;
+            &:hover{
+                color:${palette.black};
+            }
         }
     }
 
@@ -117,6 +122,7 @@ const Container = styled.div`
         display:flex;
         justify-content:center;
         button{
+            cursor: pointer;
             font-size:20px;
             font-weight:bold;
             color:#4D4747;
@@ -132,6 +138,7 @@ const Container = styled.div`
         display:flex;
         justify-content:center;
         button{
+            cursor: pointer;
             font-size:20px;
             font-weight:bold;
             color:${palette.main_text_color};
@@ -139,6 +146,11 @@ const Container = styled.div`
     }
 
     /* 반응형 스타일링 */
+    @media only screen and (min-width: 430px) {
+        .mordal-close-x-icon {
+            display:none;
+        }
+    }
     /* 태블릿 버전 */
     @media screen and (min-width: 768px) {
         .search-address{
@@ -147,9 +159,6 @@ const Container = styled.div`
         }
         .set-position-submitBtn{
             width:50%;
-        }
-        .mordal-close-x-icon {
-            display:none;
         }
         .set-position-current-location{
             height:40px;
@@ -347,13 +356,11 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
         // sweetAlert로 알림창 꾸미기
         Swal.fire({
             title: '거래 위치를 설정하시겠습니까?',
-            text: '다시 되돌릴 수 없습니다.',
-            icon: 'warning',
             
             showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-            confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+            confirmButtonColor: '#54AA76', // confrim 버튼 색깔 지정
             cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-            confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+            confirmButtonText: '완료', // confirm 버튼 텍스트 지정
             cancelButtonText: '취소', // cancel 버튼 텍스트 지정
             
             reverseButtons: true, // 버튼 순서 거꾸로
@@ -361,8 +368,7 @@ const SetPosition:React.FC<IProps> = ({closeModal}) => {
          }).then(result => {
             // 만약 Promise리턴을 받으면,
             if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
-            
-               Swal.fire('거래 위치가 설정되었습니다.', 'success');
+               Swal.fire('거래 위치가 설정되었습니다.');
             }
          });
         closeModal();

@@ -524,10 +524,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                 <div className='favorite-modal'>
                     <FavoriteModal/>
                 </div> 
-                : null}
-            <div className='favorite-modal'>
-                    <FavoriteModal/>
-                </div> 
+                : null}            
             {/* 푸터 */}
             <div className='detail-footer'>
             
