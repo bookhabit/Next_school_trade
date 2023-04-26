@@ -19,6 +19,7 @@ import LinkFooter from "../components/footer/LinkFooter";
 import UserColor from "../components/introduce/UserColor";
 import { UserState } from "../types/reduxState";
 import { getUserInfo, meAPI } from './../lib/api/user';
+import { getFavoriteList } from "../lib/api/product";
 
 interface BackgroundColor{
     firstColor:string;
@@ -63,7 +64,7 @@ const MobileContainer = styled.div`
 const MyApp = ({Component,pageProps,...data}:AppProps)=>{
     // 유저정보를 받아서 리덕스 스토어에 저장하기
     const clientData = Object(data).userData as UserState
-    
+
     const dispatch = useDispatch();
     const [queryClient] = useState(() => new QueryClient());
 

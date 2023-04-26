@@ -9,9 +9,12 @@ import SellListIcon from "../../public/static/svg/myPage/sellListIcon.svg"
 import UniversityAuthIcon from "../../public/static/svg/myPage/universityAuthIcon.svg"
 import PassWordIcon from "../../public/static/svg/myPage/passWordIcon.svg"
 import MarkerIcon from "../../public/static/svg/myPage/marker.svg"
+import LogoutIcon from "../../public/static/svg/myPage/logout.svg"
 import useModal from '../../hooks/useModal';
 import SetPosition from '../map/SetPosition';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../../store/user';
 
 const Container = styled.div`
 
@@ -45,7 +48,7 @@ const Container = styled.div`
 
     .myPage-list{
         display:felx;
-        margin-bottom:15px;
+        margin-bottom:20px;
         .myPageIcon{
             margin:0px 10px;
             
@@ -55,6 +58,10 @@ const Container = styled.div`
             font-weight:600;
             cursor: pointer;
             display:inline-block;
+            &:hover{
+                font-size:20px;
+                color:${palette.main_color}
+            }
         }
         .sellListIcon{
             margin-left:12px;
@@ -78,6 +85,7 @@ const Container = styled.div`
 
 const MyPage = () => {
     const {openModal,ModalPortal,closeModal} = useModal();
+    const dispatch = useDispatch();
     const userId = useSelector((state:any)=>state.user.id)
     
     // 관심목록 라우팅
@@ -88,6 +96,12 @@ const MyPage = () => {
     const goToBuyList = `/user/buyList/${userId}`
     // 거래후기 라우팅
     const goToTradeReview = `/user/tradeReview/${userId}`
+
+    // 로그아웃 api
+    const logout = ()=>{
+        // 로그아웃 api 연동
+        dispatch(userActions.initUser());
+    }
     return (
         <Container>
             <div className='myUniversity'>
@@ -129,6 +143,10 @@ const MyPage = () => {
                 <div className='myPage-list'>
                     <MarkerIcon className='myPageIcon markerIcon' />
                     <p onClick={openModal}>주 거래 위치 설정하기</p>
+                </div>
+                <div className='myPage-list'>
+                    <LogoutIcon className='myPageIcon markerIcon' />
+                    <p onClick={logout}>로그아웃</p>
                 </div>
             </div>
             <ModalPortal>

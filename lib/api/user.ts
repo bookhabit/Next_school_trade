@@ -12,3 +12,6 @@ export const getUserInfo = async (token:string)=> await axios.post("http://local
 
 // 특정 유저 닉네임 조회 api
 export const getSellerName = async (id:number)=> await axios.get(`http://localhost:4000/user/find/nickName/${id}`)
+
+// 로그아웃 api
+export const logoutAPI = ()=> axios.delete("/api/auth/logout");

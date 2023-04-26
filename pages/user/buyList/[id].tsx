@@ -19,7 +19,7 @@ const Container = styled.div`
 	    min-height:100vh;
     }
     padding:0px 20px;
-    background-color: rgba( 0, 0, 0, 0.5 );
+    padding-top:20px;
 `
 
 const buyList = ({id}:{id:number}) => {
