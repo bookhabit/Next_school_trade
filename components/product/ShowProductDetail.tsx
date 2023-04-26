@@ -23,6 +23,10 @@ import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
 import { RootState } from '../../store';
 import FooterButton from '../common/FooterButton';
+import { addFavorite, deleteFavorite } from '../../lib/api/product';
+import { favoriteActions } from '../../store/favorite';
+import { useDispatch } from 'react-redux';
+import FavoriteModal from './FavoriteModal';
 
 const Container = styled.div`
     width:100%;
@@ -227,7 +231,21 @@ const Container = styled.div`
             }
         }
     }
-    
+    /* 관심목록 모달창 */
+    .favorite-modal{
+        position:fixed;
+        left:75%;
+        transform: translateX( -80% );
+        bottom:80px !important;      
+    }
+    @media only screen and (min-width: 430px) {
+	    min-height:100vh;
+        .favorite-modal{
+            margin-left:20px;
+            left:auto;
+            transform:none;
+        }
+    }
     /* 푸터 css */
     .detail-footer{
         position:fixed;
@@ -282,7 +300,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     }
     const router= useRouter();
 
-    const [favoriteProduct,setFavoriteProduct] = useState(true)
+    const [favoriteProduct,setFavoriteProduct] = useState(false)
     
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
 
@@ -348,11 +366,30 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         return starCount
     };
 
+    const dispatch = useDispatch();
+
     // 하트아이콘 변경
-    const toggleHeartIcon = ()=>{
+    const toggleHeartIcon = async ()=>{
+        // 로그인 확인
         if(isLogged){
-            setFavoriteProduct(!favoriteProduct)
-            // 사용자의 관심목록 favorite에 true로 변경하는 API호출 또는 리덕스에 저장된 사용자의 관심목록에 dispatch하기
+            if(favoriteProduct===false){
+                // 사용자의 관심목록 추가 api
+                const response = await addFavorite(productDetail.id)
+                console.log('addFavorite response',response)
+                
+                // 디스패치 - 관심목록 추가 모달창 
+                dispatch(favoriteActions.setShowFavoriteModal(true))
+                setFavoriteProduct(!favoriteProduct)
+                setTimeout(() => {
+                    dispatch(favoriteActions.setShowFavoriteModal(false))
+                }, 3000);
+            }else{
+                // 사용자의 관심목록에서 삭제
+                const response = await deleteFavorite(productDetail.id)
+                console.log('delete response',response)
+                alert('관심목록에서 삭제되었습니다')
+                setFavoriteProduct(!favoriteProduct)
+            }
         }else{
             alert('로그인이 필요합니다.')
             router.push("/auth")
@@ -360,22 +397,14 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
         }
     }
 
+    // 관심목록 UI - 모달창 showState
+    const showFavoriteModal = useSelector((state:RootState)=>
+    state.favorite.showFavoriteModal)
+
+
     // dateTime 상대시간으로 출력하기
     const now = moment();
     const productDate = moment(productDetail.updatedAt)
-
-    // 판매중 거래완료 이벤트핸들러
-    const onChangeSelector = (e:React.ChangeEvent<HTMLSelectElement>)=>{
-        let completed
-        if (e.target.value === "selling"){
-            completed = false
-        }else{
-            completed = true
-        }
-        console.log(completed)
-        return completed
-        // 판매중 , 거래완료 바꾸는 api 호출
-    }
 
     // 카테고리 한글 변환
     const switchCategoryName = () => {
@@ -490,11 +519,23 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                 </div>
 
             </div>
+            {/* 관심목록 모달창 */}
+            {showFavoriteModal?
+                <div className='favorite-modal'>
+                    <FavoriteModal/>
+                </div> 
+                : null}
+            <div className='favorite-modal'>
+                    <FavoriteModal/>
+                </div> 
             {/* 푸터 */}
             <div className='detail-footer'>
             
                 <div className="detail-footer-icon">
-                    {favoriteProduct? <HeartIcon className="detail-heartIcon" onClick={toggleHeartIcon}/>:<BorderHeartIcon className="detail-heartIcon" onClick={toggleHeartIcon}/>}
+                    {favoriteProduct? 
+                    <BorderHeartIcon className="detail-heartIcon" onClick={toggleHeartIcon} />:
+                    <HeartIcon className="detail-heartIcon" onClick={toggleHeartIcon}
+                    />}
                     <DivisionIcon/>
                 </div>
                 <p className='detail-footer-price'>

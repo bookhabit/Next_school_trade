@@ -162,19 +162,21 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
     const toggleHeartIcon = async ()=>{
         // 로그인 확인
         if(isLogged){
-            setFavoriteProduct(!favoriteProduct)
             if(favoriteProduct===false){
                 // 사용자의 관심목록 추가 api
                 const response = await addFavorite(product.id)
                 
                 // 디스패치 - 관심목록 추가 모달창 
                 dispatch(favoriteActions.setShowFavoriteModal(true))
+                setFavoriteProduct(!favoriteProduct)
                 setTimeout(() => {
                     dispatch(favoriteActions.setShowFavoriteModal(false))
                 }, 3000);
             }else{
                 // 사용자의 관심목록에서 삭제
                 const response = await deleteFavorite(product.id)
+                alert('관심목록에서 삭제되었습니다.')
+                setFavoriteProduct(!favoriteProduct)
                 console.log('delete response',response)
             }
         }else{
