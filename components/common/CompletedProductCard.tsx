@@ -16,7 +16,6 @@ const Container = styled.div`
     height:105px;
     margin-bottom:10px;
     display:flex;
-       
     .productImg{
         width:116px;
         height:105px;
@@ -29,10 +28,21 @@ const Container = styled.div`
     .productInfo{
         padding:5px 10px;
         width:100%;
-        .productTitle{
-            font-size:16px;
-            font-weight:bold;
+        .productInfo-top{
+            display:flex;
+            justify-content:space-between;
+            .completed-product-text{
+                    color:${palette.errorPage};
+                    font-size:20px;
+                    font-weight:bold;
+            }
+            .productTitle{
+                cursor:pointer;
+                font-size:16px;
+                font-weight:bold;
+            }
         }
+        
         .productPrice{
             font-size:14px;
             font-weight:600;
@@ -106,7 +116,10 @@ const CompletedProductCard:React.FC<IProps> = ({product}) => {
                     }
                 </div>
                 <div className='productInfo'>
-                    <p className='productTitle'>{product.title}</p>
+                    <div className='productInfo-top'>
+                        <p className='productTitle'>{product.title}</p>
+                        <p className='completed-product-text' >거래완료</p>
+                    </div>
                     <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>
                     <p className='info-footerLeft'>{productDate.from(now)}</p>

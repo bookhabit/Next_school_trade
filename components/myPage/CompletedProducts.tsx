@@ -12,8 +12,7 @@ import { isEmpty } from 'lodash';
 
 const Container = styled.div`
     padding:0px 20px;
-    background-color: rgba( 0, 0, 0, 0.5 );
-    
+    padding-top:20px;
 `
 interface IProps{
     userId:number;
@@ -64,7 +63,6 @@ const CompletedProducts:React.FC<IProps> = ({userId}) => {
                 data.pages.map((page, index) => 
                 isEmpty(page.contents) ? <DataNull key={index} text='거래완료된 상품이 없습니다'/> :
                 <>
-                    <div className='hideProductBox'></div>
                     <ProductList key={index} setTarget={setTarget}  completedProducts={true} data={page.contents} />
                 </>
             )}

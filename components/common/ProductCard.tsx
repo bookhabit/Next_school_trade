@@ -42,35 +42,40 @@ const Container = styled.div`
             margin-top:30px;
         }
     }
+
+
     .productInfo{
         padding:5px 10px;
         width:100%;
-        .change-completed-wrap-parent{
-            width:100%;
-            height:100%;
-            position: relative;
-            cursor: pointer;
-            .change-completed-wrap{
-                position: absolute;
-                right:0px;
-                display:flex;
-                justify-content:center;
-                align-items:center;
-                flex-direction:row-reverse;
-                .change-completed{
-                    background-color:white;
-                    color:${palette.updatedDate};
-                    font-size:15px;
-                    font-weight:bold;
-                    margin-right:10px;
+        .productInfo-top{
+            display:flex;
+            justify-content:space-between;
+            .change-completed-wrap-parent{
+                height:100%;
+                cursor: pointer;
+                .change-completed-wrap{
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    flex-direction:row-reverse;
+                    .change-completed{
+                        background-color:white;
+                        color:${palette.updatedDate};
+                        font-size:15px;
+                        font-weight:bold;
+                        margin-right:10px;
+                        &:hover{
+                            color:black;    
+                        }
+                    }
                 }
             }
-        }
-        .productTitle{
-            font-size:16px;
-            font-weight:bold;
-            cursor: pointer;
-            display:inline-block;
+            .productTitle{
+                font-size:16px;
+                font-weight:bold;
+                cursor: pointer;
+                display:inline-block;
+            }
         }
         .productPrice{
             font-size:14px;
@@ -208,17 +213,19 @@ const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
                     }
                 </div>
                 <div className='productInfo'>
-                    <div className='change-completed-wrap-parent'>
-                        {showChangeCompleted ? 
-                        <div className='change-completed-wrap'>
-                            <ShowCompletedIcon onClick={showCompletedHandler} />
-                            {showCompletedBtn?
-                                <p className='change-completed' onClick={changeCompleted}>거래완료로 변경하기</p>
-                            :null}
+                    <div className='productInfo-top'>
+                        <p className='productTitle' onClick={goToDetail}>{product.title}</p>
+                        <div className='change-completed-wrap-parent'>
+                            {showChangeCompleted ? 
+                            <div className='change-completed-wrap'>
+                                <ShowCompletedIcon onClick={showCompletedHandler} />
+                                {showCompletedBtn?
+                                    <p className='change-completed' onClick={changeCompleted}>거래완료로 변경</p>
+                                :null}
+                            </div>
+                            : null}
                         </div>
-                        : null}
                     </div>
-                    <p className='productTitle' onClick={goToDetail}>{product.title}</p>
                     <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
                     <div className='info-footer'>
                         <p className='info-footerLeft'>{productDate.from(now)}</p>
