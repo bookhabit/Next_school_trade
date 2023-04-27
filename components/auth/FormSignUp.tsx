@@ -435,10 +435,9 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
 
     // 회원가입 버튼 클릭시 react-hook-form api호출
     const onSubmitSignUpForm: SubmitHandler<authForm> = async (formValue) => {
-    
     try{
         if(formValue){
-        
+            console.log('formValue',formValue)
         }
     }catch(e:any){
         
@@ -461,6 +460,10 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                             value:true,
                             message:"Name is required"
                         },
+                        pattern:{
+                            value:/0-9/,
+                            message: "이름에 숫자를 입력하지 마세요",
+                        }
                     }}
                 />
             </div>
@@ -492,7 +495,7 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                         },
                         pattern:{
                             value:/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                            message: "Invalid email format",
+                            message: "이메일 형식이 올바르지 않습니다",
                         }
                     }}
                 />
@@ -517,6 +520,15 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                             value:true,
                             message:"password is required"
                         },
+                        minLength:{
+                            value:8,
+                            message:"8글자 이상 입력해주세요"
+                        },
+                        pattern:{
+                            value:/[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/ ||
+                            /[0-9]/,
+                            message: "비밀번호에 숫자나 특수기호를 포함해주세요",
+                        }
                     }}
                 />
             </div>
