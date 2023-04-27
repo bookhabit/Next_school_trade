@@ -24,3 +24,25 @@ export interface KakaoSignUpAPIBody{
     latitude:number;
     longitude:number;
 }
+
+// react-hook-form 회원가입 폼
+export type SignUpFormValues = {
+    name:string;
+    nickname: string;
+    email: string;
+    password:string;
+    confirmPassword:string;
+    university:string;
+    inputGender:string;
+    birthMonth:string;
+    birthDay:string;
+    birthYear:string;
+}
+
+// react-hook-form 로그인 폼
+export type LoginFormValues={
+    email:string;
+    password:string;
+}
+
+type authForm = SignUpFormValues | LoginFormValues

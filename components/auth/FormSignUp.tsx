@@ -29,8 +29,9 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Users } from '../../types/user';
 import { RootState } from '../../store';
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from '@hookform/devtools';
+import { SignUpFormValues, authForm } from '../../types/auth';
 
 type KaKaoSignUp = {
     kakaoSignUp : string;
@@ -136,23 +137,10 @@ interface IProps{
     kakaoSignUp:string;
 }
 
-export type SignUpFormValues = {
-    name:string;
-    nickname: string;
-    email: string;
-    password:string;
-    confirmPassword:string;
-    university:string;
-    inputGender:string;
-    birthMonth:string;
-    birthDay:string;
-    birthYear:string;
-}
-
 let renderCount = 0
 
 const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
-    const Reactform = useForm<SignUpFormValues>({
+    const Reactform = useForm<authForm>({
         defaultValues:{
             name:'',
             nickname: '',
@@ -258,7 +246,7 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
         setPasswordFocused(false)
     }
         
-
+    // password 검증
     //* password가 이름이나 이메일을 포함하는지
     const isPasswordHasNameOrEmail = useMemo(
         () =>
@@ -284,6 +272,7 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
         ),
         [password]
     );
+
     // 디스패치
     const dispatch = useDispatch();
 
@@ -443,51 +432,69 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             }
             }
     }
+
+    // 회원가입 버튼 클릭시 react-hook-form api호출
+    const onSubmitSignUpForm: SubmitHandler<authForm> = async (formValue) => {
+    
+    try{
+        if(formValue){
+        
+        }
+    }catch(e:any){
+        
+        }
+    };
+
     renderCount++
     return (
-        <Container onSubmit={kakaoSignUp ?onSubmitUpdate :onSubmitSignUp } kakaoSignUp={kakaoSignUp}>
+        // <Container onSubmit={kakaoSignUp ?onSubmitUpdate :onSubmitSignUp } kakaoSignUp={kakaoSignUp}>
+        <Container onSubmit={handleSubmit(onSubmitSignUpForm)} kakaoSignUp={kakaoSignUp}>
             <h1>Signup Form ({renderCount/2})</h1>
             <div className='input-wrapper input-wrapper-first'>
                 <FormInput 
-                    label="name"
-                    register={register}
-                    required 
                     placeholder="이름" 
                     icon={<PersonIcon/>}
                     name='name'
-                    onChange={onChangeInput}
-                    // isValid={!!name}
-                    // errorMessage="이름을 입력해주세요"
-                    // usevalidation
+                    control={control}
+                    rules={{
+                        required:{
+                            value:true,
+                            message:"Name is required"
+                        },
+                    }}
                 />
             </div>
             <div className='input-wrapper'>
                 <FormInput 
-                    label="nickname"
-                    register={register}
-                    required 
                     placeholder="닉네임" 
                     icon={<PersonIcon/>}
                     name='nickname'
-                    onChange={onChangeInput}
-                    // isValid={!!nickname}
-                    // errorMessage="닉네임을 입력해주세요"
-                    // usevalidation
+                    control={control}
+                    rules={{
+                        required:{
+                            value:true,
+                            message:"nickname is required"
+                        },
+                    }}
                 />
             </div>
             {kakaoSignUp ? null :
             <div className='input-wrapper'>
                 <FormInput 
-                    label="email"
-                    register={register}
-                    required 
                     placeholder="이메일 주소" 
                     icon={<MailIcon/>}
-                    // name='email'
-                    // onChange={onChangeInput}
-                    // isValid={!!email}
-                    // errorMessage="이메일을 입력해주세요"
-                    // usevalidation
+                    name='email'
+                    control={control}
+                    rules={{
+                        required:{
+                            value:true,
+                            message:"E-mail is required"
+                        },
+                        pattern:{
+                            value:/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                            message: "Invalid email format",
+                        }
+                    }}
                 />
             </div>
             }
@@ -495,9 +502,6 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             {kakaoSignUp ? null : 
             <div className='input-wrapper'>
                 <FormInput 
-                    label="password"
-                    register={register}
-                    required 
                     placeholder="비밀번호 설정" 
                     icon={hidePassword? 
                         (
@@ -507,13 +511,13 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     )}
                     type={hidePassword?"password":"text"}
                     name='password'
-                    onChange={onChangeInput}
-                    // isValid={!isPasswordHasNameOrEmail&&
-                    //     isPasswordOverMinLength &&
-                    //     isPasswordHasNumberOrSymbol}
-                    // errorMessage="비밀번호를 입력해주세요"
-                    // usevalidation
-                    onFocus={onFocusPassword}
+                    control={control}
+                    rules={{
+                        required:{
+                            value:true,
+                            message:"password is required"
+                        },
+                    }}
                 />
             </div>
             }
@@ -533,9 +537,6 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             {kakaoSignUp ? null : 
                 <div className='input-wrapper'>
                 <FormInput 
-                    label="confirmPassword"
-                    register={register}
-                    required 
                     placeholder="비밀번호 확인" 
                     icon={hidePassword? 
                         (
@@ -545,11 +546,13 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     )}
                     type={hidePassword?"password":"text"}
                     name='confirmPassword'
-                    onChange={onChangeInput}
-                    // isValid={password===confirmPassword &&confirmPassword === ''}
-                    // errorMessage="입력하신 비밀번호가 일치하지 않습니다."
-                    // usevalidation
-                    onFocus={onFocusedConfirmPassword}
+                    control={control}
+                    rules={{
+                        required:{
+                            value:true,
+                            message:"password confirm is required"
+                        },
+                    }}
                     />
                 </div>
             }
