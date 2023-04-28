@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form/dist/types/form";
 import {DevTool} from "@hookform/devtools"
 import { LoggedUserType } from "../../types/user";
+import { LoginFormValues } from "../../types/auth";
 
 const Container = styled.form`
   width: 100%; // 모바일버전
@@ -68,10 +69,7 @@ const Container = styled.form`
 
 `;
 
-export type LoginFormValues={
-  email:string;
-  password:string;
-}
+
 
 let renderCount = 0
 

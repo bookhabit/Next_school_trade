@@ -4,16 +4,11 @@ import styled,{css} from 'styled-components';
 import { RootState } from '../../store';
 import palette from '../../styles/palette';
 import { Path, UseFormRegister } from 'react-hook-form/dist/types';
-import { LoginFormValues } from '../auth/FormLogin';
-import { SignUpFormValues } from '../auth/FormSignUp';
 import {
-    Control,
-    FieldPath,
-    FieldValues,
-    RegisterOptions,
     useController,
     UseControllerProps
   } from "react-hook-form";
+import { LoginFormValues, authForm } from '../../types/auth';
 
 type InputContainerProps = {
     iconExist:boolean;
@@ -66,8 +61,9 @@ const Container = styled.div<InputContainerProps>`
         color:${palette.error_message}
     }
 `
-const ErrorContainer = styled.div`
-  margin-top:8px;
+export const ErrorContainer = styled.div`
+  margin-left:10px;
+  margin-top:10px;
     p{
       color:${palette.error_message};
       font-weight:600;
@@ -81,14 +77,14 @@ interface FormInputProps {
     type?: string | undefined;
 }
 
-  const FormInput = ({
+const FormInput = ({
     icon,
     control, 
     name, 
     rules,
     placeholder,
     type
-}:FormInputProps & UseControllerProps<LoginFormValues>) => {
+}:FormInputProps & UseControllerProps<authForm>) => {
     const {
         field: { value, onChange },
         fieldState: { isDirty, isTouched, error },

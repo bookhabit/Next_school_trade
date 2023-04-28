@@ -25,7 +25,7 @@ export interface KakaoSignUpAPIBody{
     longitude:number;
 }
 
-// react-hook-form 회원가입 폼
+// react-hook-form 회원가입 input 폼
 export type SignUpFormValues = {
     name:string;
     nickname: string;
@@ -39,7 +39,7 @@ export type SignUpFormValues = {
     birthYear:string;
 }
 
-// react-hook-form 로그인 폼
+// react-hook-form 로그인 input 폼
 export type LoginFormValues={
     email:string;
     password:string;

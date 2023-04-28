@@ -8,7 +8,7 @@ import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg"
 import MapIcon from "../../public/static/svg/auth/mapIcon.svg"
 import FormInput from '../common/FormInput';
 import { useState, useEffect } from 'react';
-import Selector from '../common/Selector';
+import FormSelector from '../common/FormSelector';
 import { monthList,dayList,yearList,universityList } from '../../lib/staticData';
 import palette from '../../styles/palette';
 import { majorList } from './../../lib/staticData';
@@ -154,7 +154,8 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             birthYear:""
         }
       });
-      const {register,control,handleSubmit,formState: { errors }} = Reactform
+      const {getValues,control,handleSubmit,formState: { errors }} = Reactform
+
 
     // 카카오 로그인 회원인 경우
     let user:Users;
@@ -284,11 +285,11 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     // 대학교명 리스트 가져오기
     const [universityNameList,setUniversityNameList] = useState<string[]>();
     
+    async function fetchUniversityName() {
+        const response = await axios.get("/api/school/universityName");
+        setUniversityNameList(response.data)
+    }
     useEffect(()=>{
-        async function fetchUniversityName() {
-            const response = await axios.get("/api/school/universityName");
-            setUniversityNameList(response.data)
-        }
         fetchUniversityName();
     },[])
 
@@ -528,7 +529,7 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                             value:/[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/ ||
                             /[0-9]/,
                             message: "비밀번호에 숫자나 특수기호를 포함해주세요",
-                        }
+                        },
                     }}
                 />
             </div>
@@ -571,55 +572,80 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             
             <div className='sign-up-universityAndGender-selectors'>
                 <div className='sign-up-gender-selector'>
-                    <Selector
+                    <FormSelector
                         options={['남자','여자']}
-                        disabledoptions={["성별"]}
+                        disabledOptions={["성별"]}
                         defaultValue="성별"
                         name="inputGender"
-                        onChange={onChangeSelector}
-                        isValid={!!inputGender}
+                        control={control}
+                        rules={{
+                            required:{
+                                value:true,
+                                message:"gender is required"
+                            },
+                        }}
                     />
                 </div>
                 <div className='sign-up-university-selector'>
-                    <Selector 
+                    <FormSelector 
                         options={universityNameList}
-                        disabledoptions={["대학교"]}
+                        disabledOptions={["대학교"]}
                         defaultValue="대학교"
                         name="university"
-                        onChange={onChangeSelector}
-                        isValid={!!university}
+                        control={control}
+                        rules={{
+                            required:{
+                                value:true,
+                                message:"university is required"
+                            },
+                        }}
                     />
                 </div>
             </div>
             <div className='sign-up-modal-birthday-selectors'>
                 <div className='sign-up-modal-birthday-month-selector'>
-                    <Selector 
+                    <FormSelector 
                         options={monthList} 
-                        disabledoptions={["월"]}
+                        disabledOptions={["월"]}
                         defaultValue="월"
                         name="birthMonth"
-                        onChange={onChangeSelector}
-                        isValid={!!birthMonth}
+                        control={control}
+                        rules={{
+                            required:{
+                                value:true,
+                                message:"birth is required"
+                            },
+                        }}
                     />
                 </div>
                 <div className='sign-up-modal-birthday-day-selector'>
-                    <Selector 
+                    <FormSelector 
                         options={dayList}
-                        disabledoptions={["일"]}
+                        disabledOptions={["일"]}
                         defaultValue="일"
                         name="birthDay"
-                        onChange={onChangeSelector}
-                        isValid={!!birthDay}
+                        control={control}
+                        rules={{
+                            required:{
+                                value:true,
+                                message:"birth is required"
+                            },
+                        }}
                     />
                 </div>
                 <div className='sign-up-modal-birthday-year-selector'>
-                    <Selector 
+                    <FormSelector 
                         options={yearList}
-                        disabledoptions={["연도"]}
+                        disabledOptions={["연도"]}
                         defaultValue="연도"
                         name="birthYear"
-                        onChange={onChangeSelector}
-                        isValid={!!birthYear}
+                        control={control}
+                        rules={{
+                            required:{
+                                value:true,
+                                message:"birth is required"
+                            },
+                        }}
                     />
                 </div>
             </div>
