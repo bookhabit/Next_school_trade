@@ -37,6 +37,9 @@ export type SignUpFormValues = {
     birthMonth:string;
     birthDay:string;
     birthYear:string;
+    location:string,
+    latitude:number,
+    longitude:number
 }
 
 // react-hook-form 로그인 input 폼

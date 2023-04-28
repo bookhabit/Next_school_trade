@@ -131,6 +131,11 @@ const Container = styled.form<KaKaoSignUp>`
         border-bottom:1px solid ${palette.gray_eb}
     }
 
+    /* 지도 폼 숨기기 */
+    .hide-register-position-form{
+        display:none;
+    }
+
 `
 
 interface IProps{
@@ -151,10 +156,13 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             inputGender:"",
             birthMonth:"",
             birthDay:"",
-            birthYear:""
+            birthYear:"",
+            location:"",
+            latitude:0,
+            longitude:0
         }
       });
-      const {getValues,control,handleSubmit,formState: { errors }} = Reactform
+      const {register,control,setValue,handleSubmit,formState: { errors }} = Reactform
 
 
     // 카카오 로그인 회원인 경우
@@ -167,6 +175,13 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     const location = useSelector((state:RootState)=>state.registerPosition.location)
     const latitude = useSelector((state:RootState)=>state.registerPosition.latitude)
     const longitude = useSelector((state:RootState)=>state.registerPosition.longitude)
+
+    // 리덕스 스토어에 있는 값이 변경되면 리액트 폼에 넣기
+    useEffect(() => {
+        setValue("location",location ||'' );
+        setValue("latitude", latitude || 0);
+        setValue("longitude", longitude || 0);
+    }, [location]);
 
     const router = useRouter();
 
@@ -460,10 +475,6 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                         required:{
                             value:true,
                             message:"Name is required"
-                        },
-                        pattern:{
-                            value:/0-9/,
-                            message: "이름에 숫자를 입력하지 마세요",
                         }
                     }}
                 />
@@ -648,6 +659,11 @@ const FormSignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                         }}
                     />
                 </div>
+            </div>
+            <div className='hide-register-position-form'>
+                <input {...register("location")} />
+                <input {...register("latitude")} />
+                <input {...register("longitude")} />
             </div>
             <div className='signup-setMyPosition-wrapper' onClick={openModal}>
                 <div className='signup-setMyPosition'>
