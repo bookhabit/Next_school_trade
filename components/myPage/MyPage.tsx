@@ -15,6 +15,7 @@ import SetPosition from '../map/SetPosition';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { userActions } from '../../store/user';
+import { logoutAPI } from '../../lib/api/auth';
 
 const Container = styled.div`
 
@@ -100,6 +101,7 @@ const MyPage = () => {
     // 로그아웃 api
     const logout = ()=>{
         // 로그아웃 api 연동
+        logoutAPI();
         dispatch(userActions.initUser());
     }
     return (

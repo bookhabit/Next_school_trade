@@ -1,7 +1,6 @@
-import { LoginFormValues } from '../../components/auth/FormLogin';
 import axios from '../../lib/api';
 import { LoggedUserType } from '../../types/user';
-import { SignUpAPIBody } from '../../types/auth';
+import { LoginFormValues, SignUpAPIBody } from '../../types/auth';
 import { KakaoSignUpAPIBody } from '../../types/auth';
 
 // 로컬 회원가입 api
@@ -20,4 +19,4 @@ export const loginAPI =  async (body:LoginFormValues)=>
     await axios.post("http://localhost:4000/auth/local/signin",body, {withCredentials: true})
 
 // 로그아웃 api
-export const logoutAPI = ()=> axios.delete("/api/auth/logout")
+export const logoutAPI = ()=> axios.post("/auth/logout",{},{withCredentials: true})
