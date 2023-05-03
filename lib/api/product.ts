@@ -43,3 +43,10 @@ export const changeCompletedAPI = async (contentId:number)=>{
     {}
     ,{withCredentials: true,})
 }
+
+// 상품 삭제
+export const deleteProductAPI = async (contentId:number)=>{
+    await axios.post(`http://localhost:4000/content/delete/${contentId}`,
+    {}
+    ,{withCredentials: true,})
+}

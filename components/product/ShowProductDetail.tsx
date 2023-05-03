@@ -23,7 +23,7 @@ import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
 import { RootState } from '../../store';
 import FooterButton from '../common/FooterButton';
-import { addFavorite, deleteFavorite } from '../../lib/api/product';
+import { addFavorite, deleteFavorite, deleteProductAPI } from '../../lib/api/product';
 import { favoriteActions } from '../../store/favorite';
 import { useDispatch } from 'react-redux';
 import FavoriteModal from './FavoriteModal';
@@ -406,6 +406,11 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     const now = moment();
     const productDate = moment(productDetail.updatedAt)
 
+    // 상품 삭제
+    const deleteProduct = ()=>{
+        deleteProductAPI(productDetail.id)
+    }
+
     // 카테고리 한글 변환
     const switchCategoryName = () => {
         switch (productDetail.category) {
@@ -485,7 +490,7 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
                             <ModalClickIcon onClick={productDetail.completed ? null : clickShowBtnModal} className="correct-remove-modal-icon" />
                             {!showBtnModal? null : <div className='correct-remove-modal'>
                                 <p className='correct-btn'>수정하기</p>
-                                <p className='remove-btn'>삭제하기</p>
+                                <p className='remove-btn' onClick={deleteProduct}>삭제하기</p>
                             </div>
                             }
                         </div> 
