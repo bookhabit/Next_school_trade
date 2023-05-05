@@ -2,99 +2,98 @@ import { Users } from "../user";
 
 // 상품 타입
 export type productListType = {
-    
-    body: string;
-    
-    category: string;
-    
-    chat_cnt: number;
+  body: string;
 
-    completed: boolean;
-    
-    createdAt: string;
-    
-    completed_date: string;
-    
-    deletedAt: string | null;
+  category: string;
 
-    id: number;
+  chat_cnt: number;
 
-    images: Array<ImageType>;
-    
-    latitude: number;
-    
-    like_cnt: number;
+  completed: boolean;
 
-    location: string;
-    
-    longitude: number;
-    
-    owner: Users;
-    
-    price: number;
-    
-    title: string;
-  
-    buyer: Users;
-  
-    updatedAt: string;
-}
+  createdAt: string;
+
+  completed_date: string;
+
+  deletedAt: string | null;
+
+  id: number;
+
+  images: Array<ImageType>;
+
+  latitude: number;
+
+  like_cnt: number;
+
+  location: string;
+
+  longitude: number;
+
+  owner: Users;
+
+  price: number;
+
+  title: string;
+
+  buyer: Users;
+
+  updatedAt: string;
+};
 
 type ImageType = {
-    id: number;
-    filename: string;
+  id: number;
+  filename: string;
 
-    path: string;
+  path: string;
 
-    fieldname: string;
+  fieldname: string;
 
-    originalname: string;
+  originalname: string;
 
-    encoding: string;
+  encoding: string;
 
-    mimetype: string;
+  mimetype: string;
 
-    destination: string;
+  destination: string;
 
-    size: number;
+  size: number;
 
-    createdAt: Date;
+  createdAt: Date;
 
-    updatedAt: Date;
-}
+  updatedAt: Date;
+};
 
 // 상품 등록 타입
 export type registerProductType = {
-    images: File[];
-    
-    title:string;
+  images: File[];
 
-    price:number;
+  title: string;
 
-    body:string;
+  price: number;
 
-    category:string;
+  body: string;
 
-    latitude: number;
+  category: string;
 
-    location: string;
-    
-    longitude: number;
-}
+  latitude: number;
+
+  location: string;
+
+  longitude: number;
+};
 
 // 리액트쿼리 - infinitePage
 
 interface Page {
-    contents: productListType[];
-    totalPage: number;
+  contents: productListType[];
+  totalPage: number;
 }
 
-interface FavoriteProduct{
-    id:number;
-    content:productListType
+interface FavoriteProduct {
+  id: number;
+  content: productListType;
 }
 
 interface FavoritePage {
-    favorites: FavoriteProduct[];
-    totalPage: number;
+  favorites: FavoriteProduct[];
+  totalPage: number;
 }

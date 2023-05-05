@@ -1,29 +1,29 @@
 import { registerLocation } from "../types/location";
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type userBackgroundColor={
-    firstColor:string
-    secondColor:string
-}
+type userBackgroundColor = {
+  firstColor: string;
+  secondColor: string;
+};
 
-const initialState:userBackgroundColor={
-    firstColor:'#8edf71',
-    secondColor:'#ea5e12'
-}
+const initialState: userBackgroundColor = {
+  firstColor: "#8edf71",
+  secondColor: "#ea5e12",
+};
 
 const userBackground = createSlice({
-    name:"setUserColor",
-    initialState,
-    reducers:{
-        setFirstColor(state,action:PayloadAction<string>){
-            state.firstColor = action.payload
-        },
-        setSecondColor(state,action:PayloadAction<string>){
-            state.secondColor = action.payload
-        },
-    }
-})
+  name: "setUserColor",
+  initialState,
+  reducers: {
+    setFirstColor(state, action: PayloadAction<string>) {
+      state.firstColor = action.payload;
+    },
+    setSecondColor(state, action: PayloadAction<string>) {
+      state.secondColor = action.payload;
+    },
+  },
+});
 
-export const userBackgroundActions = {...userBackground.actions}
+export const userBackgroundActions = { ...userBackground.actions };
 
-export default userBackground
+export default userBackground;

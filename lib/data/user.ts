@@ -29,4 +29,4 @@ const write = async (users: StoredUserType[]) => {
   writeFileSync("data/users.json", JSON.stringify(users));
 };
 
-export default { getList, exist, write,find };
+export default { getList, exist, write, find };

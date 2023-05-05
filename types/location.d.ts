@@ -1,5 +1,5 @@
 export type registerLocation = {
-    location:string;
-    latitude:number;
-    longitude:number;
-}
+  location: string;
+  latitude: number;
+  longitude: number;
+};
