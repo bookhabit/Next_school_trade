@@ -93,21 +93,23 @@ const Profile = () => {
 
     const onUpload = (e: any) => {
         const file = e.target.files[0];
-        setProfileImg(e.target.files[0])
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-      
-        return new Promise<void>((resolve) => {
-          reader.onload = () => {
-            const imageUrl = reader.result;
-            if (typeof imageUrl === 'string') {
-                setThumnail(imageUrl);
-            } else {
-                setThumnail("");
-            }
-            resolve();
-          };
-        });
+        if(file){
+            setProfileImg(e.target.files[0])
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+          
+            return new Promise<void>((resolve) => {
+              reader.onload = () => {
+                const imageUrl = reader.result;
+                if (typeof imageUrl === 'string') {
+                    setThumnail(imageUrl);
+                } else {
+                    setThumnail("");
+                }
+                resolve();
+              };
+            });
+        }
       };
 
     // 비밀번호변경 모달
