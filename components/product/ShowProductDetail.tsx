@@ -409,6 +409,8 @@ const ShowProductDetail:React.FC<IProps> = ({productDetail}) => {
     // 상품 삭제
     const deleteProduct = ()=>{
         deleteProductAPI(productDetail.id)
+        alert('삭제되었습니다')
+        window.history.back();
     }
 
     // 카테고리 한글 변환
