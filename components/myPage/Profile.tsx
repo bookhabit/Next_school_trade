@@ -79,11 +79,17 @@ const Container = styled.form`
 const Profile = () => {
   // 로그인 유저 정보 불러오기
   const LoggedUser = useSelector((state: RootState) => state.user);
+  console.log("LoggedUser", LoggedUser);
 
   // state
   // 유저의 기본이미지 만들면 LoggedUser.profileImage 경로바꾸기 초기값
-  const [thumnail, setThumnail] = useState(LoggedUser.images?.path);
-  const [profileImg, setProfileImg] = useState(LoggedUser.images?.path);
+  const [thumnail, setThumnail] = useState(
+    LoggedUser.images?.path.replace(/\\/g, "/")
+  );
+  console.log("thumnail", thumnail);
+  const [profileImg, setProfileImg] = useState(
+    LoggedUser.images?.path.replace(/\\/g, "/")
+  );
   const [nickname, setNickname] = useState<string>(LoggedUser.nickname);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -117,7 +123,10 @@ const Profile = () => {
     setChangePassword(!changePassword);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setThumnail(LoggedUser.images?.path.replace(/\\/g, "/"));
+    setProfileImg(LoggedUser.images?.path.replace(/\\/g, "/"));
+  }, []);
 
   // 프로필 수정 api
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

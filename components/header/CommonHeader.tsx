@@ -37,6 +37,7 @@ const Conatainer = styled.div`
         height: 35px;
         color: ${palette.main_text_color};
         margin-right: 10px;
+        border-radius: 50%;
       }
     }
     .headerLeftIcon {
