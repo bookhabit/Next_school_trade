@@ -86,17 +86,18 @@ const Profile = () => {
   const [thumnail, setThumnail] = useState(
     LoggedUser.images?.path.replace(/\\/g, "/")
   );
-  console.log("thumnail", thumnail);
   const [profileImg, setProfileImg] = useState(
     LoggedUser.images?.path.replace(/\\/g, "/")
   );
   const [nickname, setNickname] = useState<string>(LoggedUser.nickname);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showFrontImg, setShowFrontImg] = useState(false);
 
   const onUpload = (e: any) => {
     const file = e.target.files[0];
     if (file) {
+      setShowFrontImg(true);
       setProfileImg(e.target.files[0]);
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -166,7 +167,11 @@ const Profile = () => {
   return (
     <Container onSubmit={onSubmit}>
       <div className="profile-image">
-        <img src={`http://localhost:4000/${thumnail}`} alt="프로필 이미지" />
+        {showFrontImg ? (
+          <img src={thumnail} alt="프로필 이미지" />
+        ) : (
+          <img src={`http://localhost:4000/${thumnail}`} alt="프로필 이미지" />
+        )}
         <label htmlFor="file-input" />
         <input type="file" id="file-input" onChange={(e) => onUpload(e)} />
       </div>
