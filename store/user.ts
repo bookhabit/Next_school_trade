@@ -20,7 +20,19 @@ const initialState: UserState = {
   university: "",
   updatedAt: "",
   isLogged: false,
-  images: null,
+  images: {
+    id: 999999,
+    filename: "",
+    path: "upload/default.svg",
+    fieldname: "",
+    originalname: "",
+    encoding: "",
+    mimetype: "",
+    destination: "",
+    size: 0,
+    createdAt: "",
+    updatedAt: "",
+  },
   contents: [],
 };
 

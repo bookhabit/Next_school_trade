@@ -90,21 +90,23 @@ const Profile = () => {
 
   const onUpload = (e: any) => {
     const file = e.target.files[0];
-    setProfileImg(e.target.files[0]);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+    if (file) {
+      setProfileImg(e.target.files[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
 
-    return new Promise<void>((resolve) => {
-      reader.onload = () => {
-        const imageUrl = reader.result;
-        if (typeof imageUrl === "string") {
-          setThumnail(imageUrl);
-        } else {
-          setThumnail("");
-        }
-        resolve();
-      };
-    });
+      return new Promise<void>((resolve) => {
+        reader.onload = () => {
+          const imageUrl = reader.result;
+          if (typeof imageUrl === "string") {
+            setThumnail(imageUrl);
+          } else {
+            setThumnail("");
+          }
+          resolve();
+        };
+      });
+    }
   };
   const router = useRouter();
 
@@ -155,9 +157,7 @@ const Profile = () => {
   return (
     <Container onSubmit={onSubmit}>
       <div className="profile-image">
-        {LoggedUser.images?.path && (
-          <img src={`http://localhost:4000/${thumnail}`} alt="프로필 이미지" />
-        )}
+        <img src={`http://localhost:4000/${thumnail}`} alt="프로필 이미지" />
         <label htmlFor="file-input" />
         <input type="file" id="file-input" onChange={(e) => onUpload(e)} />
       </div>
