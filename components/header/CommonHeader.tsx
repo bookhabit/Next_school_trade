@@ -31,17 +31,22 @@ const Conatainer = styled.div`
     .headerLeft {
       display: flex;
       align-items: center;
-      img {
+      .profile-image-wrapper {
         background: white;
         width: 35px;
         height: 35px;
-        color: ${palette.main_text_color};
-        margin-right: 10px;
         border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 10px;
+        img {
+          font-size: 25px;
+        }
       }
     }
     .headerLeftIcon {
-      margin-right: 15px;
+      margin-right: 10px;
       cursor: pointer;
     }
   }
@@ -136,12 +141,13 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
       <div className="headerDiv">
         <div className="headerLeft">
           <BeforeIcon className="headerLeftIcon" onClick={goToBackpage} />
-          {/* LoggedUser.ProfileImage로 바꿔야함 */}
           {pathName === "/user" ? (
-            <img
-              src={`http://localhost:4000/${LoggedUser.images?.path}`}
-              alt="프로필이미지"
-            />
+            <div className="profile-image-wrapper">
+              <img
+                src={`http://localhost:4000/${LoggedUser.images?.path}`}
+                alt="프로필이미지"
+              />
+            </div>
           ) : null}
           <p>{changeURLName()}</p>
         </div>

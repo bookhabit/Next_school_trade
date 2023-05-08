@@ -124,6 +124,7 @@ const Profile = () => {
     setChangePassword(!changePassword);
   };
 
+  // 로그인된 유저정보를 업데이트하기 위해 useEffect실행
   useEffect(() => {
     setThumnail(LoggedUser.images?.path.replace(/\\/g, "/"));
     setProfileImg(LoggedUser.images?.path.replace(/\\/g, "/"));
@@ -161,9 +162,6 @@ const Profile = () => {
     }
   };
 
-  // 로그인된 유저정보를 업데이트하기 위해 useEffect실행
-  useEffect(() => {}, []);
-
   return (
     <Container onSubmit={onSubmit}>
       <div className="profile-image">
@@ -188,13 +186,13 @@ const Profile = () => {
         {changePassword ? (
           <>
             <input
-              type="text"
+              type="password"
               placeholder="현재 비밀번호"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
             <input
-              type="text"
+              type="password"
               placeholder="새 비밀번호"
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}

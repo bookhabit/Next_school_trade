@@ -122,16 +122,22 @@ const Container = styled.div`
       background-color: #eaeaea;
       border-bottom: 1px solid ${palette.divistion_color};
       .seller-info-left {
-        width: 110px;
+        width: 100%;
         display: flex;
         align-items: center;
         /* 작성자가 아닐 경우 */
-        img {
-          width: 30px;
-          height: 30px;
-          background-color: white;
-          border-radius: 50px;
-          margin-right: 5px;
+        .profile-image-wrapper {
+          background: white;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 10px;
+          img {
+            width: 25px;
+          }
         }
         p {
           cursor: pointer;
@@ -147,6 +153,7 @@ const Container = styled.div`
         }
       }
       .seller-info-right {
+        min-width: 110px;
         .correct-remove-modal-wrapper {
           position: relative;
           .correct-remove-modal-icon {
@@ -493,15 +500,19 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
             ) : (
               <>
                 {ownerInfo.images?.path ? (
-                  <img
-                    src={`http://localhost:4000/${ownerInfo.images?.path}`}
-                    alt="판매자 프로필이미지"
-                  />
+                  <div className="profile-image-wrapper">
+                    <img
+                      src={`http://localhost:4000/${ownerInfo.images?.path}`}
+                      alt="판매자 프로필이미지"
+                    />
+                  </div>
                 ) : (
-                  <img
-                    src={`http://localhost:4000/upload/default.svg`}
-                    alt="판매자 프로필이미지"
-                  />
+                  <div className="profile-image-wrapper">
+                    <img
+                      src={`http://localhost:4000/upload/default.svg`}
+                      alt="판매자 프로필 기본이미지"
+                    />
+                  </div>
                 )}
                 <p onClick={goToSellerProfile}>{ownerInfo.nickname}</p>
               </>
