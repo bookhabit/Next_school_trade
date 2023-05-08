@@ -32,7 +32,11 @@ import { favoriteActions } from "../../store/favorite";
 import { useDispatch } from "react-redux";
 import FavoriteModal from "./FavoriteModal";
 
-const Container = styled.div`
+interface cssProps {
+  postOwner: boolean;
+}
+
+const Container = styled.div<cssProps>`
   width: 100%;
   height: 100%;
   @media only screen and (min-width: 430px) {
@@ -153,7 +157,7 @@ const Container = styled.div`
         }
       }
       .seller-info-right {
-        min-width: 110px;
+        width: ${(postOwner) => (postOwner ? "0px" : "110px")};
         .correct-remove-modal-wrapper {
           position: relative;
           .correct-remove-modal-icon {
@@ -420,6 +424,17 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
     window.history.back();
   };
 
+  // 상품 수정
+  const goToModifyProduct = () => {
+    router.push(
+      {
+        pathname: `/product/modify`,
+        query: { productDetail: JSON.stringify(productDetail) },
+      },
+      "/product/modify"
+    );
+  };
+
   // 카테고리 한글 변환
   const switchCategoryName = () => {
     switch (productDetail.category) {
@@ -450,7 +465,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
     console.log("useEffect 유저프로필", ownerInfo.images?.path);
   }, []);
   return (
-    <Container>
+    <Container postOwner={postOwner}>
       {/* 헤더 */}
       <div className="detail-header">
         <div className="detail-header-left">
@@ -527,7 +542,9 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
                 />
                 {!showBtnModal ? null : (
                   <div className="correct-remove-modal">
-                    <p className="correct-btn">수정하기</p>
+                    <p className="correct-btn" onClick={goToModifyProduct}>
+                      수정하기
+                    </p>
                     <p className="remove-btn" onClick={deleteProduct}>
                       삭제하기
                     </p>

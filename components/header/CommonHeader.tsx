@@ -98,7 +98,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
         return "카카오 로그인 중";
       case "/product/register":
         return "상품 등록하기";
-      case "/product/correct":
+      case "/product/modify":
         return "상품 수정하기";
       case "/setPosition":
         return "거래 위치 설정하기";

@@ -79,7 +79,6 @@ const Container = styled.form`
 const Profile = () => {
   // 로그인 유저 정보 불러오기
   const LoggedUser = useSelector((state: RootState) => state.user);
-  console.log("LoggedUser", LoggedUser);
 
   // state
   // 유저의 기본이미지 만들면 LoggedUser.profileImage 경로바꾸기 초기값
