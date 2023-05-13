@@ -4,7 +4,9 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 // 상품 전체 조회 - home 페이지
 export const GetproductList = ({ pageParam = 0 }: QueryFunctionContext) =>
   axios
-    .get(`http://localhost:4000/content/list?page=${pageParam}`)
+    .get(`http://localhost:4000/content/list?page=${pageParam}`, {
+  withCredentials: true,
+})
     .then((res) => res?.data);
 
 // 특정 회원 관심목록 - user/favorite 페이지
@@ -13,7 +15,9 @@ export const getFavoriteList = (
   id: number
 ) =>
   axios
-    .get(`http://localhost:4000/favorite/${id}?page=${pageParam}`)
+    .get(`http://localhost:4000/favorite/${id}?page=${pageParam}`, {
+  withCredentials: true,
+})
     .then((res) => res?.data);
 
 // 특정 회원 구매내역 - user/buyList 페이지
@@ -46,12 +50,16 @@ export const getSoldList = (
   id: number
 ) =>
   axios
-    .get(`http://localhost:4000/content/list/user/sold/${id}?page=${pageParam}`)
+    .get(`http://localhost:4000/content/list/user/sold/${id}?page=${pageParam}`, {
+  withCredentials: true,
+})
     .then((res) => res?.data);
 
 // 상품 상세 조회
 export const getProductDetail = (id: number) =>
-  axios.get(`http://localhost:4000/content/read/${id}`);
+  axios.get(`http://localhost:4000/content/read/${id}`, {
+  withCredentials: true,
+});
 
 // 카테고리 상품 조회
 export const getCategoryProductList = (

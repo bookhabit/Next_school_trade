@@ -71,7 +71,6 @@ const MobileContainer = styled.div`
 const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   // 유저정보를 받아서 리덕스 스토어에 저장하기
   const clientData = Object(data).userData as UserState;
-  console.log("clientData: ", clientData);
 
   const dispatch = useDispatch();
   const [queryClient] = useState(() => new QueryClient());
