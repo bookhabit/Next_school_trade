@@ -22,6 +22,8 @@ export type productListType = {
 
   latitude: number;
 
+  like: boolean;
+
   like_cnt: number;
 
   location: string;

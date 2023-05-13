@@ -1,251 +1,269 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import HeartIcon from "../../public/static/svg/product/heartIcon.svg"
-import BorderHeartIcon from "../../public/static/svg/product/borderHeartIcon.svg"
-import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg"
-import palette from '../../styles/palette';
-import { Division } from './Division';
-import { useRouter } from 'next/router';
-import { productListType } from '../../types/product/product';
-import { makeMoneyString } from '../../lib/utils';
-import moment from 'moment';
-import 'moment/locale/ko';
-import { isEmpty } from 'lodash';
-import DefaultImgIcon from "../../public/static/svg/product/default_img.svg"
-import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon.svg"
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { addFavorite, changeCompletedAPI, deleteFavorite } from '../../lib/api/product';
-import { useDispatch } from 'react-redux';
-import { favoriteActions } from '../../store/favorite';
-import async from './../../pages/api/map/location';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import HeartIcon from "../../public/static/svg/product/heartIcon.svg";
+import BorderHeartIcon from "../../public/static/svg/product/borderHeartIcon.svg";
+import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg";
+import palette from "../../styles/palette";
+import { Division } from "./Division";
+import { useRouter } from "next/router";
+import { productListType } from "../../types/product/product";
+import { makeMoneyString } from "../../lib/utils";
+import moment from "moment";
+import "moment/locale/ko";
+import { isEmpty } from "lodash";
+import DefaultImgIcon from "../../public/static/svg/product/default_img.svg";
+import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import {
+  addFavorite,
+  changeCompletedAPI,
+  deleteFavorite,
+} from "../../lib/api/product";
+import { useDispatch } from "react-redux";
+import { favoriteActions } from "../../store/favorite";
+import async from "./../../pages/api/map/location";
 
 const Container = styled.div`
-    width:100%;
-    height:105px;
-    margin-bottom:10px;
-    display:flex;
-    padding-bottom:100px;
-    
-    .productImg{
-        width:116px;
-        height:105px;
-        background-color:${palette.gray_80};
+  width: 100%;
+  height: 105px;
+  margin-bottom: 10px;
+  display: flex;
+  padding-bottom: 100px;
+
+  .productImg {
+    width: 116px;
+    height: 105px;
+    background-color: ${palette.gray_80};
+    cursor: pointer;
+    img {
+      width: 116px;
+      height: 100%;
+    }
+    .default-img {
+      width: 116px;
+      height: 40%;
+      margin-top: 30px;
+    }
+  }
+
+  .productInfo {
+    padding: 5px 10px;
+    width: 100%;
+    .productInfo-top {
+      display: flex;
+      justify-content: space-between;
+      .change-completed-wrap-parent {
+        height: 100%;
         cursor: pointer;
-        img {
-          width: 116px;
-          height: 100%;
+        .change-completed-wrap {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: row-reverse;
+          .change-completed {
+            background-color: white;
+            color: ${palette.updatedDate};
+            font-size: 15px;
+            font-weight: bold;
+            margin-right: 10px;
+            &:hover {
+              color: black;
+            }
+          }
         }
-        .default-img{
-            width: 116px;
-            height:40%;
-            margin-top:30px;
-        }
+      }
+      .productTitle {
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        display: inline-block;
+      }
     }
-
-
-    .productInfo{
-        padding:5px 10px;
-        width:100%;
-        .productInfo-top{
-            display:flex;
-            justify-content:space-between;
-            .change-completed-wrap-parent{
-                height:100%;
-                cursor: pointer;
-                .change-completed-wrap{
-                    display:flex;
-                    justify-content:center;
-                    align-items:center;
-                    flex-direction:row-reverse;
-                    .change-completed{
-                        background-color:white;
-                        color:${palette.updatedDate};
-                        font-size:15px;
-                        font-weight:bold;
-                        margin-right:10px;
-                        &:hover{
-                            color:black;    
-                        }
-                    }
-                }
-            }
-            .productTitle{
-                font-size:16px;
-                font-weight:bold;
-                cursor: pointer;
-                display:inline-block;
-            }
-        }
-        .productPrice{
-            font-size:14px;
-            font-weight:600;
-            margin-top:10px;
-        }
-        .info-footer{
-            display:flex;
-            justify-content:space-between;
-            margin-top:35px;
-            p{
-                font-size:13px;
-                color:${palette.updatedDate}
-            }
-        }
-        .info-footerLeft{
-            display:flex;
-            align-items:center;
-        }
-        .info-footerRight{
-            display:flex;
-            align-items:center;
-            
-            .heartDiv{
-                display:flex;
-                align-items:center;
-                margin-right:10px;
-                cursor: pointer;
-                span{
-                    margin-left:3px;
-                    font-size:16px;
-                    text-align:right;
-                }
-            }
-            .chattingDiv{
-                display:flex;
-                align-items:center;
-                span{
-                    margin-left:3px;
-                    text-align:right;
-                }
-            }
-        }
+    .productPrice {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
     }
-  
-`
+    .info-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 35px;
+      p {
+        font-size: 13px;
+        color: ${palette.updatedDate};
+      }
+    }
+    .info-footerLeft {
+      display: flex;
+      align-items: center;
+    }
+    .info-footerRight {
+      display: flex;
+      align-items: center;
 
-interface IProps{
-    product:productListType
-    showChangeCompleted?:boolean
+      .heartDiv {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        cursor: pointer;
+        span {
+          margin-left: 3px;
+          font-size: 16px;
+          text-align: right;
+        }
+      }
+      .chattingDiv {
+        display: flex;
+        align-items: center;
+        span {
+          margin-left: 3px;
+          text-align: right;
+        }
+      }
+    }
+  }
+`;
+
+interface IProps {
+  product: productListType;
+  showChangeCompleted?: boolean;
 }
 
-const ProductCard:React.FC<IProps> = ({product,showChangeCompleted}) => {
-    let imagepath
-    let imageAlt    
-    if(product.images === undefined){
-        imagepath = undefined
-    }else if 
-    (!isEmpty(product.images[0])){
-        imagepath = product.images[0].path
-        imageAlt = product.images[0].filename
+const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
+  let imagepath;
+  let imageAlt;
+  if (product.images === undefined) {
+    imagepath = undefined;
+  } else if (!isEmpty(product.images[0])) {
+    imagepath = product.images[0].path;
+    imageAlt = product.images[0].filename;
+  }
+  const router = useRouter();
+  const isLogged = useSelector((state: RootState) => state.user.isLogged);
+  // 판매자 페이지에서는 거래완료 모달 숨기기
+  if (router.pathname === "/seller/[id]/sellingProducts") {
+    showChangeCompleted = false;
+  }
+
+  // 거래완료로 바꾸는 버튼 모달
+  const [showCompletedBtn, setShowCompletedBtn] = useState(false);
+
+  const showCompletedHandler = () => {
+    setShowCompletedBtn(!showCompletedBtn);
+  };
+
+  // 거래완료로 바꾸기 api
+  const changeCompleted = async () => {
+    await changeCompletedAPI(product.id);
+    window.location.reload();
+  };
+
+  // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
+  const [favoriteProduct, setFavoriteProduct] = useState(product.like);
+  console.log("productlike", product.like);
+
+  const dispatch = useDispatch();
+
+  // 하트아이콘 변경
+  const toggleHeartIcon = async () => {
+    // 로그인 확인
+    if (isLogged) {
+      if (favoriteProduct === false) {
+        setFavoriteProduct(!favoriteProduct);
+        // 사용자의 관심목록 추가 api
+        const response = await addFavorite(product.id);
+
+        // 디스패치 - 관심목록 추가 모달창
+        dispatch(favoriteActions.setShowFavoriteModal(true));
+        setTimeout(() => {
+          dispatch(favoriteActions.setShowFavoriteModal(false));
+        }, 3000);
+      } else {
+        // 사용자의 관심목록에서 삭제
+        setFavoriteProduct(!favoriteProduct);
+        const response = await deleteFavorite(product.id);
+        alert("관심목록에서 삭제되었습니다.");
+        console.log("delete response", response);
+      }
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/auth");
+      return false;
     }
-    const router= useRouter();
-    const isLogged = useSelector((state:RootState)=>state.user.isLogged)
-    // 판매자 페이지에서는 거래완료 모달 숨기기
-    if(router.pathname === "/seller/[id]/sellingProducts"){
-        showChangeCompleted=false
-    }
+  };
 
-    // 거래완료로 바꾸는 버튼 모달
-    const [showCompletedBtn,setShowCompletedBtn] = useState(false)
+  const goToDetail = () => {
+    router.push({
+      pathname: `/product/[id]`,
+      query: { id: product.id },
+    });
+  };
 
-    const showCompletedHandler = ()=>{
-        setShowCompletedBtn(!showCompletedBtn)
-    }
+  // dateTime 상대시간으로 출력하기
+  const now = moment();
+  const productDate = moment(product.updatedAt);
 
-    // 거래완료로 바꾸기 api 
-    const changeCompleted = async ()=>{
-        await changeCompletedAPI(product.id);
-        window.location.reload();
-    }
-
-    // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
-    const [favoriteProduct,setFavoriteProduct] = useState(false)
-
-    const dispatch = useDispatch();
-    
-    // 하트아이콘 변경
-    const toggleHeartIcon = async ()=>{
-        // 로그인 확인
-        if(isLogged){
-            if(favoriteProduct===false){
-                // 사용자의 관심목록 추가 api
-                const response = await addFavorite(product.id)
-                
-                // 디스패치 - 관심목록 추가 모달창 
-                dispatch(favoriteActions.setShowFavoriteModal(true))
-                setFavoriteProduct(!favoriteProduct)
-                setTimeout(() => {
-                    dispatch(favoriteActions.setShowFavoriteModal(false))
-                }, 3000);
-            }else{
-                // 사용자의 관심목록에서 삭제
-                const response = await deleteFavorite(product.id)
-                alert('관심목록에서 삭제되었습니다.')
-                setFavoriteProduct(!favoriteProduct)
-                console.log('delete response',response)
-            }
-        }else{
-            alert('로그인이 필요합니다.')
-            router.push("/auth")
-            return false;
-        }
-    }
-
-    const goToDetail = ()=>{
-        router.push({
-            pathname:`/product/[id]`,
-            query:{id:product.id}
-        })
-    }
-
-    // dateTime 상대시간으로 출력하기
-    const now = moment();
-    const productDate = moment(product.updatedAt)
-
-    return (
-        <>
-            <Container>
-                <div className='productImg' onClick={goToDetail}>
-                    {imagepath? 
-                    <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>
-                    :
-                    <img src={"/static/svg/product/default_img.svg"} className="default-img" alt="기본이미지"/>
-                    }
+  return (
+    <>
+      <Container>
+        <div className="productImg" onClick={goToDetail}>
+          {imagepath ? (
+            <img
+              src={`http://localhost:4000/${imagepath}`}
+              alt={`http://localhost:4000/${imageAlt}`}
+            />
+          ) : (
+            <img
+              src={"/static/svg/product/default_img.svg"}
+              className="default-img"
+              alt="기본이미지"
+            />
+          )}
+        </div>
+        <div className="productInfo">
+          <div className="productInfo-top">
+            <p className="productTitle" onClick={goToDetail}>
+              {product.title}
+            </p>
+            <div className="change-completed-wrap-parent">
+              {showChangeCompleted ? (
+                <div className="change-completed-wrap">
+                  <ShowCompletedIcon onClick={showCompletedHandler} />
+                  {showCompletedBtn ? (
+                    <p className="change-completed" onClick={changeCompleted}>
+                      거래완료로 변경
+                    </p>
+                  ) : null}
                 </div>
-                <div className='productInfo'>
-                    <div className='productInfo-top'>
-                        <p className='productTitle' onClick={goToDetail}>{product.title}</p>
-                        <div className='change-completed-wrap-parent'>
-                            {showChangeCompleted ? 
-                            <div className='change-completed-wrap'>
-                                <ShowCompletedIcon onClick={showCompletedHandler} />
-                                {showCompletedBtn?
-                                    <p className='change-completed' onClick={changeCompleted}>거래완료로 변경</p>
-                                :null}
-                            </div>
-                            : null}
-                        </div>
-                    </div>
-                    <p className='productPrice'>{makeMoneyString(String(product.price))}원</p>
-                    <div className='info-footer'>
-                        <p className='info-footerLeft'>{productDate.from(now)}</p>
-                        <div className='info-footerRight'>
-                            <div className='heartDiv'>
-                                {favoriteProduct? <HeartIcon onClick={toggleHeartIcon}/>:<BorderHeartIcon onClick={toggleHeartIcon}/>}
-                                <span>{product.like_cnt}</span>
-                            </div>
-                            <div className='chattingDiv'>
-                                <ChattingIcon/>
-                                <span>{product.chat_cnt}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Container>
-            <Division/>
-        </>
-    );
+              ) : null}
+            </div>
+          </div>
+          <p className="productPrice">
+            {makeMoneyString(String(product.price))}원
+          </p>
+          <div className="info-footer">
+            <p className="info-footerLeft">{productDate.from(now)}</p>
+            <div className="info-footerRight">
+              <div className="heartDiv">
+                {favoriteProduct ? (
+                  <HeartIcon onClick={toggleHeartIcon} />
+                ) : (
+                  <BorderHeartIcon onClick={toggleHeartIcon} />
+                )}
+                <span>{product.like_cnt}</span>
+              </div>
+              <div className="chattingDiv">
+                <ChattingIcon />
+                <span>{product.chat_cnt}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Container>
+      <Division />
+    </>
+  );
 };
-
 
 export default React.memo(ProductCard);

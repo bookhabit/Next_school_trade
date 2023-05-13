@@ -311,7 +311,8 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   }
   const router = useRouter();
 
-  const [favoriteProduct, setFavoriteProduct] = useState(false);
+  const [favoriteProduct, setFavoriteProduct] = useState(productDetail.like);
+  console.log("productDetail.like", productDetail.like);
 
   const isLogged = useSelector((state: RootState) => state.user.isLogged);
 
@@ -592,13 +593,13 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
       {/* 푸터 */}
       <div className="detail-footer">
         <div className="detail-footer-icon">
-          {favoriteProduct ? (
+          {productDetail.like ? (
+            <HeartIcon className="detail-heartIcon" onClick={toggleHeartIcon} />
+          ) : (
             <BorderHeartIcon
               className="detail-heartIcon"
               onClick={toggleHeartIcon}
             />
-          ) : (
-            <HeartIcon className="detail-heartIcon" onClick={toggleHeartIcon} />
           )}
           <DivisionIcon />
         </div>
