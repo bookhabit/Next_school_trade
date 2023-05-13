@@ -7,8 +7,8 @@ type userBackgroundColor = {
 };
 
 const initialState: userBackgroundColor = {
-  firstColor: "#8edf71",
-  secondColor: "#ea5e12",
+  firstColor: "#E8FFE5",
+  secondColor: "#F1FFF0",
 };
 
 const userBackground = createSlice({
