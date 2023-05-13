@@ -41,6 +41,9 @@ const Conatainer = styled.div`
         align-items: center;
         margin-right: 10px;
         img {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
           font-size: 25px;
         }
       }
