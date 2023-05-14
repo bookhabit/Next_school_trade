@@ -83,10 +83,10 @@ const Profile = () => {
   // state
   // 유저의 기본이미지 만들면 LoggedUser.profileImage 경로바꾸기 초기값
   const [thumnail, setThumnail] = useState(
-    LoggedUser.images?.path.replace(/\\/g, "/")
+    LoggedUser.profileImage?.path.replace(/\\/g, "/")
   );
   const [profileImg, setProfileImg] = useState(
-    LoggedUser.images?.path.replace(/\\/g, "/")
+    LoggedUser.profileImage?.path.replace(/\\/g, "/")
   );
   const [nickname, setNickname] = useState<string>(LoggedUser.nickname);
   const [password, setPassword] = useState<string>("");
@@ -125,8 +125,8 @@ const Profile = () => {
 
   // 로그인된 유저정보를 업데이트하기 위해 useEffect실행
   useEffect(() => {
-    setThumnail(LoggedUser.images?.path.replace(/\\/g, "/"));
-    setProfileImg(LoggedUser.images?.path.replace(/\\/g, "/"));
+    setThumnail(LoggedUser.profileImage?.path.replace(/\\/g, "/"));
+    setProfileImg(LoggedUser.profileImage?.path.replace(/\\/g, "/"));
   }, []);
 
   // 프로필 수정 api

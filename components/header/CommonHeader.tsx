@@ -32,7 +32,7 @@ const Conatainer = styled.div`
       display: flex;
       align-items: center;
       .profile-image-wrapper {
-        background: white;
+        background: ${palette.main_text_color};
         width: 35px;
         height: 35px;
         border-radius: 50%;
@@ -41,9 +41,8 @@ const Conatainer = styled.div`
         align-items: center;
         margin-right: 10px;
         img {
-          width: 35px;
-          height: 35px;
-          border-radius: 50%;
+          width: 25px;
+          height: 25px;
           font-size: 25px;
         }
       }
@@ -137,7 +136,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
         return "페이지를 찾을 수 없습니다";
     }
   };
-  useEffect(() => {}, []);
+  console.log("LoggedUser", LoggedUser);
 
   return (
     <Conatainer>
@@ -147,7 +146,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
           {pathName === "/user" ? (
             <div className="profile-image-wrapper">
               <img
-                src={`http://localhost:4000/${LoggedUser.images?.path}`}
+                src={`http://localhost:4000/${LoggedUser.profileImage?.path}`}
                 alt="프로필이미지"
               />
             </div>

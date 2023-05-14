@@ -26,7 +26,12 @@ export type Users = {
   university: string;
   updatedAt: string;
   contents: productListType[];
-  images: Image | null;
+  profileImage: {
+    id: number;
+    path: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 };
 
 // 로그인 확인했을 때 유저정보 저장
