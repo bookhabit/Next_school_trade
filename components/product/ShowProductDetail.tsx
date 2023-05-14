@@ -126,7 +126,7 @@ const Container = styled.div<cssProps>`
       background-color: #eaeaea;
       border-bottom: 1px solid ${palette.divistion_color};
       .seller-info-left {
-        width: 100%;
+        /* width: 100%; */
         display: flex;
         align-items: center;
         /* 작성자가 아닐 경우 */
@@ -157,7 +157,7 @@ const Container = styled.div<cssProps>`
         }
       }
       .seller-info-right {
-        width: ${(postOwner) => (postOwner ? "0px" : "110px")};
+        /* width: 100%; */
         .correct-remove-modal-wrapper {
           position: relative;
           .correct-remove-modal-icon {
@@ -461,10 +461,8 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
         return "잘못된경로";
     }
   };
-  console.log("유저프로필", ownerInfo.images?.path);
-  useEffect(() => {
-    console.log("useEffect 유저프로필", ownerInfo.images?.path);
-  }, []);
+  console.log("유저프로필", ownerInfo);
+
   return (
     <Container postOwner={postOwner}>
       {/* 헤더 */}
@@ -515,18 +513,11 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
               </>
             ) : (
               <>
-                {ownerInfo.images?.path ? (
+                {ownerInfo.profileImage?.path && (
                   <div className="profile-image-wrapper">
                     <img
-                      src={`http://localhost:4000/${ownerInfo.images?.path}`}
+                      src={`http://localhost:4000/${ownerInfo.profileImage?.path}`}
                       alt="판매자 프로필이미지"
-                    />
-                  </div>
-                ) : (
-                  <div className="profile-image-wrapper">
-                    <img
-                      src={`http://localhost:4000/upload/default.svg`}
-                      alt="판매자 프로필 기본이미지"
                     />
                   </div>
                 )}
