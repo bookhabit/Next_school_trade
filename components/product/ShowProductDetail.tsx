@@ -320,10 +320,10 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   const goToBackpage = () => {
     window.history.back();
   };
-  // 판매자 정보 페이지로 이동 - owner.id 넘김
+  // 판매자 정보 페이지로 이동 - seller.id 넘김
   const goToSellerProfile = () => {
     router.push({
-      pathname: `/seller/${productDetail.owner.id}`,
+      pathname: `/seller/${productDetail.seller.id}`,
     });
   };
 
@@ -332,7 +332,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
     if (isLogged) {
       router.push({
         pathname: `/user/chatting/[id]`,
-        query: { id: productDetail.owner.id },
+        query: { id: productDetail.seller.id },
       });
     } else {
       alert("로그인이 필요합니다.");
@@ -355,13 +355,13 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   };
 
   // 판매자 정보
-  const ownerInfo = productDetail.owner;
+  const ownerInfo = productDetail.seller;
 
   // 로그인 - 현재 유저 id
   const userId = useSelector((state: RootState) => state.user.id);
 
-  // 로그인된 사용자의 id와 상품의 owner.id 비교
-  const postOwner = userId === productDetail.owner.id;
+  // 로그인된 사용자의 id와 상품의 seller.id 비교
+  const postOwner = userId === productDetail.seller.id;
 
   // 수정,삭제 버튼 모달보이기 state
   const [showBtnModal, setShowBtnModal] = useState(false);

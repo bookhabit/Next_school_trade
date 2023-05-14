@@ -30,7 +30,7 @@ export type productListType = {
 
   longitude: number;
 
-  owner: Users;
+  seller: Users;
 
   price: number;
 
