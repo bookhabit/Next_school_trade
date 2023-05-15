@@ -134,7 +134,7 @@ const Profile = () => {
     event.preventDefault();
     // form 확인
     const formData: FormData = new FormData();
-    formData.append("images", profileImg as string);
+    formData.append("profileImage", profileImg as string);
     formData.append("nickname", nickname);
     formData.append("password", password);
     // FormData 객체의 내용 출력
