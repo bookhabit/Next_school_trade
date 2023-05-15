@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import DaumPostcodeEmbed from "react-daum-postcode";
 import GeoCoding from "./GeoCoding";
 import KakaoMap from "./KaKaoMap";
+import axios from "axios";
 
 const Container = styled.div`
   .mordal-close-x-icon {
@@ -226,12 +227,24 @@ const SetPositionUserLocation: React.FC<IProps> = ({
         try {
           console.log("지오코딩 시작", currentAddr);
           // 여기에 받아온 주소로 위도,경도값을 알아내기 - 지오코딩 ( 카카오로 변경 )
-          const { lat, lng } = await GeoCoding(currentAddr);
+          const REST_API_KEY = "1e71e50aa0333c4fc579cf84718fdd4b";
+          const response = await axios.get(
+            `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
+              currentAddr
+            )}`,
+            {
+              headers: {
+                Authorization: `KakaoAK ${REST_API_KEY}`,
+              },
+            }
+          );
+          console.log("위도", response.data.documents[0].x);
+          console.log("위도", response.data.documents[0].y);
 
           // 위도,경도값을 지도의 currentMapLocation state를 변경시킨다
           setCurrentMapLocation({
-            latitude: lat,
-            longitude: lng,
+            latitude: response.data.documents[0].x,
+            longitude: response.data.documents[0].y,
           });
         } catch (e) {
           console.log("지도를 불러오는데 실패하였습니다.");
