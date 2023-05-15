@@ -173,6 +173,10 @@ const Container = styled.div`
     }
   }
 `;
+const MapContainer = styled.div`
+  width: 100%;
+  height: 50%;
+`;
 interface IProps {
   closeModal: () => void;
   currentLocation: {
@@ -186,6 +190,8 @@ declare global {
     initMap: () => void;
   }
 }
+
+const KAKAO_API_KEY = "0292e60416960470863fce8c75ff0a78";
 
 const SetPositionUserLocation: React.FC<IProps> = ({
   closeModal,
@@ -207,6 +213,42 @@ const SetPositionUserLocation: React.FC<IProps> = ({
     latitude: currentLocation.latitude,
     longitude: currentLocation.longitude,
   });
+
+  // 지도
+  const onLoadKakaoMap = () => {
+    window.kakao.maps.load(() => {
+      const container = document.getElementById("map");
+      const options = {
+        center: new window.kakao.maps.LatLng(
+          currentMapLocation.latitude,
+          currentMapLocation.longitude
+        ),
+      };
+      // 지도 생성
+      const map = new window.kakao.maps.Map(container, options);
+      const markerPosition = new window.kakao.maps.LatLng(
+        currentMapLocation.latitude,
+        currentMapLocation.longitude
+      );
+      console.log("markerPosition", markerPosition);
+
+      // 지도를 클릭한 위치에 표출할 마커
+      const marker = new window.kakao.maps.Marker({
+        position: markerPosition,
+      });
+      marker.setMap(map);
+
+      // 드래그 이벤트 발생 시 중심좌표 변경
+      kakao.maps.event.addListener(map, "dragend", function () {
+        // 지도 중심좌표를 얻어옵니다
+        var latlng = map.getCenter();
+        setCurrentMapLocation({
+          latitude: latlng.Ma,
+          longitude: latlng.La,
+        });
+      });
+    });
+  };
 
   // 주소 검색 api
   const handle = {
@@ -238,9 +280,6 @@ const SetPositionUserLocation: React.FC<IProps> = ({
               },
             }
           );
-          console.log("위도", response.data.documents[0].x);
-          console.log("위도", response.data.documents[0].y);
-
           // 위도,경도값을 지도의 currentMapLocation state를 변경시킨다
           setCurrentMapLocation({
             latitude: response.data.documents[0].x,
@@ -298,6 +337,10 @@ const SetPositionUserLocation: React.FC<IProps> = ({
     closeModal();
   };
 
+  useEffect(() => {
+    onLoadKakaoMap();
+  }, [currentMapLocation]);
+
   return (
     <Container className="modal-contents">
       <div className="set-position-header">
@@ -314,11 +357,7 @@ const SetPositionUserLocation: React.FC<IProps> = ({
           defaultQuery="한서대학교"
         />
       ) : (
-        <KakaoMap
-          latitude={currentMapLocation.latitude}
-          longitude={currentMapLocation.longitude}
-          setCurrentMapLocation={setCurrentMapLocation}
-        />
+        <MapContainer id="map" />
       )}
 
       <div className="set-position-name">

@@ -24,6 +24,7 @@ import UserColor from "../components/introduce/UserColor";
 import { UserState } from "../types/reduxState";
 import { getUserInfo, meAPI } from "./../lib/api/user";
 import { getFavoriteList } from "../lib/api/product";
+import Script from "next/script";
 
 interface BackgroundColor {
   firstColor: string;
@@ -67,7 +68,7 @@ const MobileContainer = styled.div`
 `;
 
 // const queryClient = new QueryClient();
-
+const KAKAO_API_KEY = "0292e60416960470863fce8c75ff0a78";
 const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   // 유저정보를 받아서 리덕스 스토어에 저장하기
   const clientData = Object(data).userData as UserState;
@@ -88,9 +89,12 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
       dispatch(userActions.setLoggedUser(clientData));
     }
   }, []);
-
   return (
     <Container firstColor={firstColor} secondColor={secondColor}>
+      <Script
+        strategy="beforeInteractive"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY}&autoload=false&libraries=services`}
+      />
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <GlobalStyle />
