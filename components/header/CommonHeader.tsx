@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import { RootState } from "../../store";
 import ProfileUserIcon from "../../public/static/svg/myPage/ProfileUserIcon.svg";
 import { getSellerName } from "../../lib/api/user";
+import { Avatar } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 const Conatainer = styled.div`
   position: sticky;
@@ -32,19 +34,14 @@ const Conatainer = styled.div`
       display: flex;
       align-items: center;
       .profile-image-wrapper {
-        background: ${palette.main_text_color};
+        /* background: ${palette.main_text_color};
         width: 35px;
         height: 35px;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-right: 10px;
-        img {
-          width: 25px;
-          height: 25px;
-          font-size: 25px;
-        }
+        margin-right: 10px; */
       }
     }
     .headerLeftIcon {
@@ -144,12 +141,11 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
         <div className="headerLeft">
           <BeforeIcon className="headerLeftIcon" onClick={goToBackpage} />
           {pathName === "/user" ? (
-            <div className="profile-image-wrapper">
-              <img
-                src={`http://localhost:4000/${LoggedUser.profileImage?.path}`}
-                alt="프로필이미지"
-              />
-            </div>
+            <Avatar
+              src={`http://localhost:4000/${LoggedUser.profileImage?.path}`}
+              alt="판매자 프로필"
+              sx={{ width: 35, height: 35, bgcolor: grey[50], mr: 1 }}
+            />
           ) : null}
           <p>{changeURLName()}</p>
         </div>

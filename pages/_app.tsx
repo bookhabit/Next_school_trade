@@ -24,11 +24,13 @@ import UserColor from "../components/introduce/UserColor";
 import { UserState } from "../types/reduxState";
 import { getUserInfo, meAPI } from "./../lib/api/user";
 import { getFavoriteList } from "../lib/api/product";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 interface BackgroundColor {
   firstColor: string;
   secondColor: string;
 }
+const theme = createTheme({});
 
 const Container = styled.div<BackgroundColor>`
   display: flex;
@@ -85,28 +87,30 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
 
   useEffect(() => {
     if (clientData) {
+      console.log("app_tsx 로그인유저", clientData);
       dispatch(userActions.setLoggedUser(clientData));
     }
   }, []);
-
   return (
-    <Container firstColor={firstColor} secondColor={secondColor}>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <GlobalStyle />
-          <PcContainer className="pc-style">
-            <Introduce />
-          </PcContainer>
-          <MobileContainer className="mobile-style">
-            <Header />
-            <Component {...pageProps} />
-            <div id="root-modal" />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </MobileContainer>
-          <UserColor />
-        </Hydrate>
-      </QueryClientProvider>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container firstColor={firstColor} secondColor={secondColor}>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <GlobalStyle />
+            <PcContainer className="pc-style">
+              <Introduce />
+            </PcContainer>
+            <MobileContainer className="mobile-style">
+              <Header />
+              <Component {...pageProps} />
+              <div id="root-modal" />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </MobileContainer>
+            <UserColor />
+          </Hydrate>
+        </QueryClientProvider>
+      </Container>
+    </ThemeProvider>
   );
 };
 

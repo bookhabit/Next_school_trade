@@ -31,6 +31,8 @@ import {
 import { favoriteActions } from "../../store/favorite";
 import { useDispatch } from "react-redux";
 import FavoriteModal from "./FavoriteModal";
+import { Avatar } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 interface cssProps {
   postOwner: boolean;
@@ -130,7 +132,7 @@ const Container = styled.div<cssProps>`
         display: flex;
         align-items: center;
         /* 작성자가 아닐 경우 */
-        .profile-image-wrapper {
+        /* .profile-image-wrapper {
           background: white;
           width: 35px;
           height: 35px;
@@ -139,10 +141,7 @@ const Container = styled.div<cssProps>`
           justify-content: center;
           align-items: center;
           margin-right: 10px;
-          img {
-            width: 25px;
-          }
-        }
+        } */
         p {
           cursor: pointer;
           font-size: 20px;
@@ -514,12 +513,11 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
             ) : (
               <>
                 {ownerInfo.profileImage?.path && (
-                  <div className="profile-image-wrapper">
-                    <img
-                      src={`http://localhost:4000/${ownerInfo.profileImage?.path}`}
-                      alt="판매자 프로필이미지"
-                    />
-                  </div>
+                  <Avatar
+                    src={`http://localhost:4000/${ownerInfo.profileImage?.path}`}
+                    alt="판매자 프로필"
+                    sx={{ width: 25, height: 25, bgcolor: grey[50], mr: 1 }}
+                  />
                 )}
                 <p onClick={goToSellerProfile}>{ownerInfo.nickname}</p>
               </>

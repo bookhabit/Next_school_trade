@@ -16,6 +16,8 @@ import { reviewListResponseType } from "../../types/review";
 import { isEmpty } from "lodash";
 import DataNull from "../../components/common/DataNull";
 import FailFetchData from "../../components/common/FailFetchData";
+import { Avatar } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 const Container = styled.div`
   @media only screen and (min-width: 430px) {
@@ -37,15 +39,6 @@ const Container = styled.div`
     .seller-name-wrap {
       display: flex;
       align-items: center;
-      .profile-image {
-        width: 50px;
-        height: 50px;
-        background-color: ${palette.main_text_color};
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
       p {
         font-size: 20px;
         font-weight: bold;
@@ -108,12 +101,11 @@ const profile: NextPage = ({ data }: any) => {
       <Container>
         <div className="seller-profile">
           <div className="seller-name-wrap">
-            <div className="profile-image">
-              <img
-                src={`http://localhost:4000/${sellerProfileImg}`}
-                alt="판매자 프로필"
-              />
-            </div>
+            <Avatar
+              src={`http://localhost:4000/${sellerProfileImg}`}
+              alt="판매자 프로필"
+              sx={{ width: 35, height: 35, bgcolor: grey[50] }}
+            />
             <p className="seller-name">{sellerName}</p>
           </div>
           <div className="seller-grade">
