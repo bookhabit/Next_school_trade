@@ -309,7 +309,6 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
     imageAlt = productDetail.images[0].filename;
   }
   const router = useRouter();
-
   const [favoriteProduct, setFavoriteProduct] = useState(productDetail.like);
   console.log("productDetail.like", productDetail.like);
 
@@ -317,8 +316,14 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
 
   // 이전 페이지 이동
   const goToBackpage = () => {
+    // 스크롤 위치 가져오기
+    const scrollPosition = localStorage.getItem("scrollPosition") as string;
+    if (scrollPosition) {
+      localStorage.setItem("scrollRestoration", scrollPosition);
+    }
     window.history.back();
   };
+
   // 판매자 정보 페이지로 이동 - seller.id 넘김
   const goToSellerProfile = () => {
     router.push({

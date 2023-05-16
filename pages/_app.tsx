@@ -87,7 +87,6 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
 
   useEffect(() => {
     if (clientData) {
-      console.log("app_tsx 로그인유저", clientData);
       dispatch(userActions.setLoggedUser(clientData));
     }
   }, []);

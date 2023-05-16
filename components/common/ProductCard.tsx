@@ -161,7 +161,6 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
 
   // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
   const [favoriteProduct, setFavoriteProduct] = useState(product.like);
-  console.log("productlike", product.like);
 
   const dispatch = useDispatch();
 
@@ -192,8 +191,11 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
       return false;
     }
   };
-
   const goToDetail = () => {
+    if (document.scrollingElement) {
+      const scroll = document.scrollingElement.scrollTop;
+      localStorage.setItem("scrollPosition", String(scroll));
+    }
     router.push({
       pathname: `/product/[id]`,
       query: { id: product.id },

@@ -74,6 +74,24 @@ const home = () => {
     (state: RootState) => state.favorite.showFavoriteModal
   );
 
+  useEffect(() => {
+    // 스크롤
+    const scrollRestoration = localStorage.getItem("scrollRestoration");
+    if (scrollRestoration === null) {
+      window.scrollTo(0, 0);
+    }
+    if (scrollRestoration) {
+      // 스크롤 위치를 복원합니다.
+      window.scrollTo(0, Number(scrollRestoration));
+      setTimeout(() => {
+        window.scrollTo(0, Number(scrollRestoration));
+      }, 1000);
+
+      // 변경시킨 후 로컬스토리지에 scrollRestoration 키 제거
+      localStorage.removeItem("scrollRestoration");
+    }
+  }, []);
+
   return (
     <>
       <Container>
