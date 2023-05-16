@@ -16,6 +16,7 @@ import Loading from "../../components/common/Loading";
 import FailFetchData from "../../components/common/FailFetchData";
 import DataNull from "../../components/common/DataNull";
 import { isEmpty } from "lodash";
+import SkeletonLoading from "../../components/common/SkeletonLoading";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -60,7 +61,7 @@ const categoryHome = ({ categoryName }: any) => {
   return (
     <>
       <Container>
-        {status === "loading" && <Loading />}
+        {status === "loading" && <SkeletonLoading />}
         {status === "error" && <FailFetchData />}
         {status === "success" &&
           data.pages.map((page, index) =>

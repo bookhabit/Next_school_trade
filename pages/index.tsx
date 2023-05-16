@@ -22,6 +22,7 @@ import FavoriteModal from "../components/product/FavoriteModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { cookieStringToObject } from "../lib/utils";
+import SkeletonLoading from "../components/common/SkeletonLoading";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -76,7 +77,7 @@ const home = () => {
   return (
     <>
       <Container>
-        {status === "loading" && <Loading />}
+        {status === "loading" && <SkeletonLoading />}
         {status === "error" && <FailFetchData />}
         {status === "success" &&
           data.pages.map((page, index) =>
