@@ -230,7 +230,6 @@ const SetPositionUserLocation: React.FC<IProps> = ({
         currentMapLocation.latitude,
         currentMapLocation.longitude
       );
-      console.log("markerPosition", markerPosition);
 
       // 지도를 클릭한 위치에 표출할 마커
       const marker = new window.kakao.maps.Marker({
@@ -239,7 +238,7 @@ const SetPositionUserLocation: React.FC<IProps> = ({
       marker.setMap(map);
 
       // 드래그 이벤트 발생 시 중심좌표 변경
-      kakao.maps.event.addListener(map, "dragend", function () {
+      window.kakao.maps.event.addListener(map, "dragend", function () {
         // 지도 중심좌표를 얻어옵니다
         var latlng = map.getCenter();
         setCurrentMapLocation({
@@ -282,8 +281,8 @@ const SetPositionUserLocation: React.FC<IProps> = ({
           );
           // 위도,경도값을 지도의 currentMapLocation state를 변경시킨다
           setCurrentMapLocation({
-            latitude: response.data.documents[0].x,
-            longitude: response.data.documents[0].y,
+            latitude: response.data.documents[0].y,
+            longitude: response.data.documents[0].x,
           });
         } catch (e) {
           console.log("지도를 불러오는데 실패하였습니다.");
