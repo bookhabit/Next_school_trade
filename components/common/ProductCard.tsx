@@ -30,6 +30,9 @@ const Container = styled.div`
   margin-bottom: 10px;
   display: flex;
   padding-bottom: 100px;
+  &:hover {
+    height: 110px;
+  }
 
   .productImg {
     width: 116px;
