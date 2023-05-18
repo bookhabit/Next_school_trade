@@ -126,14 +126,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const cookieObject = cookieStringToObject(context.req?.headers.cookie);
   try {
-    await queryClient.prefetchInfiniteQuery(["productList"], async () => {
-      const res = await axios.get("http://localhost:4000/content/list", {
-        headers: {
-          Authorization: "Bearer " + cookieObject.access_token,
-        },
+    if(cookieObject){
+      await queryClient.prefetchInfiniteQuery(["productList"], async () => {
+        const res = await axios.get("http://localhost:4000/content/list", {
+          headers: {
+            Authorization: "Bearer " + cookieObject.access_token,
+          },
+        });
+        return res.data;
       });
-      return res.data;
-    });
+    }else{
+      await queryClient.prefetchInfiniteQuery(["productList"], async () => {
+        const res = await axios.get("http://localhost:4000/content/list");
+        return res.data;
+      });
+    }
     return {
       props: {
         // infiniteQuery를 사용하거나 Promise.all을 사용할 경우 JSON처리 필수
