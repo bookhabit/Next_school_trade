@@ -237,7 +237,7 @@ const SliderItem = styled.div`
 `;
 
 interface IProps {
-  initialProductData: productListType | null;
+  initialProductData: productListType;
 }
 
 const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
@@ -264,7 +264,21 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
 
   // 이미지
   console.log("초기데이터 이미지 타입", initialProductData?.images);
-  const [showImages, setShowImages] = useState<string[]>([]);
+  const prevImgList: string[] = initialProductData.images.map((image) => {
+    return image.path;
+  });
+
+  const prevRegisterImgList = initialProductData.images.map(async (image) => {
+    const prevRegisterImgRes = await axios.get(
+      `http://localhost:4000/${image.path}`
+    );
+
+    const prevRegisterImg: Blob = prevRegisterImgRes.data;
+    return prevRegisterImg;
+  });
+
+  console.log("prevImgList", prevImgList);
+  const [showImages, setShowImages] = useState<string[]>(prevImgList);
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
   console.log("regiseterImages type", registerImages);
@@ -333,6 +347,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
       }
 
       setShowImages(imageUrlLists);
+      console.log(imageUrlLists);
       setRegisterImages(registerImageList);
     }
   };
@@ -470,7 +485,10 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
             <Slick>
               {showImages.map((image: string, id: number) => (
                 <SliderItem key={id} className="preview-image-box">
-                  <img src={image} alt={`${image}-${id}`} />
+                  <img
+                    src={`http://localhost:4000/${image}`}
+                    alt={`${image}-${id}`}
+                  />
                   <Delete
                     onClick={() => handleDeleteImage(id)}
                     className="preview-image-delete-icon"

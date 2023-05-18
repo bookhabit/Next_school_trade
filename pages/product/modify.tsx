@@ -10,28 +10,28 @@ const Container = styled.div`
   }
 `;
 
-const modify = () => {
-  // router의 query로 상품 데이터 가져오기
-  const router = useRouter();
-  const queryData = router.query.productDetail;
-  let initialProductData: productListType | null = null;
-  if (typeof queryData === "string") {
-    initialProductData = JSON.parse(queryData);
-  }
+interface Props {
+  initialProductData: productListType;
+}
 
-  useEffect(() => {
-    console.log("초기데이터 렌더링");
-  }, []);
-
+const modify = ({ initialProductData }: Props) => {
+  console.log("initialProductData 서버사이드", initialProductData);
   return (
     <Container>
-      <ModifyProduct
-        initialProductData={
-          initialProductData == null ? null : initialProductData
-        }
-      />
+      <ModifyProduct initialProductData={initialProductData} />
     </Container>
   );
+};
+
+modify.getInitialProps = async ({ query }: any) => {
+  // router의 query로 상품 데이터 가져오기
+  const queryData = query.productDetail;
+  let initialProductData: productListType;
+  if (typeof queryData === "string") {
+    initialProductData = JSON.parse(queryData);
+    return { initialProductData };
+  }
+  return {};
 };
 
 export default modify;
