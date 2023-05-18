@@ -4,11 +4,12 @@ import palette from "../../styles/palette";
 import ProfileUserIcon from "../../public/static/svg/myPage/ProfileUserIcon.svg";
 import CameraIcon from "../../public/static/svg/myPage/profileCamera.svg";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Button from "../common/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { userActions } from "../../store/user";
 
 const Container = styled.form`
   padding: 50px 20px;
@@ -115,6 +116,7 @@ const Profile = () => {
     }
   };
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // 비밀번호변경 모달
   const [changePassword, setChangePassword] = useState(false);
@@ -155,6 +157,7 @@ const Profile = () => {
       );
       console.log(result);
       // api 성공 시 페이지 새로고침
+      dispatch(userActions.setLoggedUser(result.data));
       router.push("/user");
     } catch (e) {
       console.log(e);

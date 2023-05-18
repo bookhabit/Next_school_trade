@@ -141,11 +141,14 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
         <div className="headerLeft">
           <BeforeIcon className="headerLeftIcon" onClick={goToBackpage} />
           {pathName === "/user" ? (
+            LoggedUser.profileImage?.path?
             <Avatar
               src={`http://localhost:4000/${LoggedUser.profileImage?.path}`}
               alt="판매자 프로필"
               sx={{ width: 35, height: 35, bgcolor: grey[50], mr: 1 }}
             />
+             :
+            null
           ) : null}
           <p>{changeURLName()}</p>
         </div>
