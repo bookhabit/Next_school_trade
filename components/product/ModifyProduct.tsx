@@ -275,7 +275,10 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
         const prevRegisterImgList = await Promise.all(
           initialProductData.images.map(async (image) => {
             const prevRegisterImgRes = await axios.get(
-              `http://localhost:4000/${image.path}`
+              `http://localhost:4000/${image.path}`,
+              {
+                responseType: "blob",
+              }
             );
 
             console.log(
