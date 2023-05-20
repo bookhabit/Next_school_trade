@@ -17,7 +17,7 @@ import { makeMoneyString } from "../../lib/utils";
 import Slider from "react-slick";
 import Item from "./Item";
 import Slick from "./Slick";
-import { productListType } from "../../types/product/product";
+import { ImageType, productListType } from "../../types/product/product";
 import moment from "moment";
 import "moment/locale/ko";
 import { isEmpty } from "lodash";
@@ -300,18 +300,9 @@ interface IProps {
 }
 
 const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
-  console.log("props로 데이터 받음", productDetail.images);
-  let imagepath: string;
-  let imageAlt: string;
-  if (!isEmpty(productDetail.images[0])) {
-    console.log(productDetail.images[0].path);
-    imagepath = productDetail.images[0].path;
-    imageAlt = productDetail.images[0].filename;
-  }
+  console.log("props로 데이터 받음", productDetail);
   const router = useRouter();
   const [favoriteProduct, setFavoriteProduct] = useState(productDetail.like);
-  console.log("productDetail.like", productDetail.like);
-
   const isLogged = useSelector((state: RootState) => state.user.isLogged);
 
   // 이전 페이지 이동
@@ -483,7 +474,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
         <div className="detail-product-image">
           <Slick>
             {!isEmpty(productDetail.images[0]) ? (
-              productDetail.images.map((item: any, index: number) => (
+              productDetail.images.map((item: ImageType, index: number) => (
                 <SliderItem key={index}>
                   <img
                     src={`http://localhost:4000/${item.path}`}
