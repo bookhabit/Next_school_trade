@@ -138,7 +138,9 @@ const Profile = () => {
     const formData: FormData = new FormData();
     formData.append("profileImage", profileImg as string);
     formData.append("nickname", nickname);
-    formData.append("password", password);
+    if(password){
+      formData.append("password", password);
+    }
     // FormData 객체의 내용 출력
     for (const pair of formData.entries()) {
       console.log(pair[0], pair[1]);

@@ -262,23 +262,49 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
 
   // Local
 
-  // 이미지
+  // 썸네일 초기이미지
   console.log("초기데이터 이미지 타입", initialProductData?.images);
   const prevImgList: string[] = initialProductData.images.map((image) => {
     return image.path;
   });
-
-  const prevRegisterImgList = initialProductData.images.map(async (image) => {
-    const prevRegisterImgRes = await axios.get(
-      `http://localhost:4000/${image.path}`
+  
+  // 등록폼 초기이미지
+  useEffect(() => {
+    const getPrevRegisterImgList = async () => {
+      const prevRegisterImgList = await Promise.all(
+        initialProductData.images.map(async (image) => {
+          const prevRegisterImgRes = await axios.get(
+            `http://localhost:4000/${image.path}`
+          );
+    
+          const prevRegisterImg: Blob = prevRegisterImgRes.data;
+          return prevRegisterImg;
+        })
+      );
+    setRegisterImages(prevRegisterImgList)
+    };
+    getPrevRegisterImgList();
+    // 지도데이터를 상품의 초기값으로 설정
+    dispatch(
+      registerPositionActions.setLocation(
+        initialProductData ? initialProductData.location : ""
+      )
     );
-
-    const prevRegisterImg: Blob = prevRegisterImgRes.data;
-    return prevRegisterImg;
-  });
+    dispatch(
+      registerPositionActions.setLatitude(
+        initialProductData ? initialProductData.latitude : 0
+      )
+    );
+    dispatch(
+      registerPositionActions.setLongitude(
+        initialProductData ? initialProductData.longitude : 0
+      )
+    );
+  }, []);
+  
 
   console.log("prevImgList", prevImgList);
-  const [showImages, setShowImages] = useState<string[]>(prevImgList);
+  const [thumbnail, setThumbnail] = useState<string[]>(prevImgList);
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
   console.log("regiseterImages type", registerImages);
@@ -328,7 +354,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
       return;
     } else {
       // 썸네일
-      let imageUrlLists = [...showImages]; // 썸네일
+      let imageUrlLists = [...thumbnail]; // 썸네일
       let registerImageList = [...registerImages]; // 등록 이미지
       for (let i = 0; i < imageLists.length; i++) {
         const currentImageUrl = URL.createObjectURL(imageLists[i]);
@@ -346,7 +372,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
         registerImageList = registerImageList.slice(0, 5);
       }
 
-      setShowImages(imageUrlLists);
+      setThumbnail(imageUrlLists);
       console.log(imageUrlLists);
       setRegisterImages(registerImageList);
     }
@@ -355,7 +381,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
   // X버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id: number) => {
     // 해당 썸네일 이미지 삭제
-    setShowImages(showImages.filter((_, index) => index !== id));
+    setThumbnail(thumbnail.filter((_, index) => index !== id));
     // 해당 상품등록 폼 이미지 삭제
     const files = Array.from(registerImages);
     files.splice(id, 1); // 인덱스 id에 해당하는 원소 1개 삭제
@@ -441,25 +467,6 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
     }
   };
 
-  // 지도데이터를 상품의 초기값으로 설정
-  useEffect(() => {
-    dispatch(
-      registerPositionActions.setLocation(
-        initialProductData ? initialProductData.location : ""
-      )
-    );
-    dispatch(
-      registerPositionActions.setLatitude(
-        initialProductData ? initialProductData.latitude : 0
-      )
-    );
-    dispatch(
-      registerPositionActions.setLongitude(
-        initialProductData ? initialProductData.longitude : 0
-      )
-    );
-  }, []);
-
   return (
     <Container onSubmit={registerProduct}>
       <div className="register-image-box">
@@ -474,16 +481,16 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
               multiple
               onChange={handleAddImages}
             />
-            <p className="file-image-count">{showImages.length}/5</p>
+            <p className="file-image-count">{thumbnail.length}/5</p>
           </div>
           <div className="preview-image-box-wrap">
-            {isEmpty(showImages) && errorImgCountMessage !== "" ? (
+            {isEmpty(thumbnail) && errorImgCountMessage !== "" ? (
               <p className="preview-image-box-error-message">
                 {errorImgCountMessage}
               </p>
             ) : null}
             <Slick>
-              {showImages.map((image: string, id: number) => (
+              {thumbnail.map((image: string, id: number) => (
                 <SliderItem key={id} className="preview-image-box">
                   <img
                     src={`http://localhost:4000/${image}`}
