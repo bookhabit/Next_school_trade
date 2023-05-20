@@ -271,17 +271,20 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
   // 등록폼 초기이미지
   useEffect(() => {
     const getPrevRegisterImgList = async () => {
-      const prevRegisterImgList = await Promise.all(
-        initialProductData.images.map(async (image) => {
-          const prevRegisterImgRes = await axios.get(
-            `http://localhost:4000/${image.path}`
-          );
-    
-          const prevRegisterImg: Blob = prevRegisterImgRes.data;
-          return prevRegisterImg;
-        })
-      );
-    setRegisterImages(prevRegisterImgList)
+      if(!isEmpty(initialProductData.images)){
+        const prevRegisterImgList = await Promise.all(
+          initialProductData.images.map(async (image) => {
+            const prevRegisterImgRes = await axios.get(
+              `http://localhost:4000/${image.path}`
+            );
+      
+            const prevRegisterBinaryImg: Blob = prevRegisterImgRes.data;
+            const prevRegisterImg = new File([prevRegisterBinaryImg],image.path)
+            return prevRegisterImg;
+          })
+        );
+        setRegisterImages(prevRegisterImgList)
+      }
     };
     getPrevRegisterImgList();
     // 지도데이터를 상품의 초기값으로 설정
@@ -309,7 +312,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
   console.log('thumbnail',thumbnail.length)
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
-  console.log("regiseterImages type", registerImages);
+  console.log("regiseterImages", registerImages);
   // 상품 등록 폼
   const [productInputs, setProductInputs] = useState({
     title: initialProductData ? initialProductData.title : "",
@@ -448,7 +451,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
       try {
         // 상품수정 api 호출
         const res = await axios.patch(
-          `http://localhost:4000/content/update/${initialProductData?.id}`,
+          `http://localhost:4000/content/update/${initialProductData.id}`,
           formData,
           {
             headers: {
@@ -492,7 +495,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
               </p>
             ) : null}
             <Slick>
-              {thumbnail.map((image: string, id: number) => (
+              {!isEmpty(thumbnail) && thumbnail.map((image: string, id: number) => (
                 <SliderItem key={id} className="preview-image-box">
                   <img
                     src={id<prevImgList.length?`http://localhost:4000/${image}`:image}
