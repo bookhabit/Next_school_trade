@@ -26,6 +26,7 @@ const modify = ({ initialProductData }: Props) => {
 modify.getInitialProps = async ({ query }: any) => {
   // router의 query로 상품 데이터 가져오기
   const queryData = query.productDetail;
+  console.log('queryData',queryData)
   let initialProductData: productListType;
   if (typeof queryData === "string") {
     initialProductData = JSON.parse(queryData);

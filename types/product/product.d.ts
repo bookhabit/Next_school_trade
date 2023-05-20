@@ -43,21 +43,9 @@ export type productListType = {
 
 type ImageType = {
   id: number;
-  filename: string;
+  
 
   path: string;
-
-  fieldname: string;
-
-  originalname: string;
-
-  encoding: string;
-
-  mimetype: string;
-
-  destination: string;
-
-  size: number;
 
   createdAt: Date;
 

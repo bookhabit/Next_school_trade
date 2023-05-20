@@ -264,14 +264,14 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
 
   // 썸네일 초기이미지
   console.log("초기데이터 이미지 타입", initialProductData?.images);
-  const prevImgList: string[] = initialProductData.images.map((image) => {
+  const prevImgList: string[] = initialProductData?.images.map((image) => {
     return image.path;
   });
   
   // 등록폼 초기이미지
   useEffect(() => {
     const getPrevRegisterImgList = async () => {
-      if(!isEmpty(initialProductData.images)){
+      if(!isEmpty(initialProductData?.images)){
         const prevRegisterImgList = await Promise.all(
           initialProductData.images.map(async (image) => {
             const prevRegisterImgRes = await axios.get(
@@ -309,7 +309,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
   console.log("prevImgList", prevImgList);
   const [thumbnail, setThumbnail] = useState<string[]>(prevImgList);
   console.log('thumbnail',thumbnail)
-  console.log('thumbnail',thumbnail.length)
+  console.log('thumbnail',thumbnail?.length)
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
   console.log("regiseterImages", registerImages);
