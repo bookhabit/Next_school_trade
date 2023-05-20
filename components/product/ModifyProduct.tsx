@@ -305,6 +305,8 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
 
   console.log("prevImgList", prevImgList);
   const [thumbnail, setThumbnail] = useState<string[]>(prevImgList);
+  console.log('thumbnail',thumbnail)
+  console.log('thumbnail',thumbnail.length)
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
   console.log("regiseterImages type", registerImages);
@@ -493,7 +495,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
               {thumbnail.map((image: string, id: number) => (
                 <SliderItem key={id} className="preview-image-box">
                   <img
-                    src={`http://localhost:4000/${image}`}
+                    src={id<prevImgList.length?`http://localhost:4000/${image}`:image}
                     alt={`${image}-${id}`}
                   />
                   <Delete
