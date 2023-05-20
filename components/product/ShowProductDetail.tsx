@@ -300,7 +300,7 @@ interface IProps {
 }
 
 const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
-  console.log("props로 데이터 받음", productDetail);
+  console.log("props로 데이터 받음", productDetail.images);
   let imagepath: string;
   let imageAlt: string;
   if (!isEmpty(productDetail.images[0])) {
@@ -486,8 +486,8 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
               productDetail.images.map((item: any, index: number) => (
                 <SliderItem key={index}>
                   <img
-                    src={`http://localhost:4000/${imagepath}`}
-                    alt={`http://localhost:4000/${imageAlt}`}
+                    src={`http://localhost:4000/${item.path}`}
+                    alt={`http://localhost:4000/${item.id}`}
                   />
                 </SliderItem>
               ))

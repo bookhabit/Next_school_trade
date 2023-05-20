@@ -267,23 +267,39 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
   const prevImgList: string[] = initialProductData.images.map((image) => {
     return image.path;
   });
-  
+
   // 등록폼 초기이미지
   useEffect(() => {
     const getPrevRegisterImgList = async () => {
-      if(!isEmpty(initialProductData.images)){
+      if (!isEmpty(initialProductData.images)) {
         const prevRegisterImgList = await Promise.all(
           initialProductData.images.map(async (image) => {
             const prevRegisterImgRes = await axios.get(
               `http://localhost:4000/${image.path}`
             );
-      
-            const prevRegisterBinaryImg: Blob = prevRegisterImgRes.data;
-            const prevRegisterImg = new File([prevRegisterBinaryImg],image.path)
+
+            console.log(
+              "prevRegisterImgRes.data 바이너리형태: ",
+              prevRegisterImgRes.data
+            );
+            const prevRegisterBinaryImg: Blob = new Blob(
+              [prevRegisterImgRes.data],
+              { type: prevRegisterImgRes.headers["content-type"] }
+            );
+            console.log(
+              "prevRegisterBinaryImg  Blob형태: ",
+              prevRegisterBinaryImg
+            );
+            const prevRegisterImg = new File(
+              [prevRegisterBinaryImg],
+              image.path,
+              { type: prevRegisterImgRes.headers["content-type"] }
+            );
+            console.log("prevRegisterImg 파일형태", prevRegisterImg);
             return prevRegisterImg;
           })
         );
-        setRegisterImages(prevRegisterImgList)
+        setRegisterImages(prevRegisterImgList);
       }
     };
     getPrevRegisterImgList();
@@ -304,12 +320,11 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
       )
     );
   }, []);
-  
 
   console.log("prevImgList", prevImgList);
   const [thumbnail, setThumbnail] = useState<string[]>(prevImgList);
-  console.log('thumbnail',thumbnail)
-  console.log('thumbnail',thumbnail.length)
+  console.log("thumbnail", thumbnail);
+  console.log("thumbnail", thumbnail.length);
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
   console.log("regiseterImages", registerImages);
@@ -495,18 +510,23 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
               </p>
             ) : null}
             <Slick>
-              {!isEmpty(thumbnail) && thumbnail.map((image: string, id: number) => (
-                <SliderItem key={id} className="preview-image-box">
-                  <img
-                    src={id<prevImgList.length?`http://localhost:4000/${image}`:image}
-                    alt={`${image}-${id}`}
-                  />
-                  <Delete
-                    onClick={() => handleDeleteImage(id)}
-                    className="preview-image-delete-icon"
-                  />
-                </SliderItem>
-              ))}
+              {!isEmpty(thumbnail) &&
+                thumbnail.map((image: string, id: number) => (
+                  <SliderItem key={id} className="preview-image-box">
+                    <img
+                      src={
+                        id < prevImgList.length
+                          ? `http://localhost:4000/${image}`
+                          : image
+                      }
+                      alt={`${image}-${id}`}
+                    />
+                    <Delete
+                      onClick={() => handleDeleteImage(id)}
+                      className="preview-image-delete-icon"
+                    />
+                  </SliderItem>
+                ))}
             </Slick>
           </div>
         </div>
