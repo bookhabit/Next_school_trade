@@ -28,13 +28,24 @@ const Container = styled.div`
             justify-content:center;
             align-items:center;
             padding:10px;
-        }
-
-        p{
-            margin-top:5px;
-            font-size:13px;
-            font-weight:bold;
-            color:${palette.main_text_color}
+            &:hover{
+                p{
+                    font-size:15px;
+                }
+            }
+            .selected{
+                    color:${palette.currentPage};    
+                    font-size:15px;
+                    path{
+                    fill:${palette.currentPage}
+                }
+            }
+            p{
+                margin-top:5px;
+                font-size:13px;
+                font-weight:bold;
+                color:${palette.main_text_color};
+            }
         }
     }
 `
@@ -43,16 +54,25 @@ const LinkFooter = () => {
     const router = useRouter();
     // 로그인 확인
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
+    
+
+    // 현재 페이지의 아이콘색깔 다르게 지정하기
+    const setCurrentPage = (path:string) => {
+        if (router.pathname === path) {
+            return "selected";
+        }
+    };
     return (
         <Container>
             <div className='link-flex-wrap'>
-                <div className='link-flex-item' onClick={()=>{
-                    router.push({
-                        pathname:"/"
-                    })
+                <div className='link-flex-item' 
+                    onClick={()=>{
+                        router.push({
+                            pathname:"/"
+                        })
                 }}>
-                    <HomeIcon/>
-                    <p>홈</p>
+                    <HomeIcon className={setCurrentPage('/')}/>
+                    <p className={setCurrentPage('/')}>홈</p>
                 </div>
                 
                 <div className='link-flex-item' onClick={()=>{
@@ -65,7 +85,7 @@ const LinkFooter = () => {
                         router.push("/auth")
                     }
                 }}>
-                    <RegisterIcon/>
+                    <RegisterIcon className={setCurrentPage('/product/register')}/>
                     <p>등록</p>
                 </div>
                 
@@ -79,8 +99,8 @@ const LinkFooter = () => {
                         router.push("/auth")
                     }
                 }}>
-                    <ChattingIcon/>
-                    <p>채팅</p>
+                    <ChattingIcon className={setCurrentPage('/user/chatting')}/>
+                    <p className={setCurrentPage('/user/chatting')}>채팅</p>
                 </div>
                 
                 <div className='link-flex-item' onClick={()=>{
@@ -92,9 +112,11 @@ const LinkFooter = () => {
                         alert('로그인이 필요합니다.')
                         router.push("/auth")
                     }
-                }}>
-                     <UserIcon/>
-                    <p>내정보</p>
+                    
+                }}
+                >
+                     <UserIcon className={setCurrentPage('/user')}/>
+                    <p className={setCurrentPage('/user')}>내정보</p>
                 </div>
             </div>
         </Container>

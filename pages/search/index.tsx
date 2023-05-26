@@ -31,7 +31,6 @@ const Container = styled.div`
 `;
 
 const index = ({keyword}:IProps) => {
-    console.log('카테고리keyword',keyword)
     const {
         data, // 💡 data.pages를 갖고 있는 배열
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -90,7 +89,6 @@ const index = ({keyword}:IProps) => {
 // 서버사이드 렌더링으로 카테고리의 쿼리를 보내서 상품리스트 가져옴
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const { keyword } = query;
-    console.log("서버keyword",keyword)
     const queryClient = new QueryClient();
   
     try {
