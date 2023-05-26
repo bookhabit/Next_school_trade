@@ -105,3 +105,11 @@ export const deleteProductAPI = async (contentId: number) => {
     withCredentials: true,
   });
 };
+
+// 상품검색
+export const getSearchProductList = (
+  { pageParam = 0 }: QueryFunctionContext,
+  keyword: string
+) =>
+  axios
+    .get(`http://localhost:4000/content/search?page=${pageParam}&keyword=${keyword}`).then((res) => res?.data);

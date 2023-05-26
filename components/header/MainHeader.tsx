@@ -102,21 +102,13 @@ const Conatainer = styled.div`
 `
 
 const mainHeader = () => {
+    const router = useRouter();
     const [testAlarmState,setTestAlarmState] = useState<boolean>(true)
     const testAlarmCount = 2
     const userUniversity = useSelector((state:RootState)=>state.user.university)
 
     // 로그인 확인
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
-    const router = useRouter();
-    const goToAlarm = ()=>{
-        if(isLogged){
-            router.push("/user/alarm")
-        }else{
-            alert('로그인이 필요합니다.')
-            router.push("/auth")
-        }
-    }
 
     // 검색창 - input
     const searchValue = useSelector((state:RootState)=>state.searchBar.value)
@@ -128,6 +120,24 @@ const mainHeader = () => {
         dispatch(searchBarActions.setSearchValue(event.target.value))
     }
 
+    // 알림페이지로 이동
+    const goToAlarm = ()=>{
+        if(isLogged){
+            router.push("/user/alarm")
+        }else{
+            alert('로그인이 필요합니다.')
+            router.push("/auth")
+        }
+    }
+    // 검색클릭하면 검색 리스트 페이지로 이동
+    const goToSearch = ()=>{
+        if(searchValue){
+            router.push({
+                pathname: '/search',
+                query: { keyword:searchValue},
+            },)
+        }
+    }
 
     return (
         <Conatainer>
@@ -135,7 +145,7 @@ const mainHeader = () => {
                 <p>{userUniversity}</p>
                 <div className='searchBar'>
                     <input className='searchInput' value={searchValue} placeholder='검색' onChange={onChangeValue} />
-                    <SearchIcon className="searchIcon"/>
+                    <SearchIcon className="searchIcon" onClick={goToSearch}/>
                 </div>
                 <div className='alarmBox'>
                     <div onClick={goToAlarm} className="alarmIcon">

@@ -12,6 +12,7 @@ import { productCategoryList } from '../../lib/staticData';
 import CategoryCard from './CategoryCard';
 import { useDispatch } from 'react-redux';
 import { searchBarActions } from '../../store/searchBar';
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
     position:fixed;
@@ -82,6 +83,7 @@ const Container = styled.div`
 `
 
 const Introduce = () => {
+    const router = useRouter();
     const user:UserState = useSelector((state:RootState):UserState=>state.user)
     const isLogged = user.isLogged;
     const linkAsIsLogged = ()=>{
@@ -97,6 +99,15 @@ const Introduce = () => {
         dispatch(searchBarActions.setSearchValue(event.target.value))
     }
 
+    // search페이지로 이동시키기
+    const goToSearch = ()=>{
+        if(searchValue){
+            router.push({
+                pathname: '/search',
+                query: { keyword:searchValue},
+                },)
+        }
+    }
     return (
         <Container>
             <LogoIcon/>
@@ -109,7 +120,7 @@ const Introduce = () => {
             <div className='introduce-bottom'>
                 <div className='introduce-search-bar'>
                     <input className='searchInput' value={searchValue}  onChange={onChangeValue} />
-                    <SearchIcon className="searchIcon"/>
+                    <SearchIcon className="searchIcon" onClick={goToSearch}/>
                 </div>
                 <CategoryCard/>
             </div>

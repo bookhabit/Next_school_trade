@@ -14,7 +14,7 @@ const Header = () => {
     const currentPathName = router.pathname;
     return (
         <Container>
-            {router.pathname==="/" || router.pathname==="/home/[name]" ? <MainHeader/> : 
+            {router.pathname==="/" || router.pathname==="/home/[name]" ||router.pathname==="/search" ? <MainHeader/> : 
             router.pathname==="/product/[id]" ? null :
             <CommonHeader pathName={currentPathName}/> }
         </Container>
