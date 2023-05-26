@@ -303,7 +303,6 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
           })
         );
         setRegisterImages(prevRegisterImgList);
-        setServerImgLength(prevRegisterImgList.length)
       }
     };
     getPrevRegisterImgList();
@@ -325,10 +324,9 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
     );
   }, []);
 
-  const [serverImgLength,setServerImgLength] = useState<number>(0);
-  const [thumbnail, setThumbnail] = useState<string[]>(prevImgList);
+  const [prevThumbnail,setPrevThumbnail] = useState<string[]>(prevImgList);
+  const [thumbnail, setThumbnail] = useState<string[]>([]);
   console.log("thumbnail", thumbnail);
-  console.log('serverImgLength',serverImgLength)
 
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
@@ -402,6 +400,15 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
       setRegisterImages(registerImageList);
     }
   };
+  // x버튼 클릭 시 이전이미지 삭제
+  const handleDeletePrevImage = (id: number) => {
+    // 해당 썸네일 이미지 삭제
+    setPrevThumbnail(prevThumbnail.filter((_, index) => index !== id));
+    // 해당 상품등록 폼 이미지 삭제
+    const files = Array.from(registerImages);
+    files.splice(id, 1); // 인덱스 id에 해당하는 원소 1개 삭제
+    setRegisterImages(files);
+  };
 
   // X버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id: number) => {
@@ -411,7 +418,6 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
     const files = Array.from(registerImages);
     files.splice(id, 1); // 인덱스 id에 해당하는 원소 1개 삭제
     setRegisterImages(files);
-    setServerImgLength((prev:number)=>prev-1)
   };
 
   // 상품등록 폼 검증
@@ -506,7 +512,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
               multiple
               onChange={handleAddImages}
             />
-            <p className="file-image-count">{thumbnail?.length}/5</p>
+            <p className="file-image-count">{thumbnail?.length+prevThumbnail.length}/5</p>
           </div>
           <div className="preview-image-box-wrap">
             {isEmpty(thumbnail) && errorImgCountMessage !== "" ? (
@@ -515,15 +521,25 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
               </p>
             ) : null}
             <Slick>
+              {!isEmpty(prevThumbnail) &&
+                prevThumbnail.map((image: string, id: number) => (
+                  <SliderItem key={id} className="preview-image-box">
+                    <img
+                      src={`http://localhost:4000/${image}`}
+                      alt={`${image}-${id}`}
+                    />
+                    <Delete
+                      onClick={() => handleDeletePrevImage(id)}
+                      className="preview-image-delete-icon"
+                    />
+                  </SliderItem>
+                ))
+              }
               {!isEmpty(thumbnail) &&
                 thumbnail.map((image: string, id: number) => (
                   <SliderItem key={id} className="preview-image-box">
                     <img
-                      src={
-                        id < serverImgLength
-                          ? `http://localhost:4000/${image}`
-                          : image
-                      }
+                      src={image}
                       alt={`${image}-${id}`}
                     />
                     <Delete
@@ -531,7 +547,8 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
                       className="preview-image-delete-icon"
                     />
                   </SliderItem>
-                ))}
+                ))
+              }
             </Slick>
           </div>
         </div>
