@@ -17,16 +17,29 @@ import styled from "styled-components";
 import LinkFooter from '../../components/footer/LinkFooter';
 import { getSearchProductList } from '../../lib/api/product';
 import { GetServerSideProps } from 'next';
+import FavoriteModal from '../../components/product/FavoriteModal';
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 
 interface IProps{
     keyword:string;
 }
 
 const Container = styled.div`
-    padding: 0px 20px;
+  padding: 0px 20px;
   padding-top: 20px;
+  .favorite-modal {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 80px !important;
+  }
   @media only screen and (min-width: 430px) {
     min-height: 100vh;
+    .favorite-modal {
+      left: auto;
+      transform: none;
+    }
   }
 `;
 
@@ -61,6 +74,11 @@ const index = ({keyword}:IProps) => {
       };
       // 스크롤 이벤트 타겟 지정
       const { setTarget } = useIntersectionObserver({ onIntersect });
+
+      // 관심목록 UI - 모달창 showState
+        const showFavoriteModal = useSelector(
+            (state: RootState) => state.favorite.showFavoriteModal
+        );
     
       return (
         <>
@@ -80,6 +98,11 @@ const index = ({keyword}:IProps) => {
                   />
                 )
               )}
+              {showFavoriteModal ? (
+                <div className="favorite-modal">
+                    <FavoriteModal />
+                </div>
+                ) : null}
           </Container>
           <LinkFooter />
         </>

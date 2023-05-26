@@ -17,16 +17,28 @@ import FailFetchData from "../../components/common/FailFetchData";
 import DataNull from "../../components/common/DataNull";
 import { isEmpty } from "lodash";
 import SkeletonLoading from "../../components/common/SkeletonLoading";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import FavoriteModal from "../../components/product/FavoriteModal";
 
 const Container = styled.div`
   padding: 0px 20px;
   padding-top: 20px;
+  .favorite-modal {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 80px !important;
+  }
   @media only screen and (min-width: 430px) {
     min-height: 100vh;
+    .favorite-modal {
+      left: auto;
+      transform: none;
+    }
   }
 `;
 const categoryHome = ({ categoryName }: any) => {
-  const lastPageNumber = 3; // 백엔드 offset 받아와야함
   const {
     data, // 💡 data.pages를 갖고 있는 배열
     fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -58,6 +70,11 @@ const categoryHome = ({ categoryName }: any) => {
   // 스크롤 이벤트 타겟 지정
   const { setTarget } = useIntersectionObserver({ onIntersect });
 
+  // 관심목록 UI - 모달창 showState
+  const showFavoriteModal = useSelector(
+    (state: RootState) => state.favorite.showFavoriteModal
+  );
+
   return (
     <>
       <Container>
@@ -76,6 +93,11 @@ const categoryHome = ({ categoryName }: any) => {
               />
             )
           )}
+          {showFavoriteModal ? (
+          <div className="favorite-modal">
+            <FavoriteModal />
+          </div>
+        ) : null}
       </Container>
       <LinkFooter />
     </>
