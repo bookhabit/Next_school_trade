@@ -303,6 +303,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
           })
         );
         setRegisterImages(prevRegisterImgList);
+        setServerImgLength(prevRegisterImgList.length)
       }
     };
     getPrevRegisterImgList();
@@ -324,8 +325,10 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
     );
   }, []);
 
-  console.log("prevImgList", prevImgList);
+  const [serverImgLength,setServerImgLength] = useState<number>(0);
   const [thumbnail, setThumbnail] = useState<string[]>(prevImgList);
+  console.log("thumbnail", thumbnail);
+  console.log('serverImgLength',serverImgLength)
 
   const [registerImages, setRegisterImages] = useState<Blob[]>([]);
   const [errorImgCountMessage, setErrorImgCountMessage] = useState<string>("");
@@ -407,8 +410,8 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
     // 해당 상품등록 폼 이미지 삭제
     const files = Array.from(registerImages);
     files.splice(id, 1); // 인덱스 id에 해당하는 원소 1개 삭제
-    // const newFileList = new FileList(files);
     setRegisterImages(files);
+    setServerImgLength((prev:number)=>prev-1)
   };
 
   // 상품등록 폼 검증
@@ -517,7 +520,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
                   <SliderItem key={id} className="preview-image-box">
                     <img
                       src={
-                        id < prevImgList.length
+                        id < serverImgLength
                           ? `http://localhost:4000/${image}`
                           : image
                       }
