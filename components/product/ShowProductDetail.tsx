@@ -303,7 +303,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   console.log("props로 데이터 받음", productDetail);
   const router = useRouter();
   const [favoriteProduct, setFavoriteProduct] = useState(productDetail.like);
-  const isLogged = useSelector((state: RootState) => state.user.isLogged);
+  const loggedUser = useSelector((state: RootState) => state.user);
 
   // 이전 페이지 이동
   const goToBackpage = () => {
@@ -324,10 +324,12 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
 
   // 게시글 주인이 아닐 경우 채팅하기 버튼 이벤트
   const goToChattingRoom = () => {
-    if (isLogged) {
+    if (loggedUser.isLogged) {
+      const roomKey = `${productDetail.id}-${loggedUser.id}-${productDetail.seller.id}`
+      console.log('roomkey',roomKey)
       router.push({
-        pathname: `/user/chatting/[id]`,
-        query: { id: productDetail.seller.id },
+        pathname: `/user/chatting/${roomKey}`,
+        query: { title:productDetail.title,price:productDetail.price},
       });
     } else {
       alert("로그인이 필요합니다.");
@@ -338,7 +340,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
 
   // 게시글 주인일 경우 채팅방 버튼 이벤트
   const goToChattinList = () => {
-    if (isLogged) {
+    if (loggedUser.isLogged) {
       router.push({
         pathname: `/user/chatting`,
       });
@@ -378,7 +380,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   // 하트아이콘 변경
   const toggleHeartIcon = async () => {
     // 로그인 확인
-    if (isLogged) {
+    if (loggedUser.isLogged) {
       if (favoriteProduct === false) {
         // 사용자의 관심목록 추가 api
         const response = await addFavorite(productDetail.id);

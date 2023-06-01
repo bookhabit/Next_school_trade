@@ -5,6 +5,9 @@ import PlusBtn from "../../public/static/svg/chatting/plusBtn.svg"
 import SubmitBtn from "../../public/static/svg/chatting/submitBtn.svg"
 
 const Container= styled.div`
+    @media only screen and (min-width: 430px) {
+        max-width:430px;
+    }
     position:fixed;
     bottom:0;      
     background-color:${palette.main_color};
