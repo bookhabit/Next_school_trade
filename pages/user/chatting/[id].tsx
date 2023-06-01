@@ -6,6 +6,10 @@ import { NextPage } from 'next';
 import styled from 'styled-components';
 import palette from '../../../styles/palette';
 import SubmitBtn from "../../../public/static/svg/chatting/submitBtn.svg"
+import io from "socket.io-client"
+
+const socket = io("http://localhost:8080/chat")
+
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
 	    min-height:100vh;
@@ -159,9 +163,8 @@ interface PropsType {
 }
 
 const chattingRoom:NextPage = (props) => {
-    console.log('채팅방페이지의 props',props)
     const {chatData} = props as PropsType
-    console.log("chatData",chatData)
+    
     return (
         <Container>
              <ChattingRoomContainer>
