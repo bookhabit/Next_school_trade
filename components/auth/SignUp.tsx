@@ -6,12 +6,13 @@ import PersonIcon from "../../public/static/svg/auth/person.svg"
 import OpenedEyeIcon from "../../public/static/svg/auth/opened_eye.svg"
 import ClosedEyeIcon from "../../public/static/svg/auth/closed_eye.svg"
 import MapIcon from "../../public/static/svg/auth/mapIcon.svg"
+import GradeIcon from "../../public/static/svg/auth/graduation-cap.svg"
+import DownIcon from "../../public/static/svg/common/selector/selector_down_arrow.svg"
 import Input from '../common/Input';
 import { useState, useEffect } from 'react';
 import Selector from '../common/Selector';
-import { monthList,dayList,yearList,universityList } from '../../lib/staticData';
+import { monthList,dayList,yearList } from '../../lib/staticData';
 import palette from '../../styles/palette';
-import { majorList } from './../../lib/staticData';
 import Button from '../common/Button';
 import { kakaoSignupAPI, signupAPI } from '../../lib/api/auth';
 import { useDispatch } from 'react-redux';
@@ -21,14 +22,14 @@ import { commonActions } from './../../store/common';
 import useValidateMode from '../../hooks/useValidateMode';
 import PasswordWarning from './PasswordWarning';
 import { authActions } from '../../store/auth';
-import Link from 'next/link';
 import useModal from '../../hooks/useModal';
-import SetPosition from '../map/SetPosition';
 import SetPositionUserLocation from '../map/SetPositionUserLocation';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Users } from '../../types/user';
 import { RootState } from '../../store';
+import Select, { GroupBase,SingleValueProps,components } from "react-select"
+import OptionsType from "react-select"
 
 type KaKaoSignUp = {
     kakaoSignUp : string;
@@ -73,7 +74,10 @@ const Container = styled.form<KaKaoSignUp>`
             margin-right:16px;
         }
         .sign-up-university-selector{
-            width:60%;
+            width:70%;
+            .custom-single-value{
+                display:flex;
+            }
         }
     }
 
@@ -134,8 +138,6 @@ interface IProps{
     kakaoSignUp:string;
 }
 
-let renderCount = 0
-
 const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     // 카카오 로그인 회원인 경우
     let user:Users;
@@ -171,17 +173,19 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
 
     // select 관리할 state
     const [selectInputs,setSelectInputs] = useState({
-        university:"",
         inputGender:"",
         birthMonth:"",
         birthDay:"",
         birthYear:""
     })
 
+    const [university,setUniversity] = useState<string>("")
+    const [universityError,setUniversityError] = useState<boolean>(false)
+
 
     // 비구조화 할당을 통해 값 추출
     const { name,nickname,email,password,confirmPassword} = inputs; 
-    const {university,inputGender,birthMonth,birthDay,birthYear} = selectInputs;
+    const {inputGender,birthMonth,birthDay,birthYear} = selectInputs;
 
     // input과 select onChange함수들
     const onChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -264,7 +268,8 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     
     // 대학교명 리스트 가져오기
     const [universityNameList,setUniversityNameList] = useState<string[]>();
-    
+    const [selectedUniversity, setSelectedUniversity] = useState<{ label: string; value: string } | null>(null);
+
     useEffect(()=>{
         async function fetchUniversityName() {
             const response = await axios.get("/api/school/universityName");
@@ -272,6 +277,27 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
         }
         fetchUniversityName();
     },[])
+    
+    const universityOptions: readonly { label: string; value: string }[] = universityNameList?.map((university) => ({
+      label: university,
+      value: university,
+    })) || [];
+
+    // 대학교 down-arraow 아이콘 변경
+    const customDropdownIndicator: React.FC<any> = (props) => {
+        return (
+          <components.DropdownIndicator {...props}>
+            <DownIcon />
+          </components.DropdownIndicator>
+        );
+    };
+    // selected value에 아이콘 추가
+    const CustomSingleValue: React.FC<SingleValueProps<any>> = ({  children,innerProps,...rest  }) => (
+        <components.SingleValue  {...rest} innerProps={innerProps} className="custom-single-value">
+            <GradeIcon style={{ marginRight: '8px' }} />
+            {children}
+        </components.SingleValue>
+    );
 
     // ModalPortal 
     const {openModal,ModalPortal,closeModal} = useModal();
@@ -307,6 +333,11 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     // 로컬 회원가입 폼 검증
     const validateSignUpForm = ()=>{
     // 폼 요소의 값이 없다면
+        console.log(university)
+        if(!university){
+            setUniversityError(true)
+        }
+
         if(!name|| !nickname || !email || !password || !university || !birthMonth|| !birthDay || !birthYear || !location || !latitude || !longitude||!inputGender){
             return false;
         }
@@ -413,10 +444,8 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
             }
             }
     }
-    renderCount++
     return (
         <Container onSubmit={kakaoSignUp ?onSubmitUpdate :onSubmitSignUp } kakaoSignUp={kakaoSignUp}>
-             <h1>Signup Form ({renderCount/2})</h1>
             <div className='input-wrapper input-wrapper-first'>
                 <Input 
                     placeholder="이름" 
@@ -501,7 +530,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     type={hidePassword?"password":"text"}
                     name='confirmPassword'
                     onChange={onChangeInput}
-                    isValid={password===confirmPassword &&confirmPassword === ''}
+                    isValid={!!password && password===confirmPassword &&confirmPassword === ''}
                     errorMessage="입력하신 비밀번호가 일치하지 않습니다."
                     usevalidation
                     onFocus={onFocusedConfirmPassword}
@@ -521,13 +550,46 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     />
                 </div>
                 <div className='sign-up-university-selector'>
-                    <Selector 
-                        options={universityNameList}
-                        disabledoptions={["대학교"]}
-                        defaultValue="대학교"
-                        name="university"
-                        onChange={onChangeSelector}
-                        isValid={!!university}
+                    <Select 
+                        placeholder="대학교"
+                        isClearable
+                        options={universityOptions} // 변경된 옵션 배열을 사용합니다.
+                        value={selectedUniversity} // 선택된 대학교 값을 저장할 state를 사용합니다.
+                        onChange={(selectedOption:any)=>{
+                            setUniversityError(false)
+                            setSelectedUniversity(selectedOption)
+                            setUniversity(selectedOption?.value)
+                        }} // 대학교 선택이 변경되면 호출되는 핸들러 함수입니다.
+                        styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              backgroundColor:universityError ? palette.snow : "transparent",
+                              border:`1px solid ${universityError ? palette.tawny : palette.gray_eb}`,
+                              fontSize:"16px",
+                              padding:"0 11px",
+                              borderRadius:"10px",
+                              outline:"none",
+                              ":hover":{
+                                borderColor:palette.gray_71
+                              },
+                            }),
+                          }}
+                        theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                            ...theme.colors,
+                            primary25: palette.gray_eb ,
+                            primary: palette.dark_cyan,
+                        },
+                        })}
+                        formatOptionLabel={({ value }) => (
+                            <p>{value}</p>
+                        )}
+                        components={{ 
+                            SingleValue: CustomSingleValue,
+                            DropdownIndicator: customDropdownIndicator 
+                        }}
                     />
                 </div>
             </div>

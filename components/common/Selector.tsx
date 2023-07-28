@@ -21,7 +21,10 @@ const Container = styled.div<{ isValid:boolean; validateMode:boolean;}>`
         background-position: right 11px center;
         background-repeat: no-repeat;
         &:focus {
-        border-color: ${palette.dark_cyan};
+            border-color: ${palette.dark_cyan};
+        }
+        &:hover{
+            border-color: ${palette.gray_71};
         }
   }
   ${({isValid,validateMode})=>
