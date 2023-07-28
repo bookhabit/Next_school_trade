@@ -16,7 +16,7 @@ import Button from '../common/Button';
 import { kakaoSignupAPI, signupAPI } from '../../lib/api/auth';
 import { useDispatch } from 'react-redux';
 import { userActions } from './../../store/user';
-import axios from "axios";
+import axios from '../../lib/api';
 import { commonActions } from './../../store/common';
 import useValidateMode from '../../hooks/useValidateMode';
 import PasswordWarning from './PasswordWarning';

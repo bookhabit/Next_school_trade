@@ -10,6 +10,7 @@ import { makeMoneyString } from '../../lib/utils';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { isEmpty } from 'lodash';
+import BackImage from './BackImage';
 
 const Container = styled.div`
     width:100%;
@@ -92,13 +93,12 @@ interface IProps{
 
 const CompletedProductCard:React.FC<IProps> = ({product}) => {
     let imagepath
-    let imageAlt    
+    const imageAlt = "상품완료 이미지"
     if(product.images === undefined){
         imagepath = undefined
     }else if 
     (!isEmpty(product.images[0])){
         imagepath = product.images[0].path
-        imageAlt = product.images[0].filename
     }
 
     // dateTime 상대시간으로 출력하기
@@ -110,7 +110,7 @@ const CompletedProductCard:React.FC<IProps> = ({product}) => {
             <Container>
                 <div className='productImg'>
                 {imagepath? 
-                    <img src={`http://localhost:4000/${imagepath}`} alt={`http://localhost:4000/${imageAlt}`}/>
+                    <BackImage src={imagepath} alt={imageAlt} />
                     :
                     <img src={"/static/svg/product/default_img.svg"} className="default-img" alt="기본이미지"/>
                     }

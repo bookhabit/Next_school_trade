@@ -8,7 +8,7 @@ import palette from '../../../styles/palette';
 import SubmitBtn from "../../../public/static/svg/chatting/submitBtn.svg"
 import io from "socket.io-client"
 
-const socket = io("http://localhost:8080/chat")
+const socket = io("ws://localhost:8080")
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {

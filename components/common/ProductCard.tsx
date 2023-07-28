@@ -23,6 +23,7 @@ import {
 import { useDispatch } from "react-redux";
 import { favoriteActions } from "../../store/favorite";
 import async from "./../../pages/api/map/location";
+import BackImage from "./BackImage";
 
 const Container = styled.div`
   width: 100%;
@@ -135,12 +136,11 @@ interface IProps {
 
 const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
   let imagepath;
-  let imageAlt;
+  const imageAlt = "상품이미지"
   if (product.images === undefined) {
     imagepath = undefined;
   } else if (!isEmpty(product.images[0])) {
     imagepath = product.images[0].path;
-    imageAlt = product.images[0].filename;
   }
   const router = useRouter();
   const isLogged = useSelector((state: RootState) => state.user.isLogged);
@@ -214,9 +214,9 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
       <Container>
         <div className="productImg" onClick={goToDetail}>
           {imagepath ? (
-            <img
-              src={`http://localhost:4000/${imagepath}`}
-              alt={`http://localhost:4000/${imageAlt}`}
+            <BackImage 
+              src={`${imagepath}`}
+              alt={`${imageAlt}`}
             />
           ) : (
             <img

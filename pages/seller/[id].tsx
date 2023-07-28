@@ -22,14 +22,13 @@ import { grey } from "@mui/material/colors";
 const Container = styled.div`
   @media only screen and (min-width: 430px) {
     min-height: 100vh;
-    margin: 0px 35px;
   }
   margin: 40px 35px;
   padding-bottom: 30px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-items:center;
+  
   .seller-profile {
     width: 320px;
     height: 50px;

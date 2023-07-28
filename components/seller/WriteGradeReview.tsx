@@ -5,7 +5,7 @@ import Emtpy_starIcon from "../../public/static/svg/review/emtpy_star.svg"
 import { useState } from 'react';
 import palette from '../../styles/palette';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios from '../../lib/api';
 import Swal from 'sweetalert2';
 import Button from '../common/Button';
 
@@ -149,12 +149,7 @@ const WriteGradeReview = () => {
         }
         // 리뷰작성 api 호출
         try{
-            const res = await axios.post(`http://localhost:4000/review/create/${sellerId}`, 
-            submitData,
-            {
-                withCredentials: true,
-            }
-            );
+            const res = await axios.post(`/review/create/${sellerId}`,submitData);
             console.log('res데이터',res)
             // 라우팅 - 리뷰리스트 페이지로 
             if(res.status===201){
