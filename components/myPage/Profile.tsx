@@ -7,9 +7,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Button from "../common/Button";
-import axios from "axios";
+import axios from "../../lib/api";
 import { useRouter } from "next/router";
 import { userActions } from "../../store/user";
+import BackImage from "../common/BackImage";
 
 const Container = styled.form`
   padding: 50px 20px;
@@ -89,7 +90,7 @@ const Profile = () => {
   const [profileImg, setProfileImg] = useState(
     LoggedUser.profileImage?.path.replace(/\\/g, "/")
   );
-  const [nickname, setNickname] = useState<string>(LoggedUser.nickname);
+  const [nickname, setNickname] = useState<string>('');
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showFrontImg, setShowFrontImg] = useState(false);
@@ -129,6 +130,7 @@ const Profile = () => {
   useEffect(() => {
     setThumnail(LoggedUser.profileImage?.path.replace(/\\/g, "/"));
     setProfileImg(LoggedUser.profileImage?.path.replace(/\\/g, "/"));
+    setNickname(LoggedUser.nickname)
   }, []);
 
   // 프로필 수정 api
@@ -148,13 +150,12 @@ const Profile = () => {
     // api요청
     try {
       const result = await axios.post(
-        "http://localhost:4000/user/profile",
+        "/user/profile",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          withCredentials: true,
         }
       );
       console.log(result);
@@ -172,7 +173,7 @@ const Profile = () => {
         {showFrontImg ? (
           <img src={thumnail} alt="프로필 이미지" />
         ) : (
-          <img src={`http://localhost:4000/${thumnail}`} alt="프로필 이미지" />
+          <BackImage src={thumnail} alt="프로필 이미지" />
         )}
         <label htmlFor="file-input" />
         <input type="file" id="file-input" onChange={(e) => onUpload(e)} />

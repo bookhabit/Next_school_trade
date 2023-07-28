@@ -3,7 +3,7 @@ import React from "react";
 import LinkFooter from "../../../components/footer/LinkFooter";
 import { getFavoriteList } from "../../../lib/api/product";
 import { useSelector } from "react-redux";
-import axios from "axios";
+import axios from "../../../lib/api";
 import {
   FavoritePage,
   Page,
@@ -94,7 +94,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieObject = cookieStringToObject(context.req?.headers.cookie);
   try {
     await queryClient.prefetchInfiniteQuery(["favoriteList"], async () => {
-      const res = await axios.get(`http://localhost:4000/favorite/${id}`, {
+      const res = await axios.get(`/favorite/${id}`, {
         headers: {
           Authorization: "Bearer " + cookieObject.access_token,
         },

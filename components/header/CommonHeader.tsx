@@ -143,7 +143,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
           {pathName === "/user" ? (
             LoggedUser.profileImage?.path?
             <Avatar
-              src={`http://localhost:4000/${LoggedUser.profileImage?.path}`}
+              src={`${process.env.NEXT_PUBLIC_SERVER_URL}/${LoggedUser.profileImage?.path}`}
               alt="판매자 프로필"
               sx={{ width: 35, height: 35, bgcolor: grey[50], mr: 1 }}
             />

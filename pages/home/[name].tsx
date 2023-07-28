@@ -10,7 +10,7 @@ import {
   QueryClient,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import axios from "axios";
+import axios from "../../lib/api";
 import { Page } from "../../types/product/product";
 import Loading from "../../components/common/Loading";
 import FailFetchData from "../../components/common/FailFetchData";
@@ -115,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       ["categoryList", categoryName],
       async () => {
         const res = await axios.get(
-          `http://localhost:4000/content/list/category`,
+          `/content/list/category`,
           { params: { category: categoryName }, withCredentials: true }
         );
         return res.data;

@@ -10,7 +10,7 @@ import FailFetchData from '../../../components/common/FailFetchData';
 import DataNull from '../../../components/common/DataNull';
 import { isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
-import axios from 'axios';
+import axios from '../../../lib/api';
 import { productListType } from '../../../types/product/product';
 import { Page } from '../../../types/product/product';
 
@@ -86,7 +86,7 @@ export const getServerSideProps : GetServerSideProps = async ({query}) => {
     try{
         // await queryClient.prefetchInfiniteQuery(
         //     ['buyList'],async()=>{
-        //       const res = await axios.post(`http://localhost:4000/content/list/bought/${id}`,{}, {withCredentials: true,})
+        //       const res = await axios.post(`/content/list/bought/${id}`,{}, {withCredentials: true,})
         //     console.log('server res.data',res.data)
         //       return res.data
         //     }

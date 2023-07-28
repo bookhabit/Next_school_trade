@@ -5,7 +5,7 @@ import {
   useInfiniteQuery,
   UseInfiniteQueryResult,
 } from "@tanstack/react-query";
-import axios from "axios";
+import axios from "../lib/api";
 import { GetServerSideProps } from "next";
 import React, { useEffect } from "react";
 import LinkFooter from "../components/footer/LinkFooter";
@@ -128,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     if(cookieObject){
       await queryClient.prefetchInfiniteQuery(["productList"], async () => {
-        const res = await axios.get("http://localhost:4000/content/list", {
+        const res = await axios.get("/content/list", {
           headers: {
             Authorization: "Bearer " + cookieObject.access_token,
           },
@@ -137,7 +137,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       });
     }else{
       await queryClient.prefetchInfiniteQuery(["productList"], async () => {
-        const res = await axios.get("http://localhost:4000/content/list");
+        const res = await axios.get("/content/list");
         return res.data;
       });
     }

@@ -33,6 +33,7 @@ import { useDispatch } from "react-redux";
 import FavoriteModal from "./FavoriteModal";
 import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import BackImage from "../common/BackImage";
 
 interface cssProps {
   postOwner: boolean;
@@ -478,9 +479,9 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
             {!isEmpty(productDetail.images[0]) ? (
               productDetail.images.map((item: ImageType, index: number) => (
                 <SliderItem key={index}>
-                  <img
-                    src={`http://localhost:4000/${item.path}`}
-                    alt={`http://localhost:4000/${item.id}`}
+                  <BackImage
+                   src={item.path}
+                   alt={"상품 이미지 "+index}
                   />
                 </SliderItem>
               ))
@@ -512,7 +513,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
               <>
                 {ownerInfo.profileImage?.path && (
                   <Avatar
-                    src={`http://localhost:4000/${ownerInfo.profileImage?.path}`}
+                    src={`${process.env.NEXT_PUBLIC_SERVER_URL}/${ownerInfo.profileImage?.path}`}
                     alt="판매자 프로필"
                     sx={{ width: 25, height: 25, bgcolor: grey[50], mr: 1 }}
                   />

@@ -6,7 +6,7 @@ import {
   QueryClient,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import axios from "axios";
+import axios from '../../lib/api';
 import { Page } from "../../types/product/product";
 import Loading from "../../components/common/Loading";
 import FailFetchData from "../../components/common/FailFetchData";
@@ -119,8 +119,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         ["searchList", keyword],
         async () => {
           const res = await axios.get(
-            `http://localhost:4000/content/search?page=0&keyword=${keyword}`,
-            { withCredentials: true }
+            `/content/search?page=0&keyword=${keyword}`
           );
           return res.data;
         }

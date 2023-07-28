@@ -42,7 +42,7 @@ const ReviewCard: React.FC<IProps> = ({ reviewList }) => {
         <div className="reviewer-name-wrap">
           <div className="reviewer-profile-img">
             <Avatar
-              src={`http://localhost:4000/${reviewList.buyer.profileImage.path}`}
+              src={`${process.env.NEXT_PUBLIC_SERVER_URL}/${reviewList.buyer.profileImage.path}`}
               alt="판매자 프로필"
               sx={{ width: 25, height: 25, bgcolor: grey[50], mr: 1 }}
             />

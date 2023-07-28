@@ -1,6 +1,6 @@
 //Kakao.js
 import React from "react";
-import axios from "axios";
+import axios from "../../../lib/api";
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useDispatch } from 'react-redux';
@@ -23,9 +23,8 @@ const Kakao = (query:any) => {
     const router = useRouter();
 
     const getUserInfo = async (authCode:string)=>{
-        const response = await axios.post("http://localhost:4000/auth/kakao",
-        {code:authCode},
-        { withCredentials: true })
+        const response = await axios.post("/auth/kakao",
+        {code:authCode})
         console.log(response)
         if(response.data){
             if(response.data.user.university){

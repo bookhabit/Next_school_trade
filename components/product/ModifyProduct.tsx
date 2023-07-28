@@ -13,7 +13,7 @@ import Slick from "./Slick";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { registerPositionActions } from "./../../store/registerPosition";
-import axios from "axios";
+import axios from "../../lib/api";
 import { isEmpty } from "lodash";
 import { RootState } from "../../store";
 import FooterButton from "../common/FooterButton";
@@ -275,7 +275,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
         const prevRegisterImgList = await Promise.all(
           initialProductData.images.map(async (image) => {
             const prevRegisterImgRes = await axios.get(
-              `http://localhost:4000/${image.path}`,
+              `/${image.path}`,
               {
                 responseType: "blob",
               }
@@ -471,13 +471,12 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
       try {
         // 상품수정 api 호출
         const res = await axios.patch(
-          `http://localhost:4000/content/update/${initialProductData.id}`,
+          `/content/update/${initialProductData.id}`,
           formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-            },
-            withCredentials: true,
+            }
           }
         );
         console.log("상품수정 res", res);
@@ -518,6 +517,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
               {!isEmpty(thumbnail) &&
                 thumbnail.map((image: string, id: number) => (
                   <SliderItem key={id} className="preview-image-box">
+                    {/* BackImage로 변경하기 - onChange도 string으로 변환하면 모두 string처리 */}
                     <img
                       src={
                         id < serverImgLength

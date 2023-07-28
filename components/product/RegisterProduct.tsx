@@ -13,10 +13,11 @@ import Slick from "./Slick";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { registerPositionActions } from "./../../store/registerPosition";
-import axios from "axios";
+import axios from "../../lib/api";
 import { isEmpty } from "lodash";
 import { RootState } from "../../store";
 import FooterButton from "../common/FooterButton";
+import Swal from "sweetalert2";
 
 const Container = styled.form`
   /* 이미지 css */
@@ -397,18 +398,17 @@ const RegisterProduct = () => {
         console.log("formData : ", formData);
         // 상품등록 api 호출
         const res = await axios.post(
-          "http://localhost:4000/content/create",
+          "/content/create",
           formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-            withCredentials: true,
           }
         );
         // 응답값에 따라서 라우팅처리
         if (res.status === 201) {
-          alert("상품등록이 완료되었습니다");
+          Swal.fire('성공','상품등록이 완료되었습니다','success')
           router.push("/");
         } else {
           alert("Failed to create product.");

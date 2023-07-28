@@ -101,7 +101,7 @@ const profile: NextPage = ({ data }: any) => {
         <div className="seller-profile">
           <div className="seller-name-wrap">
             <Avatar
-              src={`http://localhost:4000/${sellerProfileImg}`}
+              src={`${process.env.NEXT_PUBLIC_SERVER_URL}/${sellerProfileImg}`}
               alt="판매자 프로필"
               sx={{ width: 35, height: 35, bgcolor: grey[50] }}
             />
