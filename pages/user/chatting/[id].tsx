@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import ChattingRoom from '../../../components/chattingList/ChattingRoom';
 // import ChattingRoomFooter from '../../../components/footer/ChattingRoomFooter';
 import { useRouter } from 'next/router';
@@ -33,6 +33,25 @@ const ChattingRoomContainer= styled.div`
         }
         .post-price{
             font-size:18px;
+        }
+        .chatting-confirm-button-box{
+            width:100%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            button{
+                cursor: pointer;
+                padding: 8px;
+                border-radius:25px;
+                font-weight: 600;
+                font-size:16px;
+                background-color:${palette.main_text_color};
+                color:${palette.main_color} ;
+                &:hover{
+                    background-color:${palette.main_color};
+                    color:${palette.main_text_color};
+                }
+            }
         }
     }
     .chatting-last-date{
@@ -110,6 +129,92 @@ const ChattingRoomContainer= styled.div`
     }
 `
 
+const TradeConfirm = styled.div`
+    width:100%;
+    height:100%;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    .confirm-introduce{
+        h2{
+            text-align:center;
+            margin:15px;
+        }
+        align-items:center;
+        p{
+            margin-bottom:20px;
+            font-size:16px;
+            line-height:20px;
+            color:${palette.gray_76}
+        }
+    }
+
+    .confirm-buyer-payment{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        font-size:20px;
+        margin-bottom:20px;
+        button{
+            font-size:18px;
+            cursor: pointer;
+            font-size:16px;
+            background-color:${palette.main_text_color};
+            color:${palette.main_color} ;
+            &:hover{
+                background-color:${palette.main_color};
+                color:${palette.main_text_color};
+            }
+        }
+    }
+
+    .confirm-price-box{
+        width:100%;
+        height:50px;   
+        margin-bottom:20px;
+        p{
+            margin-bottom:10px;
+        }
+    }
+    .confirm-button-box{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:20px;
+        .confirm-button{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            button{
+                background-color:${palette.main_color};
+                color:${palette.main_text_color};
+                padding:10px;
+                border-radius:25px;
+                font-size:16px;
+                cursor: pointer;
+            }
+            .confirm-message{
+                margin-top:10px;
+                color:${palette.bittersweet}
+            }
+        }
+    }
+    .confirm-complete-box{
+        padding:20px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        p{
+            color:${palette.gray_b0};
+            margin-bottom:10px;
+        }
+    }
+`
+
+
 const ChattingFooter= styled.div`
     @media only screen and (min-width: 430px) {
         max-width:430px;
@@ -164,56 +269,102 @@ interface PropsType {
 
 const chattingRoom:NextPage = (props) => {
     const {chatData} = props as PropsType
+    const [confirmTrade,setConfirmTrade] = useState(false)
+    const [buyerConfirm,setBuyerConfirm] = useState(false)
+    const [sellerConfirm,setSellerConfirm] = useState(false)
+    // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
+    const isBuyerPage = true
     
     return (
         <Container>
              <ChattingRoomContainer>
-            <div className='chatting-header'>
-                <p className='post-title'>{chatData.title}</p>
-                <p className='post-price'>{chatData.price} 원</p>
-            </div>
-            <div className='chatting-message-box'>
-                <p className='chatting-last-date'>2023년 2월 25일</p>
-                <div className='chatting-me'>
-                    <p className='chatting-content'>저 그 축구화 혹시 얼마에 살 수 있을까요?</p>
-                    <p className='chatting-updateDate'>오후 12:06</p>
-                </div>
-                <div className='chatting-opponent'>
-                    <div className='opponent-profile'>
-                        <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                <div className='chatting-header'>
+                    <p className='post-title'>{chatData.title}</p>
+                    <div className='chatting-confirm-button-box'>
+                        <p className='post-price'>{chatData.price} 원</p>
+                        <button onClick={()=>setConfirmTrade(!confirmTrade)}>거래하기</button>
                     </div>
-                    <p className='chatting-content'>65000원인데 한 번 보시고 조율해봐도 됩니다!</p>
-                    <p className='chatting-updateDate'>오후 12:15</p>
                 </div>
-                <div className='chatting-me'>
-                    <p className='chatting-content'>그럼 어디서 만날까요?? 혹시 내일 3시 시간 괜찮으신가요??</p>
-                    <p className='chatting-updateDate'>오후 12:16</p>
-                </div>
-                <div className='chatting-opponent'>
-                    <div className='opponent-profile'>
-                        <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                {confirmTrade && 
+                <TradeConfirm>
+                    <div className='confirm-introduce'>
+                        <h2>거래과정</h2>
+                        <p>구매자가 결제를 완료하고 판매자와 거래를 마친 후 물건을 잘 받았다면 구매자 거래완료 버튼 클릭</p>
+                        <p>판매자는 물건을 전달한 후 구매자의 확인버튼 확인 후 판매자 거래완료 버튼 클릭</p>
+                        <p>구매자 판매자 모두 확인 시 판매자에게 결제한 금액이 전달됩니다</p>
                     </div>
-                    <p className='chatting-content'>그럼 내일 3시에 이디야 카페에서 보는건 어떠신가요?</p>
-                    <p className='chatting-updateDate'>오후 12:30</p>
+                    {isBuyerPage && (
+                        <div className='confirm-buyer-payment'>
+                            <p>{chatData.price} 원</p>
+                            <button onClick={()=>setConfirmTrade(!confirmTrade)}>결제하기</button>
+                        </div>
+                    )}
+                    <div className='confirm-price-box'>
+                        <p>거래 예상금액 : {chatData.price} </p>
+                        <p>결제 완료된 금액 : 15333 </p>
+                    </div>
+                    <div className='confirm-button-box'>
+                        <div className='confirm-button'>
+                            <button onClick={()=>setBuyerConfirm(!buyerConfirm)}>구매자 거래완료</button>
+                            {buyerConfirm && <p className='confirm-message'>완료</p>}
+                        </div>
+                        <div className='confirm-button'>
+                            <button onClick={()=>setSellerConfirm(!sellerConfirm)}>판매자 거래완료</button>
+                            {sellerConfirm && <p className='confirm-message'>완료</p>}
+                        </div>
+                    </div>
+                    {buyerConfirm && sellerConfirm && 
+                        <div className='confirm-complete-box'>
+                            <p>구매자와 판매자 모두 확인완료되었습니다</p>
+                            <p>판매자에게 돈을 드리도록 하겠습니다</p>
+                        </div>
+                    }
+                </TradeConfirm>
+                }
+                {!confirmTrade && 
+                    <div className='chatting-message-box'>
+                        <p className='chatting-last-date'>2023년 2월 25일</p>
+                        <div className='chatting-me'>
+                            <p className='chatting-content'>저 그 축구화 혹시 얼마에 살 수 있을까요?</p>
+                            <p className='chatting-updateDate'>오후 12:06</p>
+                        </div>
+                        <div className='chatting-opponent'>
+                            <div className='opponent-profile'>
+                                <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                            </div>
+                            <p className='chatting-content'>65000원인데 한 번 보시고 조율해봐도 됩니다!</p>
+                            <p className='chatting-updateDate'>오후 12:15</p>
+                        </div>
+                        <div className='chatting-me'>
+                            <p className='chatting-content'>그럼 어디서 만날까요?? 혹시 내일 3시 시간 괜찮으신가요??</p>
+                            <p className='chatting-updateDate'>오후 12:16</p>
+                        </div>
+                        <div className='chatting-opponent'>
+                            <div className='opponent-profile'>
+                                <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                            </div>
+                            <p className='chatting-content'>그럼 내일 3시에 이디야 카페에서 보는건 어떠신가요?</p>
+                            <p className='chatting-updateDate'>오후 12:30</p>
+                        </div>
+                        <div className='chatting-me'>
+                            <p className='chatting-content'>네 알겠습니다 그럼 내일 3시에 뵐게요~~</p>
+                            <p className='chatting-updateDate'>오후 12:32</p>
+                        </div>
+                    </div>
+                }
+            </ChattingRoomContainer>
+            <ChattingFooter>
+                <div className='chatting-file'>
+                    <label htmlFor='file-input'>+</label>
+                    <input type="file" id="file-input"/>
                 </div>
-                <div className='chatting-me'>
-                    <p className='chatting-content'>네 알겠습니다 그럼 내일 3시에 뵐게요~~</p>
-                    <p className='chatting-updateDate'>오후 12:32</p>
+                <div className='chatting-message'>
+                    <input type="text" placeholder='메세지 보내기'/>
                 </div>
-            </div>
-        </ChattingRoomContainer>
-        <ChattingFooter>
-            <div className='chatting-file'>
-                <label htmlFor='file-input'>+</label>
-                <input type="file" id="file-input"/>
-            </div>
-            <div className='chatting-message'>
-                <input type="text" placeholder='메세지 보내기'/>
-            </div>
-            <div className='chatting-submit'>
-                <button><SubmitBtn/></button>
-            </div>
-        </ChattingFooter>
+                <div className='chatting-submit'>
+                    <button><SubmitBtn/></button>
+                </div>
+            </ChattingFooter>
         </Container>
     );
 };
