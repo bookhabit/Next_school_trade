@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import palette from '../../../styles/palette';
 import SubmitBtn from "../../../public/static/svg/chatting/submitBtn.svg"
 import io from "socket.io-client"
+import { makeMoneyString } from '../../../lib/utils';
 
 const socket = io("ws://localhost:8080")
 
@@ -137,9 +138,14 @@ const TradeConfirm = styled.div`
     flex-direction:column;
     justify-content:center;
     .confirm-introduce{
+        margin-bottom:20px;
+        border:1px solid ${palette.gray_aa};
+        border-radius:30px;
+        padding:10px;
         h2{
             text-align:center;
             margin:15px;
+            color:${palette.gray_76}
         }
         align-items:center;
         p{
@@ -157,10 +163,12 @@ const TradeConfirm = styled.div`
         font-size:20px;
         margin-bottom:20px;
         button{
-            font-size:18px;
-            cursor: pointer;
             font-size:16px;
-            background-color:${palette.main_text_color};
+            font-weight:600;
+            cursor: pointer;
+            padding:8px;
+            border-radius:25px;
+            background-color:white;
             color:${palette.main_color} ;
             &:hover{
                 background-color:${palette.main_color};
@@ -172,9 +180,9 @@ const TradeConfirm = styled.div`
     .confirm-price-box{
         width:100%;
         height:50px;   
-        margin-bottom:20px;
+        margin-bottom:40px;
         p{
-            margin-bottom:10px;
+            margin-bottom:20px;
         }
     }
     .confirm-button-box{
@@ -281,7 +289,7 @@ const chattingRoom:NextPage = (props) => {
                 <div className='chatting-header'>
                     <p className='post-title'>{chatData.title}</p>
                     <div className='chatting-confirm-button-box'>
-                        <p className='post-price'>{chatData.price} 원</p>
+                        <p className='post-price'>{makeMoneyString(chatData.price)} 원</p>
                         <button onClick={()=>setConfirmTrade(!confirmTrade)}>거래하기</button>
                     </div>
                 </div>
@@ -291,32 +299,32 @@ const chattingRoom:NextPage = (props) => {
                         <h2>거래과정</h2>
                         <p>구매자가 결제를 완료하고 판매자와 거래를 마친 후 물건을 잘 받았다면 구매자 거래완료 버튼 클릭</p>
                         <p>판매자는 물건을 전달한 후 구매자의 확인버튼 확인 후 판매자 거래완료 버튼 클릭</p>
-                        <p>구매자 판매자 모두 확인 시 판매자에게 결제한 금액이 전달됩니다</p>
+                        <p>구매자와 판매자 모두 확인 시 판매자에게 결제한 금액이 전달됩니다</p>
                     </div>
                     {isBuyerPage && (
                         <div className='confirm-buyer-payment'>
-                            <p>{chatData.price} 원</p>
+                            <p>{makeMoneyString(chatData.price)} 원</p>
                             <button onClick={()=>setConfirmTrade(!confirmTrade)}>결제하기</button>
                         </div>
                     )}
                     <div className='confirm-price-box'>
-                        <p>거래 예상금액 : {chatData.price} </p>
-                        <p>결제 완료된 금액 : 15333 </p>
+                        <p>거래 예상금액 : {makeMoneyString(chatData.price)} </p>
+                        <p>결제 완료된 금액 : {makeMoneyString('15333')} </p>
                     </div>
                     <div className='confirm-button-box'>
                         <div className='confirm-button'>
-                            <button onClick={()=>setBuyerConfirm(!buyerConfirm)}>구매자 거래완료</button>
+                            <button onClick={()=>setBuyerConfirm(true)}>구매자 거래완료</button>
                             {buyerConfirm && <p className='confirm-message'>완료</p>}
                         </div>
                         <div className='confirm-button'>
-                            <button onClick={()=>setSellerConfirm(!sellerConfirm)}>판매자 거래완료</button>
+                            <button onClick={()=>setSellerConfirm(true)}>판매자 거래완료</button>
                             {sellerConfirm && <p className='confirm-message'>완료</p>}
                         </div>
                     </div>
                     {buyerConfirm && sellerConfirm && 
                         <div className='confirm-complete-box'>
                             <p>구매자와 판매자 모두 확인완료되었습니다</p>
-                            <p>판매자에게 돈을 드리도록 하겠습니다</p>
+                            <p>판매자에게 돈을 전달하도록 하겠습니다</p>
                         </div>
                     }
                 </TradeConfirm>
