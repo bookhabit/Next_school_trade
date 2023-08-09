@@ -98,8 +98,8 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
         strategy="beforeInteractive"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY}&autoload=false&libraries=services`}
       />
-      <SocketsProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <SocketsProvider>
           <Hydrate state={pageProps.dehydratedState}>
             <GlobalStyle />
             <PcContainer className="pc-style">
@@ -113,8 +113,8 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
             </MobileContainer>
             <UserColor />
           </Hydrate>
-        </QueryClientProvider>
-      </SocketsProvider>
+        </SocketsProvider>
+      </QueryClientProvider>
     </Container>
   );
 };

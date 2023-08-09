@@ -8,6 +8,7 @@ import { userActions } from './../../../store/user';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Loading from "../../../components/common/Loading";
+import { useSockets } from "../../../context/socket.context";
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -21,6 +22,7 @@ const Kakao = (query:any) => {
     // 로그인 시 유저정보 저장
     const dispatch = useDispatch();
     const router = useRouter();
+    const {socket} = useSockets();
 
     const getUserInfo = async (authCode:string)=>{
         const response = await axios.post("/auth/kakao",
@@ -31,6 +33,10 @@ const Kakao = (query:any) => {
                 // 유저정보에서 대학교 데이터가 있다면 로그인시키기 
                 dispatch(userActions.setLoggedUser(response.data.user))
                 localStorage.setItem('login-token', response.data.token);
+                
+                // 로그인시 userId 넘겨줌
+                socket.emit('login',response.data.user.id)
+
                 router.push('/')
             }else{
                 // 유저정보에서 대학교 데이터가 없다면 카카오 첫 로그인이라는 뜻 > 회원가입 페이지로 보내기

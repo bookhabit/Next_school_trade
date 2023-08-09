@@ -326,7 +326,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   // 게시글 주인이 아닐 경우 채팅하기 버튼 이벤트
   const goToChattingRoom = () => {
     if (loggedUser.isLogged) {
-      const roomKey = `${productDetail.id}-${loggedUser.id}-${productDetail.seller.id}`
+      const roomKey = `${productDetail.id}-${productDetail.seller.id}-${loggedUser.id}`
       console.log('roomkey',roomKey)
       router.push({
         pathname: `/user/chatting/${roomKey}`,

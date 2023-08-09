@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { SOCKET_URL } from "../config/default";
 import EVENTS from "../config/events";
+import { RootState, useSelector } from "../store";
 
 interface Context {
   socket: Socket;
@@ -13,6 +14,7 @@ interface Context {
   rooms: object;
 }
 
+// 소켓 인스턴스 연결
 const socket = io(SOCKET_URL);
 
 const SocketContext = createContext<Context>({
@@ -31,11 +33,9 @@ function SocketsProvider(props: any) {
     { message: "", time: "", username: "" },
   ]);
 
-  useEffect(() => {
-    window.onfocus = function () {
-      document.title = "Chat app";
-    };
-  }, []);
+  // 로그인 사용자 정보
+  const loggedUserId = useSelector((state:RootState)=>state.user.id)
+
 
   socket.on(EVENTS.SERVER.ROOMS, (value) => {
     setRooms(value);
@@ -49,9 +49,6 @@ function SocketsProvider(props: any) {
 
   useEffect(() => {
     socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
-      if (!document.hasFocus()) {
-        document.title = "New message...";
-      }
       setMessages((messages: any[]) => [
         ...messages,
         { message, username, time },
