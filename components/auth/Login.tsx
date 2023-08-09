@@ -13,6 +13,7 @@ import useValidateMode from "../../hooks/useValidateMode";
 import { userActions } from './../../store/user';
 import { loginAPI } from "../../lib/api/auth";
 import { useRouter } from 'next/router';
+import { RootState, useSelector } from "../../store";
 
 const Container = styled.form`
   width: 100%; // 모바일버전
@@ -65,8 +66,6 @@ const Container = styled.form`
     }
 
 `;
-
-let renderCount = 0
 
 const Login = () => {
     const [email,setEmail] = useState("");
@@ -131,11 +130,8 @@ const Login = () => {
     }
 
     // 환경변수 설정
-    const KAKAO_REST_API_KEY= "1e71e50aa0333c4fc579cf84718fdd4b"
 
-    const REDIRECT_URI = "http://localhost:3000/oauth/callback/kakao"
-
-    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=account_email`
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=code&scope=account_email`
 
     // 카카오 로그인 - 인가코드 받기
     const kakaoLogin = ()=>{
@@ -147,10 +143,9 @@ const Login = () => {
             setValidateMode(false)
         }
     },[])
-    renderCount++
+    
     return (
         <Container onSubmit={onSubmitLogin}>
-          <h1>Login Form ({renderCount/2})</h1>
           <div className="login-input-wrapper">
             <Input
               placeholder="이메일 주소"

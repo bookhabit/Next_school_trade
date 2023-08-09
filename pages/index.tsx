@@ -59,7 +59,6 @@ const home = () => {
       }
     },
   });
-  console.log("최종 infinitquery데이터", data);
 
   // 무한스크롤 구현
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {

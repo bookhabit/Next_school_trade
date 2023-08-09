@@ -26,6 +26,7 @@ import { getUserInfo, meAPI } from "./../lib/api/user";
 import { getFavoriteList } from "../lib/api/product";
 import { ThemeProvider, createTheme } from "@mui/material";
 import Script from "next/script";
+import SocketsProvider from "../context/socket.context";
 
 interface BackgroundColor {
   firstColor: string;
@@ -97,21 +98,23 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
         strategy="beforeInteractive"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY}&autoload=false&libraries=services`}
       />
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <GlobalStyle />
-          <PcContainer className="pc-style">
-            <Introduce />
-          </PcContainer>
-          <MobileContainer className="mobile-style">
-            <Header />
-            <Component {...pageProps} />
-            <div id="root-modal" />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </MobileContainer>
-          <UserColor />
-        </Hydrate>
-      </QueryClientProvider>
+      <SocketsProvider>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <GlobalStyle />
+            <PcContainer className="pc-style">
+              <Introduce />
+            </PcContainer>
+            <MobileContainer className="mobile-style">
+              <Header />
+              <Component {...pageProps} />
+              <div id="root-modal" />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </MobileContainer>
+            <UserColor />
+          </Hydrate>
+        </QueryClientProvider>
+      </SocketsProvider>
     </Container>
   );
 };
@@ -121,8 +124,11 @@ MyApp.getInitialProps = async (context: AppContext) => {
   const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie);
   let userData;
   try {
+    console.log(cookieObject,'쿠키')
     if (cookieObject.access_token) {
+      console.log('user/isLogin 요청')
       const response = await getUserInfo(cookieObject.access_token);
+      console.log('클라이언트데이터',response.data)
       userData = response.data;
     }
   } catch (e) {
