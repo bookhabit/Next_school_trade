@@ -14,6 +14,8 @@ import { userActions } from './../../store/user';
 import { loginAPI } from "../../lib/api/auth";
 import { useRouter } from 'next/router';
 import { RootState, useSelector } from "../../store";
+import { useSockets } from "../../context/socket.context";
+import { Users } from "../../types/user";
 
 const Container = styled.form`
   width: 100%; // 모바일버전
@@ -79,6 +81,7 @@ const Login = () => {
     const {setValidateMode} = useValidateMode()
 
     const dispatch = useDispatch();
+    const {socket} = useSockets();
 
     // 이메일 주소 onchange
     const onChangeEmail = (event:React.ChangeEvent<HTMLInputElement>)=>{
@@ -113,6 +116,9 @@ const Login = () => {
             try{
                 const {data} = await loginAPI(loginBody)
                 dispatch(userActions.setLoggedUser(data.user))
+                 // 로그인시 userId 넘겨줌
+                 socket.emit('login',data.user.id)
+
                 router.push("/")
             }catch(e:any){
                 // data에 있는 상태코드에 따라 에러메시지 출력
