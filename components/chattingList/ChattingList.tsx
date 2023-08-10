@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
+import { useSockets } from '../../context/socket.context';
+import Xicon from "../../public/static/svg/product/thumnailXicon.svg"
 
 const Container = styled.div`
     display:flex;
@@ -25,7 +27,7 @@ const Container = styled.div`
         }
     }
     .list-info{
-        width:270px;
+        width:300px;
         .list-info-header{
             margin-bottom:10px;
             display:flex;
@@ -34,10 +36,19 @@ const Container = styled.div`
                 font-size:23px;
                 font-weight:bold;
             }
-            .list-date{
-                font-size:15px;
-                color:${palette.updatedDate};
-                text-align:right;
+            .list-leave-modal{
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                .list-date{
+                    font-size:15px;
+                    color:${palette.updatedDate};
+                    text-align:right;
+                    margin-right:8px;
+                }
+                .leave-button{
+                    cursor:pointer;
+                }
             }
         }
         .list-content{
@@ -57,6 +68,16 @@ interface IProps{
 }
 
 const ChattingList:React.FC<IProps> = ({chatting}) => {
+    const {socket} = useSockets();
+    // 채팅방 나가기 이벤트
+    const rooms = {
+        content_id:"",
+        seller_id:"",
+        buyer_id:"",
+    }
+    const leaveRoom = ()=>{
+        socket.emit("leave_room",rooms)
+    }
     return (
         <Container>
             <div className='list-profileImage'>
@@ -67,9 +88,12 @@ const ChattingList:React.FC<IProps> = ({chatting}) => {
                     <p className='list-name'>
                         {chatting.name}
                     </p>
-                    <p className='list-date'>
-                        {chatting.chattingDate}
-                    </p>
+                    <div className='list-leave-modal'>
+                        <p className='list-date'>
+                            {chatting.chattingDate}
+                        </p>
+                        <Xicon className="leave-button" onClick={leaveRoom}/>
+                    </div>
                 </div>
                 <p className='list-content'>
                     {chatting.content}

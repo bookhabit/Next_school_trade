@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LinkFooter from '../../../components/footer/LinkFooter';
 import ChattingList from '../../../components/chattingList/ChattingList';
 import styled from 'styled-components';
+import { useSockets } from '../../../context/socket.context';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -10,7 +11,12 @@ const Container = styled.div`
 `
 
 const chattingList = () => {
-        // 사용자의 정보를 불러와서 채팅목록 개수에 맞게 리스트를 map함수를 불러준다
+        // TODO :  join_room_list 데이터 받아서 처리
+        const [roomList,setRoomList] = useState();
+        const {socket} = useSockets();
+        socket.on("join_room_list",(data)=>{
+            setRoomList(data)
+        })
         const testChattingListCount = [
             {
                 id:1,
