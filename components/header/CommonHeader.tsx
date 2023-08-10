@@ -72,19 +72,22 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
   // sellerName 가져오기
   const sellerId = Number(router.query.id);
   const [sellerName, setSellerName] = useState<string>("");
-  const getSellerNameAPI = async () => {
-    // sellerId로 api호출
-    const response = await getSellerName(sellerId);
-    setSellerName(response.data);
-  };
 
-  if (
-    pathName === "/seller/[id]" ||
-    pathName === "/seller/[id]/sellerReview" ||
-    pathName === "/seller/[id]/sellingProducts"
-  ) {
-    getSellerNameAPI();
-  }
+  
+  useEffect(()=>{
+    const getSellerNameAPI = async () => {
+      // sellerId로 api호출
+      const response = await getSellerName(sellerId);
+      setSellerName(response.data);
+    };
+    if (
+      pathName === "/seller/[id]" ||
+      pathName === "/seller/[id]/sellerReview" ||
+      pathName === "/seller/[id]/sellingProducts"
+    ) {
+      getSellerNameAPI();
+    }
+  },[])
 
   // case "/user/chatting/[id]":
   const testSellerNameForChatting = "이너런";
@@ -133,7 +136,6 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
         return "페이지를 찾을 수 없습니다";
     }
   };
-  console.log("LoggedUser", LoggedUser);
 
   return (
     <Conatainer>

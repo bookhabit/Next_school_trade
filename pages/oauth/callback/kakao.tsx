@@ -36,6 +36,9 @@ const Kakao = (query:any) => {
                 
                 // 로그인시 userId 넘겨줌
                 socket.emit('login',response.data.user.id)
+                socket.on('login',(data)=>{
+                    console.log('소켓연결성공',data)
+                })
 
                 router.push('/')
             }else{

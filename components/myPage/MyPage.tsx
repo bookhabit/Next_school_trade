@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { userActions } from "../../store/user";
 import { logoutAPI } from "../../lib/api/auth";
 import { useRouter } from "next/router";
+import { useSockets } from "../../context/socket.context";
 
 const Container = styled.div`
   .myUniversity {
@@ -98,10 +99,11 @@ const MyPage = () => {
   const goToTradeReview = `/user/tradeReview/${userId}`;
 
   const router = useRouter();
+  const {socket} = useSockets();
 
   // 로그아웃 api
   const logout = () => {
-    // 로그아웃 api 연동
+    socket.emit("logout",userId)
     logoutAPI();
     dispatch(userActions.initUser());
     router.push("/auth");

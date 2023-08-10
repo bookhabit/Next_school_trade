@@ -32,7 +32,6 @@ interface BackgroundColor {
   firstColor: string;
   secondColor: string;
 }
-const theme = createTheme({});
 
 const Container = styled.div<BackgroundColor>`
   display: flex;
@@ -92,6 +91,7 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
       dispatch(userActions.setLoggedUser(clientData));
     }
   }, []);
+
   return (
     <Container firstColor={firstColor} secondColor={secondColor}>
       <Script
@@ -122,6 +122,7 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
 MyApp.getInitialProps = async (context: AppContext) => {
   const appInitialProps = await App.getInitialProps(context);
   const cookieObject = cookieStringToObject(context.ctx.req?.headers.cookie);
+  console.log(context.ctx.req?.headers.cookie)
   let userData;
   try {
     console.log(cookieObject,'쿠키')

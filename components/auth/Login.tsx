@@ -118,6 +118,9 @@ const Login = () => {
                 dispatch(userActions.setLoggedUser(data.user))
                  // 로그인시 userId 넘겨줌
                  socket.emit('login',data.user.id)
+                 socket.on('login',(data)=>{
+                  console.log('소켓연결성공',data)
+                 })
 
                 router.push("/")
             }catch(e:any){
