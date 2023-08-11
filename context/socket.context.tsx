@@ -1,77 +1,46 @@
+// components/SocketsProvider.tsx
 import { createContext, useContext, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import { useSelector } from "../store"; // Adjust the import path based on your project structure
+import { RootState } from "../store"; // Adjust the import path based on your project structure
 import { SOCKET_URL } from "../config/default";
 import EVENTS from "../config/events";
-import { RootState, useSelector } from "../store";
 
-interface Context {
-  socket: Socket;
-  username?: string;
-  setUsername: Function;
-  messages?: { message: string; time: string; username: string }[];
-  setMessages: Function;
-  roomId?: string;
-  rooms: object;
+interface SocketContextType {
+  socket?: Socket;
 }
 
-// 소켓 인스턴스 연결
-const socket = io(SOCKET_URL);
+const SocketContext = createContext<SocketContextType>({});
 
-const SocketContext = createContext<Context>({
-  socket,
-  setUsername: () => false,
-  setMessages: () => false,
-  rooms: {},
-  messages: [],
-});
+export const useSocket = () => useContext(SocketContext);
 
-function SocketsProvider(props: any) {
-  const [username, setUsername] = useState("");
-  const [roomId, setRoomId] = useState("");
-  const [rooms, setRooms] = useState({});
-  const [messages, setMessages] = useState([
-    { message: "", time: "", username: "" },
-  ]);
-
-  // 로그인 사용자 정보
-  const loggedUserId = useSelector((state:RootState)=>state.user.id)
-
-
-  socket.on(EVENTS.SERVER.ROOMS, (value) => {
-    setRooms(value);
-  });
-
-  socket.on(EVENTS.SERVER.JOINED_ROOM, (value) => {
-    setRoomId(value);
-
-    setMessages([]);
-  });
+export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [socket, setSocket] = useState<Socket | undefined>(undefined);
+  const loggedUserId = useSelector((state: RootState) => state.user.id);
+  const isLoggedIn = !!loggedUserId;
 
   useEffect(() => {
-    socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
-      setMessages((messages: any[]) => [
-        ...messages,
-        { message, username, time },
-      ]);
-    });
-  }, [socket]);
+    if (isLoggedIn) {
+      const newSocket = io(SOCKET_URL);
+      console.log('로그인 후 소켓연결');
+      setSocket(newSocket);
+    }
+  }, [isLoggedIn]);
+
+  useEffect(()=>{
+    if(socket){
+      socket.emit('login',loggedUserId)
+      socket.on('login',(data)=>{
+          console.log('소켓연결성공',data)
+      })
+    }
+  },[socket,isLoggedIn])
+
+  console.log('socket 상태', socket);
 
   return (
-    <SocketContext.Provider
-      value={{
-        socket,
-        username,
-        setUsername,
-        rooms,
-        roomId,
-        messages,
-        setMessages,
-      }}
-      {...props}
-    />
+    <SocketContext.Provider value={{ socket }}>
+      {children}
+    </SocketContext.Provider>
   );
-}
-
-export const useSockets = () => useContext(SocketContext);
-
-export default SocketsProvider;
+};

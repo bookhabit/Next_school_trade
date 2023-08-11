@@ -26,7 +26,7 @@ import { getUserInfo, meAPI } from "./../lib/api/user";
 import { getFavoriteList } from "../lib/api/product";
 import { ThemeProvider, createTheme } from "@mui/material";
 import Script from "next/script";
-import SocketsProvider from "../context/socket.context";
+import { SocketProvider } from "../context/socket.context";
 
 interface BackgroundColor {
   firstColor: string;
@@ -99,21 +99,21 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY}&autoload=false&libraries=services`}
       />
       <QueryClientProvider client={queryClient}>
-        <SocketsProvider>
           <Hydrate state={pageProps.dehydratedState}>
             <GlobalStyle />
             <PcContainer className="pc-style">
               <Introduce />
             </PcContainer>
             <MobileContainer className="mobile-style">
-              <Header />
-              <Component {...pageProps} />
-              <div id="root-modal" />
-              <ReactQueryDevtools initialIsOpen={false} />
+              <SocketProvider>
+                <Header />
+                <Component {...pageProps} />
+                <div id="root-modal" />
+                <ReactQueryDevtools initialIsOpen={false} />
+              </SocketProvider>
             </MobileContainer>
             <UserColor />
           </Hydrate>
-        </SocketsProvider>
       </QueryClientProvider>
     </Container>
   );

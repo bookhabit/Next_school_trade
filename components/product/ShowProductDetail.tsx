@@ -34,7 +34,7 @@ import FavoriteModal from "./FavoriteModal";
 import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import BackImage from "../common/BackImage";
-import { useSockets } from "../../context/socket.context";
+import { useSocket } from "../../context/socket.context";
 
 interface cssProps {
   postOwner: boolean;
@@ -306,7 +306,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   const router = useRouter();
   const [favoriteProduct, setFavoriteProduct] = useState(productDetail.like);
   const loggedUser = useSelector((state: RootState) => state.user);
-  const {socket} = useSockets();
+  const {socket} = useSocket();
   // 소켓 - 채팅접속할 rooms 지정
   const rooms = {
     content_id:productDetail.id,
@@ -338,7 +338,9 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
       console.log('roomkey',roomKey)
 
       // 소켓 연결 - 채팅접속
-      socket.emit("join_room",rooms)
+      if(socket){
+        socket.emit("join_room",rooms)
+      }
 
       // 채팅방 페이지 이동
       router.push({

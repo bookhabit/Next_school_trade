@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
-import { useSockets } from '../../context/socket.context';
 import Xicon from "../../public/static/svg/product/thumnailXicon.svg"
+import { useSocket } from '../../context/socket.context';
 
 const Container = styled.div`
     display:flex;
@@ -68,7 +68,7 @@ interface IProps{
 }
 
 const ChattingList:React.FC<IProps> = ({chatting}) => {
-    const {socket} = useSockets();
+    const {socket} = useSocket();
     // 채팅방 나가기 이벤트
     const rooms = {
         content_id:"",
@@ -76,7 +76,9 @@ const ChattingList:React.FC<IProps> = ({chatting}) => {
         buyer_id:"",
     }
     const leaveRoom = ()=>{
-        socket.emit("leave_room",rooms)
+        if(socket){
+            socket.emit("leave_room",rooms)
+        }
     }
     return (
         <Container>
