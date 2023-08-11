@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-// import ChattingRoom from '../../../components/chattingList/ChattingRoom';
-// import ChattingRoomFooter from '../../../components/footer/ChattingRoomFooter';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import styled from 'styled-components';
@@ -8,6 +6,8 @@ import palette from '../../../styles/palette';
 import SubmitBtn from "../../../public/static/svg/chatting/submitBtn.svg"
 import io from "socket.io-client"
 import { makeMoneyString } from '../../../lib/utils';
+import { useSocket } from '../../../context/socket.context';
+import { RootState, useSelector } from '../../../store';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -221,7 +221,7 @@ const TradeConfirm = styled.div`
 `
 
 
-const ChattingFooter= styled.div`
+const ChattingFooter= styled.form`
     @media only screen and (min-width: 430px) {
         max-width:430px;
     }
@@ -273,11 +273,66 @@ interface PropsType {
     }
 }
 
+export type Rooms = {
+    content_id:string,
+    seller_id:string,
+    buyer_id:string,
+}
+
+export type messagePayload = {
+    room: Rooms;
+    send_id: number;
+    message: string;
+}
+
 const chattingRoom:NextPage = (props) => {
     const {chatData} = props as PropsType
+
+    // 거래하기 로직
     const [confirmTrade,setConfirmTrade] = useState(false)
     const [buyerConfirm,setBuyerConfirm] = useState(false)
     const [sellerConfirm,setSellerConfirm] = useState(false)
+
+    // 채팅 데이터 로직
+    const [lastChatData,setLastChatData] = useState([]) // 이전 채팅데이터
+    const [sendMessage,setSendMessage] = useState('')
+    const [chatMessages,setChatMessages] = useState([])
+    const loggedUserId = useSelector((state: RootState) => state.user.id);
+    const {socket} = useSocket();
+
+    console.log(sendMessage)
+    console.log(chatMessages)
+
+    const rooms = {
+        content_id:chatData.roomKey.split('-')[0],
+        seller_id:chatData.roomKey.split('-')[1],
+        buyer_id:chatData.roomKey.split('-')[2]
+    }
+    
+    // 채팅데이터 전송
+    const chatEmitHandler = (event:React.FormEvent<HTMLFormElement>)=>{ 
+        event.preventDefault();
+        console.log('채팅데이터 전송',sendMessage)
+        const message:messagePayload = {
+            room: rooms,
+            send_id: loggedUserId,
+            message:sendMessage,
+        }
+        socket?.emit("message",message)
+        setSendMessage("")
+    }
+
+    // 채팅데이터 수신
+    useEffect(()=>{
+        socket?.on("message",(data:string)=>{
+            console.log('서버가 전송한 데이터',data)
+            setChatMessages((prevState)=>({
+                ...prevState,
+                chatMessage:data
+            }))
+        })
+    },[socket])
+
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
     
@@ -356,16 +411,24 @@ const chattingRoom:NextPage = (props) => {
                             <p className='chatting-content'>네 알겠습니다 그럼 내일 3시에 뵐게요~~</p>
                             <p className='chatting-updateDate'>오후 12:32</p>
                         </div>
+                        {chatMessages.map((message)=>(
+                            <p>{message}</p>
+                        ))}
                     </div>
                 }
             </ChattingRoomContainer>
-            <ChattingFooter>
+            <ChattingFooter onSubmit={chatEmitHandler}>
                 <div className='chatting-file'>
                     <label htmlFor='file-input'>+</label>
                     <input type="file" id="file-input"/>
                 </div>
                 <div className='chatting-message'>
-                    <input type="text" placeholder='메세지 보내기'/>
+                    <input 
+                        type="text" 
+                        placeholder='메세지 보내기'
+                        value={sendMessage}
+                        onChange={(e)=>setSendMessage(e.target.value)}
+                        />
                 </div>
                 <div className='chatting-submit'>
                     <button><SubmitBtn/></button>
@@ -378,6 +441,7 @@ const chattingRoom:NextPage = (props) => {
 chattingRoom.getInitialProps = async ({query})=>{
     // 이 id는 contentId-sellerId-buyerId 를 가진 roomKey이다
     const {id,title,price} = query;
+    // TODO : 채팅데이터 ( 상품제목,가격,seller정보,채팅데이터 ) REST API
     const chatData = {
         roomKey:id,
         title:title,
