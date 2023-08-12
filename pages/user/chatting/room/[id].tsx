@@ -8,6 +8,7 @@ import io from "socket.io-client"
 import { makeMoneyString } from '../../../../lib/utils';
 import { useSocket } from '../../../../context/socket.context';
 import { RootState, useSelector } from '../../../../store';
+import { RoomType } from '../[id]';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -273,14 +274,8 @@ interface PropsType {
     }
 }
 
-export type Rooms = {
-    content_id:string,
-    seller_id:string,
-    buyer_id:string,
-}
-
 export type messagePayload = {
-    room: Rooms;
+    room: RoomType;
     send_id: number;
     message: string;
 }
@@ -305,7 +300,8 @@ const chattingRoom:NextPage = (props) => {
 
     // TODO:  message 받아서 send_id 와 loggedId 를 비교해서 내가 채팅한 글과 상대방이 채팅한 글을 비교해서 렌더링
 
-    const rooms = {
+    const rooms:RoomType = {
+        id:'1',
         content_id:chatData.roomKey.split('-')[0],
         seller_id:chatData.roomKey.split('-')[1],
         buyer_id:chatData.roomKey.split('-')[2]

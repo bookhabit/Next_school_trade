@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import palette from '../../styles/palette';
 import Xicon from "../../public/static/svg/product/thumnailXicon.svg"
 import { useSocket } from '../../context/socket.context';
+import { chattingRoomListType } from '../../pages/user/chatting/[id]';
+import BackImage from '../common/BackImage';
+import { useRouter } from 'next/router';
+import { RootState, useSelector } from '../../store';
 
 const Container = styled.div`
     display:flex;
@@ -59,46 +63,50 @@ const Container = styled.div`
 `
 
 interface IProps{
-    chatting:{
-        profileImage:string,
-        name:string,
-        content:string;
-        chattingDate:string;
-    };
+    chattingRoomList:chattingRoomListType
 }
 
-const ChattingList:React.FC<IProps> = ({chatting}) => {
+const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     const {socket} = useSocket();
+    const router = useRouter();
+    const loggedUserId = useSelector((state: RootState) => state.user.id);
     // 채팅방 나가기 이벤트
-    const rooms = {
-        content_id:"",
-        seller_id:"",
-        buyer_id:"",
-    }
+    
     const leaveRoom = ()=>{
         if(socket){
-            socket.emit("leave_room",rooms)
+            socket.emit("leave_room",chattingRoomList.rooms)
         }
     }
+
+    const goToChattingRoom = ()=>{
+         // 소켓 연결 - 채팅접속
+         if(socket){
+            socket.emit("join_room",chattingRoomList.rooms)
+        }
+        router.push(`/user/chatting/room/${chattingRoomList.rooms.id}`)
+    }
+
     return (
         <Container>
             <div className='list-profileImage'>
-                <img src={chatting.profileImage} alt="사용자 프로필 이미지"/>
+                {chattingRoomList?.product?.images[0] && 
+                <BackImage src={chattingRoomList?.product?.images[0].path} alt="상품이미지" />
+                }
             </div>
             <div className='list-info'>
                 <div className='list-info-header'>
-                    <p className='list-name'>
-                        {chatting.name}
+                    <p className='list-name' onClick={goToChattingRoom}>
+                        {chattingRoomList?.product?.title}
                     </p>
                     <div className='list-leave-modal'>
                         <p className='list-date'>
-                            {chatting.chattingDate}
+                            {chattingRoomList?.chatData.updatedDate}
                         </p>
                         <Xicon className="leave-button" onClick={leaveRoom}/>
                     </div>
                 </div>
                 <p className='list-content'>
-                    {chatting.content}
+                    {chattingRoomList?.chatData.lastMessage}
                 </p>
             </div>
         </Container>

@@ -4,7 +4,11 @@ import ChattingList from '../../../components/chattingList/ChattingList';
 import styled from 'styled-components';
 import { useSocket } from '../../../context/socket.context';
 import { GetServerSideProps } from 'next';
-import axios from 'axios';
+import axios from '../../../lib/api';
+import { NextPage } from 'next';
+import { Users } from '../../../types/user';
+import { productListType } from '../../../types/product/product';
+
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -12,15 +16,33 @@ const Container = styled.div`
     }
 `
 
-const chattingList = () => {
-    const [roomList,setRoomList] = useState();
-    const {socket} = useSocket();
-    if(socket){
-        socket.on("join_room_list",(data)=>{
-            setRoomList(data)
-        })
+type PropsType = {
+    chattingRoomList:chattingRoomListType[]
+}
+
+export type chattingRoomListType = {
+    rooms:RoomType,
+    product:productListType|null,
+    chatData:{
+        updatedDate:string,
+        lastMessage:string,
     }
+}
+
+export type RoomType = {
+    id:string,
+    content_id:string,
+    seller_id:string,
+    buyer_id:string,
+}
+
+const chattingList:NextPage = (props) => {
+    const {chattingRoomList} = props as PropsType
+    console.log(chattingRoomList)
+
     // TODO :  join_room_list 데이터 받아서 처리
+
+
     
 
     const testChattingListCount = [
@@ -63,8 +85,8 @@ const chattingList = () => {
     ]
     return (
         <Container>
-            {testChattingListCount.map((chatting)=>(
-                <ChattingList chatting={chatting} key={chatting.id}/>
+            {chattingRoomList.map((chatting)=>(
+                <ChattingList chattingRoomList={chatting} key={chatting.rooms.content_id}/>
             ))}
             <LinkFooter/>
         </Container>
@@ -72,15 +94,50 @@ const chattingList = () => {
 };
 
 // 서버사이드 렌더링으로 chatting list 가져옴
-// export const getServerSideProps :GetServerSideProps = async ()=>{
-//     // chatlist api요청
-//     // const chattingList = await axios.get(`/room/:id`)
-//     return{
-//         props:{
-//             chattingList
-//         }
-//     }
-// }
+export const getServerSideProps :GetServerSideProps = async ({query})=>{
+    const {id:userId} = query;
+    // chatlist api요청
+    try{
+        const response = await axios.get(`/room/list/${userId}`)
+        const rooms = response.data as RoomType[];
+        console.log('rooms',rooms)
+
+        const chattingLists: chattingRoomListType[] = []; // An array to store multiple chattingList objects
+
+        for (const room of rooms) {
+            let product = null;
+
+            if (room.content_id !== undefined) {
+                const productResponse = await axios.get(`/content/read/${room.content_id}`);
+                product = productResponse.data;
+                console.log('product', product);
+            }
+
+            const chattingList: chattingRoomListType = {
+                rooms: room,
+                product: product,
+                chatData: {
+                    updatedDate: '1일전',
+                    lastMessage: "구매가능할까요?",
+                }
+            };
+
+            chattingLists.push(chattingList);
+        }
+
+        return{
+            props:{
+                chattingRoomList:chattingLists
+            }
+        }
+
+    }catch(e){
+        console.log(e)
+        return{
+            props:{},
+        }
+    }
+}
 
 
 export default chattingList;
