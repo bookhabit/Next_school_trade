@@ -358,7 +358,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   const goToChattinList = () => {
     if (loggedUser.isLogged) {
       router.push({
-        pathname: `/user/chatting`,
+        pathname: `/user/chatting/${loggedUser.id}`,
       });
     } else {
       alert("로그인이 필요합니다.");

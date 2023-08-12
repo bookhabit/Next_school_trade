@@ -37,6 +37,7 @@ const Container = styled.div`
             display:flex;
             justify-content:space-between;
             .list-name{
+                cursor: pointer;
                 font-size:23px;
                 font-weight:bold;
             }
@@ -79,11 +80,18 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     }
 
     const goToChattingRoom = ()=>{
+        // content_id , seller_id , buyer_id
+        const roomKey = `${chattingRoomList.rooms.content_id}-${chattingRoomList.rooms.seller_id}-${chattingRoomList.rooms.buyer_id}`
          // 소켓 연결 - 채팅접속
          if(socket){
             socket.emit("join_room",chattingRoomList.rooms)
         }
-        router.push(`/user/chatting/room/${chattingRoomList.rooms.id}`)
+        router.push({
+            pathname: `/user/chatting/room/${roomKey}`,
+            query: { 
+                title:chattingRoomList.product?.title,
+                price:chattingRoomList.product?.price},
+        });
     }
 
     return (

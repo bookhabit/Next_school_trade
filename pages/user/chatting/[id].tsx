@@ -30,10 +30,10 @@ export type chattingRoomListType = {
 }
 
 export type RoomType = {
-    id:string,
-    content_id:string,
-    seller_id:string,
-    buyer_id:string,
+    id?:number,
+    content_id:number,
+    seller_id:number,
+    buyer_id:number,
 }
 
 const chattingList:NextPage = (props) => {

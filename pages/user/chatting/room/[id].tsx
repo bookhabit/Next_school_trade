@@ -301,10 +301,9 @@ const chattingRoom:NextPage = (props) => {
     // TODO:  message 받아서 send_id 와 loggedId 를 비교해서 내가 채팅한 글과 상대방이 채팅한 글을 비교해서 렌더링
 
     const rooms:RoomType = {
-        id:'1',
-        content_id:chatData.roomKey.split('-')[0],
-        seller_id:chatData.roomKey.split('-')[1],
-        buyer_id:chatData.roomKey.split('-')[2]
+        content_id:Number(chatData.roomKey.split('-')[0]),
+        seller_id:Number(chatData.roomKey.split('-')[1]),
+        buyer_id:Number(chatData.roomKey.split('-')[2])
     }
     
     // 채팅데이터 전송
