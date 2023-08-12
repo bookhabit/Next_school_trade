@@ -53,6 +53,7 @@ const Container = styled.div`
 const LinkFooter = () => {
     const router = useRouter();
     // 로그인 확인
+    const loggedUserId = useSelector((state:RootState)=>state.user.id)
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
     
 
@@ -92,7 +93,7 @@ const LinkFooter = () => {
                 <div className='link-flex-item' onClick={()=>{
                     if(isLogged){
                         router.push({
-                            pathname:"/user/chatting"
+                            pathname:`/user/chatting/${loggedUserId}`
                         })
                     }else{
                         alert('로그인이 필요합니다.')

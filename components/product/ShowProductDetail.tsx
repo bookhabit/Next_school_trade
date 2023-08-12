@@ -344,7 +344,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
 
       // 채팅방 페이지 이동
       router.push({
-        pathname: `/user/chatting/${roomKey}`,
+        pathname: `/user/chatting/room/${roomKey}`,
         query: { title:productDetail.title,price:productDetail.price},
       });
     } else {
