@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootState } from "../../store";
 import ProfileUserIcon from "../../public/static/svg/myPage/ProfileUserIcon.svg";
-import { getSellerName } from "../../lib/api/user";
+import { getUserName } from "../../lib/api/user";
 import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
@@ -70,14 +70,15 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
   const router = useRouter();
 
   // sellerName 가져오기
-  const sellerId = Number(router.query.id);
   const [sellerName, setSellerName] = useState<string>("");
+  const [chatOpponentName,setChatOpponentName] = useState("");
 
-  
   useEffect(()=>{
+    // 판매자 페이지의 sellerName가져오기
+    const sellerId = Number(router.query.id);
     const getSellerNameAPI = async () => {
       // sellerId로 api호출
-      const response = await getSellerName(sellerId);
+      const response = await getUserName(sellerId);
       setSellerName(response.data);
     };
     if (
@@ -89,8 +90,28 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
     }
   },[])
 
-  // case "/user/chatting/[id]":
-  const testSellerNameForChatting = "이너런";
+  useEffect(()=>{
+    // 채팅방 페이지의 상대방 이름 가져오기
+    const getCahttingOpponentNameAPI = async () => {
+      const chatSellerId = String(router.query.id).split('-')[1]
+      // seller_id 와 loggin_Id 가 일치하다면 (판매자라면 구매자 이름 보여주기)
+      if(LoggedUser.id === Number(chatSellerId)){
+        const chatBuyerId = String(router.query.id).split('-')[2]  
+        
+        const response = await getUserName(Number(chatBuyerId));
+        setChatOpponentName(response.data);
+      }else{
+        // seller_id 와 loggin_Id 가 일치하지 않다면 (구매자라면 판매자이름 보여주기)
+        const response = await getUserName(Number(chatSellerId));
+        setChatOpponentName(response.data);
+      }
+    };
+
+    if(pathName === "/user/chatting/room/[id]"){
+      getCahttingOpponentNameAPI();
+    }
+
+  },[])
 
   const changeURLName = () => {
     switch (pathName) {
@@ -119,7 +140,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
       case "/user/chatting/[id]":
         return "채팅";
       case "/user/chatting/room/[id]":
-        return `${testSellerNameForChatting}`;
+        return `${chatOpponentName}`;
       case "/user/tradeReview/[id]":
         return "거래후기";
       case "/user/profile":

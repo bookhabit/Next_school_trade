@@ -19,7 +19,7 @@ export const getUserInfo = async (token: string) =>
   );
 
 // 특정 유저 닉네임 조회 api
-export const getSellerName = async (id: number) =>
+export const getUserName = async (id: number) =>
   await axios.get(`/user/find/nickName/${id}`);
 
 // 로그아웃 api
