@@ -73,10 +73,9 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     const loggedUserId = useSelector((state: RootState) => state.user.id);
     // 채팅방 나가기 이벤트
     
-    const leaveRoom = ()=>{
-        if(socket){
-            socket.emit("leave_room",chattingRoomList.rooms)
-        }
+    const leaveRoom = async ()=>{
+        await socket?.emit("leave_room",chattingRoomList.rooms)
+        router.reload();
     }
 
     const goToChattingRoom = ()=>{

@@ -117,8 +117,8 @@ export const getServerSideProps :GetServerSideProps = async ({query})=>{
                 rooms: room,
                 product: product,
                 chatData: {
-                    updatedDate: '1일전',
-                    lastMessage: "구매가능할까요?",
+                    updatedDate: '1일전 (TODO)',
+                    lastMessage: "구매가능할까요? (TODO)",
                 }
             };
 

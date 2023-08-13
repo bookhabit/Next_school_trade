@@ -291,11 +291,10 @@ const chattingRoom:NextPage = (props) => {
     // 채팅 데이터 로직
     const [lastChatData,setLastChatData] = useState([]) // 이전 채팅데이터
     const [sendMessage,setSendMessage] = useState('')
-    const [chatMessages,setChatMessages] = useState([])
+    const [chatMessages,setChatMessages] = useState<messagePayload[]>([])
     const loggedUserId = useSelector((state: RootState) => state.user.id);
     const {socket} = useSocket();
 
-    console.log(sendMessage)
     console.log(chatMessages)
 
     // TODO:  message 받아서 send_id 와 loggedId 를 비교해서 내가 채팅한 글과 상대방이 채팅한 글을 비교해서 렌더링
@@ -307,7 +306,7 @@ const chattingRoom:NextPage = (props) => {
     }
     
     // 채팅데이터 전송
-    const chatEmitHandler = (event:React.FormEvent<HTMLFormElement>)=>{ 
+    const chatEmitHandler = async (event:React.FormEvent<HTMLFormElement>)=>{ 
         event.preventDefault();
         console.log('채팅데이터 전송',sendMessage)
         const message:messagePayload = {
@@ -315,23 +314,27 @@ const chattingRoom:NextPage = (props) => {
             send_id: loggedUserId,
             message:sendMessage,
         }
-        socket?.emit("message",message)
+        // 송신
+        await socket?.emit("message",message)
         setSendMessage("")
-    }
-
-    // 채팅데이터 수신
-    useEffect(()=>{
-        socket?.on("message",(data:string)=>{
+        // 채팅데이터 수신
+        await socket?.on("message",(data:messagePayload)=>{
             console.log('서버가 전송한 데이터',data)
             setChatMessages((prevState)=>({
                 ...prevState,
                 chatMessage:data
             }))
         })
-    },[socket])
+    }
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
+
+    // <TODO>
+    //     채팅 chatMessages 테스트 데이터 만들어서
+    //     나의메세지 , 상대방메세지 send_id로 비교해서 
+    //     메세지를 map함수돌리고 내메세지와 상대방의 메시지 UI만들기
+    // </TODO>
     
     return (
         <Container>
@@ -408,9 +411,9 @@ const chattingRoom:NextPage = (props) => {
                             <p className='chatting-content'>네 알겠습니다 그럼 내일 3시에 뵐게요~~</p>
                             <p className='chatting-updateDate'>오후 12:32</p>
                         </div>
-                        {chatMessages.map((message)=>(
-                            <p>{message}</p>
-                        ))}
+                        {/* {chatMessages.map((message)=>(
+                            <p>{message.message}</p>
+                        ))} */}
                     </div>
                 }
             </ChattingRoomContainer>
