@@ -278,6 +278,7 @@ export type messagePayload = {
     room: RoomType;
     send_id: number;
     message: string;
+    updatedDate?:Date;
 }
 
 const chattingRoom:NextPage = (props) => {
@@ -314,27 +315,28 @@ const chattingRoom:NextPage = (props) => {
             send_id: loggedUserId,
             message:sendMessage,
         }
-        // 송신
         await socket?.emit("message",message)
         setSendMessage("")
-        // 채팅데이터 수신
-        await socket?.on("message",(data:messagePayload)=>{
-            console.log('서버가 전송한 데이터',data)
-            setChatMessages((prevState)=>({
-                ...prevState,
-                chatMessage:data
-            }))
-        })
     }
+
+    // 채팅데이터 수신
+    // 서버에서 메시지를 받았을 때 호출되는 함수
+    const handleReceivedMessage = (newMessage: messagePayload) => {
+        // 이전 메시지들과 새로운 메시지를 합쳐서 새 배열 생성
+        const updatedChatMessages = [...chatMessages, newMessage];
+        console.log('그전데이터 ',updatedChatMessages)
+        setChatMessages(updatedChatMessages);
+    };
+
+    useEffect(()=>{
+        socket?.on("message",(msgPayload:messagePayload)=>{
+            console.log('서버가 전송한 데이터',msgPayload)
+            handleReceivedMessage(msgPayload)
+        })
+    },[socket,chatMessages])
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
-
-    // <TODO>
-    //     채팅 chatMessages 테스트 데이터 만들어서
-    //     나의메세지 , 상대방메세지 send_id로 비교해서 
-    //     메세지를 map함수돌리고 내메세지와 상대방의 메시지 UI만들기
-    // </TODO>
     
     return (
         <Container>
@@ -411,9 +413,23 @@ const chattingRoom:NextPage = (props) => {
                             <p className='chatting-content'>네 알겠습니다 그럼 내일 3시에 뵐게요~~</p>
                             <p className='chatting-updateDate'>오후 12:32</p>
                         </div>
-                        {/* {chatMessages.map((message)=>(
-                            <p>{message.message}</p>
-                        ))} */}
+                        {chatMessages.map((message)=>(
+                            loggedUserId === message.send_id ?
+                            // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
+                            <div className='chatting-me' key={Math.random()}>
+                                <p className='chatting-content'>{message.message}</p>
+                                <p className='chatting-updateDate'>오후 12:32 (TODO)</p>
+                            </div>
+                            :
+                            // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
+                            <div className='chatting-opponent' key={Math.random()}>
+                                <div className='opponent-profile'>
+                                    <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                                </div>
+                                <p className='chatting-content'>{message.message}</p>
+                                <p className='chatting-updateDate'>오후 12:15 (TODO) </p>
+                            </div>
+                        ))}
                     </div>
                 }
             </ChattingRoomContainer>
