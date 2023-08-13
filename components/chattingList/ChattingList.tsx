@@ -7,6 +7,7 @@ import { chattingRoomListType } from '../../pages/user/chatting/[id]';
 import BackImage from '../common/BackImage';
 import { useRouter } from 'next/router';
 import { RootState, useSelector } from '../../store';
+import { convertToLongText } from '../../lib/utils';
 
 const Container = styled.div`
     display:flex;
@@ -16,17 +17,15 @@ const Container = styled.div`
     border-bottom:1px solid #D9D9D9;
 
     .list-profileImage{
-        width:60px;
-        height:60px;
-        background-color:${palette.main_color};
-        border-radius:50px;
         text-align:center;
         padding-top:10px;
         margin-left:10px;
         margin-right:20px;
         img{
-            width:30px;
-            height:40px;     
+            width:60px;
+            height:60px;   
+            border-radius:50px;  
+            object-fit:cover;
             filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
         }
     }
@@ -38,13 +37,14 @@ const Container = styled.div`
             justify-content:space-between;
             .list-name{
                 cursor: pointer;
-                font-size:23px;
+                font-size:20px;
                 font-weight:bold;
             }
             .list-leave-modal{
                 display:flex;
                 align-items:center;
                 justify-content:space-between;
+                position: relative;
                 .list-date{
                     font-size:15px;
                     color:${palette.updatedDate};
@@ -54,10 +54,23 @@ const Container = styled.div`
                 .leave-button{
                     cursor:pointer;
                 }
+                .leave-room-text{
+                    display:none;
+                    background-color:white;
+                    border:1px solid gray;
+                    padding:2px;
+                }
+                .leave-button:hover + .leave-room-text{
+                    display:block;
+                    width:100%;
+                    position:absolute;
+                    top:20px;
+                    left:20px;
+                }
             }
         }
         .list-content{
-            font-size:20px;
+            font-size:16px;
         }
     }
 
@@ -103,13 +116,14 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
             <div className='list-info'>
                 <div className='list-info-header'>
                     <p className='list-name' onClick={goToChattingRoom}>
-                        {chattingRoomList?.product?.title}
+                        {convertToLongText(chattingRoomList?.product?.title,13)}
                     </p>
                     <div className='list-leave-modal'>
                         <p className='list-date'>
                             {chattingRoomList?.chatData.updatedDate}
                         </p>
                         <Xicon className="leave-button" onClick={leaveRoom}/>
+                        <p className='leave-room-text'>채팅방 나가기</p>
                     </div>
                 </div>
                 <p className='list-content'>

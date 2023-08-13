@@ -27,3 +27,18 @@ export const makeMoneyNumber = (input: string) => {
   const price = input.replace(/,/g, "");
   return price;
 };
+
+// text 제한을 두어 ... 으로 변경하는 함수
+export const convertToLongText = (input:string|undefined,maxCount:number)=>{
+  if(input && input.length > maxCount){
+    let firstText=""
+    for(var count=0; count < maxCount; count++){
+      firstText += input[count]
+    }
+    const lastText = " ..."
+    const convertedText = firstText+lastText
+    return convertedText
+  }else{
+    return input
+  }
+}
