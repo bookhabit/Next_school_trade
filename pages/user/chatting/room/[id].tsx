@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import styled from 'styled-components';
@@ -14,9 +14,7 @@ import "moment/locale/ko";
 import { result, update } from 'lodash';
 
 const Container = styled.div`
-    @media only screen and (min-width: 430px) {
-	    min-height:100vh;
-    }
+    
 `
 
 const ChattingRoomContainer= styled.div`
@@ -298,6 +296,7 @@ const chattingRoom:NextPage = (props) => {
     const [chatMessages,setChatMessages] = useState<messagePayload[]>([])
     const loggedUserId = useSelector((state: RootState) => state.user.id);
     const {socket} = useSocket();
+    const messageEndRef = useRef<HTMLDivElement | null>(null);
 
     console.log(chatMessages)
 
@@ -332,9 +331,14 @@ const chattingRoom:NextPage = (props) => {
 
     useEffect(()=>{
         socket?.on("message",(msgPayload:messagePayload)=>{
+            console.log('채팅데이터 수신',msgPayload)
             handleReceivedMessage(msgPayload)
         })
     },[socket,chatMessages])
+
+    useEffect(()=>{
+        messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
+    },[chatMessages])
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
@@ -431,6 +435,7 @@ const chattingRoom:NextPage = (props) => {
                                 <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedDate))}</p>
                             </div>
                         ))}
+                        <div ref={messageEndRef}></div>
                     </div>
                 }
             </ChattingRoomContainer>

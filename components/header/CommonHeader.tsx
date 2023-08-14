@@ -9,6 +9,7 @@ import ProfileUserIcon from "../../public/static/svg/myPage/ProfileUserIcon.svg"
 import { getUserName } from "../../lib/api/user";
 import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { useSocket } from "../../context/socket.context"
 
 const Conatainer = styled.div`
   position: sticky;
@@ -68,6 +69,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
   };
 
   const router = useRouter();
+  const {socket} = useSocket();
 
   // sellerName 가져오기
   const [sellerName, setSellerName] = useState<string>("");
@@ -111,7 +113,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
       getCahttingOpponentNameAPI();
     }
 
-  },[LoggedUser])
+  },[LoggedUser,socket])
 
   const changeURLName = () => {
     switch (pathName) {
