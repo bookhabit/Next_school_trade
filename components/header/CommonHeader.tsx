@@ -111,7 +111,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
       getCahttingOpponentNameAPI();
     }
 
-  },[])
+  },[LoggedUser])
 
   const changeURLName = () => {
     switch (pathName) {

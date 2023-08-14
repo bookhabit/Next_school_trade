@@ -65,7 +65,7 @@ const MobileContainer = styled.div`
     width: 100%;
   }
   @media only screen and (min-width: 1023px) {
-    margin-left: 80px;
+    margin-left: 240px;
   }
 `;
 

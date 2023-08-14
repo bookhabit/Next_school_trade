@@ -5,10 +5,13 @@ import styled from 'styled-components';
 import palette from '../../../../styles/palette';
 import SubmitBtn from "../../../../public/static/svg/chatting/submitBtn.svg"
 import io from "socket.io-client"
-import { makeMoneyString } from '../../../../lib/utils';
+import { convertToDatetime, makeMoneyString } from '../../../../lib/utils';
 import { useSocket } from '../../../../context/socket.context';
 import { RootState, useSelector } from '../../../../store';
 import { RoomType } from '../[id]';
+import moment from 'moment';
+import "moment/locale/ko";
+import { result, update } from 'lodash';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -278,7 +281,7 @@ export type messagePayload = {
     room: RoomType;
     send_id: number;
     message: string;
-    updatedDate?:Date;
+    updatedDate: Date;
 }
 
 const chattingRoom:NextPage = (props) => {
@@ -310,7 +313,7 @@ const chattingRoom:NextPage = (props) => {
     const chatEmitHandler = async (event:React.FormEvent<HTMLFormElement>)=>{ 
         event.preventDefault();
         console.log('채팅데이터 전송',sendMessage)
-        const message:messagePayload = {
+        const message = {
             room: rooms,
             send_id: loggedUserId,
             message:sendMessage,
@@ -324,20 +327,18 @@ const chattingRoom:NextPage = (props) => {
     const handleReceivedMessage = (newMessage: messagePayload) => {
         // 이전 메시지들과 새로운 메시지를 합쳐서 새 배열 생성
         const updatedChatMessages = [...chatMessages, newMessage];
-        console.log('그전데이터 ',updatedChatMessages)
         setChatMessages(updatedChatMessages);
     };
 
     useEffect(()=>{
         socket?.on("message",(msgPayload:messagePayload)=>{
-            console.log('서버가 전송한 데이터',msgPayload)
             handleReceivedMessage(msgPayload)
         })
     },[socket,chatMessages])
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
-    
+
     return (
         <Container>
              <ChattingRoomContainer>
@@ -418,7 +419,7 @@ const chattingRoom:NextPage = (props) => {
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
                                 <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>오후 12:32 (TODO)</p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedDate))}</p>
                             </div>
                             :
                             // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
@@ -427,7 +428,7 @@ const chattingRoom:NextPage = (props) => {
                                     <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
                                 </div>
                                 <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>오후 12:15 (TODO) </p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedDate))}</p>
                             </div>
                         ))}
                     </div>

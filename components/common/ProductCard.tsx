@@ -7,9 +7,7 @@ import palette from "../../styles/palette";
 import { Division } from "./Division";
 import { useRouter } from "next/router";
 import { productListType } from "../../types/product/product";
-import { makeMoneyString } from "../../lib/utils";
-import moment from "moment";
-import "moment/locale/ko";
+import { convertToDatetime, makeMoneyString } from "../../lib/utils";
 import { isEmpty } from "lodash";
 import DefaultImgIcon from "../../public/static/svg/product/default_img.svg";
 import ShowCompletedIcon from "../../public/static/svg/product/showCompletedIcon.svg";
@@ -205,10 +203,6 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
     });
   };
 
-  // dateTime 상대시간으로 출력하기
-  const now = moment();
-  const productDate = moment(product.updatedAt);
-
   return (
     <>
       <Container>
@@ -248,7 +242,7 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
             {makeMoneyString(String(product.price))}원
           </p>
           <div className="info-footer">
-            <p className="info-footerLeft">{productDate.from(now)}</p>
+            <p className="info-footerLeft">{convertToDatetime(product.updatedAt)}</p>
             <div className="info-footerRight">
               <div className="heartDiv">
                 {favoriteProduct ? (

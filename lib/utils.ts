@@ -1,3 +1,7 @@
+import moment from 'moment';
+import "moment/locale/ko";
+
+
 //* "token=value" 를 {token:"value"}로 바꾸는 함수
 export const cookieStringToObject = (cookieString: string | undefined) => {
   const cookies: { [key: string]: string } = {};
@@ -41,4 +45,12 @@ export const convertToLongText = (input:string|undefined,maxCount:number)=>{
   }else{
     return input
   }
+}
+
+// 상대시간 변환
+// dateTime 상대시간으로 출력하기
+export const convertToDatetime = (date:string)=>{
+  const now = moment();
+    const updatedDate = moment(date);
+    return updatedDate.from(now)
 }
