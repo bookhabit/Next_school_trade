@@ -11,7 +11,8 @@ import { RootState, useSelector } from '../../../../store';
 import { RoomType } from '../[id]';
 import moment from 'moment';
 import "moment/locale/ko";
-import { result, update } from 'lodash';
+import { isEmpty, result, update } from 'lodash';
+import axios from '../../../../lib/api';
 
 const Container = styled.div`
     
@@ -276,10 +277,11 @@ interface PropsType {
 }
 
 export type messagePayload = {
+    id?:number;
     room: RoomType;
     send_id: number;
     message: string;
-    updatedDate: Date;
+    updatedAt: Date;
 }
 
 const chattingRoom:NextPage = (props) => {
@@ -291,9 +293,9 @@ const chattingRoom:NextPage = (props) => {
     const [sellerConfirm,setSellerConfirm] = useState(false)
 
     // 채팅 데이터 로직
-    const [lastChatData,setLastChatData] = useState([]) // 이전 채팅데이터
-    const [sendMessage,setSendMessage] = useState('')
+    const [lastChatMessages,setLastChatMessages] = useState<messagePayload[]>([])
     const [chatMessages,setChatMessages] = useState<messagePayload[]>([])
+    const [sendMessage,setSendMessage] = useState('')
     const loggedUserId = useSelector((state: RootState) => state.user.id);
     const {socket} = useSocket();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
@@ -311,7 +313,6 @@ const chattingRoom:NextPage = (props) => {
     // 채팅데이터 전송
     const chatEmitHandler = async (event:React.FormEvent<HTMLFormElement>)=>{ 
         event.preventDefault();
-        console.log('채팅데이터 전송',sendMessage)
         const message = {
             room: rooms,
             send_id: loggedUserId,
@@ -331,14 +332,56 @@ const chattingRoom:NextPage = (props) => {
 
     useEffect(()=>{
         socket?.on("message",(msgPayload:messagePayload)=>{
-            console.log('채팅데이터 수신',msgPayload)
             handleReceivedMessage(msgPayload)
         })
     },[socket,chatMessages])
 
     useEffect(()=>{
         messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    },[chatMessages])
+    },[chatMessages,lastChatMessages])
+
+    
+
+    // 현재 roomId 가져오기
+    const getRoomId = async (roomData: RoomType[]) => {
+        // user의 rooms.content_id랑 현재 room의 content_id 와 비교
+        const currentRoom = roomData.filter((room) => {
+            return (
+                room.content_id === Number(chatData.roomKey.split('-')[0]) &&
+                room.seller_id === Number(chatData.roomKey.split('-')[1]) &&
+                room.buyer_id === Number(chatData.roomKey.split('-')[2])
+            );
+        });
+        const currentRoomId = currentRoom[0]?.id;
+        return currentRoomId;
+    }
+
+    // 이전 data REST API - /chat/list/:roomId  ( roomId는 number )
+    // query는 ?page= number 
+    const getPreviousChatData = async (roomId: number) => {
+        const response = await axios.get(`/chat/list/${roomId}?page=${0}`);
+        console.log('이전데이터 api', response);
+        setLastChatMessages(response.data[0])
+    }
+
+    useEffect(() => {
+        const fetchChatData = async () => {
+            try {
+                const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
+                const joinRoomList: RoomType[] = joinRoomListData.data;
+                
+                const roomId = await getRoomId(joinRoomList);
+
+                if (roomId !== undefined) {
+                    await getPreviousChatData(roomId);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchChatData();
+    }, []);
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
@@ -392,38 +435,13 @@ const chattingRoom:NextPage = (props) => {
                 {!confirmTrade && 
                     <div className='chatting-message-box'>
                         <p className='chatting-last-date'>2023년 2월 25일</p>
-                        <div className='chatting-me'>
-                            <p className='chatting-content'>저 그 축구화 혹시 얼마에 살 수 있을까요?</p>
-                            <p className='chatting-updateDate'>오후 12:06</p>
-                        </div>
-                        <div className='chatting-opponent'>
-                            <div className='opponent-profile'>
-                                <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
-                            </div>
-                            <p className='chatting-content'>65000원인데 한 번 보시고 조율해봐도 됩니다!</p>
-                            <p className='chatting-updateDate'>오후 12:15</p>
-                        </div>
-                        <div className='chatting-me'>
-                            <p className='chatting-content'>그럼 어디서 만날까요?? 혹시 내일 3시 시간 괜찮으신가요??</p>
-                            <p className='chatting-updateDate'>오후 12:16</p>
-                        </div>
-                        <div className='chatting-opponent'>
-                            <div className='opponent-profile'>
-                                <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
-                            </div>
-                            <p className='chatting-content'>그럼 내일 3시에 이디야 카페에서 보는건 어떠신가요?</p>
-                            <p className='chatting-updateDate'>오후 12:30</p>
-                        </div>
-                        <div className='chatting-me'>
-                            <p className='chatting-content'>네 알겠습니다 그럼 내일 3시에 뵐게요~~</p>
-                            <p className='chatting-updateDate'>오후 12:32</p>
-                        </div>
-                        {chatMessages.map((message)=>(
+                        {/* 이전 데이터  */}
+                        {!isEmpty(lastChatMessages) && lastChatMessages.map((message)=>(
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
                                 <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedDate))}</p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
                             </div>
                             :
                             // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
@@ -432,7 +450,25 @@ const chattingRoom:NextPage = (props) => {
                                     <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
                                 </div>
                                 <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedDate))}</p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
+                            </div>
+                        ))}
+                        {/* 현재 송수신 데이터 */}
+                        {chatMessages.map((message)=>(
+                            loggedUserId === message.send_id ?
+                            // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
+                            <div className='chatting-me' key={Math.random()}>
+                                <p className='chatting-content'>{message.message}</p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
+                            </div>
+                            :
+                            // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
+                            <div className='chatting-opponent' key={Math.random()}>
+                                <div className='opponent-profile'>
+                                    <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                                </div>
+                                <p className='chatting-content'>{message.message}</p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
                             </div>
                         ))}
                         <div ref={messageEndRef}></div>
@@ -462,8 +498,8 @@ const chattingRoom:NextPage = (props) => {
 
 chattingRoom.getInitialProps = async ({query})=>{
     // 이 id는 contentId-sellerId-buyerId 를 가진 roomKey이다
-    const {id,title,price} = query;
-    // TODO : 채팅데이터 ( 상품제목,가격,seller정보,채팅데이터 ) REST API
+    const {id,title,price,roomId} = query;
+
     const chatData = {
         roomKey:id,
         title:title,
