@@ -13,9 +13,15 @@ import moment from 'moment';
 import "moment/locale/ko";
 import { isEmpty, result, update } from 'lodash';
 import axios from '../../../../lib/api';
+import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
+import useIntersectionObserver from '../../../../hooks/useIntersectionObserver';
+import SkeletonLoading from '../../../../components/common/SkeletonLoading';
+import FailFetchData from '../../../../components/common/FailFetchData';
 
 const Container = styled.div`
-    
+    @media only screen and (min-width: 430px) {
+        min-height: 90vh;
+    }
 `
 
 const ChattingRoomContainer= styled.div`
@@ -335,11 +341,6 @@ const chattingRoom:NextPage = (props) => {
             handleReceivedMessage(msgPayload)
         })
     },[socket,chatMessages])
-
-    useEffect(()=>{
-        messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    },[chatMessages,lastChatMessages])
-
     
 
     // 현재 roomId 가져오기
@@ -358,30 +359,58 @@ const chattingRoom:NextPage = (props) => {
 
     // 이전 data REST API - /chat/list/:roomId  ( roomId는 number )
     // query는 ?page= number 
-    const getPreviousChatData = async (roomId: number) => {
-        const response = await axios.get(`/chat/list/${roomId}?page=${0}`);
-        console.log('이전데이터 api', response);
-        setLastChatMessages(response.data[0])
+    const getPreviousChatData = async (roomId:number, page:number) => {
+        const response = await axios.get(`/chat/list/${roomId}?page=${page}`);
+        return response.data;
     }
 
-    useEffect(() => {
-        const fetchChatData = async () => {
-            try {
-                const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
-                const joinRoomList: RoomType[] = joinRoomListData.data;
-                
-                const roomId = await getRoomId(joinRoomList);
+    const fetchChatData = async ( { pageParam = 0 }: QueryFunctionContext) => {
+        const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
+        const joinRoomList = joinRoomListData.data as RoomType[];
+        const roomId = await getRoomId(joinRoomList);
 
-                if (roomId !== undefined) {
-                    await getPreviousChatData(roomId);
-                }
-            } catch (error) {
-                console.error('Error:', error);
+        if (roomId !== undefined) {
+            const chatData = await getPreviousChatData(roomId, pageParam);
+            return chatData[0];
+        }
+
+        return [];
+    };
+
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        status,
+    } = useInfiniteQuery(['chattingList'], fetchChatData, {
+        getNextPageParam: (lastPage:messagePayload[], pages) => {
+            // console.log('lastPage',lastPage)
+            // console.log('pages',pages)
+            const lastPageNumber = Math.ceil(lastPage?.length / 10);
+            const totalPageNumber = Math.ceil(pages?.length/10)
+            // 이 값으로 라스트넘버값 지정
+            if (totalPageNumber < lastPageNumber) {
+                return totalPageNumber;
+            } else {
+                return undefined;
             }
-        };
+        },
+    });
 
-        fetchChatData();
-    }, []);
+    // console.log('리액트쿼리 채팅data',data)
+
+    // 무한스크롤 구현
+    const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
+        if (isIntersecting && hasNextPage) {
+            console.log('다음페이지 가져오기')
+            fetchNextPage();
+        }
+    };
+    const { setTarget } = useIntersectionObserver({ onIntersect });
+
+    useEffect(()=>{
+        messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
+    },[chatMessages,data])
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
@@ -435,8 +464,11 @@ const chattingRoom:NextPage = (props) => {
                 {!confirmTrade && 
                     <div className='chatting-message-box'>
                         <p className='chatting-last-date'>2023년 2월 25일</p>
+                        {status === "loading" && <SkeletonLoading />}
+                        {status === "error" && <FailFetchData />}
                         {/* 이전 데이터  */}
-                        {!isEmpty(lastChatMessages) && lastChatMessages.map((message)=>(
+                        <div ref={setTarget}></div>
+                        {!isEmpty(data?.pages[0]) && data?.pages[0].map((message:messagePayload)=>(
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
@@ -498,7 +530,7 @@ const chattingRoom:NextPage = (props) => {
 
 chattingRoom.getInitialProps = async ({query})=>{
     // 이 id는 contentId-sellerId-buyerId 를 가진 roomKey이다
-    const {id,title,price,roomId} = query;
+    const {id,title,price} = query;
 
     const chatData = {
         roomKey:id,

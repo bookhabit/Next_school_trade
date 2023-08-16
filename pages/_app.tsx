@@ -36,7 +36,7 @@ interface BackgroundColor {
 const Container = styled.div<BackgroundColor>`
   display: flex;
   justify-content: center;
-  height: auto;
+  height: 100%;
   .pc-style {
     display: none;
   }
