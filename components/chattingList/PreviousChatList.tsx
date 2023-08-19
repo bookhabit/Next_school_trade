@@ -12,8 +12,8 @@ const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget}) =
     console.log(chat_list,loggedUserId)
     return (
         <div>
-            <div ref={setTarget}></div>
-            {chat_list.map((message)=>(
+            <div ref={setTarget}>setTarget</div>
+            {chat_list.reverse().map((message)=>(
                 loggedUserId === message.send_id ?
                 // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                 <div className='chatting-me' key={Math.random()}>

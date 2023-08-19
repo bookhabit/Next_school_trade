@@ -20,7 +20,7 @@ const useIntersectionObserver = ({
 
 		const observer: IntersectionObserver = new IntersectionObserver(onIntersect, { root, rootMargin, threshold }); 
     // props로 받은 옵션을 넣어주어 intersevtionObserver객체를 만들어준다. 
-		observer.observe(target); // target을 observe함수를 통해 발견해준다. 그러면 callback함수 onIntersect를 실행하게 된다. 
+		observer.observe(target); // target을 observe함수를 통해 발견해준다. 그러면 callback함수 onIntersect를 실행하게 된다.
 
 		return () => observer.unobserve(target); // 다시 unobserve상태로 만들어준다. 
 	}, [onIntersect, root, rootMargin, target, threshold]);// useEffect의 의존성 배열로 모든 옵션 변수들을 지정해주었다. 

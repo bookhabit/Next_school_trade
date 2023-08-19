@@ -23,10 +23,7 @@ type PropsType = {
 export type chattingRoomListType = {
     rooms:RoomType,
     product:productListType|null,
-    chatData:{
-        updatedDate:string,
-        lastMessage:string,
-    }
+    chatData:LatestChatType|null,
 }
 
 export type RoomType = {
@@ -36,53 +33,17 @@ export type RoomType = {
     buyer_id:number,
 }
 
+export type LatestChatType = {
+    id?:number,
+    send_id?:number,
+    message:string,
+    updatedAt:Date,
+    room:RoomType
+}
+
 const chattingList:NextPage = (props) => {
     const {chattingRoomList} = props as PropsType
     console.log(chattingRoomList)
-
-    // TODO :  join_room_list 데이터 받아서 처리
-
-
-    
-
-    const testChattingListCount = [
-            {
-                id:1,
-                name:"김상원",
-                profileImage:"/static/svg/myPage/userProfileIcon.svg",
-                content:"대정문으로 와주실 수 있나요?",
-                chattingDate:"1일 전"
-            },
-            {
-                id:2,
-                name:"차민재",
-                profileImage:"/static/svg/myPage/userProfileIcon.svg",
-                content:"25000원 가능한가요?",
-                chattingDate:"2일 전",
-            },
-            {
-                id:3,
-                name:"박태웅",
-                profileImage:"/static/svg/myPage/userProfileIcon.svg",
-                content:"네 거기서 봅시다~",
-                chattingDate:"3일 전"
-            },
-            {
-                id:4,
-                name:"신동민",
-                profileImage:"/static/svg/myPage/userProfileIcon.svg",
-                content:"네 맞습니다.",
-                chattingDate:"1주 전"
-            },
-            {
-                id:5,
-                name:"조윤재",
-                profileImage:"/static/svg/myPage/userProfileIcon.svg",
-                content:"감사합니다.",
-                chattingDate:"1개월 전"
-    
-            }
-    ]
     return (
         <Container>
             {chattingRoomList.map((chatting)=>(
@@ -105,24 +66,31 @@ export const getServerSideProps :GetServerSideProps = async ({query})=>{
         const chattingLists: chattingRoomListType[] = []; // An array to store multiple chattingList objects
 
         for (const room of rooms) {
-            let product = null;
+            let product:productListType|null = null;
+            let chatData:LatestChatType|null = null;
 
+            // room의 content 정보 얻어오기
             if (room.content_id !== undefined) {
                 const productResponse = await axios.get(`/content/read/${room.content_id}`);
                 product = productResponse.data;
                 console.log('product', product);
             }
 
+            // room의 마지막 대화정보 얻어오기
+            if(room.id !== undefined){
+                const latestChat:LatestChatType = await axios.get(`/chat/latest/${room.id}`).then((response)=>response.data)
+                console.log('----lastChat',latestChat)
+                chatData=latestChat
+            }
+
             const chattingList: chattingRoomListType = {
                 rooms: room,
                 product: product,
-                chatData: {
-                    updatedDate: '1일전 (TODO)',
-                    lastMessage: "구매가능할까요? (TODO)",
-                }
+                chatData: chatData
             };
 
             chattingLists.push(chattingList);
+            console.log('서버에서 최종 전달값',chattingLists)
         }
 
         return{

@@ -475,9 +475,9 @@ const chattingRoom:NextPage = (props) => {
                         {status === "error" && <FailFetchData />}
                         {/* 이전 데이터  */}
                         {status === "success" && 
-                            data?.pages.map((page,index)=>
+                            data?.pages.map((page: ChattingListPage, index: number)=>
                             isEmpty(page.chat_list) ? (
-                                <DataNull text="찾으시는 상품이 없습니다" key={index} />
+                                <DataNull text="아직 채팅이 이루어지지 않았습니다" key={index} />
                             ) : (
                             <PreviousChatList
                                 key={index}

@@ -7,7 +7,7 @@ import { chattingRoomListType } from '../../pages/user/chatting/[id]';
 import BackImage from '../common/BackImage';
 import { useRouter } from 'next/router';
 import { RootState, useSelector } from '../../store';
-import { convertToLongText } from '../../lib/utils';
+import { convertToDatetime, convertToLongText } from '../../lib/utils';
 
 const Container = styled.div`
     display:flex;
@@ -120,14 +120,16 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
                     </p>
                     <div className='list-leave-modal'>
                         <p className='list-date'>
-                            {chattingRoomList?.chatData.updatedDate}
+                            {!!chattingRoomList?.chatData?.updatedAt ? convertToDatetime(String(chattingRoomList?.chatData?.updatedAt)) :
+                            null
+                            }
                         </p>
                         <Xicon className="leave-button" onClick={leaveRoom}/>
                         <p className='leave-room-text'>채팅방 나가기</p>
                     </div>
                 </div>
                 <p className='list-content'>
-                    {chattingRoomList?.chatData.lastMessage}
+                    {!!chattingRoomList?.chatData?.message ? chattingRoomList?.chatData?.message : <p>아직 채팅이 이루어지지 않았습니다</p>}
                 </p>
             </div>
         </Container>
