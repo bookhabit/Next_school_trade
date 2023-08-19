@@ -31,13 +31,15 @@ export type RoomType = {
     content_id:number,
     seller_id:number,
     buyer_id:number,
+    seller_confirm_time?:Date,
+    buyer_confirm_time?:Date,
 }
 
 export type LatestChatType = {
     id?:number,
     send_id?:number,
     message:string,
-    updatedAt:Date,
+    createdAt:Date,
     room:RoomType
 }
 

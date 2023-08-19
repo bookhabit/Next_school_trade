@@ -94,15 +94,22 @@ const ChattingRoomContainer= styled.div`
                 font-weight:bold;
                 line-height:30px;
             }
+            .chatting-sub-content{
+                    display:flex;
+                    justify-content:flex-end;
+                    .confirm-number{
+                        color:${palette.main_color}
+                    }
+                }
             .chatting-updateDate{
-                font-size:12px;
-                height:auto;
-                color:${palette.updatedDate};
-                margin-right:10px;
-                display:flex;
-                flex-direction:column;
-                justify-content:flex-end;
-            }
+                    font-size:12px;
+                    height:auto;
+                    color:${palette.updatedDate};
+                    margin-right:10px;
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:flex-end;
+                }
         }
         /* 상대 채팅 css */
         .chatting-opponent{
@@ -313,6 +320,9 @@ const chattingRoom:NextPage = (props) => {
     const {socket} = useSocket();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
 
+    const [sellerConfirmTime,setSellerConfirmTime] = useState(new Date())
+    const [buyerConfirmTime,setBuyerConfirmTime] = useState(new Date())
+
     const chatMessageMemo = useMemo(()=>chatMessages,[chatMessages])
 
     // TODO:  message 받아서 send_id 와 loggedId 를 비교해서 내가 채팅한 글과 상대방이 채팅한 글을 비교해서 렌더링
@@ -374,8 +384,19 @@ const chattingRoom:NextPage = (props) => {
     const fetchChatData = async ( { pageParam = 2 }: QueryFunctionContext) => {
         const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
         const joinRoomList = joinRoomListData.data as RoomType[];
+        console.log('joinRoomList',joinRoomList)
         const roomId = await getRoomId(joinRoomList);
+        
+        // 채팅자의 confirm 확인
+        const currentRoom = joinRoomList.find((room)=>room.id === roomId)
+        if(currentRoom?.seller_confirm_time){
+            setSellerConfirmTime(currentRoom?.seller_confirm_time)
+        }
+        if(currentRoom?.buyer_confirm_time){
+            setBuyerConfirmTime(currentRoom?.buyer_confirm_time)
+        }
 
+        // 이전 채팅데이터 get
         if (roomId !== undefined) {
             const chatData = await getPreviousChatData(roomId, pageParam);
             console.log('chatData',chatData)
@@ -392,15 +413,10 @@ const chattingRoom:NextPage = (props) => {
         status,
     } = useInfiniteQuery(['chattingList'], fetchChatData, {
         getNextPageParam: (lastPage:ChattingListPage, pages:ChattingListPage[]) => {
-            console.log('lastPage',lastPage)
-            console.log('pages',pages)
             // 이 값으로 라스트넘버값 지정
             return lastPage.currentPage-1 >= 0 ? lastPage.currentPage-1 : undefined
         },
     });
-
-    console.log('리액트쿼리 채팅data',data)
-    console.log('hasNextpage',hasNextPage)
 
     // 무한스크롤 구현
     const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -481,6 +497,8 @@ const chattingRoom:NextPage = (props) => {
                                 chat_list={page.chat_list}
                                 setTarget={setTarget}
                                 loggedUserId={loggedUserId}
+                                buyerConfirmTime={buyerConfirmTime}
+                                sellerConfirmTime={sellerConfirmTime}
                             />
                             )
                         )}
