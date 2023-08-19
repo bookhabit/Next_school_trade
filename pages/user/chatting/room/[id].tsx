@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import styled from 'styled-components';
@@ -289,12 +289,13 @@ export type messagePayload = {
     room: RoomType;
     send_id: number;
     message: string;
-    updatedAt: Date;
+    createdAt: Date;
 }
 
 export type ChattingListPage = {
     chat_list:messagePayload[],
-    totalPage:number
+    totalPage:number,
+    currentPage:number,
 }
 
 const chattingRoom:NextPage = (props) => {
@@ -306,12 +307,13 @@ const chattingRoom:NextPage = (props) => {
     const [sellerConfirm,setSellerConfirm] = useState(false)
 
     // 채팅 데이터 로직
-    const [lastChatMessages,setLastChatMessages] = useState<messagePayload[]>([])
     const [chatMessages,setChatMessages] = useState<messagePayload[]>([])
     const [sendMessage,setSendMessage] = useState('')
     const loggedUserId = useSelector((state: RootState) => state.user.id);
     const {socket} = useSocket();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+    const chatMessageMemo = useMemo(()=>chatMessages,[chatMessages])
 
     // TODO:  message 받아서 send_id 와 loggedId 를 비교해서 내가 채팅한 글과 상대방이 채팅한 글을 비교해서 렌더링
 
@@ -369,7 +371,7 @@ const chattingRoom:NextPage = (props) => {
         return response.data;
     }
 
-    const fetchChatData = async ( { pageParam = 0 }: QueryFunctionContext) => {
+    const fetchChatData = async ( { pageParam = 2 }: QueryFunctionContext) => {
         const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
         const joinRoomList = joinRoomListData.data as RoomType[];
         const roomId = await getRoomId(joinRoomList);
@@ -392,13 +394,8 @@ const chattingRoom:NextPage = (props) => {
         getNextPageParam: (lastPage:ChattingListPage, pages:ChattingListPage[]) => {
             console.log('lastPage',lastPage)
             console.log('pages',pages)
-            const lastPageNumber = Math.ceil(lastPage.totalPage / 10);
             // 이 값으로 라스트넘버값 지정
-            if (pages.length < lastPageNumber) {
-                return pages.length;
-            } else {
-                return undefined;
-            }
+            return lastPage.currentPage-1 >= 0 ? lastPage.currentPage-1 : undefined
         },
     });
 
@@ -476,7 +473,7 @@ const chattingRoom:NextPage = (props) => {
                         {/* 이전 데이터  */}
                         {status === "success" && 
                             data?.pages.map((page: ChattingListPage, index: number)=>
-                            isEmpty(page.chat_list) ? (
+                            isEmpty(page.chat_list) ? !chatMessageMemo && (
                                 <DataNull text="아직 채팅이 이루어지지 않았습니다" key={index} />
                             ) : (
                             <PreviousChatList
@@ -488,12 +485,12 @@ const chattingRoom:NextPage = (props) => {
                             )
                         )}
                         {/* 현재 송수신 데이터 */}
-                        {chatMessages.map((message)=>(
+                        {chatMessageMemo.map((message)=>(
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
                                 <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.createdAt))}</p>
                             </div>
                             :
                             // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
@@ -502,7 +499,7 @@ const chattingRoom:NextPage = (props) => {
                                     <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
                                 </div>
                                 <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
+                                <p className='chatting-updateDate'>{convertToDatetime(String(message.createdAt))}</p>
                             </div>
                         ))}
                         <div ref={messageEndRef}></div>
