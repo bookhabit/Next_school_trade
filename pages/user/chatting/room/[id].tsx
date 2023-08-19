@@ -17,6 +17,8 @@ import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import useIntersectionObserver from '../../../../hooks/useIntersectionObserver';
 import SkeletonLoading from '../../../../components/common/SkeletonLoading';
 import FailFetchData from '../../../../components/common/FailFetchData';
+import DataNull from '../../../../components/common/DataNull';
+import PreviousChatList from '../../../../components/chattingList/PreviousChatList';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -290,6 +292,11 @@ export type messagePayload = {
     updatedAt: Date;
 }
 
+export type ChattingListPage = {
+    chat_list:messagePayload[],
+    totalPage:number
+}
+
 const chattingRoom:NextPage = (props) => {
     const {chatData} = props as PropsType
 
@@ -305,8 +312,6 @@ const chattingRoom:NextPage = (props) => {
     const loggedUserId = useSelector((state: RootState) => state.user.id);
     const {socket} = useSocket();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
-
-    console.log(chatMessages)
 
     // TODO:  message 받아서 send_id 와 loggedId 를 비교해서 내가 채팅한 글과 상대방이 채팅한 글을 비교해서 렌더링
 
@@ -371,7 +376,8 @@ const chattingRoom:NextPage = (props) => {
 
         if (roomId !== undefined) {
             const chatData = await getPreviousChatData(roomId, pageParam);
-            return chatData[0];
+            console.log('chatData',chatData)
+            return chatData;
         }
 
         return [];
@@ -383,24 +389,25 @@ const chattingRoom:NextPage = (props) => {
         hasNextPage,
         status,
     } = useInfiniteQuery(['chattingList'], fetchChatData, {
-        getNextPageParam: (lastPage:messagePayload[], pages) => {
-            // console.log('lastPage',lastPage)
-            // console.log('pages',pages)
-            const lastPageNumber = Math.ceil(lastPage?.length / 10);
-            const totalPageNumber = Math.ceil(pages?.length/10)
+        getNextPageParam: (lastPage:ChattingListPage, pages:ChattingListPage[]) => {
+            console.log('lastPage',lastPage)
+            console.log('pages',pages)
+            const lastPageNumber = Math.ceil(lastPage.totalPage / 10);
             // 이 값으로 라스트넘버값 지정
-            if (totalPageNumber < lastPageNumber) {
-                return totalPageNumber;
+            if (pages.length < lastPageNumber) {
+                return pages.length;
             } else {
                 return undefined;
             }
         },
     });
 
-    // console.log('리액트쿼리 채팅data',data)
+    console.log('리액트쿼리 채팅data',data)
+    console.log('hasNextpage',hasNextPage)
 
     // 무한스크롤 구현
     const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
+        console.log('isIntersecting',isIntersecting)
         if (isIntersecting && hasNextPage) {
             console.log('다음페이지 가져오기')
             fetchNextPage();
@@ -467,24 +474,19 @@ const chattingRoom:NextPage = (props) => {
                         {status === "loading" && <SkeletonLoading />}
                         {status === "error" && <FailFetchData />}
                         {/* 이전 데이터  */}
-                        <div ref={setTarget}></div>
-                        {!isEmpty(data?.pages[0]) && data?.pages[0].map((message:messagePayload)=>(
-                            loggedUserId === message.send_id ?
-                            // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
-                            <div className='chatting-me' key={Math.random()}>
-                                <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
-                            </div>
-                            :
-                            // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
-                            <div className='chatting-opponent' key={Math.random()}>
-                                <div className='opponent-profile'>
-                                    <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
-                                </div>
-                                <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>{convertToDatetime(String(message.updatedAt))}</p>
-                            </div>
-                        ))}
+                        {status === "success" && 
+                            data?.pages.map((page,index)=>
+                            isEmpty(page.chat_list) ? (
+                                <DataNull text="찾으시는 상품이 없습니다" key={index} />
+                            ) : (
+                            <PreviousChatList
+                                key={index}
+                                chat_list={page.chat_list}
+                                setTarget={setTarget}
+                                loggedUserId={loggedUserId}
+                            />
+                            )
+                        )}
                         {/* 현재 송수신 데이터 */}
                         {chatMessages.map((message)=>(
                             loggedUserId === message.send_id ?

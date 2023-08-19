@@ -94,6 +94,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
 
   useEffect(()=>{
     // 채팅방 페이지의 상대방 이름 가져오기
+    console.log(chatOpponentName)
     const getCahttingOpponentNameAPI = async () => {
       const chatSellerId = String(router.query.id).split('-')[1]
       // seller_id 와 loggin_Id 가 일치하다면 (판매자라면 구매자 이름 보여주기)
