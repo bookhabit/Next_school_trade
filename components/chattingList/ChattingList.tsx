@@ -120,7 +120,7 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
                     </p>
                     <div className='list-leave-modal'>
                         <p className='list-date'>
-                            {!!chattingRoomList?.chatData?.updatedAt ? convertToDatetime(String(chattingRoomList?.chatData?.updatedAt)) :
+                            {!!chattingRoomList?.chatData?.createdAt ? convertToDatetime(String(chattingRoomList?.chatData?.createdAt)) :
                             null
                             }
                         </p>
