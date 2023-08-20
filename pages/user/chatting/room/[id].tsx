@@ -331,8 +331,9 @@ const chattingRoom:NextPage = (props) => {
 
     const [sellerConfirmTime,setSellerConfirmTime] = useState(new Date())
     const [buyerConfirmTime,setBuyerConfirmTime] = useState(new Date())
-
+    
     const chatMessageMemo = useMemo(()=>chatMessages,[chatMessages])
+    const [currentScroll,setCurrentScroll] = useState(false);
 
     const rooms:RoomType = {
         content_id:Number(chatData.roomKey.split('-')[0]),
@@ -404,7 +405,7 @@ const chattingRoom:NextPage = (props) => {
 
         // 이전 채팅데이터 get
         if (roomId !== undefined) {
-            const chatData = await getPreviousChatData(roomId, pageParam);
+            const chatData = await getPreviousChatData(roomId, pageParam);            
             // 이전 채팅데이터를 가져왔다면 현재 채팅은 기본값
             setChatMessages([])
             return chatData;
@@ -430,26 +431,27 @@ const chattingRoom:NextPage = (props) => {
 
     // 무한스크롤 구현
     const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
-        console.log('isIntersecting',isIntersecting)
-        if (isIntersecting && hasNextPage) {
-            console.log('다음페이지 가져오기')
-            fetchNextPage();
-        }
+        window.addEventListener('scroll',()=>{
+            if (isIntersecting && hasNextPage && window.scrollY === 0) {
+                fetchNextPage();
+            }
+        })
     };
-    const { setTarget } = useIntersectionObserver({ onIntersect });
+    const { setTarget } = useIntersectionObserver({ rootMargin:'-30px',onIntersect });
 
-
+    // 스크롤 아래로 이동
     useEffect(()=>{
         messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    },[chatMessages])
+    },[chatMessageMemo])
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
     const buyerId = Number(chatData.roomKey.split('-')[2])
 
     console.log('무한스크롤 데이터',data)
+    // 데이터 요청해줄떄마다 새로운 배열로 복사
+    const chattingData = data?.pages.slice().reverse()
     
-
     return (
         <Container>
              <ChattingRoomContainer>
@@ -501,8 +503,8 @@ const chattingRoom:NextPage = (props) => {
                         {status === "loading" && <SkeletonLoading />}
                         {status === "error" && <FailFetchData />}
                         {/* 이전 데이터  */}
-                        {status === "success" && 
-                            data?.pages.map((page: ChattingListPage, index: number)=>
+                        {status === "success" && chattingData && 
+                        chattingData.map((page: ChattingListPage, index: number)=>
                             isEmpty(page.chat_list) ? !chatMessageMemo && (
                                 <DataNull text="아직 채팅이 이루어지지 않았습니다" key={index} />
                             ) : (

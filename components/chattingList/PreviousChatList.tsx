@@ -17,7 +17,6 @@ const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget,sel
     const roomKey = String(router.query.id)
     const sellerId = Number(roomKey.split('-')[1])
     const buyerId = Number(roomKey.split('-')[2])
-    console.log('logged',loggedUserId)
 
     // 현재 시간에서 24시간을 뺀 시간
     const now = new Date();
@@ -28,7 +27,7 @@ const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget,sel
 
     return (
         <div>
-            <div ref={setTarget}></div>
+            <div ref={setTarget}>target</div>
             {/* 마지막 대화날짜 표시 */}
             {diffFromNowTime !==0 && diffFromNowTime > 24
             && 
