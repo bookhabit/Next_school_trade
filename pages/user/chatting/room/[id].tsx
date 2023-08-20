@@ -69,9 +69,9 @@ const ChattingRoomContainer= styled.div`
     }
     .chatting-last-date{
         width:100%;
-        height:30px;
+        height:40px;
         color:${palette.updatedDate};
-        font-size:12px;
+        font-size:16px;
         text-align:center;
         padding-top:5px;
         margin-top:20px;
@@ -334,8 +334,6 @@ const chattingRoom:NextPage = (props) => {
 
     const chatMessageMemo = useMemo(()=>chatMessages,[chatMessages])
 
-    // TODO:  message 받아서 send_id 와 loggedId 를 비교해서 내가 채팅한 글과 상대방이 채팅한 글을 비교해서 렌더링
-
     const rooms:RoomType = {
         content_id:Number(chatData.roomKey.split('-')[0]),
         seller_id:Number(chatData.roomKey.split('-')[1]),
@@ -440,9 +438,10 @@ const chattingRoom:NextPage = (props) => {
     };
     const { setTarget } = useIntersectionObserver({ onIntersect });
 
+
     useEffect(()=>{
         messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    },[chatMessages,data])
+    },[chatMessages])
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true

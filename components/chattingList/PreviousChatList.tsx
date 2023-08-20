@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChattingListPage, messagePayload } from '../../pages/user/chatting/room/[id]';
+import { messagePayload } from '../../pages/user/chatting/room/[id]';
 import { convertToDatetime } from '../../lib/utils';
 import { useRouter } from 'next/router';
 import moment from 'moment';
@@ -13,7 +13,6 @@ interface IProps{
 }
 
 const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget,sellerConfirmTime,buyerConfirmTime}) => {
-    console.log(chat_list,loggedUserId,sellerConfirmTime,buyerConfirmTime)
     const router = useRouter()
     const roomKey = String(router.query.id)
     const sellerId = Number(roomKey.split('-')[1])
@@ -26,7 +25,7 @@ const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget,sel
     if(!!chat_list){
         diffFromNowTime = Math.floor((now.getTime() - new Date(chat_list[0].createdAt).getTime()) /1000/ 60 /60)
     }
-    
+
     return (
         <div>
             <div ref={setTarget}></div>
