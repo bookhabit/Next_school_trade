@@ -11,7 +11,7 @@ import { RootState, useSelector } from '../../../../store';
 import { RoomType } from '../[id]';
 import moment from 'moment';
 import "moment/locale/ko";
-import { isEmpty, result, update } from 'lodash';
+import { isEmpty, last, result, update } from 'lodash';
 import axios from '../../../../lib/api';
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import useIntersectionObserver from '../../../../hooks/useIntersectionObserver';
@@ -390,7 +390,7 @@ const chattingRoom:NextPage = (props) => {
         return response.data;
     }
 
-    const fetchChatData = async ( { pageParam = 2 }: QueryFunctionContext) => {
+    const fetchChatData = async ( { pageParam = 0 }: QueryFunctionContext) => {
         const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
         const joinRoomList = joinRoomListData.data as RoomType[];
         const roomId = await getRoomId(joinRoomList);
@@ -423,7 +423,10 @@ const chattingRoom:NextPage = (props) => {
     } = useInfiniteQuery(['chattingList'], fetchChatData, {
         getNextPageParam: (lastPage:ChattingListPage, pages:ChattingListPage[]) => {
             // 이 값으로 라스트넘버값 지정
-            return lastPage.currentPage-1 >= 0 ? lastPage.currentPage-1 : undefined
+            if(pages.length < Math.ceil(lastPage.totalPage/10) ){
+                return pages.length    
+            }
+            return undefined
         },
     });
 
@@ -446,6 +449,7 @@ const chattingRoom:NextPage = (props) => {
     const buyerId = Number(chatData.roomKey.split('-')[2])
 
     console.log('무한스크롤 데이터',data)
+    
 
     return (
         <Container>
@@ -495,7 +499,6 @@ const chattingRoom:NextPage = (props) => {
                 }
                 {!confirmTrade && 
                     <div className='chatting-message-box'>
-                        <p className='chatting-last-date'>2023년 2월 25일</p>
                         {status === "loading" && <SkeletonLoading />}
                         {status === "error" && <FailFetchData />}
                         {/* 이전 데이터  */}
