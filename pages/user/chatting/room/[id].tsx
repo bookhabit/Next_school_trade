@@ -96,9 +96,13 @@ const ChattingRoomContainer= styled.div`
             }
             .chatting-sub-content{
                     display:flex;
+                    flex-direction:column;
                     justify-content:flex-end;
                     .confirm-number{
-                        color:${palette.main_color}
+                        color:${palette.main_color};
+                        text-align:right;
+                        margin-right:10px;
+                        margin-bottom:5px;
                     }
                 }
             .chatting-updateDate{
@@ -106,10 +110,11 @@ const ChattingRoomContainer= styled.div`
                     height:auto;
                     color:${palette.updatedDate};
                     margin-right:10px;
+                    margin-bottom:5px;
                     display:flex;
                     flex-direction:column;
                     justify-content:flex-end;
-                }
+            }
         }
         /* 상대 채팅 css */
         .chatting-opponent{
@@ -384,7 +389,6 @@ const chattingRoom:NextPage = (props) => {
     const fetchChatData = async ( { pageParam = 2 }: QueryFunctionContext) => {
         const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
         const joinRoomList = joinRoomListData.data as RoomType[];
-        console.log('joinRoomList',joinRoomList)
         const roomId = await getRoomId(joinRoomList);
         
         // 채팅자의 confirm 확인
@@ -399,7 +403,8 @@ const chattingRoom:NextPage = (props) => {
         // 이전 채팅데이터 get
         if (roomId !== undefined) {
             const chatData = await getPreviousChatData(roomId, pageParam);
-            console.log('chatData',chatData)
+            // 이전 채팅데이터를 가져왔다면 현재 채팅은 기본값
+            setChatMessages([])
             return chatData;
         }
 
@@ -434,6 +439,9 @@ const chattingRoom:NextPage = (props) => {
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
+    const buyerId = Number(chatData.roomKey.split('-')[2])
+
+    console.log('무한스크롤 데이터',data)
 
     return (
         <Container>
@@ -508,7 +516,18 @@ const chattingRoom:NextPage = (props) => {
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
                                 <p className='chatting-content'>{message.message}</p>
-                                <p className='chatting-updateDate'>{convertToDatetime(String(message.createdAt))}</p>
+                                <div className='chatting-sub-content'>
+                                    {loggedUserId === buyerId ? 
+                                    sellerConfirmTime < message.createdAt ? 
+                                    <span className='confirm-number'>1</span>
+                                    : <span></span>
+                                    :
+                                    buyerConfirmTime < message.createdAt ? 
+                                    <span className='confirm-number'>1</span>
+                                    : <span></span>
+                                    }
+                                    <p className='chatting-updateDate'>{convertToDatetime(String(message.createdAt))}</p>
+                                </div>
                             </div>
                             :
                             // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
