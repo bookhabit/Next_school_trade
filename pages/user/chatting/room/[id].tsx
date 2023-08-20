@@ -31,6 +31,9 @@ const ChattingRoomContainer= styled.div`
     padding-bottom:70px;
     /* 게시글 설명 css */
     .chatting-header{
+        position:fixed;
+        top:90px;
+        max-width:430px;
         width:100%;
         height:100px;
         background-color:#FEFBFF;
@@ -76,6 +79,7 @@ const ChattingRoomContainer= styled.div`
     }
     .chatting-message-box{
         width:100%;
+        padding-top:100px;
         /* 나의 채팅 css */
         .chatting-me{
             width:100%;
