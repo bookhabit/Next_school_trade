@@ -22,7 +22,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     if (isLoggedIn) {
       const newSocket = io(SOCKET_URL);
-      console.log('로그인 후 소켓연결');
       setSocket(newSocket);
     }
   }, [isLoggedIn]);
@@ -35,8 +34,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       })
     }
   },[socket,isLoggedIn])
-
-  console.log('socket 상태', socket);
 
   return (
     <SocketContext.Provider value={{ socket }}>

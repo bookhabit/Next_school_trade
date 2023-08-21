@@ -3,6 +3,7 @@ import { messagePayload } from '../../pages/user/chatting/room/[id]';
 import { convertToDatetime } from '../../lib/utils';
 import { useRouter } from 'next/router';
 import moment from 'moment';
+import { isEmpty } from 'lodash';
 
 interface IProps{
     chat_list:messagePayload[],
@@ -10,9 +11,11 @@ interface IProps{
     setTarget:React.Dispatch<React.SetStateAction<HTMLElement | null | undefined>>,
     sellerConfirmTime:Date,
     buyerConfirmTime:Date,
+    scrollBarRef:React.RefObject<HTMLDivElement>
 }
 
-const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget,sellerConfirmTime,buyerConfirmTime}) => {
+const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget,sellerConfirmTime,buyerConfirmTime,scrollBarRef}) => {
+    console.log(chat_list)
     const router = useRouter()
     const roomKey = String(router.query.id)
     const sellerId = Number(roomKey.split('-')[1])
@@ -21,13 +24,13 @@ const PreviousChatList:React.FC<IProps> = ({chat_list,loggedUserId,setTarget,sel
     // 현재 시간에서 24시간을 뺀 시간
     const now = new Date();
     let diffFromNowTime=0;
-    if(!!chat_list){
+    if(!isEmpty(chat_list)){
         diffFromNowTime = Math.floor((now.getTime() - new Date(chat_list[0].createdAt).getTime()) /1000/ 60 /60)
     }
 
     return (
-        <div>
-            <div ref={setTarget}>target</div>
+        <div ref={scrollBarRef}>
+            {/* <div ref={setTarget}></div> */}
             {/* 마지막 대화날짜 표시 */}
             {diffFromNowTime !==0 && diffFromNowTime > 24
             && 
