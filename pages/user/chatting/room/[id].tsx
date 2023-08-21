@@ -330,12 +330,21 @@ const chattingRoom:NextPage = (props) => {
     const {socket} = useSocket();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
 
+    // 상대방 메시지 확인 필요 로직 - 1표시
     const [sellerConfirmTime,setSellerConfirmTime] = useState(new Date())
     const [buyerConfirmTime,setBuyerConfirmTime] = useState(new Date())
-    
-    const chatMessageMemo = useMemo(()=>chatMessages,[chatMessages])
+
+    // 무한스크롤 데이터 패칭 로직
     const [hasNextPage,setHasNextPage] = useState(false)
     const [nextPageNumber,setNextPageNumber] = useState<number|undefined>(0)
+    const [prevScrollHeight,setPrevScrollHeight] = useState<number|null>(null);
+    const scrollBarRef = useRef<HTMLDivElement>(null);
+    // 원본배열이 변경되지 않기 위해 새로운배열로 복사해서 렌더링
+    function reverseArray(array:messagePayload[]) {
+        const newArray = array.slice(); // 배열 복사
+        return newArray.reverse();      // 복사된 배열 뒤집기
+    }
+    const lastChattingList = reverseArray(lastChatMessages)
 
     const rooms:RoomType = {
         content_id:Number(chatData.roomKey.split('-')[0]),
@@ -426,14 +435,10 @@ const chattingRoom:NextPage = (props) => {
         }
     };
 
-    const [prevScrollHeight,setPrevScrollHeight] = useState<number|null>(null);
-    const scrollBarRef = useRef<HTMLDivElement>(null);
-    
-    // 무한스크롤 구현
+    // fetch nextData as scroll event
     const handleScroll = throttle(() => {
-        const scrollHeight = document.documentElement.scrollHeight;
         const scrollTop = document.documentElement.scrollTop;
-        const clientHeight = document.documentElement.clientHeight;
+
         if (scrollTop === 0 && hasNextPage && nextPageNumber !== 0) {
             console.log(scrollBarRef.current)
             if(scrollBarRef.current){
@@ -443,39 +448,36 @@ const chattingRoom:NextPage = (props) => {
         }
       }, 300);
 
+    // fetch frist data : last messages
     useEffect(()=>{
         fetchChatData()
     },[])
 
+    // set scroll event
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, [handleScroll]);
 
-    // 데이터 요청 시 또는 송신 시 스크롤 아래로 이동
+    // scroll restoration or scroll to bottom
     useEffect(()=>{
         if (prevScrollHeight && scrollBarRef.current) {
             window.scrollTo(0,scrollBarRef.current.scrollHeight - prevScrollHeight)
             return setPrevScrollHeight(null);
+        }else{
+            messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
         }
-        messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    },[chatMessageMemo,lastChatMessages])
-
-    // 원본배열이 변경되지 않기 위해 새로운배열로 복사해서 렌더링
-    function reverseArray(array:messagePayload[]) {
-        const newArray = array.slice(); // 배열 복사
-        return newArray.reverse();      // 복사된 배열 뒤집기
-    }
-    const lastChattingList = reverseArray(lastChatMessages)
+    },[chatMessages,lastChatMessages])
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
     const buyerId = Number(chatData.roomKey.split('-')[2])
-
-    console.log(lastChatMessages)
-    console.log(lastChattingList)
     // 데이터 요청해줄떄마다 새로운 배열로 복사
     
+    let currentDate = new Date();
+    let lastDate:Date|null = null;
+
+
     return (
         <Container>
              <ChattingRoomContainer>
@@ -526,10 +528,27 @@ const chattingRoom:NextPage = (props) => {
                     <div className='chatting-message-box'>
                         {/* 이전 데이터  */}
                         <div ref={scrollBarRef} onScroll={handleScroll}>
-                            {lastChattingList.map((chatting)=>(
-                                loggedUserId === chatting.send_id ?
+                            {lastChattingList.map((chatting)=>{
+                                const messageDate = new Date(chatting.createdAt);
+
+                                // 날짜가 변경되었을 때, 날짜 구분 헤더 추가
+                                if (!lastDate || messageDate.toDateString() !== lastDate.toDateString()) {
+                                  lastDate = messageDate;
+                                  const shouldDisplayDate = messageDate < currentDate;
+                                    console.log(shouldDisplayDate)
+                                // 대화 날짜 표시
+                                  return (
+                                    <div key={`date-${chatting.createdAt}`} className="chatting-last-date">
+                                      {shouldDisplayDate ? moment(messageDate).format('YYYY년 MM월 DD일 dddd') : null}
+                                    </div>
+                                  );
+                                }
+
+                                // 지난 대화 표시
+                                return(
+                                    loggedUserId === chatting.send_id ?
                                 // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
-                                <div className='chatting-me' key={Math.random()}>
+                                <div className='chatting-me' key={String(chatting.createdAt)}>
                                     <p className='chatting-content'>{chatting.message}</p>
                                     <div className='chatting-sub-content'>
                                         {loggedUserId === buyerId ? 
@@ -553,19 +572,12 @@ const chattingRoom:NextPage = (props) => {
                                     <p className='chatting-content'>{chatting.message}</p>
                                     <p className='chatting-updateDate'>{convertToDatetime(String(chatting.createdAt))}</p>
                                 </div>
-                            ))}
+                                )
+                            })}
                         </div>
-                        {/* <PreviousChatList
-                                key={Math.random()}
-                                chat_list={lastChatMessages}
-                                setTarget={setTarget}
-                                loggedUserId={loggedUserId}
-                                buyerConfirmTime={buyerConfirmTime}
-                                sellerConfirmTime={sellerConfirmTime}
-                                scrollBarRef={scrollBarRef}
-                        /> */}
+                        
                         {/* 현재 송수신 데이터 */}
-                        {chatMessageMemo.map((message)=>(
+                        {chatMessages.map((message)=>(
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
