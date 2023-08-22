@@ -12,8 +12,9 @@ import { productListType } from '../../../types/product/product';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
-	    min-height:100vh;
+	    min-height:90vh;
     }
+    padding-bottom:60px;
 `
 
 type PropsType = {

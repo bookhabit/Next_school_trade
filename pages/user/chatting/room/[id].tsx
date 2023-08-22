@@ -13,12 +13,6 @@ import moment from 'moment';
 import "moment/locale/ko";
 import { isEmpty, last, result, throttle, update } from 'lodash';
 import axios from '../../../../lib/api';
-import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
-import useIntersectionObserver from '../../../../hooks/useIntersectionObserver';
-import SkeletonLoading from '../../../../components/common/SkeletonLoading';
-import FailFetchData from '../../../../components/common/FailFetchData';
-import DataNull from '../../../../components/common/DataNull';
-import PreviousChatList from '../../../../components/chattingList/PreviousChatList';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -79,7 +73,7 @@ const ChattingRoomContainer= styled.div`
     }
     .chatting-message-box{
         width:100%;
-        padding-top:100px;
+        padding-top:120px;
         /* 나의 채팅 css */
         .chatting-me{
             width:100%;
@@ -293,8 +287,8 @@ const ChattingFooter= styled.form`
     }
 `
 interface PropsType {
-    chatData:{
-        roomKey:string;
+    chattingRoomData:{
+        room:RoomType;
         title:string;
         price:string;
     }
@@ -315,7 +309,16 @@ export type ChattingListPage = {
 }
 
 const chattingRoom:NextPage = (props) => {
-    const {chatData} = props as PropsType
+    const {chattingRoomData} = props as PropsType
+    console.log('채팅룸데이터',chattingRoomData)
+
+    if(!chattingRoomData.room){
+        return (
+            <div>
+                채팅방 정보를 불러오지 못하였습니다
+            </div>
+        )
+    }
 
     // 거래하기 로직
     const [confirmTrade,setConfirmTrade] = useState(false)
@@ -329,6 +332,10 @@ const chattingRoom:NextPage = (props) => {
     const loggedUserId = useSelector((state: RootState) => state.user.id);
     const {socket} = useSocket();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
+    const buyerId = chattingRoomData.room.buyer_id
+    const sellerId = chattingRoomData.room.seller_id
+    const contentId = chattingRoomData.room.content_id
+    const roomId = chattingRoomData.room.id
 
     // 상대방 메시지 확인 필요 로직 - 1표시
     const [sellerConfirmTime,setSellerConfirmTime] = useState(new Date())
@@ -347,9 +354,9 @@ const chattingRoom:NextPage = (props) => {
     const lastChattingList = reverseArray(lastChatMessages)
 
     const rooms:RoomType = {
-        content_id:Number(chatData.roomKey.split('-')[0]),
-        seller_id:Number(chatData.roomKey.split('-')[1]),
-        buyer_id:Number(chatData.roomKey.split('-')[2])
+        content_id:contentId,
+        seller_id:sellerId,
+        buyer_id:buyerId,
     }
     
     // 채팅데이터 전송
@@ -377,21 +384,6 @@ const chattingRoom:NextPage = (props) => {
             handleReceivedMessage(msgPayload)
         })
     },[socket,chatMessages])
-    
-
-    // 현재 roomId 가져오기
-    const getRoomId = async (roomData: RoomType[]) => {
-        // user의 rooms.content_id랑 현재 room의 content_id 와 비교
-        const currentRoom = roomData.filter((room) => {
-            return (
-                room.content_id === Number(chatData.roomKey.split('-')[0]) &&
-                room.seller_id === Number(chatData.roomKey.split('-')[1]) &&
-                room.buyer_id === Number(chatData.roomKey.split('-')[2])
-            );
-        });
-        const currentRoomId = currentRoom[0]?.id;
-        return currentRoomId;
-    }
 
     // 이전 data REST API - /chat/list/:roomId  ( roomId는 number )
     // query는 ?page= number 
@@ -403,24 +395,22 @@ const chattingRoom:NextPage = (props) => {
     const fetchChatData = async ( pageParam = 0) => {
         const joinRoomListData = await axios.get(`/room/list/${loggedUserId}`);
         const joinRoomList = joinRoomListData.data as RoomType[];
-        const roomId = await getRoomId(joinRoomList);
         
-        // 채팅자의 confirm 확인
-        const currentRoom = joinRoomList.find((room)=>room.id === roomId)
-        if(currentRoom?.seller_confirm_time){
-            setSellerConfirmTime(currentRoom?.seller_confirm_time)
+        // confirm messages by seller or buyer
+        if(chattingRoomData.room.seller_confirm_time){
+            setSellerConfirmTime(chattingRoomData.room.seller_confirm_time)
         }
-        if(currentRoom?.buyer_confirm_time){
-            setBuyerConfirmTime(currentRoom?.buyer_confirm_time)
+        if(chattingRoomData.room.buyer_confirm_time){
+            setBuyerConfirmTime(chattingRoomData.room.buyer_confirm_time)
         }
 
-        // 이전 채팅데이터 get
+        // get previous chatting data
         if (roomId !== undefined) {
             const chatData:ChattingListPage = await getPreviousChatData(roomId, pageParam);  
-            console.log('chatData',chatData)          
-            // hadNextPage 구하기
+                   
+            // get hadNextPage
             if(chatData.currentPage < Math.ceil(chatData.totalPage/10)){
-                // pageNumber구하기
+                // get pageNumber
                 setHasNextPage(true)
                 setNextPageNumber(chatData.currentPage+1)
             }else{
@@ -471,20 +461,19 @@ const chattingRoom:NextPage = (props) => {
 
     // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
     const isBuyerPage = true
-    const buyerId = Number(chatData.roomKey.split('-')[2])
-    // 데이터 요청해줄떄마다 새로운 배열로 복사
     
     let currentDate = new Date();
     let lastDate:Date|null = null;
+    console.log('lastChattingList',lastChattingList)
 
 
     return (
         <Container>
              <ChattingRoomContainer>
                 <div className='chatting-header'>
-                    <p className='post-title'>{chatData.title}</p>
+                    <p className='post-title'>{chattingRoomData.title}</p>
                     <div className='chatting-confirm-button-box'>
-                        <p className='post-price'>{makeMoneyString(chatData.price)} 원</p>
+                        <p className='post-price'>{makeMoneyString(chattingRoomData.price)} 원</p>
                         <button onClick={()=>setConfirmTrade(!confirmTrade)}>거래하기</button>
                     </div>
                 </div>
@@ -498,12 +487,12 @@ const chattingRoom:NextPage = (props) => {
                     </div>
                     {isBuyerPage && (
                         <div className='confirm-buyer-payment'>
-                            <p>{makeMoneyString(chatData.price)} 원</p>
+                            <p>{makeMoneyString(chattingRoomData.price)} 원</p>
                             <button onClick={()=>setConfirmTrade(!confirmTrade)}>결제하기</button>
                         </div>
                     )}
                     <div className='confirm-price-box'>
-                        <p>거래 예상금액 : {makeMoneyString(chatData.price)} </p>
+                        <p>거래 예상금액 : {makeMoneyString(chattingRoomData.price)} </p>
                         <p>결제 완료된 금액 : {makeMoneyString('15333')} </p>
                     </div>
                     <div className='confirm-button-box'>
@@ -548,7 +537,7 @@ const chattingRoom:NextPage = (props) => {
                                 return(
                                     loggedUserId === chatting.send_id ?
                                 // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
-                                <div className='chatting-me' key={String(chatting.createdAt)}>
+                                <div className='chatting-me' key={chatting.id}>
                                     <p className='chatting-content'>{chatting.message}</p>
                                     <div className='chatting-sub-content'>
                                         {loggedUserId === buyerId ? 
@@ -565,7 +554,7 @@ const chattingRoom:NextPage = (props) => {
                                 </div>
                                 :
                                 // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
-                                <div className='chatting-opponent' key={Math.random()}>
+                                <div className='chatting-opponent' key={chatting.id}>
                                     <div className='opponent-profile'>
                                         <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
                                     </div>
@@ -633,13 +622,18 @@ const chattingRoom:NextPage = (props) => {
 chattingRoom.getInitialProps = async ({query})=>{
     // 이 id는 contentId-sellerId-buyerId 를 가진 roomKey이다
     const {id,title,price} = query;
+    const roomId = String(id)
 
-    const chatData = {
-        roomKey:id,
+    const roomInfo = await axios.get(`/room/${roomId}`).then((response)=>{
+        return response.data
+    })
+
+    const chattingRoomData = {
+        room:roomInfo,
         title:title,
         price:price
     }
-    return {chatData}
+    return {chattingRoomData}
   }
 
 export default chattingRoom;

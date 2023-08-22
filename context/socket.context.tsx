@@ -4,7 +4,6 @@ import io, { Socket } from "socket.io-client";
 import { useSelector } from "../store"; // Adjust the import path based on your project structure
 import { RootState } from "../store"; // Adjust the import path based on your project structure
 import { SOCKET_URL } from "../config/default";
-import EVENTS from "../config/events";
 
 interface SocketContextType {
   socket?: Socket;

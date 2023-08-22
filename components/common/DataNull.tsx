@@ -7,7 +7,7 @@ import QuestionSVG from "../../public/static/svg/error404/question.svg"
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
-	    min-height:100vh;
+	    min-height:90vh;
     }
     text-align:center;
     padding-top:120px;

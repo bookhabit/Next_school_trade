@@ -37,5 +37,5 @@ export default {
   divistion_color: "#D9D9D9",
   orange_btn: "#F36363",
   errorPage: "#FF9132",
-  currentPage:"#B3FDD6"
+  currentPage:"#ffc500"
 };

@@ -35,6 +35,8 @@ import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import BackImage from "../common/BackImage";
 import { useSocket } from "../../context/socket.context";
+import { RoomType } from "../../pages/user/chatting/[id]";
+import axios from "../../lib/api";
 
 interface cssProps {
   postOwner: boolean;
@@ -332,21 +334,26 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
   };
 
   // 게시글 주인이 아닐 경우 채팅하기 버튼 이벤트
-  const goToChattingRoom = () => {
+  const goToChattingRoom = async () => {
     if (loggedUser.isLogged) {
-      const roomKey = `${productDetail.id}-${productDetail.seller.id}-${loggedUser.id}`
-      console.log('roomkey',roomKey)
-
       // 소켓 연결 - 채팅접속
-      if(socket){
-        socket.emit("join_room",rooms)
+      try{
+        await socket?.emit("join_room",rooms)
+        try{
+          socket?.on("roomId_after_join_room",(roomId)=>{
+            console.log('roomid 소켓on',roomId)
+            // 채팅방 페이지 이동
+            router.push({
+              pathname: `/user/chatting/room/${roomId}`,
+              query: { title:productDetail.title,price:productDetail.price},
+            });
+          })
+          }catch(e){
+            console.log(e,'roomId 받아서 라우팅')
+          }
+      }catch(e){
+        console.log(e,'채팅방에 들어가지 못했습니다')
       }
-
-      // 채팅방 페이지 이동
-      router.push({
-        pathname: `/user/chatting/room/${roomKey}`,
-        query: { title:productDetail.title,price:productDetail.price},
-      });
     } else {
       alert("로그인이 필요합니다.");
       router.push("/auth");

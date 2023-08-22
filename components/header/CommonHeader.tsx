@@ -10,6 +10,8 @@ import { getUserName } from "../../lib/api/user";
 import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useSocket } from "../../context/socket.context"
+import axios from "../../lib/api";
+import { RoomType } from "../../pages/user/chatting/[id]";
 
 const Conatainer = styled.div`
   position: sticky;
@@ -96,16 +98,15 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
     // 채팅방 페이지의 상대방 이름 가져오기
     console.log(chatOpponentName)
     const getCahttingOpponentNameAPI = async () => {
-      const chatSellerId = String(router.query.id).split('-')[1]
+      const roomId = router.query.id
+      const roomInfo:RoomType = await axios.get(`/room/${roomId}`).then((response)=>response.data)
       // seller_id 와 loggin_Id 가 일치하다면 (판매자라면 구매자 이름 보여주기)
-      if(LoggedUser.id === Number(chatSellerId)){
-        const chatBuyerId = String(router.query.id).split('-')[2]  
-        
-        const response = await getUserName(Number(chatBuyerId));
+      if(LoggedUser.id === Number(roomInfo.seller_id)){
+        const response = await getUserName(Number(roomInfo.buyer_id));
         setChatOpponentName(response.data);
       }else{
         // seller_id 와 loggin_Id 가 일치하지 않다면 (구매자라면 판매자이름 보여주기)
-        const response = await getUserName(Number(chatSellerId));
+        const response = await getUserName(Number(roomInfo.buyer_id));
         setChatOpponentName(response.data);
       }
     };
