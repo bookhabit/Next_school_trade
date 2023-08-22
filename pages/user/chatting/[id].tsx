@@ -8,6 +8,7 @@ import axios from '../../../lib/api';
 import { NextPage } from 'next';
 import { Users } from '../../../types/user';
 import { productListType } from '../../../types/product/product';
+import { isEmpty } from 'lodash';
 
 
 const Container = styled.div`
@@ -46,10 +47,11 @@ export type LatestChatType = {
 
 const chattingList:NextPage = (props) => {
     const {chattingRoomList} = props as PropsType
-    console.log(chattingRoomList)
     return (
         <Container>
-            {chattingRoomList.map((chatting)=>(
+            {isEmpty(chattingRoomList) ? 
+                <p>아직 채팅 상대방이 없습니다</p>
+            : chattingRoomList.map((chatting)=>(
                 <ChattingList chattingRoomList={chatting} key={chatting.rooms.content_id}/>
             ))}
             <LinkFooter/>
@@ -64,7 +66,6 @@ export const getServerSideProps :GetServerSideProps = async ({query})=>{
     try{
         const response = await axios.get(`/room/list/${userId}`)
         const rooms = response.data as RoomType[];
-        console.log('rooms',rooms)
 
         const chattingLists: chattingRoomListType[] = []; // An array to store multiple chattingList objects
 
@@ -76,13 +77,11 @@ export const getServerSideProps :GetServerSideProps = async ({query})=>{
             if (room.content_id !== undefined) {
                 const productResponse = await axios.get(`/content/read/${room.content_id}`);
                 product = productResponse.data;
-                console.log('product', product);
             }
 
             // room의 마지막 대화정보 얻어오기
             if(room.id !== undefined){
                 const latestChat:LatestChatType = await axios.get(`/chat/latest/${room.id}`).then((response)=>response.data)
-                console.log('----lastChat',latestChat)
                 chatData=latestChat
             }
 
@@ -93,7 +92,6 @@ export const getServerSideProps :GetServerSideProps = async ({query})=>{
             };
 
             chattingLists.push(chattingList);
-            console.log('서버에서 최종 전달값',chattingLists)
         }
 
         return{

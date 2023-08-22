@@ -30,10 +30,10 @@ const Conatainer = styled.div`
         width:100%;
         height:45px;
 
-        p{
+        .university-name{
             width:20%;
             font-family:Roboto;
-            font-size:20px;
+            font-size:18px;
             color:${palette.main_text_color};
             font-weight:bold;
             line-height:30px;
@@ -142,7 +142,7 @@ const mainHeader = () => {
     return (
         <Conatainer>
             <div className='headerDiv'>
-                <p>{userUniversity}</p>
+                <p className='university-name'>{userUniversity}</p>
                 <div className='searchBar'>
                     <input className='searchInput' value={searchValue} placeholder='검색' onChange={onChangeValue} />
                     <SearchIcon className="searchIcon" onClick={goToSearch}/>

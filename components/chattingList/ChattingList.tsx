@@ -88,7 +88,11 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     
     const leaveRoom = async ()=>{
         await socket?.emit("leave_room",chattingRoomList.rooms)
-        router.reload();
+        socket?.on("leave_room",((data)=>{
+            console.log('삭제 후 데이터',data)
+            alert('삭제완료')
+            // router.reload();
+        }))
     }
 
     const goToChattingRoom = ()=>{
@@ -107,8 +111,13 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     return (
         <Container>
             <div className='list-profileImage'>
-                {chattingRoomList?.product?.images[0] && 
-                <BackImage src={chattingRoomList?.product?.images[0].path} alt="상품이미지" />
+                {chattingRoomList?.product?.images[0] && chattingRoomList?.product?.images[0].path !== "upload/undefined" ? 
+                <BackImage src={chattingRoomList?.product?.images[0].path} alt="상품이미지"/> : 
+                <img
+                    src={"/static/svg/product/default_img.svg"}
+                    className="default-img"
+                    alt="기본이미지"
+                />
                 }
             </div>
             <div className='list-info'>
@@ -127,7 +136,7 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
                     </div>
                 </div>
                 <p className='list-content'>
-                    {!!chattingRoomList?.chatData?.message ? chattingRoomList?.chatData?.message : <p>아직 채팅이 이루어지지 않았습니다</p>}
+                    {!!chattingRoomList?.chatData?.message ? chattingRoomList?.chatData?.message : '아직 채팅이 이루어지지 않았습니다'}
                 </p>
             </div>
         </Container>

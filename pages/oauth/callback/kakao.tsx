@@ -37,6 +37,7 @@ const Kakao = (query:any) => {
                 // 유저정보에서 대학교 데이터가 없다면 카카오 첫 로그인이라는 뜻 > 회원가입 페이지로 보내기
                 localStorage.setItem('login-token', response.data.token);
                 dispatch(userActions.setLoggedUser(response.data.user))
+                alert('첫 로그인 시 기본정보만 입력해주세요')
                 router.push({
                     pathname:'/auth',
                     query:{firstLogin:true}
