@@ -102,6 +102,18 @@ const ChattingRoomContainer= styled.div`
     .chatting-message-box{
         width:100%;
         padding-top:120px;
+        .chatting-image{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:10px;
+            img{
+                width:140px;
+                height:140px;
+                object-fit:cover;
+                border-radius:15px;
+            }
+        }
         /* 나의 채팅 css */
         .chatting-me{
             width:100%;
@@ -433,13 +445,28 @@ const chattingRoom:NextPage = (props) => {
     // 채팅데이터 전송
     const chatEmitHandler = async (event:React.FormEvent<HTMLFormElement>)=>{ 
         event.preventDefault();
-        const message = {
-            room: rooms,
-            send_id: loggedUserId,
-            message:sendMessage,
+        if(sendMessage){
+            const message = {
+                room: rooms,
+                send_id: loggedUserId,
+                message:sendMessage,
+            }
+            await socket?.emit("message",message)
+            setSendMessage("")
         }
-        await socket?.emit("message",message)
-        setSendMessage("")
+
+        if(chattingPhotos.length > 0){
+            chattingPhotos.forEach((chatting)=>{
+                const message = {
+                    room: rooms,
+                    send_id: loggedUserId,
+                    message:chatting,
+                }
+                socket?.emit("message",message)
+            })
+            setChattingPhotos([])
+        }
+
     }
 
     // 채팅데이터 수신
@@ -452,6 +479,7 @@ const chattingRoom:NextPage = (props) => {
 
     useEffect(()=>{
         socket?.on("message",(msgPayload:messagePayload)=>{
+            console.log('msgPayload수신',msgPayload)
             handleReceivedMessage(msgPayload)
         })
     },[socket,chatMessages])
@@ -537,7 +565,6 @@ const chattingRoom:NextPage = (props) => {
     let lastDate:Date|null = null;
     console.log('lastChattingList',lastChattingList)
 
-
     return (
         <Container>
              <ChattingRoomContainer>
@@ -609,7 +636,12 @@ const chattingRoom:NextPage = (props) => {
                                     loggedUserId === chatting.send_id ?
                                 // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                                 <div className='chatting-me' key={chatting.id}>
-                                    <p className='chatting-content'>{chatting.message}</p>
+                                    {chatting.message.includes('upload/image_') ? 
+                                        <div className='chatting-image'>
+                                            <BackImage src={chatting.message} alt='채팅 메세지 이미지' /> 
+                                        </div> :
+                                        <p className='chatting-content'>{chatting.message}</p>
+                                    }
                                     <div className='chatting-sub-content'>
                                         {loggedUserId === buyerId ? 
                                         sellerConfirmTime < chatting.createdAt ? 
@@ -629,7 +661,12 @@ const chattingRoom:NextPage = (props) => {
                                     <div className='opponent-profile'>
                                         <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
                                     </div>
-                                    <p className='chatting-content'>{chatting.message}</p>
+                                    {chatting.message.includes('upload/image_') ? 
+                                        <div className='chatting-image'>
+                                            <BackImage src={chatting.message} alt='채팅 메세지 이미지' /> 
+                                        </div> :
+                                        <p className='chatting-content'>{chatting.message}</p>
+                                    }
                                     <p className='chatting-updateDate'>{convertToDatetime(String(chatting.createdAt))}</p>
                                 </div>
                                 )
@@ -641,7 +678,12 @@ const chattingRoom:NextPage = (props) => {
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
+                                {message.message.includes('upload/image_') ? 
+                                <div className='chatting-image'>
+                                    <BackImage src={message.message} alt='채팅 메세지 이미지' /> 
+                                </div> :
                                 <p className='chatting-content'>{message.message}</p>
+                                }
                                 <div className='chatting-sub-content'>
                                     {loggedUserId === buyerId ? 
                                     sellerConfirmTime < message.createdAt ? 
@@ -661,7 +703,12 @@ const chattingRoom:NextPage = (props) => {
                                 <div className='opponent-profile'>
                                     <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
                                 </div>
-                                <p className='chatting-content'>{message.message}</p>
+                                {message.message.includes('upload/image_') ? 
+                                <div className='chatting-image'>
+                                    <BackImage src={message.message} alt='채팅 메세지 이미지' /> 
+                                </div> :
+                                    <p className='chatting-content'>{message.message}</p>
+                                }
                                 <p className='chatting-updateDate'>{convertToDatetime(String(message.createdAt))}</p>
                             </div>
                         ))}
@@ -670,27 +717,28 @@ const chattingRoom:NextPage = (props) => {
                 }
             </ChattingRoomContainer>
             {/* 채팅으로 보낼 썸네일 이미지 */}
-            <div className='chatting-photo-tuhmnail'>
-                <img src={'/static/svg/product/default_img.svg'} alt='테스트이미지' />
-                {
-                chattingPhotos.length > 0 && 
-                chattingPhotos.map((photo,index)=>
-                (
-                    <div className='preview-image-box'>
-                        <BackImage 
-                            src={photo} 
-                            alt="채팅이미지" 
-                        />
-                        <button
-                            onClick={() => handleDeleteImage(index)}
-                            className="preview-image-delete-icon"
-                        >
-                            <Delete/>
-                        </button>
-                    </div>
-                )
-                )}
-            </div>
+            {chattingPhotos.length > 0 &&
+                <div className='chatting-photo-tuhmnail' key={Math.random()}>
+                    { 
+                    chattingPhotos.map((photo,index)=>
+                        (
+                            
+                                <div className='preview-image-box' key={index}>
+                                    <BackImage 
+                                        src={photo} 
+                                        alt="채팅이미지" 
+                                    />
+                                    <button
+                                        onClick={() => handleDeleteImage(index)}
+                                        className="preview-image-delete-icon"
+                                    >
+                                        <Delete/>
+                                    </button>
+                                </div>
+                        )
+                    )}
+                </div>
+            }
             <ChattingFooter onSubmit={chatEmitHandler}>
                 <div className='chatting-file'>
                     <label htmlFor='file-input'>+</label>
