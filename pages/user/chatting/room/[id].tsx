@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import styled from 'styled-components';
@@ -13,10 +13,38 @@ import moment from 'moment';
 import "moment/locale/ko";
 import { isEmpty, last, result, throttle, update } from 'lodash';
 import axios from '../../../../lib/api';
+import BackImage from '../../../../components/common/BackImage';
+import Delete from "../../../../public/static/svg/product/thumnailXicon.svg";
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
         min-height: 90vh;
+    }
+    .chatting-photo-tuhmnail{
+        background-color:${palette.main_text_color};
+        position:fixed;
+        bottom:70px;      
+        height:100px;
+        width:100%;
+        max-width:430px;
+        display:flex;
+        align-items:center;
+        padding:20px;
+        .preview-image-box{
+            display:flex;
+            align-items:center;    
+            margin-right:15px;
+            img{
+                width:60px;
+                height:60px;
+                object-fit:cover;
+                margin-right:5px;
+            }
+        }
+    }
+
+    .preview-image-delete-icon{
+        cursor: pointer;
     }
 `
 
@@ -260,7 +288,11 @@ const ChattingFooter= styled.form`
         label{
             margin:0 10px;
             font-size:30px;
-            color:${palette.main_text_color}
+            color:${palette.main_text_color};
+            cursor:pointer;
+            &:hover{
+                font-size:35px;
+            }
         }
         input[type="file"] {
                 display:none;
@@ -284,6 +316,9 @@ const ChattingFooter= styled.form`
     }
     .chatting-submit{
         margin-left:10px;
+        button{
+            cursor: pointer;
+        }
     }
 `
 interface PropsType {
@@ -346,6 +381,7 @@ const chattingRoom:NextPage = (props) => {
     const [nextPageNumber,setNextPageNumber] = useState<number|undefined>(0)
     const [prevScrollHeight,setPrevScrollHeight] = useState<number|null>(null);
     const scrollBarRef = useRef<HTMLDivElement>(null);
+
     // 원본배열이 변경되지 않기 위해 새로운배열로 복사해서 렌더링
     function reverseArray(array:messagePayload[]) {
         const newArray = array.slice(); // 배열 복사
@@ -358,7 +394,42 @@ const chattingRoom:NextPage = (props) => {
         seller_id:sellerId,
         buyer_id:buyerId,
     }
+
+    // 파일업로드
+    const [chattingPhotos,setChattingPhotos] = useState<string[]>([])
+    function uploadPhoto(ev: ChangeEvent<HTMLInputElement>) {
+        const files = ev.target.files;
+        console.log('files',files)
+        if (!files) return;
+        const data = new FormData();
+        for (let i = 0; i < files.length; i++) {
+          data.append('photos', files[i]);
+        }
+
+        try{
+            axios.post<string[]>('/photos/upload', data, {
+                headers: { 'Content-type': 'multipart/form-data' },
+              }).then(response => {
+                const { data: filenames } = response;
+                console.log('response data',data)
+                setChattingPhotos(prev => {
+                  return [...prev, ...filenames];
+                });
+              });
+        }catch(e){
+            console.log(e,'upload 실패')
+        }
+      }
+      console.log('chattingPhotos',chattingPhotos)
     
+      // 업로드했던 파일 썸네일 삭제
+      const handleDeleteImage = (index:number) => {
+        const updatedPhotos = [...chattingPhotos];
+        updatedPhotos.splice(index, 1); // 해당 인덱스의 이미지 삭제
+        setChattingPhotos(updatedPhotos);
+      };
+    
+
     // 채팅데이터 전송
     const chatEmitHandler = async (event:React.FormEvent<HTMLFormElement>)=>{ 
         event.preventDefault();
@@ -598,10 +669,37 @@ const chattingRoom:NextPage = (props) => {
                     </div>
                 }
             </ChattingRoomContainer>
+            {/* 채팅으로 보낼 썸네일 이미지 */}
+            <div className='chatting-photo-tuhmnail'>
+                <img src={'/static/svg/product/default_img.svg'} alt='테스트이미지' />
+                {
+                chattingPhotos.length > 0 && 
+                chattingPhotos.map((photo,index)=>
+                (
+                    <div className='preview-image-box'>
+                        <BackImage 
+                            src={photo} 
+                            alt="채팅이미지" 
+                        />
+                        <button
+                            onClick={() => handleDeleteImage(index)}
+                            className="preview-image-delete-icon"
+                        >
+                            <Delete/>
+                        </button>
+                    </div>
+                )
+                )}
+            </div>
             <ChattingFooter onSubmit={chatEmitHandler}>
                 <div className='chatting-file'>
                     <label htmlFor='file-input'>+</label>
-                    <input type="file" id="file-input"/>
+                    <input 
+                        type="file" 
+                        id="file-input"
+                        multiple
+                        onChange={uploadPhoto}
+                    />
                 </div>
                 <div className='chatting-message'>
                     <input 
