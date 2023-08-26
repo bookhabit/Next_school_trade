@@ -11,6 +11,7 @@ import registerPosition from "./registerPosition";
 import userBackground from "./userBackground";
 import searchBar from "./searchBar";
 import favorite from "./favorite";
+import alarm from "./alarm";
 
 const rootReducer = combineReducers({
   common: common.reducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   userBackground: userBackground.reducer,
   searchBar: searchBar.reducer,
   favorite: favorite.reducer,
+  alarm:alarm.reducer,
 });
 
 // 스토어의 타입

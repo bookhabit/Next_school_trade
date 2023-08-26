@@ -42,6 +42,25 @@ const Container = styled.div`
                     fill:${palette.currentPage}
                 }
             }
+            .showAlarmBox{
+                position:relative;
+                .showAlarm{
+                    cursor: pointer;
+                    position:absolute;
+                    /* top:-10px;
+                    left: 10px; */
+                    width:20px;
+                    height:20px;
+                    background-color:#F1531A;
+                    color:${palette.main_text_color};
+                    font-size:15px;
+                    font-weight:400px;
+                    text-align:center;
+                    align-items:center;
+                    border-radius:50px;
+                    padding-top:2px;
+                }
+            }
             p{
                 margin-top:5px;
                 font-size:13px;
@@ -58,6 +77,10 @@ const LinkFooter = () => {
     const loggedUserId = useSelector((state:RootState)=>state.user.id)
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
     
+    // 알림 색깔
+    const chattingAlarm = useSelector((state:RootState)=>state.alarm.chatting)
+    console.log('chaatin알람',chattingAlarm)
+    
 
     // 현재 페이지의 아이콘색깔 다르게 지정하기
     const setCurrentPage = (path:string) => {
@@ -65,18 +88,6 @@ const LinkFooter = () => {
             return "selected";
         }
     };
-
-    const {socket} = useSocket();
-
-    useEffect(()=>{
-        socket?.on("message",(msgPayload:messagePayload)=>{
-            console.log('footer msgPayload수신',msgPayload)
-            if(loggedUserId !== msgPayload.send_id){
-                // 채팅 알림 띄우기
-                console.log('내가 보낸 메세지 아님 채팅알림 띄어라')
-            }
-        })
-    },[socket])
 
     return (
         <Container>
@@ -107,6 +118,9 @@ const LinkFooter = () => {
                 
                 <div className='link-flex-item' onClick={()=>{
                     if(isLogged){
+                        // 알림 디스패치 - false로 
+
+                        // 라우팅
                         router.push({
                             pathname:`/user/chatting/${loggedUserId}`
                         })
@@ -115,7 +129,11 @@ const LinkFooter = () => {
                         router.push("/auth")
                     }
                 }}>
-                    <ChattingIcon className={setCurrentPage('/user/chatting')}/>
+                    <div className='showAlarmBox'>
+                        <ChattingIcon className={setCurrentPage('/user/chatting')}/>
+                        {chattingAlarm ? 
+                        <span className='showAlarm'>0</span> : null}
+                    </div>
                     <p className={setCurrentPage('/user/chatting')}>채팅</p>
                 </div>
                 
