@@ -617,58 +617,61 @@ const chattingRoom:NextPage = (props) => {
                         <div ref={scrollBarRef} onScroll={handleScroll}>
                             {lastChattingList.map((chatting)=>{
                                 const messageDate = new Date(chatting.createdAt);
-
+                                let shouldDisplayDate;
                                 // 날짜가 변경되었을 때, 날짜 구분 헤더 추가
                                 if (!lastDate || messageDate.toDateString() !== lastDate.toDateString()) {
                                   lastDate = messageDate;
-                                  const shouldDisplayDate = messageDate < currentDate;
+                                shouldDisplayDate = messageDate < currentDate;
                                     console.log(shouldDisplayDate)
-                                // 대화 날짜 표시
-                                  return (
-                                    <div key={`date-${chatting.createdAt}`} className="chatting-last-date">
-                                      {shouldDisplayDate ? moment(messageDate).format('YYYY년 MM월 DD일 dddd') : null}
-                                    </div>
-                                  );
                                 }
 
                                 // 지난 대화 표시
                                 return(
-                                    loggedUserId === chatting.send_id ?
-                                // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
-                                <div className='chatting-me' key={chatting.id}>
-                                    {chatting.message.includes('upload/image_') ? 
-                                        <div className='chatting-image'>
-                                            <BackImage src={chatting.message} alt='채팅 메세지 이미지' /> 
-                                        </div> :
-                                        <p className='chatting-content'>{chatting.message}</p>
-                                    }
-                                    <div className='chatting-sub-content'>
-                                        {loggedUserId === buyerId ? 
-                                        sellerConfirmTime < chatting.createdAt ? 
-                                        <span className='confirm-number'>1</span>
-                                        : <span></span>
+                                    <>
+                                        {shouldDisplayDate ?                                     
+                                        <div key={`date-${chatting.createdAt}`} className="chatting-last-date">
+                                            {shouldDisplayDate ? moment(messageDate).format('YYYY년 MM월 DD일 dddd') : null}
+                                        </div> : null}
+                                        
+                                        {loggedUserId === chatting.send_id ?
+                                        // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
+                                        <div className='chatting-me' key={chatting.id}>
+                                            {chatting.message.includes('upload/image_') ? 
+                                                <div className='chatting-image'>
+                                                    <BackImage src={chatting.message} alt='채팅 메세지 이미지' /> 
+                                                </div> :
+                                                <p className='chatting-content'>{chatting.message}</p>
+                                            }
+                                            <div className='chatting-sub-content'>
+                                                {loggedUserId === buyerId ? 
+                                                sellerConfirmTime < chatting.createdAt ? 
+                                                <span className='confirm-number'>1</span>
+                                                : <span></span>
+                                                :
+                                                buyerConfirmTime < chatting.createdAt ? 
+                                                <span className='confirm-number'>1</span>
+                                                : <span></span>
+                                                }
+                                                <p className='chatting-updateDate'>{convertToDatetime(String(chatting.createdAt))}</p>
+                                            </div>
+                                        </div>
                                         :
-                                        buyerConfirmTime < chatting.createdAt ? 
-                                        <span className='confirm-number'>1</span>
-                                        : <span></span>
+                                        // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
+                                        <div className='chatting-opponent' key={chatting.id}>
+                                            <div className='opponent-profile'>
+                                                <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                                            </div>
+                                            {chatting.message.includes('upload/image_') ? 
+                                                <div className='chatting-image'>
+                                                    <BackImage src={chatting.message} alt='채팅 메세지 이미지' /> 
+                                                </div> :
+                                                <p className='chatting-content'>{chatting.message}</p>
+                                            }
+                                            <p className='chatting-updateDate'>{convertToDatetime(String(chatting.createdAt))}</p>
+                                        </div>
                                         }
-                                        <p className='chatting-updateDate'>{convertToDatetime(String(chatting.createdAt))}</p>
-                                    </div>
-                                </div>
-                                :
-                                // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
-                                <div className='chatting-opponent' key={chatting.id}>
-                                    <div className='opponent-profile'>
-                                        <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
-                                    </div>
-                                    {chatting.message.includes('upload/image_') ? 
-                                        <div className='chatting-image'>
-                                            <BackImage src={chatting.message} alt='채팅 메세지 이미지' /> 
-                                        </div> :
-                                        <p className='chatting-content'>{chatting.message}</p>
-                                    }
-                                    <p className='chatting-updateDate'>{convertToDatetime(String(chatting.createdAt))}</p>
-                                </div>
+                                    </>
+
                                 )
                             })}
                         </div>

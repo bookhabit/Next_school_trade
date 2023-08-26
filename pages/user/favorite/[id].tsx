@@ -30,7 +30,7 @@ const Container = styled.div`
   }
   padding: 0px 20px;
   padding-top: 20px;
-  padding-bottom: 60px;
+  padding-bottom:70px;
 `;
 
 const favorite = ({ id }: { id: number }) => {

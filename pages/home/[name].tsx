@@ -24,6 +24,7 @@ import FavoriteModal from "../../components/product/FavoriteModal";
 const Container = styled.div`
   padding: 0px 20px;
   padding-top: 20px;
+  padding-bottom:70px;
   .favorite-modal {
     position: fixed;
     left: 50%;

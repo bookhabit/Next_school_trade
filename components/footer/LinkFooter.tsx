@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 import HomeIcon from "../../public/static/svg/footer/home.svg"
@@ -9,6 +9,8 @@ import ChattingIcon from "../../public/static/svg/footer/chatting.svg"
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { useSocket } from '../../context/socket.context';
+import { messagePayload } from '../../pages/user/chatting/room/[id]';
 
 const Container = styled.div`
     position:fixed;
@@ -63,6 +65,19 @@ const LinkFooter = () => {
             return "selected";
         }
     };
+
+    const {socket} = useSocket();
+
+    useEffect(()=>{
+        socket?.on("message",(msgPayload:messagePayload)=>{
+            console.log('footer msgPayload수신',msgPayload)
+            if(loggedUserId !== msgPayload.send_id){
+                // 채팅 알림 띄우기
+                console.log('내가 보낸 메세지 아님 채팅알림 띄어라')
+            }
+        })
+    },[socket])
+
     return (
         <Container>
             <div className='link-flex-wrap'>
