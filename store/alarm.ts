@@ -3,13 +3,13 @@ import { CommonState } from "../types/reduxState";
 
 type chatlState = {
   chatting: boolean;
-  review:boolean;
+  alarmPage:boolean;
 };
 
 // 초기상태
 const initialState: chatlState = {
     chatting: true,
-    review:false,
+    alarmPage:true,
 };
 
 const alarm = createSlice({
@@ -20,8 +20,8 @@ const alarm = createSlice({
     setChatting(state, action: PayloadAction<boolean>) {
       state.chatting = action.payload;
     },
-    setReview(state, action: PayloadAction<boolean>) {
-      state.review = action.payload;
+    setAlarmPage(state, action: PayloadAction<boolean>) {
+      state.alarmPage = action.payload;
     },
   },
 });

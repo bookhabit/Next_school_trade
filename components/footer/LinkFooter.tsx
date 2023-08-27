@@ -7,10 +7,11 @@ import RegisterIcon from "../../public/static/svg/footer/register.svg"
 import UserIcon from "../../public/static/svg/footer/user.svg"
 import ChattingIcon from "../../public/static/svg/footer/chatting.svg"
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useSocket } from '../../context/socket.context';
 import { messagePayload } from '../../pages/user/chatting/room/[id]';
+import { alarmActions } from '../../store/alarm';
 
 const Container = styled.div`
     position:fixed;
@@ -47,11 +48,11 @@ const Container = styled.div`
                 .showAlarm{
                     cursor: pointer;
                     position:absolute;
-                    /* top:-10px;
-                    left: 10px; */
+                    top:-10px;
+                    left:15px;
                     width:20px;
                     height:20px;
-                    background-color:#F1531A;
+                    background-color:#f46430;
                     color:${palette.main_text_color};
                     font-size:15px;
                     font-weight:400px;
@@ -79,7 +80,8 @@ const LinkFooter = () => {
     
     // 알림 색깔
     const chattingAlarm = useSelector((state:RootState)=>state.alarm.chatting)
-    console.log('chaatin알람',chattingAlarm)
+    
+    const dispatch = useDispatch();
     
 
     // 현재 페이지의 아이콘색깔 다르게 지정하기
@@ -119,7 +121,7 @@ const LinkFooter = () => {
                 <div className='link-flex-item' onClick={()=>{
                     if(isLogged){
                         // 알림 디스패치 - false로 
-
+                        dispatch(alarmActions.setChatting(false));
                         // 라우팅
                         router.push({
                             pathname:`/user/chatting/${loggedUserId}`
@@ -132,7 +134,7 @@ const LinkFooter = () => {
                     <div className='showAlarmBox'>
                         <ChattingIcon className={setCurrentPage('/user/chatting')}/>
                         {chattingAlarm ? 
-                        <span className='showAlarm'>0</span> : null}
+                        <span className='showAlarm'>1</span> : null}
                     </div>
                     <p className={setCurrentPage('/user/chatting')}>채팅</p>
                 </div>

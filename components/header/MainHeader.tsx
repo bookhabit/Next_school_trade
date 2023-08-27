@@ -12,6 +12,7 @@ import { RootState } from '../../store';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { searchBarActions } from '../../store/searchBar';
+import { alarmActions } from '../../store/alarm';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -103,8 +104,6 @@ const Conatainer = styled.div`
 
 const mainHeader = () => {
     const router = useRouter();
-    const [testAlarmState,setTestAlarmState] = useState<boolean>(true)
-    const testAlarmCount = 2
     const userUniversity = useSelector((state:RootState)=>state.user.university)
 
     // 로그인 확인
@@ -115,14 +114,17 @@ const mainHeader = () => {
 
     const dispatch = useDispatch();
     
-    // dispatch(searchBarActions.setSearchValue())
     const onChangeValue=(event:React.ChangeEvent<HTMLInputElement>)=>{
         dispatch(searchBarActions.setSearchValue(event.target.value))
     }
+    // 알림 색깔
+    const alarmPageState = useSelector((state:RootState)=>state.alarm.alarmPage)
 
     // 알림페이지로 이동
     const goToAlarm = ()=>{
         if(isLogged){
+            // 알림 디스패치 - false로 
+            dispatch(alarmActions.setAlarmPage(false));
             router.push("/user/alarm")
         }else{
             alert('로그인이 필요합니다.')
@@ -150,7 +152,7 @@ const mainHeader = () => {
                 <div className='alarmBox'>
                     <div onClick={goToAlarm} className="alarmIcon">
                         <AlarmIcon/>
-                        {testAlarmState ? <span className='showAlarm'>{testAlarmCount}</span>  : null}
+                        {alarmPageState ? <span className='showAlarm'>{1}</span>  : null}
                     </div>
                 </div>
                 <Link href="/category" className='categoryBox'>
