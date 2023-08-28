@@ -71,6 +71,13 @@ const Container = styled.div`
         }
         .list-content{
             font-size:16px;
+            .not-confirmed-message{
+                color:black;
+                font-weight:bold;
+            }
+            .confirmed-message{
+                
+            }
         }
     }
 
@@ -84,10 +91,33 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     const {socket} = useSocket();
     const router = useRouter();
     const loggedUserId = useSelector((state: RootState) => state.user.id);
+
+    const {rooms,product,chatData} = chattingRoomList
+
+    
+    // 마지막 대화를 읽었는지 확인
+    const confirmLastMessage = ()=>{
+        if(chatData && rooms && product){
+            if(loggedUserId === rooms.buyer_id && rooms.buyer_confirm_time ){
+                if(chatData.send_id !== loggedUserId && chatData.createdAt > rooms.buyer_confirm_time){
+                    return <p className='not-confirmed-message'>{chatData.message}</p>
+                }else{
+                    return <p className='confirmed-message'>{chatData.message}</p>
+                }
+            }else if(loggedUserId === rooms.seller_id && rooms.seller_confirm_time){
+                if(chatData.send_id !== loggedUserId && chatData.createdAt > rooms.seller_confirm_time){
+                    return <p className='not-confirmed-message'>{chatData.message}</p>
+                }else{
+                    return <p className='confirmed-message'>{chatData.message}</p>
+                }
+            }
+        }
+    }
+
     // 채팅방 나가기 이벤트
     
     const leaveRoom = async ()=>{
-        await socket?.emit("leave_room",chattingRoomList.rooms)
+        await socket?.emit("leave_room",rooms)
         socket?.on("leave_room",((data)=>{
             console.log('삭제 후 데이터',data)
             alert('삭제완료')
@@ -98,13 +128,13 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     const goToChattingRoom = ()=>{
          // 소켓 연결 - 채팅접속
         if(socket){
-            socket.emit("join_room",chattingRoomList.rooms)
+            socket.emit("join_room",rooms)
         }
         router.push({
-            pathname: `/user/chatting/room/${chattingRoomList.rooms.id}`,
+            pathname: `/user/chatting/room/${rooms.id}`,
             query: { 
-                title:chattingRoomList.product?.title,
-                price:chattingRoomList.product?.price},
+                title:product?.title,
+                price:product?.price},
         });
     }
 
@@ -135,9 +165,13 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
                         <p className='leave-room-text'>채팅방 나가기</p>
                     </div>
                 </div>
-                <p className='list-content'>
-                    {!!chattingRoomList?.chatData?.message ? chattingRoomList?.chatData?.message : '아직 채팅이 이루어지지 않았습니다'}
-                </p>
+                <div className='list-content'>
+                    {
+                    chatData?.message 
+                        ? confirmLastMessage()
+                        : '아직 채팅이 이루어지지 않았습니다'
+                    }
+                </div>
             </div>
         </Container>
     );
