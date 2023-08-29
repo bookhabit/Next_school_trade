@@ -52,7 +52,7 @@ const chattingList:NextPage = (props) => {
             {isEmpty(chattingRoomList) ? 
                 <p>아직 채팅 상대방이 없습니다</p>
             : chattingRoomList.map((chatting)=>(
-                <ChattingList chattingRoomList={chatting} key={chatting.rooms.content_id}/>
+                <ChattingList chattingRoomList={chatting} key={chatting.rooms.id}/>
             ))}
             <LinkFooter/>
         </Container>

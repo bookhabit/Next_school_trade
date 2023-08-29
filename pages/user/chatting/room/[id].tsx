@@ -479,7 +479,7 @@ const chattingRoom:NextPage = (props) => {
 
     useEffect(()=>{
         socket?.on("message",(msgPayload:messagePayload)=>{
-            console.log('msgPayload수신',msgPayload)
+            console.log('채팅방 페이지에서 msgPayload수신',msgPayload)
             handleReceivedMessage(msgPayload)
         })
     },[socket,chatMessages])

@@ -18,6 +18,7 @@ import { userActions } from "../../store/user";
 import { logoutAPI } from "../../lib/api/auth";
 import { useRouter } from "next/router";
 import { useSocket } from "../../context/socket.context";
+import { RootState } from "../../store";
 
 const Container = styled.div`
   .myUniversity {
@@ -87,16 +88,16 @@ const Container = styled.div`
 const MyPage = () => {
   const { openModal, ModalPortal, closeModal } = useModal();
   const dispatch = useDispatch();
-  const userId = useSelector((state: any) => state.user.id);
+  const user = useSelector((state: RootState) => state.user);
 
   // 관심목록 라우팅
-  const goToFavorite = `/user/favorite/${userId}`;
+  const goToFavorite = `/user/favorite/${user.id}`;
   // 판매내역 라우팅
-  const goToSellList = `/user/sellList/${userId}`;
+  const goToSellList = `/user/sellList/${user.id}`;
   // 구매내역 라우팅
-  const goToBuyList = `/user/buyList/${userId}`;
+  const goToBuyList = `/user/buyList/${user.id}`;
   // 거래후기 라우팅
-  const goToTradeReview = `/user/tradeReview/${userId}`;
+  const goToTradeReview = `/user/tradeReview/${user.id}`;
 
   const router = useRouter();
   const { socket } = useSocket();
@@ -104,7 +105,7 @@ const MyPage = () => {
   // 로그아웃 api
   const logout = () => {
     if(socket){
-      socket.emit("logout",userId)
+      socket.emit("logout",user.id)
     }
     logoutAPI();
     dispatch(userActions.initUser());
@@ -113,7 +114,7 @@ const MyPage = () => {
   return (
     <Container>
       <div className="myUniversity">
-        <p>한서대학교</p>
+        <p>{user.university}</p>
       </div>
       <div className="myTradeList myPageBody">
         <p className="myPageTitle">거래목록</p>
