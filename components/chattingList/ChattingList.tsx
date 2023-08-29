@@ -26,7 +26,6 @@ const Container = styled.div`
             height:60px;   
             border-radius:50px;  
             object-fit:cover;
-            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
         }
     }
     .list-info{
@@ -117,6 +116,7 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     // 채팅방 나가기 이벤트
     
     const leaveRoom = async ()=>{
+        console.log('채팅방나가기 클릭')
         await socket?.emit("leave_room",rooms)
         socket?.on("leave_room",((data)=>{
             console.log('삭제 후 데이터',data)

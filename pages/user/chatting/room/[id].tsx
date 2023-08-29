@@ -627,7 +627,7 @@ const chattingRoom:NextPage = (props) => {
 
                                 // 지난 대화 표시
                                 return(
-                                    <>
+                                    <div key={chatting.id}>
                                         {shouldDisplayDate ?                                     
                                         <div key={`date-${chatting.createdAt}`} className="chatting-last-date">
                                             {shouldDisplayDate ? moment(messageDate).format('YYYY년 MM월 DD일 dddd') : null}
@@ -670,7 +670,7 @@ const chattingRoom:NextPage = (props) => {
                                             <p className='chatting-updateDate'>{convertToDatetime(String(chatting.createdAt))}</p>
                                         </div>
                                         }
-                                    </>
+                                    </div>
 
                                 )
                             })}
@@ -680,7 +680,7 @@ const chattingRoom:NextPage = (props) => {
                         {chatMessages.map((message)=>(
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
-                            <div className='chatting-me' key={Math.random()}>
+                            <div className='chatting-me' key={message.id}>
                                 {message.message.includes('upload/image_') ? 
                                 <div className='chatting-image'>
                                     <BackImage src={message.message} alt='채팅 메세지 이미지' /> 
@@ -702,7 +702,7 @@ const chattingRoom:NextPage = (props) => {
                             </div>
                             :
                             // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
-                            <div className='chatting-opponent' key={Math.random()}>
+                            <div className='chatting-opponent' key={message.id}>
                                 <div className='opponent-profile'>
                                     <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
                                 </div>
