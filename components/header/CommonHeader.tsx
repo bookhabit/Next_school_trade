@@ -18,7 +18,7 @@ const Conatainer = styled.div`
   top: 0;
   width: 100%;
   max-width: 430px;
-  height: 90px;
+  height: 100px;
   background-color: ${palette.main_color};
   display: flex;
   align-items: center;
@@ -96,7 +96,6 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
 
   useEffect(()=>{
     // 채팅방 페이지의 상대방 이름 가져오기
-    console.log(chatOpponentName)
     const getCahttingOpponentNameAPI = async () => {
       const roomId = router.query.id
       const roomInfo:RoomType = await axios.get(`/room/${roomId}`).then((response)=>response.data)

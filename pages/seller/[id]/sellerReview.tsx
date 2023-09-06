@@ -8,9 +8,6 @@ import styled from "styled-components";
 import FailFetchData from "../../../components/common/FailFetchData";
 
 const Container = styled.div`
-  @media only screen and (min-width: 430px) {
-    min-height: 100vh;
-  }
 `;
 
 const sellerReview: NextPage = ({ data }: any) => {

@@ -27,6 +27,7 @@ import { getFavoriteList } from "../lib/api/product";
 import { ThemeProvider, createTheme } from "@mui/material";
 import Script from "next/script";
 import { SocketProvider } from "../context/socket.context";
+import Layout from "../components/Layout";
 
 interface BackgroundColor {
   firstColor: string;
@@ -37,6 +38,10 @@ const Container = styled.div<BackgroundColor>`
   display: flex;
   justify-content: center;
   height: 100%;
+  html,body,#root {
+    height: 100%;
+    margin: 0;
+  }
   .pc-style {
     display: none;
   }
@@ -106,8 +111,10 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
             </PcContainer>
             <MobileContainer className="mobile-style">
               <SocketProvider>
-                <Header />
-                <Component {...pageProps} />
+                <Layout>
+                  <Header />
+                  <Component {...pageProps} />
+                </Layout>
                 <div id="root-modal" />
                 <ReactQueryDevtools initialIsOpen={false} />
               </SocketProvider>

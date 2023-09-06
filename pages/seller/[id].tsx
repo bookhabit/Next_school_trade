@@ -20,9 +20,6 @@ import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 const Container = styled.div`
-  @media only screen and (min-width: 430px) {
-    min-height: 100vh;
-  }
   margin: 40px 35px;
   padding-bottom: 30px;
   display: flex;

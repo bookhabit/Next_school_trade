@@ -3,12 +3,10 @@ import styled from 'styled-components';
 import palette from '../../styles/palette';
 
 const Container = styled.div`
-  @media only screen and (min-width: 430px) {
-	    min-height:100vh;
-  }
   display:flex;
   justify-content:center;
   align-items:center;
+  margin-top:300px;
   .data-fetch-fail-box{
     display:flex;
     justify-content:center;

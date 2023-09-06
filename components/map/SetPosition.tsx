@@ -347,11 +347,6 @@ const SetPosition: React.FC<IProps> = ({ closeModal }) => {
       Swal.fire("장소명을 입력해주세요.");
       return false;
     }
-    dispatch(registerPositionActions.setLatitude(currentMapLocation.latitude));
-    dispatch(
-      registerPositionActions.setLongitude(currentMapLocation.longitude)
-    );
-    dispatch(registerPositionActions.setLocation(inputLocation));
     // sweetAlert로 알림창 꾸미기
     Swal.fire({
       title: "거래 위치를 설정하시겠습니까?",
@@ -366,6 +361,11 @@ const SetPosition: React.FC<IProps> = ({ closeModal }) => {
     }).then((result) => {
       // 만약 Promise리턴을 받으면,
       if (result.isConfirmed) {
+        dispatch(registerPositionActions.setLatitude(currentMapLocation.latitude));
+        dispatch(
+          registerPositionActions.setLongitude(currentMapLocation.longitude)
+        );
+        dispatch(registerPositionActions.setLocation(inputLocation));
         // 만약 모달창에서 confirm 버튼을 눌렀다면
         Swal.fire("거래 위치가 설정되었습니다.");
       }

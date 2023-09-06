@@ -36,7 +36,6 @@ const Container = styled.div`
     bottom: 80px !important;
   }
   @media only screen and (min-width: 430px) {
-    min-height: 100vh;
     .favorite-modal {
       left: auto;
       transform: none;

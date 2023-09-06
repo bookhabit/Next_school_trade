@@ -45,9 +45,6 @@ interface cssProps {
 const Container = styled.div<cssProps>`
   width: 100%;
   height: 100%;
-  @media only screen and (min-width: 430px) {
-    min-height: 100vh;
-  }
   /* 헤더 css */
   .detail-header {
     position: sticky;

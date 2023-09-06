@@ -17,9 +17,6 @@ import BackImage from '../../../../components/common/BackImage';
 import Delete from "../../../../public/static/svg/product/thumnailXicon.svg";
 
 const Container = styled.div`
-    @media only screen and (min-width: 430px) {
-        min-height: 90vh;
-    }
     .chatting-photo-tuhmnail{
         background-color:${palette.main_text_color};
         position:fixed;

@@ -19,7 +19,6 @@ const Container = styled.form`
   justify-content: center;
   align-items: center;
   .profile-image {
-    margin-top: 20px;
     position: relative;
     img {
       padding: 10px;

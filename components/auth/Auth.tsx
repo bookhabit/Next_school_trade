@@ -7,9 +7,6 @@ import FormLogin from "./FormLogin";
 import FormSignUp from "./FormSignUp";
 
 const Container = styled.div`
-  @media only screen and (min-width: 430px) {
-    min-height: 100vh;
-  }
 `;
 interface IProps {
   currentLeft: boolean;

@@ -6,11 +6,7 @@ import ErrorImg from "../../public/static/svg/error404/caroon.svg"
 import QuestionSVG from "../../public/static/svg/error404/question.svg"
 
 const Container = styled.div`
-    @media only screen and (min-width: 430px) {
-	    min-height:90vh;
-    }
     text-align:center;
-    padding-top:120px;
     .error-content{
         width:100%;
         height:420px;

@@ -10,9 +10,6 @@ import styled from 'styled-components';
 import Loading from "../../../components/common/Loading";
 
 const Container = styled.div`
-    @media only screen and (min-width: 430px) {
-	    min-height:100vh;
-    }
 `
 
 const Kakao = (query:any) => {
