@@ -361,11 +361,15 @@ const SetPosition: React.FC<IProps> = ({ closeModal }) => {
     }).then((result) => {
       // 만약 Promise리턴을 받으면,
       if (result.isConfirmed) {
+        // 리덕스 스토어 위치값 변경
         dispatch(registerPositionActions.setLatitude(currentMapLocation.latitude));
         dispatch(
           registerPositionActions.setLongitude(currentMapLocation.longitude)
         );
         dispatch(registerPositionActions.setLocation(inputLocation));
+        
+        // 마이페이지에서 주거래위치 설정을 한다면 user의 주거래 위치를 변경하는 api 연동
+
         // 만약 모달창에서 confirm 버튼을 눌렀다면
         Swal.fire("거래 위치가 설정되었습니다.");
       }

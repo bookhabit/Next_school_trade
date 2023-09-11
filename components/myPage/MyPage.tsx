@@ -24,7 +24,7 @@ const Container = styled.div`
   .myUniversity {
     background-color: #f9f8f8;
     width: 100%;
-    height: 130px;
+    height: 100px;
     display: felx;
     justify-content: center;
     align-items: center;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LinkFooter from '../../../components/footer/LinkFooter';
 import ChattingList from '../../../components/chattingList/ChattingList';
 import styled from 'styled-components';
@@ -44,12 +44,25 @@ export type LatestChatType = {
 
 const chattingList:NextPage = (props) => {
     const {chattingRoomList} = props as PropsType
+    const [copyRoomList,setCopyRoomList] = useState<chattingRoomListType[]>([])
+    const [leaveRoomId,setLeaveRoomId] = useState<string>()
+
+    useEffect(()=>{
+        if(leaveRoomId){
+            const leavedRoomList = chattingRoomList.filter((roomList)=>roomList.rooms.id !== Number(leaveRoomId))
+            console.log('leavedRoomList',leavedRoomList)
+            setCopyRoomList(leavedRoomList)
+        }else{
+            setCopyRoomList(chattingRoomList)
+        }
+    },[leaveRoomId])
+
     return (
         <Container>
             {isEmpty(chattingRoomList) ? 
                 <p>아직 채팅 상대방이 없습니다</p>
-            : chattingRoomList.map((chatting)=>(
-                <ChattingList chattingRoomList={chatting} key={chatting.rooms.id}/>
+            : copyRoomList.map((chatting)=>(
+                <ChattingList chattingRoomList={chatting} key={chatting.rooms.id} setLeaveRoomId={setLeaveRoomId} />
             ))}
             <LinkFooter/>
         </Container>

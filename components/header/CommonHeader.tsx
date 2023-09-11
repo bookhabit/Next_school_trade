@@ -96,6 +96,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
 
   useEffect(()=>{
     // 채팅방 페이지의 상대방 이름 가져오기
+    console.log('채팅상대방이름',chatOpponentName)
     const getCahttingOpponentNameAPI = async () => {
       const roomId = router.query.id
       const roomInfo:RoomType = await axios.get(`/room/${roomId}`).then((response)=>response.data)

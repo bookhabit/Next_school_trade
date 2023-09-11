@@ -83,10 +83,11 @@ const Container = styled.div`
 `
 
 interface IProps{
-    chattingRoomList:chattingRoomListType
+    chattingRoomList:chattingRoomListType;
+    setLeaveRoomId:React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
+const ChattingList:React.FC<IProps> = ({chattingRoomList,setLeaveRoomId}) => {
     const {socket} = useSocket();
     const router = useRouter();
     const loggedUserId = useSelector((state: RootState) => state.user.id);
@@ -118,10 +119,10 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList}) => {
     const leaveRoom = async ()=>{
         console.log('채팅방나가기 클릭')
         await socket?.emit("leave_room",rooms)
-        socket?.on("leave_room",((data)=>{
-            console.log('삭제 후 데이터',data)
-            alert('삭제완료')
-            // router.reload();
+        socket?.on("leave_room",((data:string)=>{
+            alert('채팅방 나가기 완료')
+            console.log(data)
+            setLeaveRoomId(data) 
         }))
     }
 
