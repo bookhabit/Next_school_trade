@@ -50,7 +50,6 @@ const home = () => {
     status,
   } = useInfiniteQuery(["productList"], GetproductList, {
     getNextPageParam: (lastPage: Page, pages: Page[]) => {
-      console.log(lastPage,pages)
       const lastPageNumber = Math.ceil(lastPage.totalPage / 10);
       // 이 값으로 라스트넘버값 지정
       if (pages.length < lastPageNumber) {

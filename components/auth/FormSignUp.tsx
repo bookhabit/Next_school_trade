@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import CloseXIcon from "../../public/static/svg/auth/modal_close_x_icon.svg"
 import MailIcon from "../../public/static/svg/auth/email.svg"
 import PersonIcon from "../../public/static/svg/auth/person.svg"
 import OpenedEyeIcon from "../../public/static/svg/auth/opened_eye.svg"
@@ -9,21 +8,16 @@ import MapIcon from "../../public/static/svg/auth/mapIcon.svg"
 import FormInput from '../common/FormInput';
 import { useState, useEffect } from 'react';
 import FormSelector from '../common/FormSelector';
-import { monthList,dayList,yearList,universityList } from '../../lib/staticData';
+import { monthList,dayList,yearList } from '../../lib/staticData';
 import palette from '../../styles/palette';
-import { majorList } from './../../lib/staticData';
 import Button from '../common/Button';
 import { kakaoSignupAPI, signupAPI } from '../../lib/api/auth';
 import { useDispatch } from 'react-redux';
 import { userActions } from './../../store/user';
 import axios from '../../lib/api';
-import { commonActions } from './../../store/common';
 import useValidateMode from '../../hooks/useValidateMode';
 import PasswordWarning from './PasswordWarning';
-import { authActions } from '../../store/auth';
-import Link from 'next/link';
 import useModal from '../../hooks/useModal';
-import SetPosition from '../map/SetPosition';
 import SetPositionUserLocation from '../map/SetPositionUserLocation';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';

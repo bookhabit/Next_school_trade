@@ -482,8 +482,6 @@ const chattingRoom:NextPage = (props) => {
         socket?.on("message",(msgPayload:messagePayload)=>{
             console.log('채팅방 페이지에서 msgPayload수신',msgPayload)
             handleReceivedMessage(msgPayload)
-            // setBuyerConfirmTime(msgPayload.room.buyer_confirm_time as Date)
-            // setSellerConfirmTime(msgPayload.room.seller_confirm_time as Date)
         })
     },[socket])
 

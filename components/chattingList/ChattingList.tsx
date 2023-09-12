@@ -118,8 +118,8 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList,setLeaveRoomId}) => {
     
     const leaveRoom = async ()=>{
         console.log('채팅방나가기 클릭')
-        await socket?.emit("leave_room",rooms)
-        socket?.on("leave_room",((data:string)=>{
+        await socket?.emit("delete_room",rooms)
+        socket?.on("delete_room",((data:string)=>{
             alert('채팅방 나가기 완료')
             console.log(data)
             setLeaveRoomId(data) 
