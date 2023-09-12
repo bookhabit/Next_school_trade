@@ -21,11 +21,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   console.log('socket',socket)
 
     useEffect(() => {
-      console.log('1번쨰 useEffect')
-      console.log('로그인 상태',isLoggedIn)
       if (isLoggedIn) {
         if (!socket) {
-          console.log('백엔드 소켓 연결')
           const newSocket = io(SOCKET_URL);
           setSocket(newSocket);
         } else {
@@ -36,10 +33,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, [isLoggedIn]);
 
     useEffect(() => {
-      console.log('2번쨰 useEffect')
       if (socket) {
-        console.log('소켓 이벤트 login emit')
-
         const handleLogin = (data:any) => {
           console.log('소켓 연결 성공', data);
         };

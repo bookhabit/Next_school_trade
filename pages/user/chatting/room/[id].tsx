@@ -15,6 +15,7 @@ import { isEmpty, last, result, throttle, update } from 'lodash';
 import axios from '../../../../lib/api';
 import BackImage from '../../../../components/common/BackImage';
 import Delete from "../../../../public/static/svg/product/thumnailXicon.svg";
+import { Users } from '../../../../types/user';
 
 const Container = styled.div`
     .chatting-photo-tuhmnail{
@@ -160,7 +161,10 @@ const ChattingRoomContainer= styled.div`
             margin-bottom:20px;
             .opponent-profile{
                 margin:0px 10px;
-                
+                img{
+                    width:40px;
+                    height:40px;
+                }   
             }
             .chatting-content{
                 max-width:230px;
@@ -380,6 +384,7 @@ const chattingRoom:NextPage = (props) => {
     const sellerId = chattingRoomData.room.seller_id
     const contentId = chattingRoomData.room.content_id
     const roomId = chattingRoomData.room.id
+    const [opponentProfileImg,setOpponentProfileImg] = useState<null|string>(null);
 
     // 상대방 메시지 확인 필요 로직 - 1표시
     const [sellerConfirmTime,setSellerConfirmTime] = useState(new Date())
@@ -429,7 +434,6 @@ const chattingRoom:NextPage = (props) => {
             console.log(e,'upload 실패')
         }
       }
-      console.log('chattingPhotos',chattingPhotos)
     
       // 업로드했던 파일 썸네일 삭제
       const handleDeleteImage = (index:number) => {
@@ -478,8 +482,10 @@ const chattingRoom:NextPage = (props) => {
         socket?.on("message",(msgPayload:messagePayload)=>{
             console.log('채팅방 페이지에서 msgPayload수신',msgPayload)
             handleReceivedMessage(msgPayload)
+            // setBuyerConfirmTime(msgPayload.room.buyer_confirm_time as Date)
+            // setSellerConfirmTime(msgPayload.room.seller_confirm_time as Date)
         })
-    },[socket,chatMessages])
+    },[socket])
 
     // 이전 data REST API - /chat/list/:roomId  ( roomId는 number )
     // query는 ?page= number 
@@ -521,12 +527,26 @@ const chattingRoom:NextPage = (props) => {
         }
     };
 
+    const getOpponentInfo = async ()=>{
+        if(loggedUserId===rooms.buyer_id){
+            // 상대방의 정보가 필요하니 반대(seller)의 id
+            const userInfo:Users = await axios.get(`/user/find/${rooms.seller_id}`).then((response)=>response.data)
+
+            setOpponentProfileImg(userInfo.profileImage.path)
+        }
+        if(loggedUserId===rooms.seller_id){
+            // 상대방의 정보가 필요하니 반대(seller)의 id
+            const userInfo:Users = await axios.get(`/user/find/${rooms.buyer_id}`).then((response)=>response.data)
+
+            setOpponentProfileImg(userInfo.profileImage.path)
+        }
+    }
+
     // fetch nextData as scroll event
     const handleScroll = throttle(() => {
         const scrollTop = document.documentElement.scrollTop;
 
         if (scrollTop === 0 && hasNextPage && nextPageNumber !== 0) {
-            console.log(scrollBarRef.current)
             if(scrollBarRef.current){
                 setPrevScrollHeight(scrollBarRef.current.scrollHeight)
             }
@@ -537,6 +557,7 @@ const chattingRoom:NextPage = (props) => {
     // fetch frist data : last messages
     useEffect(()=>{
         fetchChatData()
+        getOpponentInfo()
     },[])
 
     // set scroll event
@@ -560,7 +581,6 @@ const chattingRoom:NextPage = (props) => {
     
     let currentDate = new Date();
     let lastDate:Date|null = null;
-    console.log('lastChattingList',lastChattingList)
 
     return (
         <Container>
@@ -619,7 +639,6 @@ const chattingRoom:NextPage = (props) => {
                                 if (!lastDate || messageDate.toDateString() !== lastDate.toDateString()) {
                                   lastDate = messageDate;
                                 shouldDisplayDate = messageDate < currentDate;
-                                    console.log(shouldDisplayDate)
                                 }
 
                                 // 지난 대화 표시
@@ -656,7 +675,11 @@ const chattingRoom:NextPage = (props) => {
                                         // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
                                         <div className='chatting-opponent' key={chatting.id}>
                                             <div className='opponent-profile'>
+                                                {opponentProfileImg ? 
+                                                <BackImage src={opponentProfileImg} alt="상대방 프로필이미지"/>
+                                                : 
                                                 <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                                                }
                                             </div>
                                             {chatting.message.includes('upload/image_') ? 
                                                 <div className='chatting-image'>
@@ -677,7 +700,7 @@ const chattingRoom:NextPage = (props) => {
                         {chatMessages.map((message)=>(
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
-                            <div className='chatting-me' key={message.id}>
+                            <div className='chatting-me' key={Math.random()}>
                                 {message.message.includes('upload/image_') ? 
                                 <div className='chatting-image'>
                                     <BackImage src={message.message} alt='채팅 메세지 이미지' /> 
@@ -699,9 +722,13 @@ const chattingRoom:NextPage = (props) => {
                             </div>
                             :
                             // 현재 로그인한 사용자와 보낸 사람의 id가 다르다면 >> '상대방'
-                            <div className='chatting-opponent' key={message.id}>
+                            <div className='chatting-opponent' key={Math.random()}>
                                 <div className='opponent-profile'>
-                                    <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                                    {opponentProfileImg ? 
+                                        <BackImage src={opponentProfileImg} alt="상대방 프로필이미지"/>
+                                        : 
+                                        <img src="/static/svg/chatting/opponent.svg" alt="상대방 프로필이미지"/>
+                                    }
                                 </div>
                                 {message.message.includes('upload/image_') ? 
                                 <div className='chatting-image'>

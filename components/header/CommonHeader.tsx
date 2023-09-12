@@ -96,17 +96,18 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
 
   useEffect(()=>{
     // 채팅방 페이지의 상대방 이름 가져오기
-    console.log('채팅상대방이름',chatOpponentName)
     const getCahttingOpponentNameAPI = async () => {
       const roomId = router.query.id
+      console.log('roomId',roomId)
       const roomInfo:RoomType = await axios.get(`/room/${roomId}`).then((response)=>response.data)
       // seller_id 와 loggin_Id 가 일치하다면 (판매자라면 구매자 이름 보여주기)
+      console.log('로그인유저 id',LoggedUser.id)
       if(LoggedUser.id === Number(roomInfo.seller_id)){
         const response = await getUserName(Number(roomInfo.buyer_id));
         setChatOpponentName(response.data);
-      }else{
-        // seller_id 와 loggin_Id 가 일치하지 않다면 (구매자라면 판매자이름 보여주기)
-        const response = await getUserName(Number(roomInfo.buyer_id));
+      }
+      if(LoggedUser.id === Number(roomInfo.buyer_id)){
+        const response = await getUserName(Number(roomInfo.seller_id));
         setChatOpponentName(response.data);
       }
     };
