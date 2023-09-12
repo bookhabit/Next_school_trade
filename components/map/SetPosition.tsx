@@ -18,6 +18,8 @@ import DaumPostcodeEmbed from "react-daum-postcode";
 import { RootState } from "../../store";
 import Button from "../common/Button";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { updateUserLocation } from "../../lib/api/user";
 
 const Container = styled.div`
   .mordal-close-x-icon {
@@ -201,6 +203,8 @@ const SetPosition: React.FC<IProps> = ({ closeModal }) => {
   const dispatch = useDispatch();
   // 주소 검색 api
   const [openPostcode, setOpenPostcode] = React.useState<boolean>(false);
+  const router = useRouter();
+  console.log(router.pathname)
 
   // 유저 정보의 위도,경도 값을 받아서 첫 위치로 지정하여 지도를 표시해준다 - 지금은 한서대학교 위도경도로 테스트
   const userLocation = useSelector((state: RootState) => state.user.location);
@@ -342,7 +346,7 @@ const SetPosition: React.FC<IProps> = ({ closeModal }) => {
   };
 
   // 주 거래 위치로 설정하기  - 위치,위도,경도를 registerPositon 리덕스 스토어에 저장한다
-  const savePosition = () => {
+  const savePosition = async () => {
     if (validateLocation() === false) {
       Swal.fire("장소명을 입력해주세요.");
       return false;
@@ -361,14 +365,18 @@ const SetPosition: React.FC<IProps> = ({ closeModal }) => {
     }).then((result) => {
       // 만약 Promise리턴을 받으면,
       if (result.isConfirmed) {
-        // 리덕스 스토어 위치값 변경
-        dispatch(registerPositionActions.setLatitude(currentMapLocation.latitude));
-        dispatch(
-          registerPositionActions.setLongitude(currentMapLocation.longitude)
-        );
-        dispatch(registerPositionActions.setLocation(inputLocation));
-        
-        // 마이페이지에서 주거래위치 설정을 한다면 user의 주거래 위치를 변경하는 api 연동
+        if(router.pathname==="/user"){
+          // 마이페이지 - user의 주거래 위치를 변경하는 api 연동
+          const response = updateUserLocation(currentMapLocation.latitude,currentMapLocation.longitude,inputLocation).then((response)=>response)
+          console.log('응답',response)
+        }else{
+          // 리덕스 스토어 위치값 변경 - 상품등록 및 수정 경우
+          dispatch(registerPositionActions.setLatitude(currentMapLocation.latitude));
+          dispatch(
+            registerPositionActions.setLongitude(currentMapLocation.longitude)
+          );
+          dispatch(registerPositionActions.setLocation(inputLocation));
+        }
 
         // 만약 모달창에서 confirm 버튼을 눌렀다면
         Swal.fire("거래 위치가 설정되었습니다.");

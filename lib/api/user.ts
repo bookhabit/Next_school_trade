@@ -24,3 +24,10 @@ export const getUserName = async (id: number) =>
 
 // 로그아웃 api
 export const logoutAPI = () => axios.delete("/api/auth/logout");
+
+// 유저의 위치 정보 업데이트 api
+export const updateUserLocation = async (latitude:number,longitude:number,inputLocation:string) => axios.post(`/user/changeLocation`,{
+  latitude: latitude,
+  longitude:longitude,
+  location:inputLocation
+}).then((response)=>response.data)
