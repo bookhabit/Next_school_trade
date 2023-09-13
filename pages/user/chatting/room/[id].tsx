@@ -556,6 +556,12 @@ const chattingRoom:NextPage = (props) => {
     useEffect(()=>{
         fetchChatData()
         getOpponentInfo()
+        return()=>{
+            socket?.emit('leave_room',roomId)
+            socket?.on('leave_room',(data)=>{
+                console.log('leave_room응답',data)
+            })
+        }
     },[])
 
     // set scroll event

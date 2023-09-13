@@ -42,7 +42,7 @@ const Container = styled.div`
   }
 `;
 
-const home = () => {
+const MainPage = () => {
   const {
     data, // 💡 data.pages를 갖고 있는 배열
     fetchNextPage, // 💡 다음 페이지를 불러오는 함수
@@ -152,4 +152,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 };
-export default home;
+export default MainPage;
