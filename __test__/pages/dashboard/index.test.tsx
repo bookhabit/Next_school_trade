@@ -12,4 +12,21 @@ describe('dashboard page',()=>{
 
         expect(header).toHaveTextContent(headerText)
     })
+
+    it('Should have a disabled button',()=>{
+        render(<DashboardIndex/>);
+
+        const buttonElement = screen.getByRole('button')
+
+        expect(buttonElement).toBeDisabled();
+    })
+
+    it('Should have a p tag with className of blue',()=>{
+        render(<DashboardIndex/>);
+
+        const pElement = screen.getByTestId('paragraph-blue');
+
+        expect(pElement).toHaveClass('blue')
+        expect(pElement).toHaveTextContent('This is our paragraph')
+    })
 })
