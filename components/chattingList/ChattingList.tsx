@@ -88,6 +88,7 @@ interface IProps{
 }
 
 const ChattingList:React.FC<IProps> = ({chattingRoomList,setLeaveRoomId}) => {
+    console.log('전달받은 리스트',chattingRoomList)
     const {socket} = useSocket();
     const router = useRouter();
     const loggedUserId = useSelector((state: RootState) => state.user.id);

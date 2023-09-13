@@ -20,6 +20,7 @@ import Button from "../common/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { updateUserLocation } from "../../lib/api/user";
+import { userActions } from "../../store/user";
 
 const Container = styled.div`
   .mordal-close-x-icon {
@@ -367,8 +368,10 @@ const SetPosition: React.FC<IProps> = ({ closeModal }) => {
       if (result.isConfirmed) {
         if(router.pathname==="/user"){
           // 마이페이지 - user의 주거래 위치를 변경하는 api 연동
-          const response = updateUserLocation(currentMapLocation.latitude,currentMapLocation.longitude,inputLocation).then((response)=>response)
-          console.log('응답',response)
+          updateUserLocation(currentMapLocation.latitude,currentMapLocation.longitude,inputLocation).then((response)=>{
+            // user정보 업데이트
+            dispatch(userActions.setLoggedUser(response))
+          })
         }else{
           // 리덕스 스토어 위치값 변경 - 상품등록 및 수정 경우
           dispatch(registerPositionActions.setLatitude(currentMapLocation.latitude));

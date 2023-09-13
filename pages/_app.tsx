@@ -132,11 +132,8 @@ MyApp.getInitialProps = async (context: AppContext) => {
   console.log(context.ctx.req?.headers.cookie)
   let userData;
   try {
-    console.log(cookieObject,'쿠키')
     if (cookieObject.access_token) {
-      console.log('user/isLogin 요청')
       const response = await getUserInfo(cookieObject.access_token);
-      console.log('클라이언트데이터',response.data)
       userData = response.data;
     }
   } catch (e) {
