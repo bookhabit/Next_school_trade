@@ -45,24 +45,24 @@ export type LatestChatType = {
 const chattingList:NextPage = (props) => {
     const {chattingRoomList} = props as PropsType
     const [copyRoomList,setCopyRoomList] = useState<chattingRoomListType[]>([])
-    const [leaveRoomId,setLeaveRoomId] = useState<string>()
+    const [deleteRoomId,setDeleteRoomId] = useState<string>()
 
     useEffect(()=>{
-        if(leaveRoomId){
-            const leavedRoomList = chattingRoomList.filter((roomList)=>roomList.rooms.id !== Number(leaveRoomId))
+        if(deleteRoomId){
+            const leavedRoomList = chattingRoomList.filter((roomList)=>roomList.rooms.id !== Number(deleteRoomId))
             console.log('leavedRoomList',leavedRoomList)
             setCopyRoomList(leavedRoomList)
         }else{
             setCopyRoomList(chattingRoomList)
         }
-    },[leaveRoomId])
+    },[deleteRoomId])
 
     return (
         <Container>
             {isEmpty(chattingRoomList) ? 
                 <p>아직 채팅 상대방이 없습니다</p>
             : copyRoomList.map((chatting)=>(
-                <ChattingList chattingRoomList={chatting} key={chatting.rooms.id} setLeaveRoomId={setLeaveRoomId} />
+                <ChattingList chattingRoomList={chatting} key={chatting.rooms.id} setDeleteRoomId={setDeleteRoomId} />
             ))}
             <LinkFooter/>
         </Container>

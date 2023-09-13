@@ -84,10 +84,10 @@ const Container = styled.div`
 
 interface IProps{
     chattingRoomList:chattingRoomListType;
-    setLeaveRoomId:React.Dispatch<React.SetStateAction<string | undefined>>
+    setDeleteRoomId:React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-const ChattingList:React.FC<IProps> = ({chattingRoomList,setLeaveRoomId}) => {
+const ChattingList:React.FC<IProps> = ({chattingRoomList,setDeleteRoomId}) => {
     console.log('전달받은 리스트',chattingRoomList)
     const {socket} = useSocket();
     const router = useRouter();
@@ -117,13 +117,13 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList,setLeaveRoomId}) => {
 
     // 채팅방 나가기 이벤트
     
-    const leaveRoom = async ()=>{
+    const deleteRoom = async ()=>{
         console.log('채팅방나가기 클릭')
         await socket?.emit("delete_room",rooms.id)
         socket?.on("delete_room",((data:string)=>{
             alert('채팅방 나가기 완료')
             console.log('채팅방 나가기 response',data)
-            setLeaveRoomId(data) 
+            setDeleteRoomId(data) 
         }))
     }
 
@@ -163,7 +163,7 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList,setLeaveRoomId}) => {
                             null
                             }
                         </p>
-                        <Xicon className="leave-button" onClick={leaveRoom}/>
+                        <Xicon className="leave-button" onClick={deleteRoom}/>
                         <p className='leave-room-text'>채팅방 나가기</p>
                     </div>
                 </div>
