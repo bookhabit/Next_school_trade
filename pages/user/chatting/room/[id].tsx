@@ -358,7 +358,6 @@ export type ChattingListPage = {
 
 const chattingRoom:NextPage = (props) => {
     const {chattingRoomData} = props as PropsType
-    console.log('채팅룸데이터',chattingRoomData)
 
     if(!chattingRoomData.room){
         return (
@@ -402,7 +401,7 @@ const chattingRoom:NextPage = (props) => {
         return newArray.reverse();      // 복사된 배열 뒤집기
     }
     const lastChattingList = reverseArray(lastChatMessages)
-
+    
     const rooms:RoomType = {
         content_id:contentId,
         seller_id:sellerId,
@@ -472,18 +471,14 @@ const chattingRoom:NextPage = (props) => {
 
     // 채팅데이터 수신
     // 서버에서 메시지를 받았을 때 호출되는 함수
-    const handleReceivedMessage = (newMessage: messagePayload) => {
-        // 이전 메시지들과 새로운 메시지를 합쳐서 새 배열 생성
-        const updatedChatMessages = [...chatMessages, newMessage];
-        setChatMessages(updatedChatMessages);
-    };
 
     useEffect(()=>{
         socket?.on("message",(msgPayload:messagePayload)=>{
             console.log('채팅방 페이지에서 msgPayload수신',msgPayload)
-            handleReceivedMessage(msgPayload)
+            setChatMessages((prevChatMessages) => [...prevChatMessages, msgPayload]);
         })
     },[socket])
+    console.log('chatMessages',chatMessages)
 
     // 이전 data REST API - /chat/list/:roomId  ( roomId는 number )
     // query는 ?page= number 
@@ -531,6 +526,7 @@ const chattingRoom:NextPage = (props) => {
             const userInfo:Users = await axios.get(`/user/find/${rooms.seller_id}`).then((response)=>response.data)
 
             setOpponentProfileImg(userInfo.profileImage.path)
+            console.log(userInfo.profileImage.path)
         }
         if(loggedUserId===rooms.seller_id){
             // 상대방의 정보가 필요하니 반대(seller)의 id
