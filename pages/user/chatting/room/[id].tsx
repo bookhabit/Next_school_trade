@@ -16,6 +16,8 @@ import axios from '../../../../lib/api';
 import BackImage from '../../../../components/common/BackImage';
 import Delete from "../../../../public/static/svg/product/thumnailXicon.svg";
 import { Users } from '../../../../types/user';
+import { useDispatch } from 'react-redux';
+import { alarmActions } from '../../../../store/alarm';
 
 const Container = styled.div`
     .chatting-photo-tuhmnail{
@@ -350,12 +352,16 @@ export type messagePayload = {
     createdAt: Date;
 }
 
+export type confirm_message_responseType={
+    confirmTime:Date;
+    partnerId:number;
+}
+
 export type ChattingListPage = {
     chat_list:messagePayload[],
     totalPage:number,
     currentPage:number,
 }
-
 const chattingRoom:NextPage = (props) => {
     const {chattingRoomData} = props as PropsType
 
@@ -366,6 +372,8 @@ const chattingRoom:NextPage = (props) => {
             </div>
         )
     }
+
+    const dispatch = useDispatch();
 
     // 거래하기 로직
     const [confirmTrade,setConfirmTrade] = useState(false)
@@ -388,6 +396,9 @@ const chattingRoom:NextPage = (props) => {
     // 상대방 메시지 확인 필요 로직 - 1표시
     const [sellerConfirmTime,setSellerConfirmTime] = useState(new Date())
     const [buyerConfirmTime,setBuyerConfirmTime] = useState(new Date())
+
+    const [sellerConfirmRealTime,setSellerConfirmRealTime] = useState(new Date())
+    const [buyerConfirmRealTime,setBuyerConfirmRealTime] = useState(new Date())
 
     // 무한스크롤 데이터 패칭 로직
     const [hasNextPage,setHasNextPage] = useState(false)
@@ -469,17 +480,6 @@ const chattingRoom:NextPage = (props) => {
 
     }
 
-    // 채팅데이터 수신
-    // 서버에서 메시지를 받았을 때 호출되는 함수
-
-    useEffect(()=>{
-        socket?.on("message",(msgPayload:messagePayload)=>{
-            console.log('채팅방 페이지에서 msgPayload수신',msgPayload)
-            setChatMessages((prevChatMessages) => [...prevChatMessages, msgPayload]);
-        })
-    },[socket])
-    console.log('chatMessages',chatMessages)
-
     // 이전 data REST API - /chat/list/:roomId  ( roomId는 number )
     // query는 ?page= number 
     const getPreviousChatData = async (roomId:number, page:number) => {
@@ -494,9 +494,11 @@ const chattingRoom:NextPage = (props) => {
         // confirm messages by seller or buyer
         if(chattingRoomData.room.seller_confirm_time){
             setSellerConfirmTime(chattingRoomData.room.seller_confirm_time)
+            setSellerConfirmRealTime(chattingRoomData.room.seller_confirm_time)
         }
         if(chattingRoomData.room.buyer_confirm_time){
             setBuyerConfirmTime(chattingRoomData.room.buyer_confirm_time)
+            setBuyerConfirmRealTime(chattingRoomData.room.buyer_confirm_time)
         }
 
         // get previous chatting data
@@ -559,6 +561,39 @@ const chattingRoom:NextPage = (props) => {
             })
         }
     },[])
+
+    // 채팅데이터 수신
+    // 서버에서 메시지를 받았을 때 호출되는 함수
+
+    useEffect(()=>{
+        socket?.on("message",(msgPayload:messagePayload)=>{
+            console.log('채팅방 페이지에서 msgPayload수신',msgPayload)
+            setChatMessages((prevChatMessages) => [...prevChatMessages, msgPayload]);
+        })
+        
+        socket?.on("confirm_message",(data:confirm_message_responseType)=>{
+            console.log('confirm_message',data)
+            // 여기서 data는 상대방이 메세지를 읽었는지 알 수 있는 값이다
+            // true는 상대방이 채팅을 읽었다는 뜻으로 새로운 Date로 업데이트
+            // 로그인 한 사람과 파트너 아이디를 비교 (파트너아이디가 아닌 사람은 즉 메세지를 보낸사람 > 읽었다는 뜻은 보낸사람의 메세지의 1을 없애야 한다는 뜻)
+            if(data){
+                if(loggedUserId === buyerId){
+                    if(loggedUserId !== data.partnerId){
+                        console.log('이 시간으로 buyer time 업데이트',data.confirmTime)
+                        setSellerConfirmRealTime(data.confirmTime)
+                    }
+                }
+                if(loggedUserId === sellerId){
+                    if(loggedUserId !== data.partnerId){
+                        setBuyerConfirmRealTime(data.confirmTime) 
+                       console.log('seller time 업데이트')
+                    }
+                }
+            }
+        })
+    },[socket])
+    
+console.log('업데이트된 buyerTime',buyerConfirmTime)
 
     // set scroll event
     useEffect(() => {
@@ -709,11 +744,11 @@ const chattingRoom:NextPage = (props) => {
                                 }
                                 <div className='chatting-sub-content'>
                                     {loggedUserId === buyerId ? 
-                                    sellerConfirmTime < message.createdAt ? 
+                                    sellerConfirmRealTime < message.createdAt ? 
                                     <span className='confirm-number'>1</span>
                                     : <span></span>
                                     :
-                                    buyerConfirmTime < message.createdAt ? 
+                                    buyerConfirmRealTime < message.createdAt ? 
                                     <span className='confirm-number'>1</span>
                                     : <span></span>
                                     }
