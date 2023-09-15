@@ -96,8 +96,8 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   );
 
     // TODO : 채팅알림 
-    socket?.on("메세지가 왔는지 알 수 있는 이벤트",(data:confirm_message_responseType)=>{
-      console.log('_app.tsx에서 이벤트수신 수신',data)
+    socket?.on("chat_notification",(data:confirm_message_responseType)=>{
+      console.log('_app.tsx에서 chat_notification 수신',data)
       console.log('loggedUserId',loggedUserId)
       console.log('파트너 id (즉 메세지 읽은사람)',data.partnerId)
       if(loggedUserId === data.partnerId){

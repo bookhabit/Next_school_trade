@@ -18,8 +18,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const loggedUserId = useSelector((state: RootState) => state.user.id);
   const isLoggedIn = !!loggedUserId;
 
-  console.log('socket',socket)
-
     useEffect(() => {
       if (isLoggedIn) {
         if (!socket) {

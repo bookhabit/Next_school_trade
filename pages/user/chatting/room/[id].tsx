@@ -528,7 +528,6 @@ const chattingRoom:NextPage = (props) => {
             const userInfo:Users = await axios.get(`/user/find/${rooms.seller_id}`).then((response)=>response.data)
 
             setOpponentProfileImg(userInfo.profileImage.path)
-            console.log(userInfo.profileImage.path)
         }
         if(loggedUserId===rooms.seller_id){
             // 상대방의 정보가 필요하니 반대(seller)의 id
@@ -566,6 +565,22 @@ const chattingRoom:NextPage = (props) => {
     // 서버에서 메시지를 받았을 때 호출되는 함수
 
     useEffect(()=>{
+        // 채팅방에 들어온 userId 정보 
+        socket?.on("confirm_join_room",(joined_userId:number)=>{
+            console.log('confirm_join_room 이벤트 수신')
+            if(loggedUserId !== joined_userId){
+                console.log('userId 입장',joined_userId)
+                // 상대방 confirm_time 업데이트
+                if(buyerId === joined_userId){
+                    setBuyerConfirmTime(new Date())
+                    setBuyerConfirmRealTime(new Date())
+                }
+                if(sellerId === joined_userId){
+                    setSellerConfirmTime(new Date())
+                    setSellerConfirmRealTime(new Date())
+                }
+            }
+        })
         socket?.on("message",(msgPayload:messagePayload)=>{
             console.log('채팅방 페이지에서 msgPayload수신',msgPayload)
             setChatMessages((prevChatMessages) => [...prevChatMessages, msgPayload]);
@@ -592,8 +607,6 @@ const chattingRoom:NextPage = (props) => {
             }
         })
     },[socket])
-    
-console.log('업데이트된 buyerTime',buyerConfirmTime)
 
     // set scroll event
     useEffect(() => {
