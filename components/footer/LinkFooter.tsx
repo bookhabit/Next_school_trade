@@ -14,6 +14,18 @@ import { messagePayload } from '../../pages/user/chatting/room/[id]';
 import { alarmActions } from '../../store/alarm';
 
 const Container = styled.div`
+    @keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+    }
+
     position:fixed;
     bottom:0;      
     background-color:${palette.main_color};
@@ -60,6 +72,8 @@ const Container = styled.div`
                     align-items:center;
                     border-radius:50px;
                     padding-top:2px;
+                    /* 애니메이션 적용 */
+                    animation: blink 2s infinite;
                 }
             }
             p{
@@ -88,7 +102,10 @@ const LinkFooter = () => {
       useEffect(()=>{
         socket?.on('chat_notification', (message:messagePayload) => {
             dispatch(alarmActions.setChatting(true));
-            console.log(message.message)
+            dispatch(alarmActions.setChattingModal(true));
+            setTimeout(() => {
+                dispatch(alarmActions.setChattingModal(false));
+            }, 3000);
           });          
     },[socket])
     
@@ -143,7 +160,7 @@ const LinkFooter = () => {
                     <div className='showAlarmBox'>
                         <ChattingIcon className={setCurrentPage('/user/chatting')}/>
                         {chattingAlarm ? 
-                        <span className='showAlarm'>1</span> : null}
+                        <span className='showAlarm'></span> : null}
                     </div>
                     <p className={setCurrentPage('/user/chatting')}>채팅</p>
                 </div>

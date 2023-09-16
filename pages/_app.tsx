@@ -30,6 +30,7 @@ import { SocketProvider, useSocket } from "../context/socket.context";
 import Layout from "../components/Layout";
 import { alarmActions } from "../store/alarm";
 import { confirm_message_responseType, messagePayload } from "./user/chatting/room/[id]";
+import ChattingModal from "../components/alarm/ChattingModal";
 
 interface BackgroundColor {
   firstColor: string;
@@ -74,6 +75,12 @@ const MobileContainer = styled.div`
   @media only screen and (min-width: 1023px) {
     margin-left: 240px;
   }
+  /* 채팅목록 모달창 */
+  .chatting-modal {
+    position: fixed;
+    width:100%;
+    bottom: 80px !important;
+  }
 `;
 
 // const queryClient = new QueryClient();
@@ -94,6 +101,9 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   const secondColor = useSelector(
     (state: RootState) => state.userBackground.secondColor
   );
+
+  // 채팅알림 색깔
+  const chattingModal = useSelector((state:RootState)=>state.alarm.chattingModal)
 
   useEffect(() => {
     if (clientData) {
@@ -118,6 +128,11 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
                 <Layout>
                   <Header />
                   <Component {...pageProps} />
+                  {chattingModal ? (
+                    <div className="chatting-modal">
+                      <ChattingModal />
+                    </div>
+                  ) : null}
                 </Layout>
                 <div id="root-modal" />
                 <ReactQueryDevtools initialIsOpen={false} />
