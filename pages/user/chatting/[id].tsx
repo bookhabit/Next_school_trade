@@ -9,6 +9,10 @@ import { NextPage } from 'next';
 import { Users } from '../../../types/user';
 import { productListType } from '../../../types/product/product';
 import { isEmpty } from 'lodash';
+import { messagePayload } from './room/[id]';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 
 const Container = styled.div`
@@ -46,6 +50,9 @@ const chattingList:NextPage = (props) => {
     const {chattingRoomList} = props as PropsType
     const [copyRoomList,setCopyRoomList] = useState<chattingRoomListType[]>([])
     const [deleteRoomId,setDeleteRoomId] = useState<string>()
+    const {socket} = useSocket();
+    const router = useRouter();
+    const loggedUserId = useSelector((state: RootState) => state.user.id);
 
     useEffect(()=>{
         if(deleteRoomId){
@@ -56,13 +63,64 @@ const chattingList:NextPage = (props) => {
             setCopyRoomList(chattingRoomList)
         }
     },[deleteRoomId])
+    
+    const getChattingRoomList = async ()=>{
+        try{
+            const response = await axios.get(`/room/list/${loggedUserId}`)
+            const rooms = response.data as RoomType[];
+    
+            const chattingLists: chattingRoomListType[] = []; // An array to store multiple chattingList objects
+    
+            for (const room of rooms) {
+                let product:productListType|null = null;
+                let chatData:LatestChatType|null = null;
+    
+                // room의 content 정보 얻어오기
+                if (room.content_id !== undefined) {
+                    const productResponse = await axios.get(`/content/read/${room.content_id}`);
+                    product = productResponse.data;
+                }
+    
+                // room의 마지막 대화정보 얻어오기
+                if(room.id !== undefined){
+                    const latestChat:LatestChatType = await axios.get(`/chat/latest/${room.id}`).then((response)=>response.data)
+                    chatData=latestChat
+                }
+    
+                const chattingList: chattingRoomListType = {
+                    rooms: room,
+                    product: product,
+                    chatData: chatData
+                };
+    
+                chattingLists.push(chattingList);
+            }
+            return chattingLists
+            
+    
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+    useEffect(()=>{
+        socket?.on('chat_notification', (message:messagePayload) => {
+            console.log('chat_notification 받은 메시지:', message);
+            getChattingRoomList().then((response)=>{
+                console.log('chat_notification 이벤트 수신 후 데이터 다시 가져오기 response',response)
+                if(response){
+                    setCopyRoomList(response)
+                }
+            })
+    })          
+    },[socket])
 
     return (
         <Container>
             {isEmpty(chattingRoomList) ? 
                 <p>아직 채팅 상대방이 없습니다</p>
             : copyRoomList.map((chatting)=>(
-                <ChattingList chattingRoomList={chatting} key={chatting.rooms.id} setDeleteRoomId={setDeleteRoomId} />
+                <ChattingList chattingRoomList={chatting} key={chatting.rooms.id} setDeleteRoomId={setDeleteRoomId}  />
             ))}
             <LinkFooter/>
         </Container>

@@ -82,6 +82,15 @@ const LinkFooter = () => {
     const chattingAlarm = useSelector((state:RootState)=>state.alarm.chatting)
     
     const dispatch = useDispatch();
+    const {socket} = useSocket();
+
+      // TODO : 채팅알림 
+      useEffect(()=>{
+        socket?.on('chat_notification', (message:messagePayload) => {
+            dispatch(alarmActions.setChatting(true));
+            console.log(message.message)
+          });          
+    },[socket])
     
 
     // 현재 페이지의 아이콘색깔 다르게 지정하기

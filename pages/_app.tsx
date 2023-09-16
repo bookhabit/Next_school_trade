@@ -29,7 +29,7 @@ import Script from "next/script";
 import { SocketProvider, useSocket } from "../context/socket.context";
 import Layout from "../components/Layout";
 import { alarmActions } from "../store/alarm";
-import { confirm_message_responseType } from "./user/chatting/room/[id]";
+import { confirm_message_responseType, messagePayload } from "./user/chatting/room/[id]";
 
 interface BackgroundColor {
   firstColor: string;
@@ -94,17 +94,6 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   const secondColor = useSelector(
     (state: RootState) => state.userBackground.secondColor
   );
-
-    // TODO : 채팅알림 
-    socket?.on("chat_notification",(data:confirm_message_responseType)=>{
-      console.log('_app.tsx에서 chat_notification 수신',data)
-      console.log('loggedUserId',loggedUserId)
-      console.log('파트너 id (즉 메세지 읽은사람)',data.partnerId)
-      if(loggedUserId === data.partnerId){
-        console.log('로그인한사람 - 즉 파트너id인사람 (메세지 읽은사람일 경우)')
-        dispatch(alarmActions.setChatting(true))
-      }
-    })
 
   useEffect(() => {
     if (clientData) {

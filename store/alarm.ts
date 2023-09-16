@@ -8,8 +8,8 @@ type chatlState = {
 
 // 초기상태
 const initialState: chatlState = {
-    chatting: true,
-    alarmPage:true,
+    chatting: false,
+    alarmPage:false,
 };
 
 const alarm = createSlice({
