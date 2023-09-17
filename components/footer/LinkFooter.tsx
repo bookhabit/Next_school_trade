@@ -110,7 +110,7 @@ const LinkFooter = () => {
         return response;
     }
 
-      // TODO : 채팅알림 
+      // 채팅알림 
       useEffect(()=>{
         socket?.on('chat_notification', (message:messagePayload) => {
             getProductInfo(message).then((response:productListType)=>{

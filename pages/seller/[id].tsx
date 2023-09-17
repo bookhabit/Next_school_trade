@@ -35,6 +35,8 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom:1px solid gray;
+    padding-bottom:10px;
     .seller-name-wrap {
       display: flex;
       align-items: center;
@@ -70,6 +72,9 @@ const Container = styled.div`
       }
     }
   }
+  .seller-review-preview{
+    width:100%;
+  }
 `;
 
 type propsData = {
@@ -78,9 +83,7 @@ type propsData = {
 }
 
 const profile = (data:propsData) => {
-  console.log("판매자프로필 data", data);
   const reviewList: reviewListResponseType[] = data?.reviewList;
-  
   const sellerName: string = data.userInfo.nickname;
   const sellerGrade: number = data.userInfo.grade;
   const sellerId: number = data.userInfo.id;
@@ -156,8 +159,6 @@ profile.getInitialProps = async ({ query }:{query:ParsedUrlQuery}) => {
   try {
     const userInfo = await axios.get(`/user/find/${userId}`).then((response)=>response.data)
     const { data } = await GetReviewList(userId);
-    console.log('userINfo',userInfo)
-    console.log('reviewList',data)
     const propsData = {
       userInfo : userInfo,
       reviewList:data

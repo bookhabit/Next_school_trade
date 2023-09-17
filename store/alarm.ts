@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type alarmState = {
-  alarm:boolean
+  alarm:number;
 };
 
 // 초기상태
 const initialState: alarmState = {
-    alarm:false
+    alarm:0
 };
 
 const alarm = createSlice({
@@ -14,7 +14,7 @@ const alarm = createSlice({
   initialState,
   reducers: {
     // validateMode 변경하기
-    setAlarm(state, action: PayloadAction<boolean>) {
+    setAlarm(state, action: PayloadAction<number>) {
       state.alarm = action.payload;
     },
   },

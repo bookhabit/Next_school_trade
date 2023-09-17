@@ -13,4 +13,5 @@ export type reviewListResponseType = {
   review: string;
   buyer: Users;
   seller: Users;
+  grade:number;
 };
