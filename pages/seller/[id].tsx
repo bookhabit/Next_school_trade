@@ -12,12 +12,15 @@ import palette from "../../styles/palette";
 import { Division } from "../../components/common/Division";
 import ReviewCard from "../../components/seller/ReviewCard";
 import { GetReviewList } from "../../lib/api/review";
-import { reviewListResponseType } from "../../types/review";
+import { reviewListResponseType, reviewListType } from "../../types/review";
 import { isEmpty } from "lodash";
 import DataNull from "../../components/common/DataNull";
 import FailFetchData from "../../components/common/FailFetchData";
 import { Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { Users } from "../../types/user";
+import axios from "../../lib/api";
+import { ParsedUrlQuery } from "querystring";
 
 const Container = styled.div`
   margin: 40px 35px;
@@ -69,17 +72,19 @@ const Container = styled.div`
   }
 `;
 
-const profile: NextPage = ({ data }: any) => {
+type propsData = {
+  userInfo :Users;
+  reviewList:reviewListResponseType[]
+}
+
+const profile = (data:propsData) => {
   console.log("판매자프로필 data", data);
-  const reviewList: reviewListResponseType[] = data;
-  if (isEmpty(reviewList)) {
-    return <FailFetchData />;
-  }
-  const preViewList = reviewList.slice(0, 2);
-  const sellerGrade: number = data[0].seller.grade;
-  const sellerName: string = data[0].seller.nickname;
-  const sellerId: number = data[0].seller.id;
-  const sellerProfileImg = data[0].seller.profileImage.path;
+  const reviewList: reviewListResponseType[] = data?.reviewList;
+  
+  const sellerName: string = data.userInfo.nickname;
+  const sellerGrade: number = data.userInfo.grade;
+  const sellerId: number = data.userInfo.id;
+  const sellerProfileImg = data.userInfo.profileImage.path;
 
   const router = useRouter();
 
@@ -105,7 +110,7 @@ const profile: NextPage = ({ data }: any) => {
             <p className="seller-name">{sellerName}</p>
           </div>
           <div className="seller-grade">
-            {reviewList &&
+            {sellerGrade &&
               starLoop().map((index) => <SellerStarIcon key={index} />)}
           </div>
         </div>
@@ -131,12 +136,12 @@ const profile: NextPage = ({ data }: any) => {
         </div>
         <div className="seller-review-preview">
           <Division />
-          {preViewList ? (
-            preViewList.map((review, index) => (
+          {isEmpty(reviewList) ? (
+            <DataNull text="아직 거래후기가 없습니다" />
+          ) : (
+            reviewList.map((review, index) => (
               <ReviewCard key={index} reviewList={review} />
             ))
-          ) : (
-            <DataNull text="아직 거래후기가 없습니다" />
           )}
         </div>
       </Container>
@@ -145,12 +150,19 @@ const profile: NextPage = ({ data }: any) => {
   );
 };
 
-profile.getInitialProps = async ({ query }) => {
+profile.getInitialProps = async ({ query }:{query:ParsedUrlQuery}) => {
   const { id } = query;
   const userId = Number(id);
   try {
+    const userInfo = await axios.get(`/user/find/${userId}`).then((response)=>response.data)
     const { data } = await GetReviewList(userId);
-    return { data: data };
+    console.log('userINfo',userInfo)
+    console.log('reviewList',data)
+    const propsData = {
+      userInfo : userInfo,
+      reviewList:data
+    }
+    return propsData;
   } catch (e) {
     console.log(e);
   }
