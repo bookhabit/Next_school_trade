@@ -37,23 +37,29 @@ const Container = styled.div`
 
 const ChattingModal = () => {
     const router = useRouter();
-    const [message,setMessage] = useState<messagePayload>()
     const dispatch = useDispatch();
+    const {socket} = useSocket();
 
+    // 채팅방 페이지에서는 모달창 x
+    if(router.pathname === '/user/chatting/room/[id]'){
+        return false;
+    }
+
+    const roomInfo = useSelector((state:RootState)=>state.chattingAlarm.chattingRoom)
     const chattingUserName = useSelector((state:RootState)=>state.chattingAlarm.chatting_user_name)
     const chattingMessage = useSelector((state:RootState)=>state.chattingAlarm.chatting_message)
     const productTitle = useSelector((state:RootState)=>state.chattingAlarm.chatting_product_title)
     const productPrice = useSelector((state:RootState)=>state.chattingAlarm.chatting_product_price)
 
-    // useSelect로 
-
     const goToChattingRoom = async ()=>{
-        if(productTitle && productPrice){
+        if(roomInfo && productTitle && productPrice){
             // 알림 디스패치 - false로 
             dispatch(chattingAlarmActions.setChatting(false));
             dispatch(chattingAlarmActions.setChattingModal(false));
+            // join_room 이벤트 연결하기
+            await socket?.emit("join_room",roomInfo)
             router.push({
-                pathname: `/user/chatting/room/${message?.room.id}`,
+                pathname: `/user/chatting/room/${roomInfo.id}`,
                 query: { 
                     title:productTitle,
                     price:productPrice},

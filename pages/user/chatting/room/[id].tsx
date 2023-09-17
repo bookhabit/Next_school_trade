@@ -17,7 +17,7 @@ import BackImage from '../../../../components/common/BackImage';
 import Delete from "../../../../public/static/svg/product/thumnailXicon.svg";
 import { Users } from '../../../../types/user';
 import { useDispatch } from 'react-redux';
-import { alarmActions } from '../../../../store/chattingAlarm';
+import { chattingAlarmActions } from '../../../../store/chattingAlarm';
 
 const Container = styled.div`
     .chatting-photo-tuhmnail{

@@ -106,7 +106,6 @@ const LinkFooter = () => {
         return product;
     }
     const getChattingUserName = async (userId:number)=>{
-        console.log('채팅한 상대방유저네임 가져오기')
         const response = await axios.get(`/user/find/nickName/${userId}`)
         return response;
     }
@@ -117,16 +116,21 @@ const LinkFooter = () => {
             getProductInfo(message).then((response:productListType)=>{
                 dispatch(chattingAlarmActions.setChattingProductPrice(String(response.price)))
                 dispatch(chattingAlarmActions.setChattingProductTitle(response.title))
-                
             })
             getChattingUserName(message.send_id).then((response)=>{
                 dispatch(chattingAlarmActions.setChattingUserName(response.data))
             })
+            dispatch(chattingAlarmActions.setChattingRoom(message.room))
             dispatch(chattingAlarmActions.setChattingMessage(message.message))
             dispatch(chattingAlarmActions.setChatting(true));
             dispatch(chattingAlarmActions.setChattingModal(true));
             setTimeout(() => {
                 dispatch(chattingAlarmActions.setChattingModal(false));
+                // 모달창 꺼진 후 데이터 초기화
+                dispatch(chattingAlarmActions.setChattingProductPrice(''))
+                dispatch(chattingAlarmActions.setChattingProductTitle(''))
+                dispatch(chattingAlarmActions.setChattingUserName(''))
+                dispatch(chattingAlarmActions.setChattingMessage(''))
             }, 3000);
           });          
     },[socket])

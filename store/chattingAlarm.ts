@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CommonState } from "../types/reduxState";
+import { RoomType } from "../pages/user/chatting/[id]";
 
 type chatState = {
   chatting: boolean;
   chattingModal:boolean;
+  chattingRoom:RoomType|undefined;
   chatting_user_name:string;
   chatting_message:string;
   chatting_product_title:string;
@@ -14,6 +16,7 @@ type chatState = {
 const initialState: chatState = {
     chatting: false,
     chattingModal:false,
+    chattingRoom:undefined,
     chatting_user_name:'',
     chatting_message:'',
     chatting_product_title:'',
@@ -30,6 +33,9 @@ const chattingAlarm = createSlice({
     },
     setChattingModal(state, action: PayloadAction<boolean>) {
       state.chattingModal = action.payload;
+    },
+    setChattingRoom(state, action: PayloadAction<RoomType|undefined>) {
+      state.chattingRoom = action.payload;
     },
     setChattingUserName(state,action:PayloadAction<string>){
       state.chatting_user_name = action.payload;
