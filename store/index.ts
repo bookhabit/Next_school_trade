@@ -12,6 +12,7 @@ import userBackground from "./userBackground";
 import searchBar from "./searchBar";
 import favorite from "./favorite";
 import chattingAlarm from "./chattingAlarm";
+import alarm from "./alarm";
 
 const rootReducer = combineReducers({
   common: common.reducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   searchBar: searchBar.reducer,
   favorite: favorite.reducer,
   chattingAlarm:chattingAlarm.reducer,
+  alarm:alarm.reducer,
 });
 
 // 스토어의 타입

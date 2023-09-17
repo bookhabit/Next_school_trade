@@ -19,15 +19,16 @@ const Container = styled.div`
     height:50px;
     margin:0px 20px;
     padding:0px 20px;
-    background-color:${palette.bittersweet};
+    background-color:${palette.main_color};
+    opacity:80%;
     border-radius:10px;
     display:flex;
     justify-content:center;
     align-items:center;
+    cursor: pointer;
     .chatting-alarm{
         font-size:16px;
         color:${palette.main_text_color};
-        cursor: pointer;
     }
     .opponent_name{
         font-size:18px;
@@ -42,7 +43,7 @@ const ChattingModal = () => {
 
     // 채팅방 페이지에서는 모달창 x
     if(router.pathname === '/user/chatting/room/[id]'){
-        return false;
+        return <div></div>;
     }
 
     const roomInfo = useSelector((state:RootState)=>state.chattingAlarm.chattingRoom)
@@ -68,8 +69,8 @@ const ChattingModal = () => {
     }
 
     return (
-        <Container>
-            <div className='chatting-alarm' onClick={goToChattingRoom}>
+        <Container onClick={goToChattingRoom}>
+            <div className='chatting-alarm'>
                 {chattingUserName && (
                     <p className='opponent_name'>{chattingUserName}: {chattingMessage}</p>
                 )}

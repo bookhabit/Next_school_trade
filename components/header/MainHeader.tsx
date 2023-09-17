@@ -12,9 +12,20 @@ import { RootState } from '../../store';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { searchBarActions } from '../../store/searchBar';
-import { alarmActions } from '../../store/chattingAlarm';
+import alarm, { AlarmActions } from '../../store/alarm';
 
 const Conatainer = styled.div`
+    @keyframes blink {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
     position:sticky;
     top:0;
     width:100%;
@@ -69,7 +80,7 @@ const Conatainer = styled.div`
 
         }
         /* 사용자 알람정보 boolean state에 따라서 props를 전달받아야함 */
-        .alarmBox{
+        .showAlarmBox{
             width:5%;
             div{
                 cursor: pointer;
@@ -80,10 +91,10 @@ const Conatainer = styled.div`
                     cursor: pointer;
                     position:absolute;
                     top:-10px;
-                    left: 10px;
+                    left:10px;
                     width:20px;
                     height:20px;
-                    background-color:#F1531A;
+                    background-color:#f46430;
                     color:${palette.main_text_color};
                     font-size:15px;
                     font-weight:400px;
@@ -91,6 +102,8 @@ const Conatainer = styled.div`
                     align-items:center;
                     border-radius:50px;
                     padding-top:2px;
+                    /* 애니메이션 적용 */
+                    animation: blink 2s infinite;
                 }
             }
         }
@@ -118,13 +131,13 @@ const mainHeader = () => {
         dispatch(searchBarActions.setSearchValue(event.target.value))
     }
     // 알림 색깔
-    const alarmPageState = useSelector((state:RootState)=>state.alarm.alarmPage)
+    const alarmPageState = useSelector((state:RootState)=>state.alarm.alarm)
 
     // 알림페이지로 이동
     const goToAlarm = ()=>{
         if(isLogged){
             // 알림 디스패치 - false로 
-            dispatch(alarmActions.setAlarmPage(false));
+            dispatch(AlarmActions.setAlarm(false));
             router.push("/user/alarm")
         }else{
             alert('로그인이 필요합니다.')
@@ -149,10 +162,10 @@ const mainHeader = () => {
                     <input className='searchInput' value={searchValue} placeholder='검색' onChange={onChangeValue} />
                     <SearchIcon className="searchIcon" onClick={goToSearch}/>
                 </div>
-                <div className='alarmBox'>
+                <div className='showAlarmBox'>
                     <div onClick={goToAlarm} className="alarmIcon">
                         <AlarmIcon/>
-                        {alarmPageState ? <span className='showAlarm'>{1}</span>  : null}
+                        {!alarmPageState ? <span className='showAlarm'>{}</span>  : null}
                     </div>
                 </div>
                 <Link href="/category" className='categoryBox'>
