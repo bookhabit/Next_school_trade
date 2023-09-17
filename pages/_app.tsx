@@ -4,7 +4,6 @@ import { RootState, wrapper } from "../store";
 import { useSelector } from "react-redux";
 import App from "next/app";
 import { cookieStringToObject } from "./../lib/utils";
-import axios from "../lib/api";
 import { useEffect, useState } from "react";
 import { userActions } from "../store/user";
 import { useDispatch } from "react-redux";
@@ -15,21 +14,14 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { LoggedUserType, Users } from "../types/user";
 import styled from "styled-components";
 import Introduce from "../components/introduce/Introduce";
-import palette from "../styles/palette";
-import LinkFooter from "../components/footer/LinkFooter";
 import UserColor from "../components/introduce/UserColor";
 import { UserState } from "../types/reduxState";
 import { getUserInfo, meAPI } from "./../lib/api/user";
-import { getFavoriteList } from "../lib/api/product";
-import { ThemeProvider, createTheme } from "@mui/material";
 import Script from "next/script";
-import { SocketProvider, useSocket } from "../context/socket.context";
+import { SocketProvider } from "../context/socket.context";
 import Layout from "../components/Layout";
-import { alarmActions } from "../store/alarm";
-import { confirm_message_responseType, messagePayload } from "./user/chatting/room/[id]";
 import ChattingModal from "../components/alarm/ChattingModal";
 
 interface BackgroundColor {
@@ -89,7 +81,6 @@ const KAKAO_API_KEY = "0292e60416960470863fce8c75ff0a78";
 const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   // 유저정보를 받아서 리덕스 스토어에 저장하기
   const clientData = Object(data).userData as UserState;
-  const {socket} = useSocket();
   const dispatch = useDispatch();
   const [queryClient] = useState(() => new QueryClient());
   const loggedUserId = useSelector((state: RootState) => state.user.id);
@@ -103,7 +94,7 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   );
 
   // 채팅알림 색깔
-  const chattingModal = useSelector((state:RootState)=>state.alarm.chattingModal)
+  const chattingModal = useSelector((state:RootState)=>state.chattingAlarm.chattingModal)
 
   useEffect(() => {
     if (clientData) {

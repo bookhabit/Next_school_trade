@@ -11,7 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useSocket } from '../../context/socket.context';
 import { messagePayload } from '../../pages/user/chatting/room/[id]';
-import { alarmActions } from '../../store/alarm';
+import { chattingAlarmActions } from '../../store/chattingAlarm';
+import { productListType } from '../../types/product/product';
+import axios from '../../lib/api';
 
 const Container = styled.div`
     @keyframes blink {
@@ -93,18 +95,38 @@ const LinkFooter = () => {
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
     
     // 알림 색깔
-    const chattingAlarm = useSelector((state:RootState)=>state.alarm.chatting)
+    const chattingAlarm = useSelector((state:RootState)=>state.chattingAlarm.chatting)
     
     const dispatch = useDispatch();
     const {socket} = useSocket();
 
+    const getProductInfo = async (message:messagePayload)=>{
+        const productResponse = await axios.get(`/content/read/${message?.room.content_id}`);
+        const product = productResponse.data as productListType;
+        return product;
+    }
+    const getChattingUserName = async (userId:number)=>{
+        console.log('채팅한 상대방유저네임 가져오기')
+        const response = await axios.get(`/user/find/nickName/${userId}`)
+        return response;
+    }
+
       // TODO : 채팅알림 
       useEffect(()=>{
         socket?.on('chat_notification', (message:messagePayload) => {
-            dispatch(alarmActions.setChatting(true));
-            dispatch(alarmActions.setChattingModal(true));
+            getProductInfo(message).then((response:productListType)=>{
+                dispatch(chattingAlarmActions.setChattingProductPrice(String(response.price)))
+                dispatch(chattingAlarmActions.setChattingProductTitle(response.title))
+                
+            })
+            getChattingUserName(message.send_id).then((response)=>{
+                dispatch(chattingAlarmActions.setChattingUserName(response.data))
+            })
+            dispatch(chattingAlarmActions.setChattingMessage(message.message))
+            dispatch(chattingAlarmActions.setChatting(true));
+            dispatch(chattingAlarmActions.setChattingModal(true));
             setTimeout(() => {
-                dispatch(alarmActions.setChattingModal(false));
+                dispatch(chattingAlarmActions.setChattingModal(false));
             }, 3000);
           });          
     },[socket])
@@ -147,7 +169,7 @@ const LinkFooter = () => {
                 <div className='link-flex-item' onClick={()=>{
                     if(isLogged){
                         // 알림 디스패치 - false로 
-                        dispatch(alarmActions.setChatting(false));
+                        dispatch(chattingAlarmActions.setChatting(false));
                         // 라우팅
                         router.push({
                             pathname:`/user/chatting/${loggedUserId}`

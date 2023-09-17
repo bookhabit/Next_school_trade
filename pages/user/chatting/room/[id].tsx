@@ -17,7 +17,7 @@ import BackImage from '../../../../components/common/BackImage';
 import Delete from "../../../../public/static/svg/product/thumnailXicon.svg";
 import { Users } from '../../../../types/user';
 import { useDispatch } from 'react-redux';
-import { alarmActions } from '../../../../store/alarm';
+import { alarmActions } from '../../../../store/chattingAlarm';
 
 const Container = styled.div`
     .chatting-photo-tuhmnail{
@@ -599,12 +599,6 @@ const chattingRoom:NextPage = (props) => {
                 }
             }
         })
-
-        socket?.on('chat_notification', (message) => {
-            // 이벤트를 수신한 후 처리할 코드를 작성합니다.
-            console.log('chat_notification 받은 메시지:', message);
-            // 채팅방 리스트 페이지나 최상위 페이지에서 처리할 로직을 추가합니다.
-          });          
 
         return()=>{
             socket?.emit('leave_room',roomId)

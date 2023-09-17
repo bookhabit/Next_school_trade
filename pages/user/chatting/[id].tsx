@@ -105,9 +105,7 @@ const chattingList:NextPage = (props) => {
 
     useEffect(()=>{
         socket?.on('chat_notification', (message:messagePayload) => {
-            console.log('chat_notification 받은 메시지:', message);
             getChattingRoomList().then((response)=>{
-                console.log('chat_notification 이벤트 수신 후 데이터 다시 가져오기 response',response)
                 if(response){
                     setCopyRoomList(response)
                 }

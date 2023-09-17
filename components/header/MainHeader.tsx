@@ -12,7 +12,7 @@ import { RootState } from '../../store';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { searchBarActions } from '../../store/searchBar';
-import { alarmActions } from '../../store/alarm';
+import { alarmActions } from '../../store/chattingAlarm';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -32,7 +32,7 @@ const Conatainer = styled.div`
         height:45px;
 
         .university-name{
-            width:20%;
+            width:22%;
             font-family:Roboto;
             font-size:18px;
             color:${palette.main_text_color};

@@ -9,7 +9,7 @@ import { useSocket } from '../../context/socket.context';
 import axios from '../../lib/api';
 import { productListType } from '../../types/product/product';
 import { getUserName } from '../../lib/api/user';
-import { alarmActions } from '../../store/alarm';
+import { chattingAlarmActions } from '../../store/chattingAlarm';
 
 const Container = styled.div`
     @media only screen and (min-width: 430px) {
@@ -37,47 +37,37 @@ const Container = styled.div`
 
 const ChattingModal = () => {
     const router = useRouter();
-    const {socket} = useSocket();
     const [message,setMessage] = useState<messagePayload>()
-    const [chattingUserName,setChattingUserName] = useState();
     const dispatch = useDispatch();
 
+    const chattingUserName = useSelector((state:RootState)=>state.chattingAlarm.chatting_user_name)
+    const chattingMessage = useSelector((state:RootState)=>state.chattingAlarm.chatting_message)
+    const productTitle = useSelector((state:RootState)=>state.chattingAlarm.chatting_product_title)
+    const productPrice = useSelector((state:RootState)=>state.chattingAlarm.chatting_product_price)
+
+    // useSelect로 
+
     const goToChattingRoom = async ()=>{
-        const productResponse = await axios.get(`/content/read/${message?.room.content_id}`);
-        const product = productResponse.data as productListType;
-        // 알림 디스패치 - false로 
-        dispatch(alarmActions.setChatting(false));
-        dispatch(alarmActions.setChattingModal(false));
-        router.push({
-            pathname: `/user/chatting/room/${message?.room.id}`,
-            query: { 
-                title:product?.title,
-                price:product?.price},
-        })
+        if(productTitle && productPrice){
+            // 알림 디스패치 - false로 
+            dispatch(chattingAlarmActions.setChatting(false));
+            dispatch(chattingAlarmActions.setChattingModal(false));
+            router.push({
+                pathname: `/user/chatting/room/${message?.room.id}`,
+                query: { 
+                    title:productTitle,
+                    price:productPrice},
+            })
+        }
     }
-
-    const getChattingUserName = async (userId:number)=>{
-        const response = await axios.get(`/user/find/nickName/${userId}`);
-        setChattingUserName(response.data)
-    }
-
-    // TODO : 채팅알림 
-    useEffect(()=>{
-        socket?.on('chat_notification', (message:messagePayload) => {
-            console.log('chat_notification 모달창 수신',message)
-            setMessage(message)
-            getChattingUserName(message.send_id)
-        });          
-    },[socket])
-    console.log('chattingUserName',chattingUserName)
 
     return (
         <Container>
-            <p className='chatting-alarm' onClick={goToChattingRoom}>
+            <div className='chatting-alarm' onClick={goToChattingRoom}>
                 {chattingUserName && (
-                    <p className='opponent_name'>{chattingUserName}에게서</p>
-                )} 채팅이 왔습니다
-            </p>
+                    <p className='opponent_name'>{chattingUserName}: {chattingMessage}</p>
+                )}
+            </div>
         </Container>
     );
 };
