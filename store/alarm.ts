@@ -1,22 +1,27 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Notificaitions } from "../types/alarm";
 
 type alarmState = {
-  alarm:number;
+  alarmList:Notificaitions[];
 };
 
 // 초기상태
 const initialState: alarmState = {
-    alarm:0
+    alarmList:[]
 };
 
 const alarm = createSlice({
   name: "alarm",
   initialState,
   reducers: {
-    // validateMode 변경하기
-    setAlarm(state, action: PayloadAction<number>) {
-      state.alarm = action.payload;
-    },
+      // 알람 리스트 설정하기
+      setAlarmList(state, action: PayloadAction<Notificaitions[]>) {
+        state.alarmList = action.payload;
+      },
+      // 알람 초기화하기
+      initAlarmList(state) {
+        state.alarmList=[]
+      },
   },
 });
 

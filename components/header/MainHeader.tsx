@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import palette from '../../styles/palette';
 // import AirbnbLogoIcon from "../public/static/svg/logo.svg"
@@ -13,19 +13,11 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { searchBarActions } from '../../store/searchBar';
 import alarm, { AlarmActions } from '../../store/alarm';
+import { confirmAlarm, getAlarmInfo } from '../../lib/api/alarm';
+import { useSocket } from '../../context/socket.context';
+import { responseAlarmList } from '../../types/alarm';
 
 const Conatainer = styled.div`
-    @keyframes blink {
-        0% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
     position:sticky;
     top:0;
     width:100%;
@@ -102,8 +94,6 @@ const Conatainer = styled.div`
                     align-items:center;
                     border-radius:50px;
                     padding-top:2px;
-                    /* 애니메이션 적용 */
-                    animation: blink 2s infinite;
                 }
             }
         }
@@ -121,23 +111,58 @@ const mainHeader = () => {
 
     // 로그인 확인
     const isLogged = useSelector((state:RootState)=>state.user.isLogged)
+    const isLoggedUserId = useSelector((state:RootState)=>state.user.id)
 
     // 검색창 - input
     const searchValue = useSelector((state:RootState)=>state.searchBar.value)
 
     const dispatch = useDispatch();
+    const {socket} = useSocket();
     
     const onChangeValue=(event:React.ChangeEvent<HTMLInputElement>)=>{
         dispatch(searchBarActions.setSearchValue(event.target.value))
     }
-    // 알림 색깔
-    const alarmPageState = useSelector((state:RootState)=>state.alarm.alarm)
+
+    // 유저의 알림 받아오기
+    useEffect(() => {
+        const fetchData = async () => {
+          // REST API
+          if (isLoggedUserId) {
+            try {
+              const response = await getAlarmInfo(isLoggedUserId);
+              const responseAlarmList = response.data as responseAlarmList 
+              console.log('알림리스트', response.data);
+              dispatch(AlarmActions.setAlarmList(responseAlarmList.notification_list))
+            } catch (error) {
+              console.error('알림을 가져오는 중 에러 발생:', error);
+            }
+          }
+      
+          // SOCKET
+          socket?.on("notification", (data) => {
+            console.log('notification 수신 data', data);
+          });
+        };
+      
+        fetchData();
+      }, [isLoggedUserId]);
+      
+
+    // 유저의 알림 리스트
+    const alarmList = useSelector((state:RootState)=>state.alarm.alarmList)
+
+    // 유저가 확인하지 않은 알림 리스트
+    const notConfirmedAlarmList = alarmList.filter((alarm)=>alarm.confirmed !== true)
+    console.log('확인하지 않은 알림리스트',notConfirmedAlarmList)
 
     // 알림페이지로 이동
-    const goToAlarm = ()=>{
+    const goToAlarm = async ()=>{
         if(isLogged){
             // 알림 디스패치 - false로 
-            dispatch(AlarmActions.setAlarm(false));
+            // TODO : notification/confirm/:id > 204 받은 후 처리
+            const response = await alarmList.forEach((alarm)=>confirmAlarm(alarm.id))
+            console.log('알림 확인',response)
+            dispatch(AlarmActions.initAlarmList());
             router.push("/user/alarm")
         }else{
             alert('로그인이 필요합니다.')
@@ -165,7 +190,7 @@ const mainHeader = () => {
                 <div className='showAlarmBox'>
                     <div onClick={goToAlarm} className="alarmIcon">
                         <AlarmIcon/>
-                        {!alarmPageState ? <span className='showAlarm'>{}</span>  : null}
+                        {notConfirmedAlarmList.length === 0 ? null : <span className='showAlarm'>{notConfirmedAlarmList.length}</span>  }
                     </div>
                 </div>
                 <Link href="/category" className='categoryBox'>

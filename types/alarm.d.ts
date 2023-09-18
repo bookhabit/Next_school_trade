@@ -18,3 +18,9 @@ type Notificaitions = {
   // 수신자
   receiver: Users;
 }
+
+type responseAlarmList = {
+  currentPage:number;
+  notification_list:Notificaitions[];
+  totalPage:number;
+}
