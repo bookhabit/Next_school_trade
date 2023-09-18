@@ -133,7 +133,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
         return "카테고리";
       case "/user":
         return `${LoggedUser.name}`;
-      case "/user/alarm":
+      case "/user/alarm/[id]":
         return "알림";
       case "/user/favorite/[id]":
         return "관심목록";

@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { searchBarActions } from '../../store/searchBar';
 import alarm, { AlarmActions } from '../../store/alarm';
-import { confirmAlarm, getAlarmInfo } from '../../lib/api/alarm';
+import { confirmAlarm, getAlarmInfo, getNotConfirmedAlarmInfo } from '../../lib/api/alarm';
 import { useSocket } from '../../context/socket.context';
 import { responseAlarmList } from '../../types/alarm';
 
@@ -129,7 +129,7 @@ const mainHeader = () => {
           // REST API
           if (isLoggedUserId) {
             try {
-              const response = await getAlarmInfo(isLoggedUserId);
+              const response = await getNotConfirmedAlarmInfo(isLoggedUserId);
               const responseAlarmList = response.data as responseAlarmList 
               console.log('알림리스트', response.data);
               dispatch(AlarmActions.setAlarmList(responseAlarmList.notification_list))
@@ -162,8 +162,7 @@ const mainHeader = () => {
             // TODO : notification/confirm/:id > 204 받은 후 처리
             const response = await alarmList.forEach((alarm)=>confirmAlarm(alarm.id))
             console.log('알림 확인',response)
-            dispatch(AlarmActions.initAlarmList());
-            router.push("/user/alarm")
+            router.push(`/user/alarm/${isLoggedUserId}`)
         }else{
             alert('로그인이 필요합니다.')
             router.push("/auth")
