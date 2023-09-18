@@ -57,8 +57,8 @@ const alarm = ({userId}:{userId:string}) => {
           {status === "error" && <FailFetchData />}
           {status === "success" &&
             data.pages.map((page, index) =>
-              isEmpty(page.notification_list) ? (
-                <DataNull text="아직 받은은 알림이 없습니다" key={index} />
+              isEmpty(page) ? (
+                <DataNull text="아직 받은 알림이 없습니다" key={index} />
               ) : 
               (
                 page.notification_list.map((list,index)=>(

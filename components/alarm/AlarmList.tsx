@@ -18,11 +18,15 @@ const Container = styled.div`
         width:270px;
         .list-info{
             .list-userName{
-                font-size:20px;
+                font-size:16px;
+            }
+            .list-alarmType{
+                font-size:18px;
+                color:${palette.gray_80}
             }
             .list-content{
                 margin-top:20px;
-                font-size:20px;    
+                font-size:18px;    
                 line-height: 23px;
             }
             .list-date{
@@ -42,6 +46,12 @@ interface IProps{
 
 
 const AlarmList:React.FC<IProps> = ({alarm}) => {
+    const getAlarmType = (type:number)=>{
+        switch(type){
+            case 1:
+                return "리뷰를 남겼습니다"
+        }
+    }
     return (
         <Container>
             <div className='list-logo'>
@@ -49,9 +59,10 @@ const AlarmList:React.FC<IProps> = ({alarm}) => {
             </div>
             <div className='list-info-box'>
                 <div className='list-info'>
-                    <p className='list-userName'>{alarm.notifier.nickname}</p>
+                    <div className='list-header'>
+                        <p className='list-userName'>{alarm.notifier.nickname} 님이 <span className='list-alarmType'>{getAlarmType(alarm.type)}</span></p>
+                    </div>
                     <p className='list-content'>{alarm.msg}</p>
-
                 </div>
                 {/* <p className='list-date'>{alarm.}</p> */}
             </div>
