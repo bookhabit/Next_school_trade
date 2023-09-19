@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import LogoIcon from "../../public/static/svg/logo.svg"
 import palette from '../../styles/palette';
 import { Notificaitions } from '../../types/alarm';
+import { convertToDatetime, convertToLongText } from '../../lib/utils';
 
 const Container = styled.div`
     display:flex;
@@ -15,7 +16,7 @@ const Container = styled.div`
         margin-right:20px;
     }
     .list-info-box{
-        width:270px;
+        width:100%;
         .list-info{
             .list-userName{
                 font-size:16px;
@@ -24,17 +25,22 @@ const Container = styled.div`
                 font-size:18px;
                 color:${palette.gray_80}
             }
-            .list-content{
+            .list-middle{
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
                 margin-top:20px;
-                font-size:18px;    
-                line-height: 23px;
-            }
-            .list-date{
-                margin-top:5px;
-                float:right;
-                font-size:15px;
-                color:${palette.updatedDate};
-                text-align:right;
+                .list-content{
+                    font-size:18px;    
+                    line-height: 23px;
+                }
+                .list-date{
+                    width:100px;
+                    font-size:15px;
+                    color:${palette.updatedDate};
+                    text-align:right;
+                    margin-right:30px;
+                }
             }
         }
     }
@@ -62,9 +68,11 @@ const AlarmList:React.FC<IProps> = ({alarm}) => {
                     <div className='list-header'>
                         <p className='list-userName'>{alarm.notifier.nickname} 님이 <span className='list-alarmType'>{getAlarmType(alarm.type)}</span></p>
                     </div>
-                    <p className='list-content'>{alarm.msg}</p>
+                    <div className='list-middle'>
+                        <p className='list-content'>{convertToLongText(alarm.msg,25)}</p>
+                        <p className='list-date'>{convertToDatetime(String(alarm.createdAt))}</p>
+                    </div>
                 </div>
-                {/* <p className='list-date'>{alarm.}</p> */}
             </div>
         </Container>
     );

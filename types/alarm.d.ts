@@ -17,6 +17,8 @@ type Notificaitions = {
 
   // 수신자
   receiver: Users;
+
+  createdAt:Date;
 }
 
 type responseAlarmList = {
