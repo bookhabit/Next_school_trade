@@ -131,7 +131,6 @@ const mainHeader = () => {
             try {
               const response = await getNotConfirmedAlarmInfo(isLoggedUserId);
               const responseAlarmList = response.data as responseAlarmList 
-              console.log('알림리스트', response.data);
               dispatch(AlarmActions.setAlarmList(responseAlarmList.notification_list))
             } catch (error) {
               console.error('알림을 가져오는 중 에러 발생:', error);
@@ -153,7 +152,6 @@ const mainHeader = () => {
 
     // 유저가 확인하지 않은 알림 리스트
     const notConfirmedAlarmList = alarmList.filter((alarm)=>alarm.confirmed !== true)
-    console.log('확인하지 않은 알림리스트',notConfirmedAlarmList)
 
     // 알림페이지로 이동
     const goToAlarm = async ()=>{

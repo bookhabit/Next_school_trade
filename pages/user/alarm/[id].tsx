@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import AlarmList from '../../../components/alarm/AlarmList';
 import { QueryClient, dehydrate, useInfiniteQuery } from '@tanstack/react-query';
 import axios from '../../../lib/api';
-import { getAlarmInfo } from '../../../lib/api/alarm';
+import { deleteAlarm, getAlarmInfo } from '../../../lib/api/alarm';
 import { responseAlarmList } from '../../../types/alarm';
 import { ParsedUrlQuery } from 'querystring';
 import FailFetchData from '../../../components/common/FailFetchData';
@@ -12,6 +12,7 @@ import { isEmpty } from 'lodash';
 import DataNull from '../../../components/common/DataNull';
 import Loading from '../../../components/common/Loading';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import Swal from 'sweetalert2';
 
 const Container = styled.div`
   padding-bottom: 70px;
@@ -22,6 +23,7 @@ const alarm = ({userId}:{userId:string}) => {
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
         hasNextPage, // 다음 페이지가 있는지 여부, Boolean
         status,
+        refetch
       } = useInfiniteQuery(
         ["alarmList", userId],
         async (pageParam) => (await getAlarmInfo( userId,pageParam) as responseAlarmList),
@@ -38,7 +40,14 @@ const alarm = ({userId}:{userId:string}) => {
         }
       );
       console.log("infinitquery", data);
-      console.log('hasNextPage',hasNextPage)
+      
+      // 알림 삭제 함수
+      const deleteAlarmFunc = async (notification_id:number)=>{
+        await deleteAlarm(notification_id)
+        Swal.fire('','삭제완료','success')
+        // 삭제 후에 데이터를 다시 불러오기
+        refetch();
+      }
 
       // 무한스크롤 구현
       const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -57,7 +66,7 @@ const alarm = ({userId}:{userId:string}) => {
           {status === "error" && <FailFetchData />}
           {status === "success" &&
             data.pages.map((page, index) =>
-              isEmpty(page) ? (
+              page.totalPage===0 ? (
                 <DataNull text="아직 받은 알림이 없습니다" key={index} />
               ) : 
               (
@@ -66,6 +75,7 @@ const alarm = ({userId}:{userId:string}) => {
                     <AlarmList
                       key={index}
                       alarm={list}
+                      deleteAlarm={deleteAlarmFunc}
                     />
                     <div ref={setTarget} key={index+5}></div>
                   </div>
