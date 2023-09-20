@@ -107,37 +107,34 @@ const Conatainer = styled.div`
 
 const mainHeader = () => {
     const router = useRouter();
-    const userUniversity = useSelector((state:RootState)=>state.user.university)
+    const dispatch = useDispatch();
+    const {socket} = useSocket();
 
-    // 로그인 확인
-    const isLogged = useSelector((state:RootState)=>state.user.isLogged)
-    const isLoggedUserId = useSelector((state:RootState)=>state.user.id)
+    // 전역상태
+
+    // 유저
+    const userInfo = useSelector((state:RootState)=>state.user)
+    
+    // 유저의 알림 리스트
+    const alarmList = useSelector((state:RootState)=>state.alarm.alarmList)
+    // 유저가 확인하지 않은 알림 리스트
+    const notConfirmedAlarmList = alarmList.filter((alarm)=>alarm.confirmed !== true)
+    console.log('확인하지 않은 알림리스트',notConfirmedAlarmList)
 
     // 검색창 - input
     const searchValue = useSelector((state:RootState)=>state.searchBar.value)
-
-    const dispatch = useDispatch();
-    const {socket} = useSocket();
     
     const onChangeValue=(event:React.ChangeEvent<HTMLInputElement>)=>{
         dispatch(searchBarActions.setSearchValue(event.target.value))
     }
 
-    // 유저의 알림 리스트
-    const alarmList = useSelector((state:RootState)=>state.alarm.alarmList)
-    console.log('알림리스트',alarmList)
-
-    // 유저가 확인하지 않은 알림 리스트
-    const notConfirmedAlarmList = alarmList.filter((alarm)=>alarm.confirmed !== true)
-    console.log('확인하지 않은 알림리스트',notConfirmedAlarmList)
-
     // 유저의 알림 받아오기
     useEffect(() => {
         const fetchData = async () => {
           // REST API
-          if (isLoggedUserId) {
+          if (userInfo.id) {
             try {
-              const response = await getNotConfirmedAlarmInfo(isLoggedUserId);
+              const response = await getNotConfirmedAlarmInfo(userInfo.id);
               const responseAlarmList = response.data as responseAlarmList 
               dispatch(AlarmActions.setAlarmList(responseAlarmList.notification_list))
             } catch (error) {
@@ -146,25 +143,29 @@ const mainHeader = () => {
           }
         };       
       
-        fetchData();
-      }, [isLoggedUserId]);
+          // SOCKET
+        const notificationHandler = (data:any) => {
+            const notification = data.notification as Notificaitions;
+            dispatch(AlarmActions.addAlarmList(notification));
+            console.log('디스패치');
+        };
 
-      useEffect(()=>{
-        // SOCKET
-                
-        socket?.on("notification", (data) => {
-            console.log('notification 수신 data', data);
-            const notification = data.notification as Notificaitions
-            console.log('notification 수신',notification)
-            dispatch(AlarmActions.addAlarmList(notification))
-        });
-      },[])
+        fetchData();
+        socket?.on("notification", notificationHandler);
+
+        return () => {
+            // 컴포넌트가 언마운트될 때 이벤트 핸들러 제거
+            socket?.off("notification", notificationHandler);
+        };
+      }, [userInfo.id]);
+
+      
 
     // 알림페이지로 이동
     const goToAlarm = async ()=>{
-        if(isLogged){
+        if(userInfo.isLogged){
             await notConfirmedAlarmList.forEach((alarm)=>confirmAlarm(alarm.id))
-            router.push(`/user/alarm/${isLoggedUserId}`)
+            router.push(`/user/alarm/${userInfo.id}`)
         }else{
             alert('로그인이 필요합니다.')
             router.push("/auth")
@@ -183,7 +184,7 @@ const mainHeader = () => {
     return (
         <Conatainer>
             <div className='headerDiv'>
-                <p className='university-name'>{userUniversity}</p>
+                <p className='university-name'>{userInfo.university}</p>
                 <div className='searchBar'>
                     <input className='searchInput' value={searchValue} placeholder='검색' onChange={onChangeValue} />
                     <SearchIcon className="searchIcon" onClick={goToSearch}/>
