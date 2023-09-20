@@ -15,7 +15,7 @@ import { searchBarActions } from '../../store/searchBar';
 import alarm, { AlarmActions } from '../../store/alarm';
 import { confirmAlarm, getAlarmInfo, getNotConfirmedAlarmInfo } from '../../lib/api/alarm';
 import { useSocket } from '../../context/socket.context';
-import { responseAlarmList } from '../../types/alarm';
+import { Notificaitions, responseAlarmList } from '../../types/alarm';
 
 const Conatainer = styled.div`
     position:sticky;
@@ -123,6 +123,14 @@ const mainHeader = () => {
         dispatch(searchBarActions.setSearchValue(event.target.value))
     }
 
+    // 유저의 알림 리스트
+    const alarmList = useSelector((state:RootState)=>state.alarm.alarmList)
+    console.log('알림리스트',alarmList)
+
+    // 유저가 확인하지 않은 알림 리스트
+    const notConfirmedAlarmList = alarmList.filter((alarm)=>alarm.confirmed !== true)
+    console.log('확인하지 않은 알림리스트',notConfirmedAlarmList)
+
     // 유저의 알림 받아오기
     useEffect(() => {
         const fetchData = async () => {
@@ -136,30 +144,26 @@ const mainHeader = () => {
               console.error('알림을 가져오는 중 에러 발생:', error);
             }
           }
-      
-          // SOCKET
-          socket?.on("notification", (data) => {
-            console.log('notification 수신 data', data);
-          });
-        };
+        };       
       
         fetchData();
       }, [isLoggedUserId]);
-      
 
-    // 유저의 알림 리스트
-    const alarmList = useSelector((state:RootState)=>state.alarm.alarmList)
-
-    // 유저가 확인하지 않은 알림 리스트
-    const notConfirmedAlarmList = alarmList.filter((alarm)=>alarm.confirmed !== true)
+      useEffect(()=>{
+        // SOCKET
+                
+        socket?.on("notification", (data) => {
+            console.log('notification 수신 data', data);
+            const notification = data.notification as Notificaitions
+            console.log('notification 수신',notification)
+            dispatch(AlarmActions.addAlarmList(notification))
+        });
+      },[])
 
     // 알림페이지로 이동
     const goToAlarm = async ()=>{
         if(isLogged){
-            // 알림 디스패치 - false로 
-            // TODO : notification/confirm/:id > 204 받은 후 처리
-            const response = await alarmList.forEach((alarm)=>confirmAlarm(alarm.id))
-            console.log('알림 확인',response)
+            await notConfirmedAlarmList.forEach((alarm)=>confirmAlarm(alarm.id))
             router.push(`/user/alarm/${isLoggedUserId}`)
         }else{
             alert('로그인이 필요합니다.')
