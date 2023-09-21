@@ -58,37 +58,40 @@ interface IProps {
 }
 
 const CommonHeader: React.FC<IProps> = ({ pathName }) => {
+  const router = useRouter();
+  const {socket} = useSocket();
+  const sellerId = Number(router.query.id);
+  const LoggedUser = useSelector((state: RootState) => state.user);
+  
   // 알림페이지,카테고리페이지,채팅방페이지 는 편집 버튼 생성
   const showEditBtn =
     pathName === "/user/alarm" ||
     pathName === "/user/chatting" ||
     pathName === "/user/favorite/[id]";
 
-  const LoggedUser = useSelector((state: RootState) => state.user);
+  
 
   const goToBackpage = () => {
     window.history.back();
   };
 
-  const router = useRouter();
-  const {socket} = useSocket();
-
   // sellerName 가져오기
   const [sellerName, setSellerName] = useState<string>("");
   const [chatOpponentName,setChatOpponentName] = useState("");
 
-  useEffect(()=>{
-    // 판매자 페이지의 sellerName가져오기
-    const sellerId = Number(router.query.id);
+  // 판매자 페이지의 sellerName가져오기
+  useEffect(() => {
     const getSellerNameAPI = async () => {
       // sellerId로 api호출
-      try{
+      try {
         const response = await getUserName(sellerId);
         setSellerName(response.data);
-      }catch(e){
-        console.log('사용자 이름 불러오기 실패',e)
+      } catch (e) {
+        console.log('사용자 이름 불러오기 실패', e)
       }
     };
+  
+    // pathName이 변경될 때마다 getSellerNameAPI()를 호출
     if (
       pathName === "/seller/[id]" ||
       pathName === "/seller/[id]/sellerReview" ||
@@ -96,7 +99,7 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
     ) {
       getSellerNameAPI();
     }
-  },[])
+  }, [pathName, sellerId]);
 
   useEffect(()=>{
     // 채팅방 페이지의 상대방 이름 가져오기

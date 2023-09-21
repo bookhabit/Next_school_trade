@@ -5,6 +5,8 @@ import palette from '../../styles/palette';
 import { Notificaitions } from '../../types/alarm';
 import { convertToDatetime, convertToLongText } from '../../lib/utils';
 import CloseXIcon from "../../public/static/svg/auth/modal_close_x_icon.svg"
+import { useRouter } from 'next/router';
+import { RootState, useSelector } from '../../store';
 
 const Container = styled.div`
     display:flex;
@@ -27,6 +29,7 @@ const Container = styled.div`
             .alarm-info{
                 .alarm-userName{
                     font-size:16px;
+                    cursor: pointer;
                 }
                 .alarm-alarmType{
                     font-size:18px;
@@ -37,7 +40,7 @@ const Container = styled.div`
                     align-items:center;
                     justify-content:space-between;
                     margin-top:20px;
-                    .list-content{
+                    .alarm-content{
                         font-size:18px;    
                         line-height: 23px;
                     }
@@ -72,10 +75,18 @@ interface IProps{
 
 
 const AlarmList:React.FC<IProps> = ({alarm,deleteAlarm}) => {
+    const loggedUserId = useSelector((state:RootState)=>state.user.id)
+    const router = useRouter();
     const getAlarmType = (type:number)=>{
         switch(type){
             case 1:
                 return "리뷰를 남겼습니다"
+        }
+    }
+
+    const goToReviewPage = ()=>{
+        if(alarm.type===1){
+            router.push(`/seller/${loggedUserId}/sellerReview`)
         }
     }
 
@@ -88,7 +99,7 @@ const AlarmList:React.FC<IProps> = ({alarm,deleteAlarm}) => {
                 <div className='alarm-info-box'>
                     <div className='alarm-info'>
                         <div className='alarm-header'>
-                            <p className='alarm-userName'>{alarm.notifier.nickname} 님이 <span className='alarm-alarmType'>{getAlarmType(alarm.type)}</span></p>
+                            <p className='alarm-userName' onClick={goToReviewPage}>{alarm.notifier.nickname} 님이 <span className='alarm-alarmType'>{getAlarmType(alarm.type)}</span></p>
                         </div>
                         <div className='alarm-middle'>
                             <p className='alarm-content'>{convertToLongText(alarm.msg,25)}</p>

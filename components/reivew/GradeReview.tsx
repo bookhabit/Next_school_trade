@@ -33,7 +33,6 @@ const Container = styled.div`
         justify-content:center;
         align-items:center;
         margin-top:10px;
-        cursor: pointer;
         h2{
             font-size:30px;
             color:${palette.main_color}
