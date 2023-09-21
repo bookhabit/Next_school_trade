@@ -30,6 +30,7 @@ import { Users } from '../../types/user';
 import { RootState } from '../../store';
 import Select, { GroupBase,SingleValueProps,components } from "react-select"
 import OptionsType from "react-select"
+import Swal from 'sweetalert2';
 
 type KaKaoSignUp = {
     kakaoSignUp : string;
@@ -272,8 +273,14 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
 
     useEffect(()=>{
         async function fetchUniversityName() {
-            const response = await axios.get("/api/school/universityName");
-            setUniversityNameList(response.data)
+            try{
+                const response = await axios.get("/api/school/universityName");
+                setUniversityNameList(response.data)
+            }catch(e){
+                console.log('대학교리스트 가져오기',e)
+                Swal.fire('대학교 리스트 가져오기 실패','error')
+            }
+            
         }
         fetchUniversityName();
     },[])

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import FormLogin from "./FormLogin";
 import FormSignUp from "./FormSignUp";
+import LinkFooter from "../footer/LinkFooter";
 
 const Container = styled.div`
 `;
@@ -20,7 +21,7 @@ const Auth: React.FC<IProps> = ({ currentLeft }) => {
   return (
     <Container>
       {currentLeft ? <Login /> : <SignUp kakaoSignUp={kakaoSignUp} />}
-      {/* {currentLeft? <FormLogin/>: <FormSignUp kakaoSignUp={kakaoSignUp}/> } */}
+      <LinkFooter/>
     </Container>
   );
 };

@@ -504,7 +504,7 @@ const chattingRoom:NextPage = (props) => {
         // get previous chatting data
         if (roomId !== undefined) {
             const chatData:ChattingListPage = await getPreviousChatData(roomId, pageParam);  
-                   
+            
             // get hadNextPage
             if(chatData.currentPage < Math.ceil(chatData.totalPage/10)){
                 // get pageNumber
@@ -524,16 +524,24 @@ const chattingRoom:NextPage = (props) => {
 
     const getOpponentInfo = async ()=>{
         if(loggedUserId===rooms.buyer_id){
-            // 상대방의 정보가 필요하니 반대(seller)의 id
-            const userInfo:Users = await axios.get(`/user/find/${rooms.seller_id}`).then((response)=>response.data)
+            try{
+                // 상대방의 정보가 필요하니 반대(seller)의 id
+                const userInfo:Users = await axios.get(`/user/find/${rooms.seller_id}`).then((response)=>response.data)
+                setOpponentProfileImg(userInfo.profileImage.path)
+            }catch(e){
+                console.log('상대방 정보 불러오기 실패',e)
+            }
 
-            setOpponentProfileImg(userInfo.profileImage.path)
         }
         if(loggedUserId===rooms.seller_id){
-            // 상대방의 정보가 필요하니 반대(seller)의 id
-            const userInfo:Users = await axios.get(`/user/find/${rooms.buyer_id}`).then((response)=>response.data)
+            try{
+                // 상대방의 정보가 필요하니 반대(seller)의 id
+                const userInfo:Users = await axios.get(`/user/find/${rooms.buyer_id}`).then((response)=>response.data)
 
-            setOpponentProfileImg(userInfo.profileImage.path)
+                setOpponentProfileImg(userInfo.profileImage.path)
+            }catch(e){
+                console.log('상대방 정보 불러오기 실패',e)
+            }
         }
     }
 

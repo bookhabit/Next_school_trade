@@ -22,6 +22,8 @@ import { useDispatch } from "react-redux";
 import { favoriteActions } from "../../store/favorite";
 import async from "./../../pages/api/map/location";
 import BackImage from "./BackImage";
+import Swal from "sweetalert2";
+import { AxiosError } from "axios";
 
 const Container = styled.div`
   width: 100%;
@@ -154,8 +156,12 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
 
   // 거래완료로 바꾸기 api
   const changeCompleted = async () => {
-    await changeCompletedAPI(product.id);
-    window.location.reload();
+    try{
+      await changeCompletedAPI(product.id);
+      window.location.reload();
+    }catch(e){
+      console.log('거래 완료로 변경실패',e)
+    }
   };
 
   // 하트아이콘 클릭하면 사용자 관심목록에 추가하고 색칠된 아이콘으로 변경
@@ -168,21 +174,30 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
     // 로그인 확인
     if (isLogged) {
       if (favoriteProduct === false) {
-        setFavoriteProduct(!favoriteProduct);
         // 사용자의 관심목록 추가 api
-        const response = await addFavorite(product.id);
-
-        // 디스패치 - 관심목록 추가 모달창
-        dispatch(favoriteActions.setShowFavoriteModal(true));
-        setTimeout(() => {
-          dispatch(favoriteActions.setShowFavoriteModal(false));
-        }, 3000);
+        try{
+          await addFavorite(product.id);
+          setFavoriteProduct(!favoriteProduct);
+          // 디스패치 - 관심목록 추가 모달창
+          dispatch(favoriteActions.setShowFavoriteModal(true));
+          setTimeout(() => {
+            dispatch(favoriteActions.setShowFavoriteModal(false));
+          }, 3000);
+        }catch(e:any){
+          console.log('관심목록 추가 실패',e)
+          Swal.fire('관심목록을 추가하는데 실패하였습니다',e.code,'error')
+        }
       } else {
         // 사용자의 관심목록에서 삭제
-        setFavoriteProduct(!favoriteProduct);
-        const response = await deleteFavorite(product.id);
-        alert("관심목록에서 삭제되었습니다.");
-        console.log("delete response", response);
+        try{
+          const response = await deleteFavorite(product.id);
+          setFavoriteProduct(!favoriteProduct);
+          Swal.fire('관심목록에서 삭제되었습니다','','success')
+          console.log("delete response", response);
+        }catch(e:any){
+          console.log('관심목록 삭제 실패',e)
+          Swal.fire('관심목록을 삭제하는데 실패하였습니다', e.code, 'error')
+        }
       }
     } else {
       alert("로그인이 필요합니다.");

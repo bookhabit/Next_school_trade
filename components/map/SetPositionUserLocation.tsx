@@ -266,7 +266,6 @@ const SetPositionUserLocation: React.FC<IProps> = ({
       const currentAddr = data.address;
       if (currentAddr) {
         try {
-          console.log("지오코딩 시작", currentAddr);
           // 여기에 받아온 주소로 위도,경도값을 알아내기 - 지오코딩 ( 카카오로 변경 )
           const REST_API_KEY = "1e71e50aa0333c4fc579cf84718fdd4b";
           const response = await axios.get(

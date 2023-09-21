@@ -13,6 +13,7 @@ import useValidateMode from "../../hooks/useValidateMode";
 import { userActions } from './../../store/user';
 import { loginAPI } from "../../lib/api/auth";
 import { useRouter } from 'next/router';
+import { AxiosError } from "axios";
 
 const Container = styled.form`
   width: 100%; // 모바일버전
@@ -116,15 +117,17 @@ const Login = () => {
                 router.push("/")
             }catch(e:any){
                 // data에 있는 상태코드에 따라 에러메시지 출력
-                console.log('에러',e.response)
-                // 해당 이메일의 유저가 없을 때
-                if(e.response.status === 404){
-                    setErrorMessage(e.response.data.message)
-                }
-                // 유저의 비밀번호가 일치하지 않을 때
-                if(e.response.status === 401){
-                    setErrorMessage(e.response.data.message)
-                }
+                console.log('에러',e)
+                // 백엔드 연결 X - 네트워크에러
+                if(e.code === "ERR_NETWORK"){
+                  setErrorMessage("서버와 제대로 연결하지 못하였습니다")
+                }else if(e.response.status === 404){
+                  // 해당 이메일의 유저가 없을 때
+                  setErrorMessage(e.response.data.message)
+                } else if(e.response.status === 401){
+                  // 유저의 비밀번호가 일치하지 않을 때
+                  setErrorMessage(e.response.data.message)
+                }                
             }
         }
     }

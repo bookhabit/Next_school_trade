@@ -82,8 +82,12 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
     const sellerId = Number(router.query.id);
     const getSellerNameAPI = async () => {
       // sellerId로 api호출
-      const response = await getUserName(sellerId);
-      setSellerName(response.data);
+      try{
+        const response = await getUserName(sellerId);
+        setSellerName(response.data);
+      }catch(e){
+        console.log('사용자 이름 불러오기 실패',e)
+      }
     };
     if (
       pathName === "/seller/[id]" ||
@@ -98,16 +102,24 @@ const CommonHeader: React.FC<IProps> = ({ pathName }) => {
     // 채팅방 페이지의 상대방 이름 가져오기
     const getCahttingOpponentNameAPI = async () => {
       const roomId = router.query.id
-      const roomInfo:RoomType = await axios.get(`/room/${roomId}`).then((response)=>response.data)
-      // seller_id 와 loggin_Id 가 일치하다면 (판매자라면 구매자 이름 보여주기)
-      
-      if(LoggedUser.id === Number(roomInfo.seller_id)){
-        const response = await getUserName(Number(roomInfo.buyer_id));
-        setChatOpponentName(response.data);
-      }
-      if(LoggedUser.id === Number(roomInfo.buyer_id)){
-        const response = await getUserName(Number(roomInfo.seller_id));
-        setChatOpponentName(response.data);
+      try{
+        const roomInfo:RoomType = await axios.get(`/room/${roomId}`).then((response)=>response.data)
+        // seller_id 와 loggin_Id 가 일치하다면 (판매자라면 구매자 이름 보여주기)
+        
+        try{
+          if(LoggedUser.id === Number(roomInfo.seller_id)){
+            const response = await getUserName(Number(roomInfo.buyer_id));
+            setChatOpponentName(response.data);
+          }
+          if(LoggedUser.id === Number(roomInfo.buyer_id)){
+            const response = await getUserName(Number(roomInfo.seller_id));
+            setChatOpponentName(response.data);
+          }
+        }catch(e){
+          console.log('채팅 상대방 이름 불러오기 실패',e)
+        }
+      }catch(e){
+        console.log('채팅방 정보 불러오기 실패',e)
       }
     };
 
