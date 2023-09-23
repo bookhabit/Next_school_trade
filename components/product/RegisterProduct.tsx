@@ -277,7 +277,6 @@ const RegisterProduct = () => {
   };
   // 가격 input - 콤마찍기
   const onChangePrice = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     const commaPrice = makeMoneyString(String(e.target.value));
     setPrice(commaPrice);
   };
@@ -338,6 +337,16 @@ const RegisterProduct = () => {
     setRegisterImages(files);
   };
 
+  // 가격 1억원 이상 검증
+  const validatePrice = (price:number)=>{
+    console.log('유효성price',price)
+    if(price > 100000000){
+      alert('대부분의 대학생에게는 1억원이 없습니다')
+      return false
+    }
+    return true
+  }
+
   // 상품등록 폼 검증
   const validateRegisterForm = () => {
     // 폼 요소의 값이 없다면
@@ -389,7 +398,7 @@ const RegisterProduct = () => {
     console.log(formData.getAll("images"));
 
     // 현재 모든 formData는 string으로 되어있음
-    if (validateRegisterForm()) {
+    if (validateRegisterForm() && validatePrice(Number(makeMoneyNumber(price)))) {
       // formdata 출력하기
       for (const [key, value] of formData.entries()) {
         console.log(key, value);

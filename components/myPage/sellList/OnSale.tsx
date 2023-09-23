@@ -35,7 +35,8 @@ const OnSale:React.FC<IProps> = ({userId}) => {
         fetchNextPage, // 💡 다음 페이지를 불러오는 함수
         hasNextPage, // 다음 페이지가 있는지 여부, Boolean
         status,
-        isFetching 
+        isFetching ,
+        refetch
     } = useInfiniteQuery(
           ["onSaleList"] 
         , async (pageParam)=> await getSellingList(pageParam,APIuserId)
@@ -72,7 +73,7 @@ const OnSale:React.FC<IProps> = ({userId}) => {
                 isEmpty(page.contents) ?
                 <DataNull text='판매중인 상품이 없습니다' key={index} />
                  :
-                 <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} showChangeCompleted={true}  />
+                 <ProductList key={index} completedProducts={false} data={page.contents} setTarget={setTarget} showChangeCompleted={true} refetch={refetch} />
             )}
         </Container>
     );

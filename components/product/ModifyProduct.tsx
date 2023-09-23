@@ -414,6 +414,16 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
     setServerImgLength((prev:number)=>prev-1)
   };
 
+  // 가격 1억원 이상 검증
+  const validatePrice = (price:number)=>{
+    console.log('유효성price',price)
+    if(price > 100000000){
+      alert('대부분의 대학생에게는 1억원이 없습니다')
+      return false
+    }
+    return true
+  }
+
   // 상품등록 폼 검증
   const validateRegisterForm = () => {
     // 폼 요소의 값이 없다면
@@ -463,7 +473,7 @@ const ModifyProduct: React.FC<IProps> = ({ initialProductData }) => {
     console.log(formData.getAll("images"));
 
     // 현재 모든 formData는 string으로 되어있음
-    if (validateRegisterForm()) {
+    if (validateRegisterForm() && validatePrice(Number(makeMoneyNumber(price)))) {
       // formdata 출력하기
       for (const [key, value] of formData.entries()) {
         console.log(key, value);

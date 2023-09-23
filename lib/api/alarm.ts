@@ -18,3 +18,5 @@ export const confirmAlarm = async (notification_id:number) =>
 // 특정유저 알림 삭제
 export const deleteAlarm = async (notification_id:number) =>
   await axios.post(`/notification/delete/${notification_id}`)
+
+// 거래성사 확인 여부 api

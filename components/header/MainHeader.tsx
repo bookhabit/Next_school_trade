@@ -159,7 +159,10 @@ const mainHeader = () => {
         };
       }, [userInfo.id]);
 
-      
+    // 거래 성사 확인 여부 api 받아오기
+    useEffect(()=>{
+
+    },[])
 
     // 알림페이지로 이동
     const goToAlarm = async ()=>{
@@ -171,6 +174,7 @@ const mainHeader = () => {
             router.push("/auth")
         }
     }
+
     // 검색클릭하면 검색 리스트 페이지로 이동
     const goToSearch = ()=>{
         if(searchValue){
