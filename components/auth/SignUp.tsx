@@ -275,7 +275,9 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
         async function fetchUniversityName() {
             try{
                 const response = await axios.get("/api/school/universityName");
-                setUniversityNameList(response.data)
+                const UniversitySet = new Set(response.data as string)
+                const universityList = Array.from(UniversitySet)
+                setUniversityNameList(universityList)
             }catch(e){
                 console.log('대학교리스트 가져오기',e)
                 Swal.fire('대학교 리스트 가져오기 실패','error')
