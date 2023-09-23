@@ -6,7 +6,7 @@ import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg";
 import palette from "../../styles/palette";
 import { Division } from "./Division";
 import { useRouter } from "next/router";
-import { productListType } from "../../types/product/product";
+import { Page, productListType } from "../../types/product/product";
 import { convertToDatetime, makeMoneyString } from "../../lib/utils";
 import { isEmpty } from "lodash";
 import DefaultImgIcon from "../../public/static/svg/product/default_img.svg";
@@ -20,10 +20,9 @@ import {
 } from "../../lib/api/product";
 import { useDispatch } from "react-redux";
 import { favoriteActions } from "../../store/favorite";
-import async from "./../../pages/api/map/location";
 import BackImage from "./BackImage";
 import Swal from "sweetalert2";
-import { AxiosError } from "axios";
+import { InfiniteData, QueryObserverResult, RefetchOptions, RefetchQueryFilters } from '@tanstack/react-query';
 
 const Container = styled.div`
   width: 100%;
@@ -130,9 +129,10 @@ const Container = styled.div`
 interface IProps {
   product: productListType;
   showChangeCompleted?: boolean;
+  refetch?:<TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<QueryObserverResult<InfiniteData<Page>, unknown>>
 }
 
-const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
+const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted,refetch }) => {
   let imagepath;
   const imageAlt = "상품이미지"
   if (product.images === undefined) {
@@ -158,7 +158,7 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted }) => {
   const changeCompleted = async () => {
     try{
       await changeCompletedAPI(product.id);
-      window.location.reload();
+      refetch
     }catch(e){
       console.log('거래 완료로 변경실패',e)
     }

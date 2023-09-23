@@ -8,7 +8,9 @@ export type productListType = {
 
   chat_cnt: number;
 
-  completed: boolean;
+  seller_completed: boolean;
+
+  buyer_completed: boolean;
 
   createdAt: string;
 

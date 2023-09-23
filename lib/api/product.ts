@@ -22,7 +22,7 @@ export const getBuyList = (
   id: number
 ) =>
   axios
-    .post(
+    .get(
       `/content/list/bought/${id}?page=${pageParam}`,
       {},
     )

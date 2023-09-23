@@ -18,6 +18,9 @@ import Delete from "../../../../public/static/svg/product/thumnailXicon.svg";
 import { Users } from '../../../../types/user';
 import { useDispatch } from 'react-redux';
 import { chattingAlarmActions } from '../../../../store/chattingAlarm';
+import Swal from 'sweetalert2';
+import { changeCompletedAPI, getProductDetail } from '../../../../lib/api/product';
+import { productListType } from '../../../../types/product/product';
 
 const Container = styled.div`
     .chatting-photo-tuhmnail{
@@ -194,11 +197,12 @@ const ChattingRoomContainer= styled.div`
 
 const TradeConfirm = styled.div`
     width:100%;
-    height:100%;
     padding:20px;
+    padding-top:200px;
     display:flex;
     flex-direction:column;
     justify-content:center;
+    align-items:center;
     .confirm-introduce{
         margin-bottom:20px;
         border:1px solid ${palette.gray_aa};
@@ -238,16 +242,8 @@ const TradeConfirm = styled.div`
             }
         }
     }
-
-    .confirm-price-box{
-        width:100%;
-        height:50px;   
-        margin-bottom:40px;
-        p{
-            margin-bottom:20px;
-        }
-    }
     .confirm-button-box{
+        width:100%;
         display:flex;
         align-items:center;
         justify-content:space-between;
@@ -264,6 +260,10 @@ const TradeConfirm = styled.div`
                 border-radius:25px;
                 font-size:16px;
                 cursor: pointer;
+                &:hover{
+                    background-color:${palette.main_color};
+                    opacity:80;
+                }
             }
             .confirm-message{
                 margin-top:10px;
@@ -377,8 +377,50 @@ const chattingRoom:NextPage = (props) => {
 
     // 거래하기 로직
     const [confirmTrade,setConfirmTrade] = useState(false)
-    const [buyerConfirm,setBuyerConfirm] = useState(false)
-    const [sellerConfirm,setSellerConfirm] = useState(false)
+    const [buyerCompleted,setBuyerCompleted] = useState(false)
+    const [sellerCompleted,setSellerCompleted] = useState(false)
+
+    const setBuyerCompletedAPI = async ()=>{
+        if(loggedUserId === buyerId){
+            setBuyerCompleted(true)
+            try{
+                await changeCompletedAPI(chattingRoomData.room.content_id)
+            }catch(e){
+                console.log('거래완료 변경실패')
+            }
+        }else{
+            Swal.fire('구매자만 버튼을 눌러주세요')
+        }
+    }
+
+    const setSellerCompletedAPI = async ()=>{
+        if(loggedUserId === sellerId){
+            setSellerCompleted(true)
+            try{
+                await changeCompletedAPI(chattingRoomData.room.content_id)
+            }catch(e){
+                console.log('거래완료 변경실패')
+            }
+        }else{
+            Swal.fire('판매자만 버튼을 눌러주세요')
+        }
+    }
+
+    const confirmTradeModal = async ()=>{
+        setConfirmTrade(!confirmTrade)
+        const response = await getProductDetail(chattingRoomData.room.content_id)
+        const productInfo = response.data as productListType
+        console.log('productInfo',productInfo)
+        try{
+            setBuyerCompleted(productInfo.buyer_completed)
+            setSellerCompleted(productInfo.seller_completed)
+        }catch(e){
+            console.log('구매자 및 판매자의 completed 변경')
+        }
+    }
+    
+    console.log('sellerCompleted',sellerCompleted)
+    console.log('buyercompleted',buyerCompleted)
 
     // 채팅 데이터 로직
     const [chatMessages,setChatMessages] = useState<messagePayload[]>([])
@@ -644,7 +686,7 @@ const chattingRoom:NextPage = (props) => {
                     <p className='post-title'>{chattingRoomData.title}</p>
                     <div className='chatting-confirm-button-box'>
                         <p className='post-price'>{makeMoneyString(chattingRoomData.price)} 원</p>
-                        <button onClick={()=>setConfirmTrade(!confirmTrade)}>거래하기</button>
+                        <button onClick={confirmTradeModal}>거래완료</button>
                     </div>
                 </div>
                 {confirmTrade && 
@@ -652,33 +694,26 @@ const chattingRoom:NextPage = (props) => {
                     <div className='confirm-introduce'>
                         <h2>거래과정</h2>
                         <p>구매자가 결제를 완료하고 판매자와 거래를 마친 후 물건을 잘 받았다면 구매자 거래완료 버튼 클릭</p>
-                        <p>판매자는 물건을 전달한 후 구매자의 확인버튼 확인 후 판매자 거래완료 버튼 클릭</p>
-                        <p>구매자와 판매자 모두 확인 시 판매자에게 결제한 금액이 전달됩니다</p>
+                        <p>판매자는 물건을 전달한 후 결제를 완료하고 판매자 거래완료 버튼 클릭</p>
                     </div>
                     {isBuyerPage && (
                         <div className='confirm-buyer-payment'>
                             <p>{makeMoneyString(chattingRoomData.price)} 원</p>
-                            <button onClick={()=>setConfirmTrade(!confirmTrade)}>결제하기</button>
                         </div>
                     )}
-                    <div className='confirm-price-box'>
-                        <p>거래 예상금액 : {makeMoneyString(chattingRoomData.price)} </p>
-                        <p>결제 완료된 금액 : {makeMoneyString('15333')} </p>
-                    </div>
                     <div className='confirm-button-box'>
                         <div className='confirm-button'>
-                            <button onClick={()=>setBuyerConfirm(true)}>구매자 거래완료</button>
-                            {buyerConfirm && <p className='confirm-message'>완료</p>}
+                            <button onClick={setBuyerCompletedAPI}>구매자 거래완료</button>
+                            {buyerCompleted && <p className='confirm-message'>완료</p>}
                         </div>
                         <div className='confirm-button'>
-                            <button onClick={()=>setSellerConfirm(true)}>판매자 거래완료</button>
-                            {sellerConfirm && <p className='confirm-message'>완료</p>}
+                            <button onClick={setSellerCompletedAPI}>판매자 거래완료</button>
+                            {sellerCompleted && <p className='confirm-message'>완료</p>}
                         </div>
                     </div>
-                    {buyerConfirm && sellerConfirm && 
+                    {buyerCompleted && sellerCompleted && 
                         <div className='confirm-complete-box'>
-                            <p>구매자와 판매자 모두 확인완료되었습니다</p>
-                            <p>판매자에게 돈을 전달하도록 하겠습니다</p>
+                            <p>구매자와 판매자 모두 거래 확인 완료되었습니다</p>
                         </div>
                     }
                 </TradeConfirm>

@@ -518,7 +518,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
           <div className="seller-info-left">
             {postOwner ? (
               <>
-                {productDetail.completed ? (
+                {productDetail.seller_completed ? (
                   <div className="seller-product-completed">
                     <p>거래완료</p>
                   </div>
@@ -545,7 +545,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
             {postOwner ? (
               <div className="correct-remove-modal-wrapper">
                 <ModalClickIcon
-                  onClick={productDetail.completed ? null : clickShowBtnModal}
+                  onClick={productDetail.seller_completed ? null : clickShowBtnModal}
                   className="correct-remove-modal-icon"
                 />
                 {!showBtnModal ? null : (
