@@ -13,6 +13,7 @@ import { messagePayload } from './room/[id]';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { getUserName } from '../../../lib/api/user';
 
 
 const Container = styled.div`
@@ -27,6 +28,7 @@ export type chattingRoomListType = {
     rooms:RoomType,
     product:productListType|null,
     chatData:LatestChatType|null,
+    opponentName:string|null,
 }
 
 export type RoomType = {
@@ -48,6 +50,7 @@ export type LatestChatType = {
 
 const chattingList:NextPage = (props) => {
     const {chattingRoomList} = props as PropsType
+    console.log(chattingRoomList)
     const [copyRoomList,setCopyRoomList] = useState<chattingRoomListType[]>([])
     const [deleteRoomId,setDeleteRoomId] = useState<string>()
     const {socket} = useSocket();
@@ -74,11 +77,20 @@ const chattingList:NextPage = (props) => {
             for (const room of rooms) {
                 let product:productListType|null = null;
                 let chatData:LatestChatType|null = null;
+                let opponentName:string|null = null;
     
                 // room의 content 정보 얻어오기
                 if (room.content_id !== undefined) {
                     const productResponse = await axios.get(`/content/read/${room.content_id}`);
                     product = productResponse.data;
+                }
+
+                // 상대방 이름 받아오기
+                if(room.buyer_id !== undefined){
+                    const response = await getUserName(room.buyer_id)
+                    if(response.status===200){
+                        opponentName = response.data
+                    }
                 }
     
                 // room의 마지막 대화정보 얻어오기
@@ -90,7 +102,8 @@ const chattingList:NextPage = (props) => {
                 const chattingList: chattingRoomListType = {
                     rooms: room,
                     product: product,
-                    chatData: chatData
+                    chatData: chatData,
+                    opponentName:opponentName
                 };
     
                 chattingLists.push(chattingList);
@@ -138,11 +151,26 @@ export const getServerSideProps :GetServerSideProps = async ({query})=>{
         for (const room of rooms) {
             let product:productListType|null = null;
             let chatData:LatestChatType|null = null;
+            let opponentName:string|null = null;
 
             // room의 content 정보 얻어오기
             if (room.content_id !== undefined) {
                 const productResponse = await axios.get(`/content/read/${room.content_id}`);
                 product = productResponse.data;
+            }
+
+            // 상대방 이름 받아오기
+            if(Number(userId) !== room.buyer_id ){
+                const response = await getUserName(room.buyer_id)
+                if(response.status===200){
+                    opponentName = response.data
+                }
+            }
+            if(Number(userId) !== room.seller_id ){
+                const response = await getUserName(room.seller_id)
+                if(response.status===200){
+                    opponentName = response.data
+                }
             }
 
             // room의 마지막 대화정보 얻어오기
@@ -154,7 +182,8 @@ export const getServerSideProps :GetServerSideProps = async ({query})=>{
             const chattingList: chattingRoomListType = {
                 rooms: room,
                 product: product,
-                chatData: chatData
+                chatData: chatData,
+                opponentName:opponentName
             };
 
             chattingLists.push(chattingList);

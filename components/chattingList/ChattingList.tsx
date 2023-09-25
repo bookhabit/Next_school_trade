@@ -70,6 +70,11 @@ const Container = styled.div`
         }
         .list-content{
             font-size:16px;
+            .list-opponentName{
+                margin:10px 0px;
+                font-size:18px;
+                color:${palette.dark_cyan}
+            }
             .not-confirmed-message{
                 color:black;
                 font-weight:bold;
@@ -167,6 +172,9 @@ const ChattingList:React.FC<IProps> = ({chattingRoomList,setDeleteRoomId}) => {
                     </div>
                 </div>
                 <div className='list-content'>
+                    <p className='list-opponentName'>
+                        {'상대방 : '+chattingRoomList.opponentName}
+                    </p>
                     {
                     chatData?.message 
                         ? confirmLastMessage()

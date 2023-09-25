@@ -99,7 +99,7 @@ const MainPage = () => {
         {status === "success" &&
           data.pages.map((page, index) =>
             isEmpty(page.contents) ? (
-              <DataNull text="찾으시는 상품이 없습니다" key={index} />
+              <DataNull text="게시된 상품이 없습니다" key={index} />
             ) : (
               <ProductList
                 key={index}
