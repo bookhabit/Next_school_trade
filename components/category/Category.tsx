@@ -31,14 +31,14 @@ const Container = styled.div`
             justify-content:center;
             align-items:center;
             cursor: pointer;
-            &:hover{
-                width:34%;
-            }
         }
         p{
             display:inline-block;
             font-size:20px;
             margin-top:15px;
+            &:hover{
+                font-size:24px;
+            }
         }
     }
     

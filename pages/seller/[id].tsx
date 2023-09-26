@@ -27,7 +27,7 @@ const Container = styled.div`
   padding-bottom: 30px;
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items:center;  
   
   .seller-profile {
     width: 320px;
@@ -74,6 +74,20 @@ const Container = styled.div`
   }
   .seller-review-preview{
     width:100%;
+    .goToSellerReview{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      button{
+        text-align:center;
+        color:#7d7676;
+        cursor: pointer;
+        margin-bottom:10px;
+        &:hover{
+          color:${palette.main_color};
+        }
+      }
+    }
   }
 `;
 
@@ -99,6 +113,9 @@ const profile = (data:propsData) => {
     }
     return starCount;
   };
+
+  const filterdReviewList = reviewList.slice(0, 5);
+  console.log(filterdReviewList)
 
   return (
     <>
@@ -142,9 +159,16 @@ const profile = (data:propsData) => {
           {isEmpty(reviewList) ? (
             <DataNull text="아직 거래후기가 없습니다" />
           ) : (
-            reviewList.map((review, index) => (
-              <ReviewCard key={index} reviewList={review} />
-            ))
+            <>
+              {filterdReviewList.map((review, index) => (
+                <ReviewCard key={index} reviewList={review} />
+              ))}
+              {reviewList.length > 5 && 
+              <div className="goToSellerReview">
+                <button className="goToSellerReviewBtn" onClick={() => router.push(`/seller/${sellerId}/sellerReview`)}>{sellerName}님의 거래후기 보러가기</button>
+              </div>
+              }
+            </>
           )}
         </div>
       </Container>
