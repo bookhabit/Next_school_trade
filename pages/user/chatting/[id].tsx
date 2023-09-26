@@ -50,11 +50,10 @@ export type LatestChatType = {
 
 const chattingList:NextPage = (props) => {
     const {chattingRoomList} = props as PropsType
-    console.log(chattingRoomList)
+
     const [copyRoomList,setCopyRoomList] = useState<chattingRoomListType[]>([])
     const [deleteRoomId,setDeleteRoomId] = useState<string>()
     const {socket} = useSocket();
-    const router = useRouter();
     const loggedUserId = useSelector((state: RootState) => state.user.id);
 
     useEffect(()=>{
@@ -67,54 +66,67 @@ const chattingList:NextPage = (props) => {
         }
     },[deleteRoomId])
     
-    const getChattingRoomList = async ()=>{
-        try{
-            const response = await axios.get(`/room/list/${loggedUserId}`)
-            const rooms = response.data as RoomType[];
-    
-            const chattingLists: chattingRoomListType[] = []; // An array to store multiple chattingList objects
-    
-            for (const room of rooms) {
-                let product:productListType|null = null;
-                let chatData:LatestChatType|null = null;
-                let opponentName:string|null = null;
-    
-                // room의 content 정보 얻어오기
-                if (room.content_id !== undefined) {
-                    const productResponse = await axios.get(`/content/read/${room.content_id}`);
-                    product = productResponse.data;
-                }
-
-                // 상대방 이름 받아오기
-                if(room.buyer_id !== undefined){
-                    const response = await getUserName(room.buyer_id)
-                    if(response.status===200){
-                        opponentName = response.data
-                    }
-                }
-    
-                // room의 마지막 대화정보 얻어오기
-                if(room.id !== undefined){
-                    const latestChat:LatestChatType = await axios.get(`/chat/latest/${room.id}`).then((response)=>response.data)
-                    chatData=latestChat
-                }
-    
-                const chattingList: chattingRoomListType = {
-                    rooms: room,
-                    product: product,
-                    chatData: chatData,
-                    opponentName:opponentName
-                };
-    
-                chattingLists.push(chattingList);
+    // 상대방이 메세지 보냈을 때 최신 데이터 동기화
+    const getChattingRoomList = async () => {
+        try {
+          const response = await axios.get(`/room/list/${loggedUserId}`);
+          const rooms = response.data as RoomType[];
+      
+          const chattingLists: chattingRoomListType[] = [];
+      
+          for (const room of rooms) {
+            let product: productListType | null = null;
+            let chatData: LatestChatType | null = null;
+            let opponentName: string | null = null;
+      
+            // room의 content 정보 얻어오기
+            if (room.content_id !== undefined) {
+              const productResponse = await axios.get(`/content/read/${room.content_id}`);
+              product = productResponse.data;
             }
-            return chattingLists
-            
-    
-        }catch(e){
-            console.log(e)
+      
+            // 상대방 이름 받아오기
+            if (room.buyer_id !== undefined) {
+              try {
+                const response = await getUserName(room.buyer_id);
+                if (response.status === 200) {
+                  opponentName = response.data;
+                } else {
+                  console.error(`Failed to fetch opponent name for buyer_id ${room.buyer_id}`);
+                }
+              } catch (error:any) {
+                console.error(`Error fetching opponent name for buyer_id ${room.buyer_id}: ${error.message}`);
+              }
+            }
+      
+            // room의 마지막 대화정보 얻어오기
+            if (room.id !== undefined) {
+              try {
+                const latestChat: LatestChatType = await axios.get(`/chat/latest/${room.id}`).then((response) => response.data);
+                chatData = latestChat;
+              } catch (error:any) {
+                console.error(`Error fetching latest chat for room id ${room.id}: ${error.message}`);
+              }
+            }
+      
+            const chattingList: chattingRoomListType = {
+              rooms: room,
+              product: product,
+              chatData: chatData,
+              opponentName: opponentName,
+            };
+      
+            chattingLists.push(chattingList);
+          }
+      
+          return chattingLists;
+        } catch (error:any) {
+          console.error(`Error fetching chatting room list: ${error.message}`);
+          // 에러 발생 시 빈 배열 또는 다른 기본값을 반환하거나, 상황에 따라 에러를 다시 throw하여 상위 컴포넌트에서 처리할 수 있습니다.
+          return [];
         }
-    }
+      };
+      
 
     useEffect(()=>{
         socket?.on('chat_notification', (message:messagePayload) => {
@@ -128,7 +140,7 @@ const chattingList:NextPage = (props) => {
 
     return (
         <Container>
-            {isEmpty(chattingRoomList) ? 
+            {isEmpty(copyRoomList) ? 
                 <p>아직 채팅 상대방이 없습니다</p>
             : copyRoomList.map((chatting)=>(
                 <ChattingList chattingRoomList={chatting} key={chatting.rooms.id} setDeleteRoomId={setDeleteRoomId}  />

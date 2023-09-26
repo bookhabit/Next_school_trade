@@ -144,7 +144,6 @@ MyApp.getInitialProps = async (context: AppContext) => {
   if (cookieObject.access_token) {
     try {
       const response = await getUserInfo(cookieObject.access_token);
-      console.log('토큰 유저정보',response)
       userData = response.data;
     } catch (e) {
       console.log('토큰(로그인) 유저정보 불러오기 실패',e);
