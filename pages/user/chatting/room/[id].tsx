@@ -21,6 +21,7 @@ import { chattingAlarmActions } from '../../../../store/chattingAlarm';
 import Swal from 'sweetalert2';
 import { changeCompletedAPI, getProductDetail } from '../../../../lib/api/product';
 import { productListType } from '../../../../types/product/product';
+import ConfirmTrade from '../../../../components/confirmTrade/ConfirmTrade';
 
 const Container = styled.div`
     .chatting-photo-tuhmnail{
@@ -195,95 +196,6 @@ const ChattingRoomContainer= styled.div`
     }
 `
 
-const TradeConfirm = styled.div`
-    width:100%;
-    padding:20px;
-    padding-top:200px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    .confirm-introduce{
-        margin-bottom:20px;
-        border:1px solid ${palette.gray_aa};
-        border-radius:30px;
-        padding:10px;
-        h2{
-            text-align:center;
-            margin:15px;
-            color:${palette.gray_76}
-        }
-        align-items:center;
-        p{
-            margin-bottom:20px;
-            font-size:16px;
-            line-height:20px;
-            color:${palette.gray_76}
-        }
-    }
-
-    .confirm-buyer-payment{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        font-size:20px;
-        margin-bottom:20px;
-        button{
-            font-size:16px;
-            font-weight:600;
-            cursor: pointer;
-            padding:8px;
-            border-radius:25px;
-            background-color:white;
-            color:${palette.main_color} ;
-            &:hover{
-                background-color:${palette.main_color};
-                color:${palette.main_text_color};
-            }
-        }
-    }
-    .confirm-button-box{
-        width:100%;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        margin-bottom:20px;
-        .confirm-button{
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            button{
-                background-color:${palette.main_color};
-                color:${palette.main_text_color};
-                padding:10px;
-                border-radius:25px;
-                font-size:16px;
-                cursor: pointer;
-                &:hover{
-                    background-color:${palette.main_color};
-                    opacity:80;
-                }
-            }
-            .confirm-message{
-                margin-top:10px;
-                color:${palette.bittersweet}
-            }
-        }
-    }
-    .confirm-complete-box{
-        padding:20px;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        p{
-            color:${palette.gray_b0};
-            margin-bottom:10px;
-        }
-    }
-`
-
 
 const ChattingFooter= styled.form`
     @media only screen and (min-width: 430px) {
@@ -372,55 +284,8 @@ const chattingRoom:NextPage = (props) => {
             </div>
         )
     }
-
-    const dispatch = useDispatch();
-
-    // 거래하기 로직
+    // 거래하기 모달창
     const [confirmTrade,setConfirmTrade] = useState(false)
-    const [buyerCompleted,setBuyerCompleted] = useState(false)
-    const [sellerCompleted,setSellerCompleted] = useState(false)
-
-    const setBuyerCompletedAPI = async ()=>{
-        if(loggedUserId === buyerId){
-            setBuyerCompleted(true)
-            try{
-                await changeCompletedAPI(chattingRoomData.room.content_id)
-            }catch(e){
-                console.log('거래완료 변경실패')
-            }
-        }else{
-            Swal.fire('구매자만 버튼을 눌러주세요')
-        }
-    }
-
-    const setSellerCompletedAPI = async ()=>{
-        if(loggedUserId === sellerId){
-            setSellerCompleted(true)
-            try{
-                await changeCompletedAPI(chattingRoomData.room.content_id)
-            }catch(e){
-                console.log('거래완료 변경실패')
-            }
-        }else{
-            Swal.fire('판매자만 버튼을 눌러주세요')
-        }
-    }
-
-    const confirmTradeModal = async ()=>{
-        setConfirmTrade(!confirmTrade)
-        const response = await getProductDetail(chattingRoomData.room.content_id)
-        const productInfo = response.data as productListType
-        console.log('productInfo',productInfo)
-        try{
-            setBuyerCompleted(productInfo.buyer_completed)
-            setSellerCompleted(productInfo.seller_completed)
-        }catch(e){
-            console.log('구매자 및 판매자의 completed 변경')
-        }
-    }
-    
-    console.log('sellerCompleted',sellerCompleted)
-    console.log('buyercompleted',buyerCompleted)
 
     // 채팅 데이터 로직
     const [chatMessages,setChatMessages] = useState<messagePayload[]>([])
@@ -453,7 +318,15 @@ const chattingRoom:NextPage = (props) => {
         const newArray = array.slice(); // 배열 복사
         return newArray.reverse();      // 복사된 배열 뒤집기
     }
-    const lastChattingList = reverseArray(lastChatMessages)
+
+    // 이전 메시지 메모이제이션
+    const lastChattingList = useMemo(() => {
+        return reverseArray(lastChatMessages);
+    }, [lastChatMessages]);
+
+    // 실시간 메시지 메모이제이션
+    const memoizedChatMessages = useMemo(() => chatMessages, [chatMessages]);
+
     
     const rooms:RoomType = {
         content_id:contentId,
@@ -465,7 +338,7 @@ const chattingRoom:NextPage = (props) => {
     const [chattingPhotos,setChattingPhotos] = useState<string[]>([])
     function uploadPhoto(ev: ChangeEvent<HTMLInputElement>) {
         const files = ev.target.files;
-        console.log('files',files)
+        
         if (!files) return;
         const data = new FormData();
         for (let i = 0; i < files.length; i++) {
@@ -672,9 +545,6 @@ const chattingRoom:NextPage = (props) => {
             messageEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
         }
     },[chatMessages,lastChatMessages])
-
-    // 판매자인지 구매자인지 식별 후 구매자일경우 결제창 보이도록
-    const isBuyerPage = true
     
     let currentDate = new Date();
     let lastDate:Date|null = null;
@@ -682,42 +552,14 @@ const chattingRoom:NextPage = (props) => {
     return (
         <Container>
              <ChattingRoomContainer>
-                <div className='chatting-header'>
-                    <p className='post-title'>{chattingRoomData.title}</p>
-                    <div className='chatting-confirm-button-box'>
-                        <p className='post-price'>{makeMoneyString(chattingRoomData.price)} 원</p>
-                        <button onClick={confirmTradeModal}>거래완료</button>
-                    </div>
-                </div>
-                {confirmTrade && 
-                <TradeConfirm>
-                    <div className='confirm-introduce'>
-                        <h2>거래과정</h2>
-                        <p>구매자가 결제를 완료하고 판매자와 거래를 마친 후 물건을 잘 받았다면 구매자 거래완료 버튼 클릭</p>
-                        <p>판매자는 물건을 전달한 후 결제를 완료하고 판매자 거래완료 버튼 클릭</p>
-                    </div>
-                    {isBuyerPage && (
-                        <div className='confirm-buyer-payment'>
-                            <p>{makeMoneyString(chattingRoomData.price)} 원</p>
-                        </div>
-                    )}
-                    <div className='confirm-button-box'>
-                        <div className='confirm-button'>
-                            <button onClick={setBuyerCompletedAPI}>구매자 거래완료</button>
-                            {buyerCompleted && <p className='confirm-message'>완료</p>}
-                        </div>
-                        <div className='confirm-button'>
-                            <button onClick={setSellerCompletedAPI}>판매자 거래완료</button>
-                            {sellerCompleted && <p className='confirm-message'>완료</p>}
-                        </div>
-                    </div>
-                    {buyerCompleted && sellerCompleted && 
-                        <div className='confirm-complete-box'>
-                            <p>구매자와 판매자 모두 거래 확인 완료되었습니다</p>
-                        </div>
-                    }
-                </TradeConfirm>
-                }
+                <ConfirmTrade
+                    chattingRoomData={chattingRoomData}
+                    confirmTrade={confirmTrade}
+                    setConfirmTrade={setConfirmTrade}
+                    loggedUserId={loggedUserId}
+                    buyerId={buyerId}  
+                    sellerId={sellerId}
+                />
                 {!confirmTrade && 
                     <div className='chatting-message-box'>
                         {/* 이전 데이터  */}
@@ -787,7 +629,7 @@ const chattingRoom:NextPage = (props) => {
                         </div>
                         
                         {/* 현재 송수신 데이터 */}
-                        {chatMessages.map((message)=>(
+                        {memoizedChatMessages.map((message)=>(
                             loggedUserId === message.send_id ?
                             // 현재 로그인한 사용자와 보낸 사람의 id가 같다면 '나'
                             <div className='chatting-me' key={Math.random()}>
