@@ -3,7 +3,7 @@ import { readFileSync } from "fs";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
-    const universityName = readFileSync("data/universityName.csv", "utf-8");
+    const universityName = readFileSync("../../../data/universityName.csv", "utf-8");
 
     if (!universityName) {
       return res.send("학교 데이터베이스가 비어있습니다.");
