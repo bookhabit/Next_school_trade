@@ -119,7 +119,6 @@ const mainHeader = () => {
     const alarmList = useSelector((state:RootState)=>state.alarm.alarmList)
     // 유저가 확인하지 않은 알림 리스트
     const notConfirmedAlarmList = alarmList.filter((alarm)=>alarm.confirmed !== true)
-    console.log('확인하지 않은 알림리스트',notConfirmedAlarmList)
 
     // 검색창 - input
     const searchValue = useSelector((state:RootState)=>state.searchBar.value)

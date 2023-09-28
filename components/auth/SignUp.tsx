@@ -274,7 +274,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
     useEffect(()=>{
         async function fetchUniversityName() {
             try{
-                const response = await axios.get("https://school-trade.vercel.app/api/school/universityName");
+                const response = await axios.get("/api/school/universityName");
                 const UniversitySet = new Set(response.data as string)
                 const universityList = Array.from(UniversitySet)
                 setUniversityNameList(universityList)
