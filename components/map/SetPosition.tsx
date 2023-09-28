@@ -4,19 +4,14 @@ import palette from "../../styles/palette";
 import MarkerIcon from "../../public/static/svg/map/marker.svg";
 import CloseXIcon from "../../public/static/svg/map/modal_close_x_icon.svg";
 import { useEffect, useRef, useState } from "react";
-import Head from "next/head";
-import throttle from "lodash/throttle";
 import { useDispatch } from "react-redux";
 import registerPosition, {
   registerPositionActions,
 } from "../../store/registerPosition";
 import Swal from "sweetalert2";
-import { getLocationInfoAPI } from "../../lib/api/map";
 import { useSelector } from "react-redux";
-import GeoCoding from "./GeoCoding";
 import DaumPostcodeEmbed from "react-daum-postcode";
 import { RootState } from "../../store";
-import Button from "../common/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { updateUserLocation } from "../../lib/api/user";
