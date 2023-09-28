@@ -3,8 +3,6 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import FormLogin from "./FormLogin";
-import FormSignUp from "./FormSignUp";
 import LinkFooter from "../footer/LinkFooter";
 
 const Container = styled.div`

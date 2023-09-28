@@ -11,8 +11,6 @@ import registerPosition, {
 } from "./../../store/registerPosition";
 import Swal from "sweetalert2";
 import DaumPostcodeEmbed from "react-daum-postcode";
-import GeoCoding from "./GeoCoding";
-import KakaoMap from "./KaKaoMap";
 import axios from "axios";
 
 const Container = styled.div`
@@ -190,8 +188,6 @@ declare global {
     initMap: () => void;
   }
 }
-
-const KAKAO_API_KEY = "0292e60416960470863fce8c75ff0a78";
 
 const SetPositionUserLocation: React.FC<IProps> = ({
   closeModal,

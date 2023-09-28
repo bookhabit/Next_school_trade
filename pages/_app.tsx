@@ -76,7 +76,6 @@ const MobileContainer = styled.div`
 `;
 
 // const queryClient = new QueryClient();
-const KAKAO_API_KEY = "0292e60416960470863fce8c75ff0a78";
 
 const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
   // 유저정보를 받아서 리덕스 스토어에 저장하기
@@ -106,7 +105,7 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
     <Container firstColor={firstColor} secondColor={secondColor}>
       <Script
         strategy="beforeInteractive"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY}&autoload=false&libraries=services`}
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false&libraries=services`}
       />
       <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>

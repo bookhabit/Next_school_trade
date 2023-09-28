@@ -16,8 +16,6 @@ declare global {
   }
 }
 
-const KAKAO_API_KEY = "0292e60416960470863fce8c75ff0a78";
-
 function KaKaoMap({ latitude, longitude, setCurrentMapLocation }: MapProps) {
   console.log("props latitude", latitude);
   console.log("props longitude", longitude);
@@ -26,7 +24,7 @@ function KaKaoMap({ latitude, longitude, setCurrentMapLocation }: MapProps) {
   useEffect(() => {
     const mapScript = document.createElement("script");
     mapScript.async = true;
-    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY}&autoload=false`;
+    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false`;
 
     document.head.appendChild(mapScript);
 
