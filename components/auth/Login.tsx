@@ -48,8 +48,12 @@ const Container = styled.form`
     cursor: pointer;
   }
   .kakao-btn{
+    width:100%;
     text-align:center;
     cursor: pointer;
+    img{
+      width:100%;
+    }
   }
   /* 에러메시지 스타일링 */
   .input-error-message{
@@ -183,7 +187,7 @@ const Login = () => {
             <p>{errorMessage}</p>
           </div>
           <div className="login-submit-button-wrapper">
-            <Button type="submit" width='100%' height='42px'radius='10px' >
+            <Button type="submit" width='100%' height='52px'radius='10px' >
               로그인
             </Button>
           </div>

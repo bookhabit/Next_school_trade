@@ -398,8 +398,11 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                 dispatch(userActions.setLoggedUser(data.user)) 
                 router.push("/")
     
-            }catch(e){
+            }catch(e:any){
                 console.log(e)
+                if(e.response.data.statusCode===409){
+                    alert('이미 존재하는 이메일입니다')
+                }
             }
             }
         }
@@ -539,7 +542,7 @@ const SignUp:React.FC<IProps> = ({kakaoSignUp}) => {
                     type={hidePassword?"password":"text"}
                     name='confirmPassword'
                     onChange={onChangeInput}
-                    isValid={!!password && password===confirmPassword &&confirmPassword === ''}
+                    isValid={!!password && password===confirmPassword}
                     errorMessage="입력하신 비밀번호가 일치하지 않습니다."
                     usevalidation
                     onFocus={onFocusedConfirmPassword}

@@ -22,6 +22,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (isLoggedIn) {
         if (!socket) {
           const newSocket = io(SOCKET_URL);
+          console.log('소켓연결',SOCKET_URL)
           setSocket(newSocket);
         } else {
           // 이미 소켓이 있는 경우에는 다시 연결하지 않음

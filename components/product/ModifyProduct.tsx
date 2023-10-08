@@ -182,6 +182,7 @@ const Container = styled.form`
 
   /* 지도 모달창 연결 css */
   .register-setPosition-modal {
+    cursor: pointer;
     display: flex;
     align-items: center;
     background-color: #edebeb;

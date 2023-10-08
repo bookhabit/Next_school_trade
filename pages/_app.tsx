@@ -125,7 +125,7 @@ const MyApp = ({ Component, pageProps, ...data }: AppProps) => {
                   ) : null}
                 </Layout>
                 <div id="root-modal" />
-                <ReactQueryDevtools initialIsOpen={false} />
+                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
               </SocketProvider>
             </MobileContainer>
             <UserColor />
