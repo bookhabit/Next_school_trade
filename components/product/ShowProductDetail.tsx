@@ -37,6 +37,7 @@ import BackImage from "../common/BackImage";
 import { useSocket } from "../../context/socket.context";
 import { RoomType } from "../../pages/user/chatting/[id]";
 import axios from "../../lib/api";
+import Swal from "sweetalert2";
 
 interface cssProps {
   postOwner: boolean;
@@ -416,7 +417,7 @@ const ShowProductDetail: React.FC<IProps> = ({ productDetail }) => {
         // 사용자의 관심목록에서 삭제
         const response = await deleteFavorite(productDetail.id);
         console.log("delete response", response);
-        alert("관심목록에서 삭제되었습니다");
+        Swal.fire('관심목록에서 삭제되었습니다','','success')
         setFavoriteProduct(!favoriteProduct);
       }
     } else {

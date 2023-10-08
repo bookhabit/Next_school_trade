@@ -31,7 +31,7 @@ const Container = styled.div`
 `;
 
 const favorite = ({ id }: { id: number }) => {
-  const { data, fetchNextPage, hasNextPage, status, isLoading, isFetching } =
+  const { data, fetchNextPage, hasNextPage, status, isLoading, isFetching,refetch } =
     useInfiniteQuery(
       ["favoriteList"],
       async (pageParam) =>
@@ -72,7 +72,7 @@ const favorite = ({ id }: { id: number }) => {
             ) : (
               page.favorites.map((content, id) => (
                 <>
-                  <ProductCard key={id} product={content.content} />
+                  <ProductCard key={id} product={content.content} refetch={refetch} />
                   <div ref={setTarget}></div>
                 </>
               ))

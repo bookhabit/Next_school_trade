@@ -6,7 +6,7 @@ import ChattingIcon from "../../public/static/svg/product/chattingIcon.svg";
 import palette from "../../styles/palette";
 import { Division } from "./Division";
 import { useRouter } from "next/router";
-import { Page, productListType } from "../../types/product/product";
+import { FavoritePage, Page, productListType } from "../../types/product/product";
 import { convertToDatetime, makeMoneyString } from "../../lib/utils";
 import { isEmpty } from "lodash";
 import DefaultImgIcon from "../../public/static/svg/product/default_img.svg";
@@ -129,7 +129,7 @@ const Container = styled.div`
 interface IProps {
   product: productListType;
   showChangeCompleted?: boolean;
-  refetch?:<TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<QueryObserverResult<InfiniteData<Page>, unknown>>
+  refetch?:<TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<QueryObserverResult<InfiniteData<Page|FavoritePage>, unknown>>
 }
 
 const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted,refetch }) => {
@@ -187,13 +187,13 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted,refetch })
           console.log('관심목록 추가 실패',e)
           Swal.fire('관심목록을 추가하는데 실패하였습니다',e.code,'error')
         }
-      } else {
+      } else if(favoriteProduct === true){
         // 사용자의 관심목록에서 삭제
         try{
           const response = await deleteFavorite(product.id);
           setFavoriteProduct(!favoriteProduct);
+          refetch
           Swal.fire('관심목록에서 삭제되었습니다','','success')
-          console.log("delete response", response);
         }catch(e:any){
           console.log('관심목록 삭제 실패',e)
           Swal.fire('관심목록을 삭제하는데 실패하였습니다', e.code, 'error')
