@@ -158,6 +158,7 @@ const ProductCard: React.FC<IProps> = ({ product, showChangeCompleted,refetch })
   const changeCompleted = async () => {
     try{
       await changeCompletedAPI(product.id);
+      Swal.fire('','거래완료로 변경하였습니다','success')
       refetch
     }catch(e){
       console.log('거래 완료로 변경실패',e)

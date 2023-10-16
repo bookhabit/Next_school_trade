@@ -36,6 +36,7 @@ interface IProps{
 }
 
 const ShowReview:React.FC<IProps> = ({reviewList,ownerName}) => {    
+    console.log('ownerName',ownerName)
     return (
         <Container>
             <div className='trade-review-title'>

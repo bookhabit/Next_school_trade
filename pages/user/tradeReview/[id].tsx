@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const tradeReview:NextPage = ({data}:any) => {
     let userReviewList = data
-    let ownerName 
+    let ownerName = data[0].seller.nickname
     if(!data){
         userReviewList = data
         ownerName = data[0].seller.nickname
